@@ -16,6 +16,12 @@ window.OUTFITS = [
     id: 'founders',
     name: 'FOUNDERS EDITION',
     locked: true,
+    // Card shown next to the 3D preview while this outfit is selected.
+    notice: {
+      tag: 'FOUNDERS® / COMING SOON',
+      title: 'FOUNDERS® will drop in limited quantity once released.',
+      free: 'FREE FREE FREE I WILL NOT CHARGE',
+    },
     bodies: {
       slim: 'api/outfit?id=founders',
     },

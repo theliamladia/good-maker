@@ -117,8 +117,21 @@
     state.outfit = o;
     $('outfitHint').hidden = !o.locked;
     $('outfitHint').textContent = o.locked ? 'PREVIEW ONLY / NOT AVAILABLE TO DOWNLOAD' : '';
+    showNotice(o);
     setBody(state.body); // re-checks the body is available for this outfit
   }
+
+  // Card next to the 3D preview for outfits with a notice (e.g. Founders).
+  // Closing it hides it until a different outfit is picked and this one again.
+  function showNotice(o) {
+    const n = o.notice;
+    $('dropCard').hidden = !n;
+    if (!n) return;
+    $('dropTag').textContent = n.tag;
+    $('dropTitle').textContent = n.title;
+    $('dropFree').innerHTML = `<span>${n.free}</span><span aria-hidden="true">${n.free}</span>`;
+  }
+  $('dropClose').onclick = () => { $('dropCard').hidden = true; };
 
   // ---------- Body ----------
   // Slim (female) bodies keep the user's hair by default; Classic starts without it.

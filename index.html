@@ -116,6 +116,12 @@
 
   <!-- Center: the model -->
   <section class="viewer-wrap">
+    <aside class="drop-card" id="dropCard" hidden aria-live="polite">
+      <button type="button" class="drop-close" id="dropClose" aria-label="Close">✕</button>
+      <div class="section-tag mono" id="dropTag"></div>
+      <p class="drop-title" id="dropTitle"></p>
+      <div class="drop-free mono" id="dropFree"></div>
+    </aside>
     <div id="view3d"></div>
     <div class="viewer-bar mono">
       <button type="button" class="chip" id="rotate" aria-pressed="true">↻ SPIN</button>
