@@ -156,11 +156,22 @@
     }
   }
 
-  // Username -> skin via public skin APIs (both send CORS headers).
-  const SKIN_APIS = [
-    (u) => `https://mc-heads.net/skin/${u}`,
-    (u) => `https://minotar.net/skin/${u}`,
-  ];
+  // Username -> skin. Tried in order until one loads:
+  // 1. minecraft.tools skin stealer (always current, handles renamed players)
+  // 2. playerdb.co resolves the name to a UUID, then skin by UUID (rename-proof)
+  // 3. name-based services as a last resort (may be cached for renamed players)
+  async function skinSources(name) {
+    const n = encodeURIComponent(name);
+    const sources = [`https://minecraft.tools/download-skin/${n}`];
+    try {
+      const res = await fetch(`https://playerdb.co/api/player/minecraft/${n}`);
+      const id = res.ok && (await res.json())?.data?.player?.raw_id;
+      if (id) sources.push(`https://crafatar.com/skins/${id}`, `https://mc-heads.net/skin/${id}`);
+    } catch { /* lookup failed; fall through to name-based sources */ }
+    sources.push(`https://mc-heads.net/skin/${n}`, `https://minotar.net/skin/${n}`);
+    return sources;
+  }
+
   $('userForm').onsubmit = async (e) => {
     e.preventDefault();
     const name = $('username').value.trim();
@@ -168,9 +179,9 @@
     showError('');
     $('userForm').classList.add('loading');
     try {
-      for (const api of SKIN_APIS) {
+      for (const src of await skinSources(name)) {
         try {
-          await loadSkinFrom(api(encodeURIComponent(name)), name);
+          await loadSkinFrom(src, name);
           return;
         } catch { /* try the next service */ }
       }
