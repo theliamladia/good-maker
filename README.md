@@ -8,6 +8,10 @@ Static site that dresses a Minecraft skin in a preset outfit.
 - Keeps **long hair** that hangs onto the torso (on by default for Slim bodies; Off / Short / Mid / Long control), with a 1-pixel eraser map to brush unwanted hair pixels back to the outfit. Hair is found by flooding down from the neckline through hair-coloured pixels, skipping colours that are the old outfit.
 - Draws the **outfit** pixels on top, then shows a live 3D preview and a GOOD ME® download button.
 
+## Username lookup
+
+`api/skin.js` is a Vercel serverless function (`/api/skin?name=<username>`). It asks Mojang for the player's UUID and current skin and returns the PNG from the site's own domain, so it works for renamed players and the browser can read the pixels. Locally (no function), the page falls back to public skin services.
+
 ## Run
 
 Open over HTTP (not `file://`), e.g. `python3 -m http.server`, or host on GitHub Pages.

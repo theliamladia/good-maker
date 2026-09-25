@@ -156,18 +156,31 @@
     }
   }
 
-  // Username -> skin. Tried in order until one loads:
-  // 1. minecraft.tools skin stealer (always current, handles renamed players)
-  // 2. playerdb.co resolves the name to a UUID, then skin by UUID (rename-proof)
-  // 3. name-based services as a last resort (may be cached for renamed players)
-  async function skinSources(name) {
+  // Username -> skin.
+  // 1. Our own /api/skin (Vercel function): asks Mojang directly, so it's
+  //    always current (renamed players too) and same-origin (readable pixels).
+  // 2. If that endpoint isn't available (e.g. local dev), fall back to a UUID
+  //    lookup via playerdb.co + crafatar, then name-based services.
+  async function fetchOwnApi(name) {
+    const res = await fetch(`api/skin?name=${encodeURIComponent(name)}`);
+    const type = res.headers.get('content-type') || '';
+    if (res.ok && type.startsWith('image/')) return URL.createObjectURL(await res.blob());
+    if (type.includes('application/json')) {
+      const { error } = await res.json().catch(() => ({}));
+      if (error === 'not_found') throw Object.assign(new Error(`NO PLAYER NAMED ${name.toUpperCase()}.`), { final: true });
+      if (error === 'no_skin') throw Object.assign(new Error(`${name.toUpperCase()} USES A DEFAULT SKIN.`), { final: true });
+    }
+    return null; // endpoint missing or upstream error -> use fallbacks
+  }
+
+  async function fallbackSources(name) {
     const n = encodeURIComponent(name);
-    const sources = [`https://minecraft.tools/download-skin/${n}`];
+    const sources = [];
     try {
       const res = await fetch(`https://playerdb.co/api/player/minecraft/${n}`);
       const id = res.ok && (await res.json())?.data?.player?.raw_id;
       if (id) sources.push(`https://crafatar.com/skins/${id}`, `https://mc-heads.net/skin/${id}`);
-    } catch { /* lookup failed; fall through to name-based sources */ }
+    } catch { /* lookup failed; use name-based sources */ }
     sources.push(`https://mc-heads.net/skin/${n}`, `https://minotar.net/skin/${n}`);
     return sources;
   }
@@ -179,7 +192,16 @@
     showError('');
     $('userForm').classList.add('loading');
     try {
-      for (const src of await skinSources(name)) {
+      let own = null;
+      try {
+        own = await fetchOwnApi(name);
+        if (own) return await loadSkinFrom(own, name);
+      } catch (err) {
+        if (err.final) return showError(err.message);
+      } finally {
+        if (own) URL.revokeObjectURL(own);
+      }
+      for (const src of await fallbackSources(name)) {
         try {
           await loadSkinFrom(src, name);
           return;
