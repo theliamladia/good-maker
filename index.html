@@ -60,37 +60,57 @@
     </div>
     <p class="micro mono" id="bodyHint"></p>
 
-    <div class="section-tag mono with-help">Nº003 / HAIR <button type="button" class="help-btn" data-help="hair" aria-label="How do I use hair?">?</button></div>
-    <div class="segmented four" id="hair" role="radiogroup" aria-label="Hair length">
-      <button type="button" data-hair="0" role="radio">Off</button>
-      <button type="button" data-hair="4" role="radio">Short</button>
-      <button type="button" data-hair="8" role="radio">Mid</button>
-      <button type="button" data-hair="12" role="radio">Long</button>
-    </div>
-    <p class="micro mono" id="hairHint">KEEPS YOUR HAIR OVER THE OUTFIT</p>
-
-    <div class="section-tag mono with-help">Nº004 / HEADWEAR <button type="button" class="help-btn" data-help="headwear" aria-label="How do I use headwear?">?</button></div>
-    <div class="segmented three" id="headwear" role="radiogroup" aria-label="Headwear">
-      <button type="button" data-headwear="keep" role="radio">Keep</button>
-      <button type="button" data-headwear="auto" role="radio">No hood</button>
-      <button type="button" data-headwear="none" role="radio">None</button>
-    </div>
-    <p class="micro mono" id="headwearHint">REMOVES HOODS FROM YOUR OLD OUTFIT</p>
-
-    <div class="eraser" id="eraser">
-      <div class="eraser-head">
-        <div class="chips" id="eraseTabs">
-          <button type="button" class="chip" data-map="head" aria-pressed="true">HEAD</button>
-          <button type="button" class="chip" data-map="torso">TORSO</button>
-        </div>
-        <span class="eraser-actions">
-          <button type="button" class="chip" id="eraseUndo" disabled>UNDO</button>
-          <button type="button" class="chip" id="eraseReset" disabled>RESET</button>
-        </span>
+    <!-- Hair & Head: two swipeable cards in the same spot -->
+    <div class="swiper" id="swiper">
+      <div class="swiper-tabs mono" role="tablist" aria-label="Hair and head">
+        <button type="button" role="tab" data-slide="0" aria-selected="true">Nº003 / HAIR</button>
+        <button type="button" role="tab" data-slide="1" aria-selected="false">Nº004 / HEAD</button>
       </div>
-      <canvas id="hairMap" width="384" height="192" aria-label="Pixel map. Click or drag to erase hair, hoods or hat pixels."></canvas>
-      <div class="map-labels mono" id="mapLabels"></div>
-      <p class="micro mono" id="eraseHint">ERASER / CLICK OR DRAG TO REMOVE HOOD OR HAT PIXELS.</p>
+      <div class="slides" id="slides">
+        <section class="slide" role="tabpanel" aria-label="Hair">
+          <div class="slide-row">
+            <div class="segmented four" id="hair" role="radiogroup" aria-label="Hair length">
+              <button type="button" data-hair="0" role="radio">Off</button>
+              <button type="button" data-hair="4" role="radio">Short</button>
+              <button type="button" data-hair="8" role="radio">Mid</button>
+              <button type="button" data-hair="12" role="radio">Long</button>
+            </div>
+            <button type="button" class="help-btn" data-help="hair" aria-label="How do I use hair?">?</button>
+          </div>
+          <p class="micro mono" id="hairHint">KEEPS YOUR HAIR OVER THE OUTFIT</p>
+          <canvas class="pixmap" data-map="torso" width="384" height="192" aria-label="Torso pixel map. Click or drag over hair to erase it."></canvas>
+          <div class="map-labels mono" style="grid-template-columns: 4fr 8fr 4fr 8fr"><span>R</span><span>FRONT</span><span>L</span><span>BACK</span></div>
+          <div class="map-foot">
+            <p class="micro mono" data-hint="torso"></p>
+            <span class="eraser-actions">
+              <button type="button" class="chip" data-undo="torso" disabled>UNDO</button>
+              <button type="button" class="chip" data-reset="torso" disabled>RESET</button>
+            </span>
+          </div>
+        </section>
+
+        <section class="slide" role="tabpanel" aria-label="Head">
+          <div class="slide-row">
+            <div class="segmented three" id="headwear" role="radiogroup" aria-label="Headwear">
+              <button type="button" data-headwear="keep" role="radio">Keep</button>
+              <button type="button" data-headwear="auto" role="radio">No hood</button>
+              <button type="button" data-headwear="none" role="radio">None</button>
+            </div>
+            <button type="button" class="help-btn" data-help="headwear" aria-label="How do I use headwear?">?</button>
+          </div>
+          <p class="micro mono" id="headwearHint">REMOVES HOODS FROM YOUR OLD OUTFIT</p>
+          <canvas class="pixmap" data-map="head" width="384" height="192" aria-label="Head pixel map. Click or drag to erase hood or hat pixels."></canvas>
+          <div class="map-labels mono" style="grid-template-columns: 1fr 1fr 1fr 1fr"><span>R</span><span>FRONT</span><span>L</span><span>BACK</span></div>
+          <div class="map-foot">
+            <p class="micro mono" data-hint="head"></p>
+            <span class="eraser-actions">
+              <button type="button" class="chip" data-undo="head" disabled>UNDO</button>
+              <button type="button" class="chip" data-reset="head" disabled>RESET</button>
+            </span>
+          </div>
+        </section>
+      </div>
+      <div class="swiper-dots" aria-hidden="true"><span class="on"></span><span></span></div>
     </div>
   </aside>
 

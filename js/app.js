@@ -10,8 +10,7 @@
     hair: 0,             // torso rows of the user's hair to keep (0 = off)
     hairGuess: 0,        // detected length, applied when the Slim body is chosen
     headwear: 'auto',    // 'keep' | 'auto' (remove hoods) | 'none' (no hat layer)
-    erased: new Set(),   // hair pixels ("x,y" on the jacket layer) the user brushed away
-    strokes: [],         // undo stack: arrays of keys erased per stroke
+    erased: new Set(),   // "x,y" keys brushed away (hair on the jacket layer, hat pixels)
     hairKeys: new Set(), // hair pixels in the current render (erasable)
     merged: null,
     tone: [224, 172, 140],
@@ -179,9 +178,7 @@
     state.user = data;
     state.userName = name;
     state.isDemo = isDemo;
-    state.erased = new Set();
-    state.strokes = [];
-    updateEraserButtons();
+    resetErasers();
     $('uploadTitle').textContent = name;
     $('uploadSub').textContent = isDemo ? 'DEMO / TAP TO UPLOAD YOURS' : 'TAP TO SWAP SKIN';
     drawFace();
@@ -370,59 +367,65 @@
   }
 
   // ---------- Eraser ----------
-  // Pixel maps of the head and torso as seen on the model (overlay layer drawn
-  // over base). One map pixel = one skin pixel. HEAD erases hat-layer pixels
-  // (hoods, hats); TORSO erases carried-over hair so the outfit shows through.
+  // Pixel maps of the torso (Hair card) and head (Head card) as seen on the
+  // model: overlay layer drawn over base, one map pixel = one skin pixel.
+  // TORSO erases carried-over hair so the outfit shows through; HEAD erases
+  // hat-layer pixels (hoods, hats). Each map has its own undo/reset.
   const MAPS = {
+    torso: {
+      x: 16, y: 20, w: 24, h: 12, ox: 0, oy: 16,
+      dividers: { h: [], v: [4, 12, 16] },
+      hint: () => (state.hair ? 'DRAG OVER HAIR TO ERASE IT.' : 'TURN HAIR ON TO EDIT IT HERE.'),
+      erasable: (key) => state.hairKeys.has(key),
+    },
     head: {
       x: 0, y: 0, w: 32, h: 16, ox: 32, oy: 0,
       dividers: { h: [8], v: [8, 16, 24] },
-      labels: ['R', 'FRONT', 'L', 'BACK'], cols: '1fr 1fr 1fr 1fr',
-      hint: 'CLICK OR DRAG TO REMOVE HOOD OR HAT PIXELS.',
+      hint: () => 'DRAG OVER HOOD OR HAT PIXELS.',
       erasable: (key) => {
         const [x, y] = key.split(',').map(Number);
         return state.merged && state.merged.data[(y * 64 + x) * 4 + 3] > 0;
       },
     },
-    torso: {
-      x: 16, y: 20, w: 24, h: 12, ox: 0, oy: 16,
-      dividers: { h: [], v: [4, 12, 16] },
-      labels: ['R', 'FRONT', 'L', 'BACK'], cols: '4fr 8fr 4fr 8fr',
-      hint: 'CLICK OR DRAG OVER HAIR TO SHOW THE OUTFIT UNDERNEATH.',
-      erasable: (key) => state.hairKeys.has(key),
-    },
   };
-  let map = MAPS.head;
-  const hairMap = $('hairMap');
-  let hover = null;
-
-  function setMap(name) {
-    map = MAPS[name];
-    $('eraseTabs').querySelectorAll('[data-map]').forEach((b) => b.setAttribute('aria-pressed', b.dataset.map === name));
-    $('mapLabels').style.gridTemplateColumns = map.cols;
-    $('mapLabels').innerHTML = map.labels.map((l) => `<span>${l}</span>`).join('');
-    updateEraseHint();
-    drawHairMap();
+  for (const [name, m] of Object.entries(MAPS)) {
+    m.name = name;
+    m.canvas = document.querySelector(`.pixmap[data-map="${name}"]`);
+    m.hintEl = document.querySelector(`[data-hint="${name}"]`);
+    m.undoBtn = document.querySelector(`[data-undo="${name}"]`);
+    m.resetBtn = document.querySelector(`[data-reset="${name}"]`);
+    m.keys = new Set(); // erased keys owned by this map
+    m.strokes = [];     // undo stack
+    m.hover = null;
   }
+
   function updateEraseHint() {
-    $('eraseHint').textContent = map === MAPS.torso && !state.hair ? 'TURN HAIR ON TO EDIT IT HERE.' : map.hint;
+    for (const m of Object.values(MAPS)) m.hintEl.textContent = m.hint();
   }
-  $('eraseTabs').onclick = (e) => {
-    const btn = e.target.closest('[data-map]');
-    if (btn) setMap(btn.dataset.map);
-  };
+  function updateEraserButtons() {
+    for (const m of Object.values(MAPS)) {
+      m.undoBtn.disabled = !m.strokes.length;
+      m.resetBtn.disabled = !m.keys.size;
+    }
+  }
+  function resetErasers() {
+    state.erased.clear();
+    for (const m of Object.values(MAPS)) { m.keys.clear(); m.strokes = []; }
+    updateEraserButtons();
+  }
 
-  function drawHairMap() {
-    const m = state.merged;
-    const ctx = hairMap.getContext('2d');
-    const scale = hairMap.width / map.w;
-    ctx.clearRect(0, 0, hairMap.width, hairMap.height);
-    if (!m) return;
-    const px = (x, y) => m.data.slice((y * 64 + x) * 4, (y * 64 + x) * 4 + 4);
-    for (let y = 0; y < map.h; y++) {
-      for (let x = 0; x < map.w; x++) {
-        const sx = map.x + x, sy = map.y + y;
-        for (const c of [px(sx, sy), px(sx + map.ox, sy + map.oy)]) {
+  function drawMap(m) {
+    const src = state.merged;
+    const cv = m.canvas;
+    const ctx = cv.getContext('2d');
+    const scale = cv.width / m.w;
+    ctx.clearRect(0, 0, cv.width, cv.height);
+    if (!src) return;
+    const px = (x, y) => src.data.slice((y * 64 + x) * 4, (y * 64 + x) * 4 + 4);
+    for (let y = 0; y < m.h; y++) {
+      for (let x = 0; x < m.w; x++) {
+        const sx = m.x + x, sy = m.y + y;
+        for (const c of [px(sx, sy), px(sx + m.ox, sy + m.oy)]) {
           if (!c[3]) continue;
           ctx.fillStyle = `rgba(${c[0]},${c[1]},${c[2]},${c[3] / 255})`;
           ctx.fillRect(x * scale, y * scale, scale, scale);
@@ -430,69 +433,84 @@
       }
     }
     ctx.fillStyle = 'rgba(11,21,38,0.35)';
-    for (const x of map.dividers.v) ctx.fillRect(x * scale - 1, (map.dividers.h[0] || 0) * scale, 2, hairMap.height);
-    for (const y of map.dividers.h) ctx.fillRect(0, y * scale - 1, hairMap.width, 2);
-    if (hover) {
+    for (const x of m.dividers.v) ctx.fillRect(x * scale - 1, (m.dividers.h[0] || 0) * scale, 2, cv.height);
+    for (const y of m.dividers.h) ctx.fillRect(0, y * scale - 1, cv.width, 2);
+    if (m.hover) {
       ctx.strokeStyle = '#1a5cff';
       ctx.lineWidth = 2;
-      ctx.strokeRect(hover[0] * scale + 1, hover[1] * scale + 1, scale - 2, scale - 2);
+      ctx.strokeRect(m.hover[0] * scale + 1, m.hover[1] * scale + 1, scale - 2, scale - 2);
     }
   }
-
-  const cellAt = (e) => {
-    const r = hairMap.getBoundingClientRect();
-    const x = Math.floor(((e.clientX - r.left) / r.width) * map.w);
-    const y = Math.floor(((e.clientY - r.top) / r.height) * map.h);
-    return x >= 0 && y >= 0 && x < map.w && y < map.h ? [x, y] : null;
-  };
+  const drawHairMap = () => Object.values(MAPS).forEach(drawMap);
 
   let stroke = null;
   let pending = false;
-  function eraseAt(cell) {
+  function eraseAt(m, cell) {
     if (!cell) return;
-    const key = `${map.x + cell[0] + map.ox},${map.y + cell[1] + map.oy}`;
-    if (state.erased.has(key) || !map.erasable(key)) return;
+    const key = `${m.x + cell[0] + m.ox},${m.y + cell[1] + m.oy}`;
+    if (state.erased.has(key) || !m.erasable(key)) return;
     state.erased.add(key);
+    m.keys.add(key);
     stroke.push(key);
     if (!pending) { // batch re-renders to one per frame while dragging
       pending = true;
       requestAnimationFrame(() => { pending = false; render(); });
     }
   }
-  function updateEraserButtons() {
-    $('eraseUndo').disabled = !state.strokes.length;
-    $('eraseReset').disabled = !state.erased.size;
+
+  for (const m of Object.values(MAPS)) {
+    const cv = m.canvas;
+    const cellAt = (e) => {
+      const r = cv.getBoundingClientRect();
+      const x = Math.floor(((e.clientX - r.left) / r.width) * m.w);
+      const y = Math.floor(((e.clientY - r.top) / r.height) * m.h);
+      return x >= 0 && y >= 0 && x < m.w && y < m.h ? [x, y] : null;
+    };
+    cv.onpointerdown = (e) => {
+      cv.setPointerCapture(e.pointerId);
+      stroke = [];
+      eraseAt(m, cellAt(e));
+    };
+    cv.onpointermove = (e) => {
+      m.hover = cellAt(e);
+      if (stroke) eraseAt(m, m.hover);
+      else drawMap(m);
+    };
+    cv.onpointerup = cv.onpointercancel = () => {
+      if (stroke && stroke.length) m.strokes.push(stroke);
+      stroke = null;
+      updateEraserButtons();
+    };
+    cv.onpointerleave = () => { m.hover = null; drawMap(m); };
+
+    m.undoBtn.onclick = () => {
+      const last = m.strokes.pop();
+      if (last) last.forEach((k) => { state.erased.delete(k); m.keys.delete(k); });
+      updateEraserButtons();
+      render();
+    };
+    m.resetBtn.onclick = () => {
+      m.keys.forEach((k) => state.erased.delete(k));
+      m.keys.clear();
+      m.strokes = [];
+      updateEraserButtons();
+      render();
+    };
   }
 
-  hairMap.onpointerdown = (e) => {
-    hairMap.setPointerCapture(e.pointerId);
-    stroke = [];
-    eraseAt(cellAt(e));
-  };
-  hairMap.onpointermove = (e) => {
-    hover = cellAt(e);
-    if (stroke) eraseAt(hover);
-    else drawHairMap();
-  };
-  hairMap.onpointerup = hairMap.onpointercancel = () => {
-    if (stroke && stroke.length) state.strokes.push(stroke);
-    stroke = null;
-    updateEraserButtons();
-  };
-  hairMap.onpointerleave = () => { hover = null; drawHairMap(); };
-
-  $('eraseUndo').onclick = () => {
-    const last = state.strokes.pop();
-    if (last) last.forEach((k) => state.erased.delete(k));
-    updateEraserButtons();
-    render();
-  };
-  $('eraseReset').onclick = () => {
-    state.erased.clear();
-    state.strokes = [];
-    updateEraserButtons();
-    render();
-  };
+  // ---------- Hair / Head swiper ----------
+  // Two cards side by side in a scroll-snap strip: swipe on touch, or use the
+  // tabs. The active tab follows the scroll position.
+  const slides = $('slides');
+  const tabs = [...document.querySelectorAll('#swiper [data-slide]')];
+  const dots = [...document.querySelectorAll('.swiper-dots span')];
+  const showSlide = (i) => slides.scrollTo({ left: i * slides.clientWidth });
+  tabs.forEach((t) => { t.onclick = () => showSlide(+t.dataset.slide); });
+  slides.addEventListener('scroll', () => {
+    const i = Math.round(slides.scrollLeft / slides.clientWidth);
+    tabs.forEach((t, j) => t.setAttribute('aria-selected', j === i));
+    dots.forEach((d, j) => d.classList.toggle('on', j === i));
+  }, { passive: true });
 
   $('download').onclick = () => {
     if (state.outfit.locked || !state.resultUrl) return;
@@ -504,7 +522,8 @@
 
   // ---------- Boot with the demo head ----------
   setHeadwear('auto', false);
-  setMap('head');
+  updateEraseHint();
+  updateEraserButtons();
   setBody('classic');
   loadData(DEMO_SKIN).then((d) => useSkin(d, 'Spurdo', true)).catch(() => render());
 })();
