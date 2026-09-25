@@ -6,6 +6,9 @@ Static site that dresses a Minecraft skin in a preset outfit.
 - Fills arms, legs and torso with a **skin tone** (auto-detected from the face, picked with the colour picker, or clicked on the face preview).
 - Shades that tone per face (lit from above/front, darker inner sides/back/bottom, cast shadows under sleeves and hems, hue-shifted shadows). The same rules apply to any chosen colour.
 - Keeps **long hair** that hangs onto the torso (on by default for Slim bodies; Off / Short / Mid / Long control), with a 1-pixel eraser map to brush unwanted hair pixels back to the outfit. Hair is found by flooding down from the neckline through hair-coloured pixels, skipping colours that are the old outfit.
+- **Headwear**: Keep / No hood / None. "No hood" drops hat-layer pixels matching the old outfit's main colours (hoods), keeping hair, hats and accessories.
+- **Eraser** with HEAD and TORSO maps to brush away leftover hat/hood pixels or carried-over hair, with undo/reset.
+- **?** buttons on Hair and Headwear open short animated how-tos (`js/help.js`).
 - Draws the **outfit** pixels on top, then shows a live 3D preview and a GOOD ME® download button.
 
 ## Username lookup

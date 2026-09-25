@@ -120,8 +120,11 @@ function sampleSkinTone(skin) {
 }
 
 // Builds the new skin: user's head + skin-toned body under the outfit.
-// erased = Set of "x,y" jacket-layer keys the user brushed out of the hair.
-function mergeSkin(userSkin, outfit, tone, slim, hairRows = 0, erased = null) {
+// hairRows = torso rows of the user's hair to keep (0 = off).
+// erased   = Set of "x,y" keys the user brushed away (hair on the jacket
+//            layer, or hat-layer pixels).
+// headwear = 'keep' | 'auto' (drop hoods) | 'none' (drop the whole hat layer).
+function mergeSkin(userSkin, outfit, tone, slim, hairRows = 0, erased = null, headwear = 'auto') {
   outfit = to64(outfit);
   const out = blank();
   const opaque = (x, y) => x >= 0 && y >= 0 && x < SIZE && y < SIZE && outfit.data[idx(x, y) + 3] > 0;
@@ -165,13 +168,18 @@ function mergeSkin(userSkin, outfit, tone, slim, hairRows = 0, erased = null) {
     out.data[i + 3] = Math.round(oa * 255);
   }
 
-  // 3. User's head + hat layer, replacing whatever is there.
+  // 3. User's head, then their hat layer filtered by the headwear setting.
   if (!userSkin) return out;
   userSkin = to64(userSkin);
   const [hx, hy, hw, hh] = HEAD_RECT;
+  const hood = headwear === 'auto' ? hoodMask(userSkin, tone) : null;
   for (let y = hy; y < hy + hh; y++) {
     for (let x = hx; x < hx + hw; x++) {
       const i = idx(x, y);
+      if (x >= HAT_DX) {
+        if (headwear === 'none' || (hood && hood.has(x + ',' + y))) continue;
+        if (erased && erased.has(x + ',' + y)) continue;
+      }
       for (let c = 0; c < 4; c++) out.data[i + c] = userSkin.data[i + c];
     }
   }
@@ -277,6 +285,28 @@ function extractHair(skin, tone, rows) {
     }
   }
   return found;
+}
+
+// --- Hoods ---------------------------------------------------------------
+// Hoods live on the hat layer and share the old hoodie's colour, so hat
+// pixels matching the old outfit's main colours are treated as hood. Pixels
+// close to the skin tone are always kept (fur/ears on creature skins).
+const HAT_DX = 32;
+
+function hoodMask(skin, tone) {
+  const clothes = clothingColours(skin).filter((c) => dist(c, tone) >= 40);
+  const mask = new Set();
+  if (!clothes.length) return mask;
+  for (let y = 0; y < 16; y++) {
+    for (let x = HAT_DX; x < 64; x++) {
+      const i = idx(x, y);
+      if (skin.data[i + 3] === 0) continue;
+      const rgb = [skin.data[i], skin.data[i + 1], skin.data[i + 2]];
+      if (dist(rgb, tone) < 40) continue;
+      if (clothes.some((c) => dist(c, rgb) < 28)) mask.add(x + ',' + y);
+    }
+  }
+  return mask;
 }
 
 // Guesses hair length (0 / 4 / 8 / 12 rows) from how far hair reaches down the torso.

@@ -60,7 +60,7 @@
     </div>
     <p class="micro mono" id="bodyHint"></p>
 
-    <div class="section-tag mono">Nº003 / HAIR</div>
+    <div class="section-tag mono with-help">Nº003 / HAIR <button type="button" class="help-btn" data-help="hair" aria-label="How do I use hair?">?</button></div>
     <div class="segmented four" id="hair" role="radiogroup" aria-label="Hair length">
       <button type="button" data-hair="0" role="radio">Off</button>
       <button type="button" data-hair="4" role="radio">Short</button>
@@ -69,17 +69,28 @@
     </div>
     <p class="micro mono" id="hairHint">KEEPS YOUR HAIR OVER THE OUTFIT</p>
 
-    <div class="eraser" id="eraser" hidden>
+    <div class="section-tag mono with-help">Nº004 / HEADWEAR <button type="button" class="help-btn" data-help="headwear" aria-label="How do I use headwear?">?</button></div>
+    <div class="segmented three" id="headwear" role="radiogroup" aria-label="Headwear">
+      <button type="button" data-headwear="keep" role="radio">Keep</button>
+      <button type="button" data-headwear="auto" role="radio">No hood</button>
+      <button type="button" data-headwear="none" role="radio">None</button>
+    </div>
+    <p class="micro mono" id="headwearHint">REMOVES HOODS FROM YOUR OLD OUTFIT</p>
+
+    <div class="eraser" id="eraser">
       <div class="eraser-head">
-        <span class="section-tag mono">ERASE HAIR</span>
+        <div class="chips" id="eraseTabs">
+          <button type="button" class="chip" data-map="head" aria-pressed="true">HEAD</button>
+          <button type="button" class="chip" data-map="torso">TORSO</button>
+        </div>
         <span class="eraser-actions">
           <button type="button" class="chip" id="eraseUndo" disabled>UNDO</button>
           <button type="button" class="chip" id="eraseReset" disabled>RESET</button>
         </span>
       </div>
-      <canvas id="hairMap" width="288" height="144" aria-label="Torso pixel map. Click or drag over hair to erase it."></canvas>
-      <div class="map-labels mono"><span>R</span><span>FRONT</span><span>L</span><span>BACK</span></div>
-      <p class="micro mono">CLICK OR DRAG OVER HAIR TO SHOW THE OUTFIT UNDERNEATH.</p>
+      <canvas id="hairMap" width="384" height="192" aria-label="Pixel map. Click or drag to erase hair, hoods or hat pixels."></canvas>
+      <div class="map-labels mono" id="mapLabels"></div>
+      <p class="micro mono" id="eraseHint">ERASER / CLICK OR DRAG TO REMOVE HOOD OR HAT PIXELS.</p>
     </div>
   </aside>
 
@@ -102,10 +113,10 @@
   <!-- Right: the fit -->
   <div class="right-col">
   <aside class="panel right">
-    <div class="section-tag mono">Nº004 / OUTFIT</div>
+    <div class="section-tag mono">Nº005 / OUTFIT</div>
     <div class="outfits" id="outfits"></div>
 
-    <div class="section-tag mono">Nº005 / SKIN TONE</div>
+    <div class="section-tag mono">Nº006 / SKIN TONE</div>
     <div class="tone">
       <label class="swatch" title="Pick a colour"><input type="color" id="tone" value="#e0ac8c"><span id="swatch"></span></label>
       <button type="button" class="chip mono" id="auto">AUTO</button>
@@ -132,5 +143,6 @@
 <script src="js/skin.js"></script>
 <script src="js/outfits.js"></script>
 <script src="js/app.js"></script>
+<script src="js/help.js"></script>
 </body>
 </html>
