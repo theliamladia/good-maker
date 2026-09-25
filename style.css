@@ -246,6 +246,7 @@ body {
   background: #87cefa;
 }
 .segmented button:disabled { opacity: 0.35; cursor: not-allowed; }
+.segmented button[hidden] { display: none; }
 
 /* ---------- Tone ---------- */
 .tone { display: flex; gap: 10px; align-items: center; }

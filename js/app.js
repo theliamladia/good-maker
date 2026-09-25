@@ -60,10 +60,24 @@
     return (lockedCache[src] = data);
   }
   // Texture set for the chosen sleeve (falls back to short if there's no long version).
-  const setFor = (o) => (state.sleeve === 'long' && o.long ? o.long : o.bodies);
-  const loadOutfit = (o, body) => (o.locked ? loadLocked(o.bodies[body]) : loadData(setFor(o)[body]));
+  // Sleeve lengths an outfit comes in, and the one in effect for it (the
+  // user's choice if available, otherwise whatever the outfit has).
+  const sleevesOf = (o) => ['short', 'long'].filter((k) => (k === 'long' ? o.long : o.bodies));
+  const sleeveFor = (o) => (sleevesOf(o).includes(state.sleeve) ? state.sleeve : sleevesOf(o)[0]);
+  const setFor = (o) => (sleeveFor(o) === 'long' ? o.long : o.bodies);
+  const loadOutfit = (o, body) => (o.locked ? loadLocked(setFor(o)[body]) : loadData(setFor(o)[body]));
   const EMPTY_OUTFIT = { width: 64, height: 64, data: new Uint8ClampedArray(64 * 64 * 4) };
-  const bodiesOf = (o) => Object.keys(o.bodies);
+  const bodiesOf = (o) => Object.keys(setFor(o));
+  // Show only the options that exist; the grid shrinks to fit what's left.
+  function showOnly(group, attr, available) {
+    let n = 0;
+    group.querySelectorAll('button').forEach((b) => {
+      const ok = available.includes(b.dataset[attr]);
+      b.hidden = !ok;
+      if (ok) n++;
+    });
+    group.style.gridTemplateColumns = `repeat(${n}, 1fr)`;
+  }
 
   const toHex = (rgb) => '#' + rgb.map((v) => v.toString(16).padStart(2, '0')).join('');
   const fromHex = (hex) => [1, 3, 5].map((i) => parseInt(hex.slice(i, i + 2), 16));
@@ -141,19 +155,16 @@
 
   // ---------- Sleeve ----------
   function updateSleeveButtons() {
-    const hasLong = !!state.outfit.long;
-    $('sleeve').querySelectorAll('button').forEach((b) => {
-      b.disabled = b.dataset.sleeve === 'long' && !hasLong;
-      b.setAttribute('aria-checked', b.dataset.sleeve === (hasLong ? state.sleeve : 'short'));
-    });
+    const o = state.outfit;
+    showOnly($('sleeve'), 'sleeve', sleevesOf(o));
+    $('sleeve').querySelectorAll('button').forEach((b) => b.setAttribute('aria-checked', b.dataset.sleeve === sleeveFor(o)));
   }
   $('sleeve').onclick = (e) => {
     const btn = e.target.closest('[data-sleeve]');
-    if (!btn || btn.disabled) return;
+    if (!btn) return;
     state.sleeve = btn.dataset.sleeve;
     updateSleeveButtons();
-    drawOutfits();
-    render();
+    setBody(state.body); // bodies can differ per sleeve; also redraws and renders
   };
 
   function selectOutfit(o) {
@@ -185,7 +196,7 @@
       body = available[0];
       why = `${fullName(state.outfit)} COMES IN ${body.toUpperCase()} ONLY`;
     }
-    $('body').querySelectorAll('button').forEach((b) => { b.disabled = !available.includes(b.dataset.body); });
+    showOnly($('body'), 'body', available);
     state.body = body;
     setHair(body === 'slim' ? state.hairGuess : 0, false);
     $('body').querySelectorAll('button').forEach((b) => b.setAttribute('aria-checked', b.dataset.body === body));

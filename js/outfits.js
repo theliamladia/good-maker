@@ -1,8 +1,10 @@
-// Available outfits. Each has one 64x64 PNG per body type.
+// Available outfits: one 64x64 PNG per body type, per sleeve length.
+// bodies = short-sleeve set, long = long-sleeve set; either may be left out,
+// and within a set a body may be left out. Options an outfit doesn't have are
+// hidden from the Body / Sleeve controls while it's selected.
 // Leave body areas transparent where skin should show; the head area is ignored.
 // classic = 4px (Steve) arms, slim = 3px (Alex) arms.
 // color (optional) = colourway, shown smaller under the name.
-// long (optional) = long-sleeve versions, picked with the Sleeve control.
 // locked: true = preview only. The PNG isn't in this repo; it's served
 // scrambled by /api/outfit (see api/outfit.js) and can't be downloaded.
 window.OUTFITS = [
@@ -36,8 +38,8 @@ window.OUTFITS = [
     id: 'good-lab-destroyed',
     name: 'GOOD LAB®',
     color: 'Destroyed',
-    bodies: {
-      slim: 'outfits/good-lab-destroyed-slim.png',
+    long: {
+      slim: 'outfits/good-lab-destroyed-long-slim.png',
     },
   },
   {
