@@ -1,4 +1,4 @@
-# Good Maker
+# GOOD® Maker
 
 Static site that dresses a Minecraft skin in a preset outfit.
 
@@ -14,6 +14,8 @@ Open over HTTP (not `file://`), e.g. `python3 -m http.server`, or host on GitHub
 ## Add an outfit
 
 1. Save a 64x64 PNG in `outfits/`. Leave areas transparent where skin should show; the head area is ignored.
-2. Add an entry to `js/outfits.js` (`slim: true` for 3px-arm outfits).
+2. Add an entry to `js/outfits.js` with one PNG per body: `classic` (4px arms) and `slim` (3px arms).
+
+The body type is auto-detected from the uploaded skin and can be switched with the Classic / Slim toggle.
 
 Shading strength is tuned in `js/skin.js` (`FACE_STEP`, `CAST_SHADOW`, `LIMB_END`, `shadeTone`).

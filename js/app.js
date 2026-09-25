@@ -1,6 +1,16 @@
 (() => {
   const $ = (id) => document.getElementById(id);
-  const state = { user: null, outfit: null, outfitData: {}, tone: [224, 172, 140], resultUrl: null };
+  const DEMO_SKIN = 'samples/spurdo.png';
+
+  const state = {
+    user: null,          // ImageData of the head source
+    isDemo: true,
+    outfit: window.OUTFITS[0],
+    body: 'classic',     // 'classic' | 'slim'
+    tone: [224, 172, 140],
+    resultUrl: null,
+  };
+  const cache = {};
 
   const loadImage = (src) => new Promise((resolve, reject) => {
     const img = new Image();
@@ -17,44 +27,81 @@
     return ctx.getImageData(0, 0, img.width, img.height);
   };
 
+  const loadData = async (src) => (cache[src] ||= imageData(await loadImage(src)));
+
   const toHex = (rgb) => '#' + rgb.map((v) => v.toString(16).padStart(2, '0')).join('');
   const fromHex = (hex) => [1, 3, 5].map((i) => parseInt(hex.slice(i, i + 2), 16));
 
+  // ---------- 3D viewer ----------
   let viewer = null;
+  const view = $('view3d');
   if (window.skinview3d) {
-    viewer = new skinview3d.SkinViewer({ canvas: document.createElement('canvas'), width: 240, height: 320 });
+    viewer = new skinview3d.SkinViewer({
+      canvas: document.createElement('canvas'),
+      width: view.clientWidth, height: view.clientHeight,
+    });
     viewer.autoRotate = true;
+    viewer.autoRotateSpeed = 0.6;
     viewer.animation = new skinview3d.IdleAnimation();
-    $('view3d').appendChild(viewer.canvas);
-    $('rotate').onchange = (e) => { viewer.autoRotate = e.target.checked; };
-    $('anim').onchange = (e) => {
-      const A = { idle: skinview3d.IdleAnimation, walk: skinview3d.WalkingAnimation, run: skinview3d.RunningAnimation };
-      viewer.animation = A[e.target.value] ? new A[e.target.value]() : null;
+    viewer.zoom = 0.85;
+    view.appendChild(viewer.canvas);
+    new ResizeObserver(() => viewer.setSize(view.clientWidth, view.clientHeight)).observe(view);
+
+    $('rotate').onclick = (e) => {
+      viewer.autoRotate = !viewer.autoRotate;
+      e.currentTarget.setAttribute('aria-pressed', viewer.autoRotate);
+    };
+    const ANIMS = { idle: skinview3d.IdleAnimation, walk: skinview3d.WalkingAnimation, run: skinview3d.RunningAnimation };
+    $('anim').onclick = (e) => {
+      const btn = e.target.closest('[data-anim]');
+      if (!btn) return;
+      $('anim').querySelectorAll('.chip').forEach((b) => b.setAttribute('aria-pressed', b === btn));
+      const A = ANIMS[btn.dataset.anim];
+      viewer.animation = A ? new A() : null;
     };
   } else {
-    $('view3d').innerHTML = '<p class="hint">3D preview unavailable.</p>';
+    view.innerHTML = '<p class="micro mono center" style="padding-top:40%">3D PREVIEW UNAVAILABLE</p>';
   }
 
-  // Outfit picker
-  window.OUTFITS.forEach((o, i) => {
-    const btn = document.createElement('button');
-    btn.type = 'button';
-    btn.className = 'outfit';
-    btn.innerHTML = `<img src="${o.file}" alt=""><span>${o.name}</span>`;
-    btn.onclick = () => selectOutfit(o, btn);
-    $('outfits').appendChild(btn);
-    if (i === 0) selectOutfit(o, btn);
-  });
+  // ---------- Outfits ----------
+  function drawOutfits() {
+    $('outfits').innerHTML = '';
+    for (const o of window.OUTFITS) {
+      const btn = document.createElement('button');
+      btn.type = 'button';
+      btn.className = 'outfit';
+      btn.setAttribute('aria-pressed', o === state.outfit);
+      btn.innerHTML = `<img src="${o.bodies[state.body]}" alt=""><span>${o.name}</span>`;
+      btn.onclick = () => { state.outfit = o; drawOutfits(); render(); };
+      $('outfits').appendChild(btn);
+    }
+  }
 
-  async function selectOutfit(o, btn) {
-    document.querySelectorAll('.outfit').forEach((b) => b.classList.remove('selected'));
-    btn.classList.add('selected');
-    state.outfit = o;
-    if (!state.outfitData[o.id]) state.outfitData[o.id] = imageData(await loadImage(o.file));
+  // ---------- Body ----------
+  function setBody(body, why) {
+    state.body = body;
+    $('body').querySelectorAll('button').forEach((b) => b.setAttribute('aria-checked', b.dataset.body === body));
+    $('bodyHint').textContent = why || (body === 'slim' ? '3PX ARMS / ALEX MODEL' : '4PX ARMS / STEVE MODEL');
+    drawOutfits();
     render();
   }
+  $('body').onclick = (e) => {
+    const btn = e.target.closest('[data-body]');
+    if (btn) setBody(btn.dataset.body);
+  };
 
-  // Upload
+  // ---------- Upload ----------
+  function useSkin(data, name, isDemo) {
+    state.user = data;
+    state.isDemo = isDemo;
+    $('uploadTitle').textContent = name;
+    $('uploadSub').textContent = isDemo ? 'DEMO / TAP TO UPLOAD YOURS' : 'TAP TO SWAP SKIN';
+    drawFace();
+    setTone(SkinLib.sampleSkinTone(data), false);
+    const slim = SkinLib.detectSlim(data);
+    setBody(slim ? 'slim' : 'classic', `DETECTED ${slim ? 'SLIM' : 'CLASSIC'} / TAP TO CHANGE`);
+  }
+
   async function handleFile(file) {
     $('error').hidden = true;
     if (!file) return;
@@ -62,11 +109,9 @@
     try {
       const data = imageData(await loadImage(url));
       if (data.width !== 64 || (data.height !== 64 && data.height !== 32)) {
-        throw new Error(`Skin must be 64x64 or 64x32 (got ${data.width}x${data.height}).`);
+        throw new Error(`SKIN MUST BE 64×64 OR 64×32 (GOT ${data.width}×${data.height}).`);
       }
-      state.user = data;
-      drawFace();
-      setTone(SkinLib.sampleSkinTone(data));
+      useSkin(data, file.name.replace(/\.png$/i, ''), false);
     } catch (e) {
       $('error').textContent = e.message;
       $('error').hidden = false;
@@ -76,20 +121,27 @@
   }
 
   $('file').onchange = (e) => handleFile(e.target.files[0]);
+  // Whole page is a drop target.
   const drop = $('drop');
-  drop.ondragover = (e) => { e.preventDefault(); drop.classList.add('over'); };
-  drop.ondragleave = () => drop.classList.remove('over');
-  drop.ondrop = (e) => { e.preventDefault(); drop.classList.remove('over'); handleFile(e.dataTransfer.files[0]); };
+  document.addEventListener('dragover', (e) => { e.preventDefault(); drop.classList.add('over'); });
+  document.addEventListener('dragleave', (e) => { if (!e.relatedTarget) drop.classList.remove('over'); });
+  document.addEventListener('drop', (e) => {
+    e.preventDefault();
+    drop.classList.remove('over');
+    handleFile(e.dataTransfer.files[0]);
+  });
 
-  // Skin tone
-  // Any tone (auto, picker or face click) goes through the same shading rules;
-  // the ramp shows the highlight/shadow shades that will be used.
-  function setTone(rgb) {
+  // ---------- Skin tone ----------
+  // Every tone (auto, picker, eyedropper) goes through the same shading rules;
+  // the ramp previews the highlight -> shadow shades that will be used.
+  function setTone(rgb, rerender = true) {
     state.tone = rgb;
-    $('tone').value = toHex(rgb);
+    const hex = toHex(rgb);
+    $('tone').value = hex;
+    $('swatch').style.background = hex;
     $('ramp').innerHTML = [1, 0, -1, -1.5, -2, -3]
       .map((s) => `<span style="background:${toHex(SkinLib.shadeTone(rgb, s))}"></span>`).join('');
-    render();
+    if (rerender) render();
   }
   $('tone').oninput = (e) => setTone(fromHex(e.target.value));
   $('auto').onclick = () => state.user && setTone(SkinLib.sampleSkinTone(state.user));
@@ -101,6 +153,7 @@
   }
   $('face').onclick = (e) => {
     if (!state.user) return;
+    e.preventDefault(); // don't open the file picker
     const r = e.target.getBoundingClientRect();
     const x = 8 + Math.floor(((e.clientX - r.left) / r.width) * 8);
     const y = 8 + Math.floor(((e.clientY - r.top) / r.height) * 8);
@@ -108,27 +161,30 @@
     if (state.user.data[i + 3] > 0) setTone([...state.user.data.slice(i, i + 3)]);
   };
 
-  setTone(state.tone);
-
-  // Result
-  function render() {
-    const outfit = state.outfit && state.outfitData[state.outfit.id];
-    if (!outfit) return;
-    const merged = SkinLib.mergeSkin(state.user, outfit, state.tone, state.outfit.slim);
+  // ---------- Render ----------
+  let renderId = 0;
+  async function render() {
+    const id = ++renderId;
+    const outfit = await loadData(state.outfit.bodies[state.body]);
+    if (id !== renderId) return; // a newer render started
+    const slim = state.body === 'slim';
+    const merged = SkinLib.mergeSkin(state.user, outfit, state.tone, slim);
     const canvas = $('flat');
     canvas.getContext('2d').putImageData(new ImageData(merged.data, 64, 64), 0, 0);
     state.resultUrl = canvas.toDataURL('image/png');
-    $('download').disabled = !state.user;
-    $('modelHint').textContent = state.outfit.slim
-      ? 'Use the Slim (Alex) model when uploading this skin.'
-      : 'Use the Classic (Steve) model when uploading this skin.';
-    if (viewer) viewer.loadSkin(state.resultUrl, { model: state.outfit.slim ? 'slim' : 'default' });
+    $('download').disabled = state.isDemo;
+    $('download').title = state.isDemo ? 'Upload your skin first' : '';
+    if (viewer) viewer.loadSkin(state.resultUrl, { model: slim ? 'slim' : 'default' });
   }
 
   $('download').onclick = () => {
     const a = document.createElement('a');
     a.href = state.resultUrl;
-    a.download = `${state.outfit.id}-skin.png`;
+    a.download = `${state.outfit.id}-${state.body}.png`;
     a.click();
   };
+
+  // ---------- Boot with the demo head ----------
+  setBody('classic');
+  loadData(DEMO_SKIN).then((d) => useSkin(d, 'Spurdo', true)).catch(() => render());
 })();

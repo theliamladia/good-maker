@@ -188,6 +188,16 @@ function mergeSkin(userSkin, outfit, tone, slim) {
   return out;
 }
 
-const SkinLib = { sampleSkinTone, mergeSkin, bodyParts, shadeTone };
+// Slim (Alex) skins leave the 4th arm column transparent: the right arm's
+// front-right strip at x=54..55, y=20..31 is unused on 3px arms.
+function detectSlim(skin) {
+  if (skin.height !== SIZE) return false;
+  for (let y = 20; y < 32; y++) {
+    for (let x = 54; x < 56; x++) if (skin.data[idx(x, y) + 3] !== 0) return false;
+  }
+  return true;
+}
+
+const SkinLib = { sampleSkinTone, mergeSkin, bodyParts, shadeTone, detectSlim };
 if (typeof module !== 'undefined') module.exports = SkinLib;
 else window.SkinLib = SkinLib;

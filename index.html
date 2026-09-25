@@ -3,65 +3,107 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Good Maker</title>
+  <title>GOOD® Maker</title>
+  <meta name="description" content="Put your Minecraft skin in a GOOD® fit.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <main>
-    <h1>Good Maker</h1>
-    <p class="sub">Upload your Minecraft skin and put on a new outfit.</p>
 
-    <section class="step">
-      <h2>1. Your skin</h2>
-      <label class="drop" id="drop">
-        <input type="file" id="file" accept="image/png">
-        <span>Drop a skin PNG here or click to choose</span>
-      </label>
-      <p class="error" id="error" hidden></p>
-    </section>
+<!-- CRT overlay -->
+<div class="crt-scanlines" aria-hidden="true"></div>
+<div class="crt-vignette" aria-hidden="true"></div>
 
-    <section class="step">
-      <h2>2. Outfit</h2>
-      <div class="outfits" id="outfits"></div>
-    </section>
+<!-- Sky -->
+<div class="hero-sky" aria-hidden="true">
+  <div class="cloud cloud-1"></div>
+  <div class="cloud cloud-2"></div>
+  <div class="cloud cloud-3"></div>
+  <div class="cloud cloud-4"></div>
+</div>
 
-    <section class="step">
-      <h2>3. Skin tone</h2>
-      <div class="tone">
-        <input type="color" id="tone" value="#e0ac8c">
-        <button type="button" id="auto">Auto-detect from face</button>
-        <span class="hint">or click your face below to pick a colour</span>
+<header class="site-header">
+  <a class="wordmark" href="#">GOOD® <span>Maker</span></a>
+  <nav class="site-nav">
+    <button type="button" class="cta-pill" id="download">Download skin <span class="dot-live"></span></button>
+  </nav>
+</header>
+
+<div class="ticker ticker-top" aria-hidden="true">
+  <div class="ticker-track">
+    <span>GOOD® MAKER&nbsp;&nbsp;●&nbsp;&nbsp;</span><span>GOOD® MAKER&nbsp;&nbsp;●&nbsp;&nbsp;</span><span>GOOD® MAKER&nbsp;&nbsp;●&nbsp;&nbsp;</span><span>GOOD® MAKER&nbsp;&nbsp;●&nbsp;&nbsp;</span><span>GOOD® MAKER&nbsp;&nbsp;●&nbsp;&nbsp;</span><span>GOOD® MAKER&nbsp;&nbsp;●&nbsp;&nbsp;</span><span>GOOD® MAKER&nbsp;&nbsp;●&nbsp;&nbsp;</span><span>GOOD® MAKER&nbsp;&nbsp;●&nbsp;&nbsp;</span>
+  </div>
+</div>
+
+<main class="stage">
+  <!-- Left: you -->
+  <aside class="panel left">
+    <div class="section-tag mono">Nº001 / YOUR SKIN</div>
+    <label class="upload" id="drop">
+      <input type="file" id="file" accept="image/png">
+      <canvas id="face" width="8" height="8" title="Click your face to pick a skin tone"></canvas>
+      <span class="upload-text">
+        <strong id="uploadTitle">Drop your skin</strong>
+        <small class="mono" id="uploadSub">OR TAP TO UPLOAD A .PNG</small>
+      </span>
+    </label>
+    <p class="error mono" id="error" hidden></p>
+
+    <div class="section-tag mono">Nº002 / BODY</div>
+    <div class="segmented" id="body" role="radiogroup" aria-label="Body type">
+      <button type="button" data-body="classic" role="radio">Classic</button>
+      <button type="button" data-body="slim" role="radio">Slim</button>
+    </div>
+    <p class="micro mono" id="bodyHint"></p>
+  </aside>
+
+  <!-- Center: the model -->
+  <section class="viewer-wrap">
+    <div id="view3d"></div>
+    <div class="viewer-bar mono">
+      <button type="button" class="chip" id="rotate" aria-pressed="true">↻ SPIN</button>
+      <span class="sep"></span>
+      <div class="chips" id="anim">
+        <button type="button" class="chip" data-anim="idle" aria-pressed="true">IDLE</button>
+        <button type="button" class="chip" data-anim="walk">WALK</button>
+        <button type="button" class="chip" data-anim="run">RUN</button>
+        <button type="button" class="chip" data-anim="none">STILL</button>
       </div>
-      <div class="ramp" id="ramp" title="Shading generated from your tone"></div>
-      <canvas id="face" width="8" height="8" title="Click to pick skin tone"></canvas>
-    </section>
+    </div>
+    <p class="micro mono center">DRAG TO TURN / SCROLL TO ZOOM</p>
+  </section>
 
-    <section class="step result">
-      <h2>4. Preview</h2>
-      <div class="previews">
-        <div>
-          <div id="view3d"></div>
-          <div class="controls">
-            <label><input type="checkbox" id="rotate" checked> Rotate</label>
-            <select id="anim">
-              <option value="idle">Idle</option>
-              <option value="walk">Walk</option>
-              <option value="run">Run</option>
-              <option value="none">Still</option>
-            </select>
-          </div>
-          <p class="hint">Drag to turn, scroll to zoom.</p>
-        </div>
-        <canvas id="flat" width="64" height="64"></canvas>
-      </div>
-      <button type="button" id="download" disabled>Download skin</button>
-      <p class="hint" id="modelHint"></p>
-    </section>
-  </main>
+  <!-- Right: the fit -->
+  <aside class="panel right">
+    <div class="section-tag mono">Nº003 / OUTFIT</div>
+    <div class="outfits" id="outfits"></div>
 
-  <script src="https://cdn.jsdelivr.net/npm/skinview3d@3.1.0/bundles/skinview3d.bundle.js"></script>
-  <script src="js/skin.js"></script>
-  <script src="js/outfits.js"></script>
-  <script src="js/app.js"></script>
+    <div class="section-tag mono">Nº004 / SKIN TONE</div>
+    <div class="tone">
+      <label class="swatch" title="Pick a colour"><input type="color" id="tone" value="#e0ac8c"><span id="swatch"></span></label>
+      <button type="button" class="chip mono" id="auto">AUTO</button>
+    </div>
+    <div class="ramp" id="ramp" title="Shading built from your tone"></div>
+    <p class="micro mono">CLICK YOUR FACE TO EYEDROP.</p>
+
+    <details class="texture">
+      <summary class="mono">VIEW TEXTURE</summary>
+      <canvas id="flat" width="64" height="64"></canvas>
+    </details>
+  </aside>
+</main>
+
+<div class="ticker ticker-band" aria-hidden="true">
+  <div class="ticker-track slow">
+    <span>GOOD® RECORDS&nbsp;&nbsp;●&nbsp;&nbsp;</span><span>GOOD® RECORDS&nbsp;&nbsp;●&nbsp;&nbsp;</span><span>GOOD® RECORDS&nbsp;&nbsp;●&nbsp;&nbsp;</span><span>GOOD® RECORDS&nbsp;&nbsp;●&nbsp;&nbsp;</span><span>GOOD® RECORDS&nbsp;&nbsp;●&nbsp;&nbsp;</span><span>GOOD® RECORDS&nbsp;&nbsp;●&nbsp;&nbsp;</span><span>GOOD® RECORDS&nbsp;&nbsp;●&nbsp;&nbsp;</span><span>GOOD® RECORDS&nbsp;&nbsp;●&nbsp;&nbsp;</span>
+  </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/skinview3d@3.1.0/bundles/skinview3d.bundle.js"></script>
+<script src="js/skin.js"></script>
+<script src="js/outfits.js"></script>
+<script src="js/app.js"></script>
 </body>
 </html>
