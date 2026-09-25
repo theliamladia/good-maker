@@ -33,6 +33,14 @@ window.OUTFITS = [
     },
   },
   {
+    id: 'good-lab-destroyed',
+    name: 'GOOD LAB®',
+    color: 'Destroyed',
+    bodies: {
+      slim: 'outfits/good-lab-destroyed-slim.png',
+    },
+  },
+  {
     id: 'founders',
     name: 'FOUNDERS EDITION',
     locked: true,
