@@ -138,6 +138,22 @@ body {
 }
 .segmented button[aria-checked="true"] { background: #fff; color: var(--ink); box-shadow: 0 2px 8px rgba(11, 21, 38, 0.12); }
 
+/* ---------- Hair eraser ---------- */
+.eraser { margin-top: 14px; }
+.eraser-head { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; }
+.eraser-head .section-tag { margin: 0; }
+.eraser-actions { display: flex; gap: 4px; }
+.eraser-actions .chip:disabled { opacity: 0.4; cursor: default; }
+#hairMap {
+  display: block; width: 100%; aspect-ratio: 2; border-radius: 8px;
+  image-rendering: pixelated; cursor: crosshair; touch-action: none;
+  background: repeating-conic-gradient(#e6edf5 0 25%, #fff 0 50%) 0 0 / 12px 12px;
+}
+.map-labels {
+  display: grid; grid-template-columns: 4fr 8fr 4fr 8fr; margin-top: 4px;
+  font-size: 0.6rem; letter-spacing: 0.08em; color: var(--ink-soft); text-align: center;
+}
+
 /* ---------- Chips ---------- */
 .chip {
   border: 1px solid rgba(11, 21, 38, 0.14); background: rgba(255, 255, 255, 0.75);

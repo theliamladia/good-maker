@@ -120,7 +120,8 @@ function sampleSkinTone(skin) {
 }
 
 // Builds the new skin: user's head + skin-toned body under the outfit.
-function mergeSkin(userSkin, outfit, tone, slim, hairRows = 0) {
+// erased = Set of "x,y" jacket-layer keys the user brushed out of the hair.
+function mergeSkin(userSkin, outfit, tone, slim, hairRows = 0, erased = null) {
   outfit = to64(outfit);
   const out = blank();
   const opaque = (x, y) => x >= 0 && y >= 0 && x < SIZE && y < SIZE && outfit.data[idx(x, y) + 3] > 0;
@@ -178,6 +179,7 @@ function mergeSkin(userSkin, outfit, tone, slim, hairRows = 0) {
   // 4. Long hair that hangs onto the torso, placed on the jacket layer so it
   //    sits over the new outfit.
   for (const { x, y, rgba } of extractHair(userSkin, tone, hairRows)) {
+    if (erased && erased.has(x + ',' + y)) continue;
     const i = idx(x, y);
     for (let c = 0; c < 4; c++) out.data[i + c] = rgba[c];
   }
@@ -298,6 +300,6 @@ function detectSlim(skin) {
   return true;
 }
 
-const SkinLib = { sampleSkinTone, mergeSkin, bodyParts, shadeTone, detectSlim, estimateHairRows };
+const SkinLib = { sampleSkinTone, mergeSkin, bodyParts, shadeTone, detectSlim, estimateHairRows, extractHair };
 if (typeof module !== 'undefined') module.exports = SkinLib;
 else window.SkinLib = SkinLib;

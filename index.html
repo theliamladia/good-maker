@@ -66,6 +66,19 @@
       <button type="button" data-hair="12" role="radio">Long</button>
     </div>
     <p class="micro mono" id="hairHint">KEEPS YOUR HAIR OVER THE OUTFIT</p>
+
+    <div class="eraser" id="eraser" hidden>
+      <div class="eraser-head">
+        <span class="section-tag mono">ERASE HAIR</span>
+        <span class="eraser-actions">
+          <button type="button" class="chip" id="eraseUndo" disabled>UNDO</button>
+          <button type="button" class="chip" id="eraseReset" disabled>RESET</button>
+        </span>
+      </div>
+      <canvas id="hairMap" width="288" height="144" aria-label="Torso pixel map. Click or drag over hair to erase it."></canvas>
+      <div class="map-labels mono"><span>R</span><span>FRONT</span><span>L</span><span>BACK</span></div>
+      <p class="micro mono">CLICK OR DRAG OVER HAIR TO SHOW THE OUTFIT UNDERNEATH.</p>
+    </div>
   </aside>
 
   <!-- Center: the model -->
