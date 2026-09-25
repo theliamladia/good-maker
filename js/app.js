@@ -117,6 +117,7 @@
   // ---------- Upload ----------
   function useSkin(data, name, isDemo) {
     state.user = data;
+    state.userName = name;
     state.isDemo = isDemo;
     state.erased = new Set();
     state.strokes = [];
@@ -367,7 +368,7 @@
   $('download').onclick = () => {
     const a = document.createElement('a');
     a.href = state.resultUrl;
-    a.download = `${state.outfit.id}-${state.body}.png`;
+    a.download = `${(state.userName || 'skin').replace(/[^A-Za-z0-9_-]/g, '')}GOOD.png`;
     a.click();
   };
 
