@@ -130,6 +130,8 @@ body {
   display: grid; grid-template-columns: 1fr 1fr; padding: 4px; gap: 4px;
   background: rgba(11, 21, 38, 0.08); border-radius: 12px;
 }
+.segmented.four { grid-template-columns: repeat(4, 1fr); }
+.segmented.four button { padding: 9px 4px; font-size: 0.85rem; }
 .segmented button {
   border: 0; background: transparent; padding: 10px; border-radius: 9px;
   font: 600 0.95rem 'Inter', sans-serif; color: var(--ink-soft); cursor: pointer;

@@ -5,6 +5,7 @@ Static site that dresses a Minecraft skin in a preset outfit.
 - Keeps the user's **head + hat layer** from their uploaded skin.
 - Fills arms, legs and torso with a **skin tone** (auto-detected from the face, picked with the colour picker, or clicked on the face preview).
 - Shades that tone per face (lit from above/front, darker inner sides/back/bottom, cast shadows under sleeves and hems, hue-shifted shadows). The same rules apply to any chosen colour.
+- Keeps **long hair** that hangs onto the torso (on by default for Slim bodies; Off / Short / Mid / Long control). Hair is found by flooding down from the neckline through hair-coloured pixels, skipping colours that are the old outfit.
 - Draws the **outfit** pixels on top, then shows a live 3D preview and a download button.
 
 ## Run

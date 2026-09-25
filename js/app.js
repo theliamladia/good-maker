@@ -7,6 +7,8 @@
     isDemo: true,
     outfit: window.OUTFITS[0],
     body: 'classic',     // 'classic' | 'slim'
+    hair: 0,             // torso rows of the user's hair to keep (0 = off)
+    hairGuess: 0,        // detected length, applied when the Slim body is chosen
     tone: [224, 172, 140],
     resultUrl: null,
   };
@@ -78,8 +80,10 @@
   }
 
   // ---------- Body ----------
+  // Slim (female) bodies keep the user's hair by default; Classic starts without it.
   function setBody(body, why) {
     state.body = body;
+    setHair(body === 'slim' ? state.hairGuess : 0, false);
     $('body').querySelectorAll('button').forEach((b) => b.setAttribute('aria-checked', b.dataset.body === body));
     $('bodyHint').textContent = why || (body === 'slim' ? '3PX ARMS / ALEX MODEL' : '4PX ARMS / STEVE MODEL');
     drawOutfits();
@@ -90,6 +94,20 @@
     if (btn) setBody(btn.dataset.body);
   };
 
+  // ---------- Hair ----------
+  function setHair(rows, rerender = true) {
+    state.hair = rows;
+    $('hair').querySelectorAll('button').forEach((b) => b.setAttribute('aria-checked', +b.dataset.hair === rows));
+    $('hairHint').textContent = rows
+      ? 'KEEPS YOUR HAIR OVER THE OUTFIT'
+      : state.hairGuess ? 'HAIR FOUND / TAP A LENGTH TO KEEP IT' : 'KEEPS YOUR HAIR OVER THE OUTFIT';
+    if (rerender) render();
+  }
+  $('hair').onclick = (e) => {
+    const btn = e.target.closest('[data-hair]');
+    if (btn) setHair(+btn.dataset.hair);
+  };
+
   // ---------- Upload ----------
   function useSkin(data, name, isDemo) {
     state.user = data;
@@ -98,6 +116,7 @@
     $('uploadSub').textContent = isDemo ? 'DEMO / TAP TO UPLOAD YOURS' : 'TAP TO SWAP SKIN';
     drawFace();
     setTone(SkinLib.sampleSkinTone(data), false);
+    state.hairGuess = SkinLib.estimateHairRows(data, state.tone);
     const slim = SkinLib.detectSlim(data);
     setBody(slim ? 'slim' : 'classic', `DETECTED ${slim ? 'SLIM' : 'CLASSIC'} / TAP TO CHANGE`);
   }
@@ -168,7 +187,7 @@
     const outfit = await loadData(state.outfit.bodies[state.body]);
     if (id !== renderId) return; // a newer render started
     const slim = state.body === 'slim';
-    const merged = SkinLib.mergeSkin(state.user, outfit, state.tone, slim);
+    const merged = SkinLib.mergeSkin(state.user, outfit, state.tone, slim, state.hair);
     const canvas = $('flat');
     canvas.getContext('2d').putImageData(new ImageData(merged.data, 64, 64), 0, 0);
     state.resultUrl = canvas.toDataURL('image/png');

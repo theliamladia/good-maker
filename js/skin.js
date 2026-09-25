@@ -32,55 +32,33 @@ function bodyParts(slim) {
 
 // --- Shading -------------------------------------------------------------
 // Light comes from above and in front. Each face gets a tone step; shadows
-// shift hue toward red and gain saturation, highlights shift toward yellow,
-// so the result doesn't look like flat grey-darkened skin.
+// lean warm and highlights lean toward warm white, so the result doesn't
+// look like flat grey-darkened skin.
 const FACE_STEP = { top: 1, front: 0, outer: -1, back: -1.5, inner: -2, bottom: -3 };
 const CAST_SHADOW = -1.5; // skin directly under a sleeve / shorts hem
 const LIMB_END = -0.5;    // bottom row of hands and feet
 
-function rgbToHsl([r, g, b]) {
-  r /= 255; g /= 255; b /= 255;
-  const max = Math.max(r, g, b), min = Math.min(r, g, b);
-  const l = (max + min) / 2;
-  if (max === min) return [0, 0, l];
-  const d = max - min;
-  const s = l > 0.5 ? d / (2 - max - min) : d / (max + min);
-  let h = max === r ? (g - b) / d + (g < b ? 6 : 0) : max === g ? (b - r) / d + 2 : (r - g) / d + 4;
-  return [h * 60, s, l];
-}
-
-function hslToRgb([h, s, l]) {
-  h = ((h % 360) + 360) % 360 / 360;
-  if (s === 0) return [l, l, l].map((v) => Math.round(v * 255));
-  const q = l < 0.5 ? l * (1 + s) : l + s - l * s, p = 2 * l - q;
-  const f = (t) => {
-    t = (t + 1) % 1;
-    if (t < 1 / 6) return p + (q - p) * 6 * t;
-    if (t < 1 / 2) return q;
-    if (t < 2 / 3) return p + (q - p) * (2 / 3 - t) * 6;
-    return p;
-  };
-  return [f(h + 1 / 3), f(h), f(h - 1 / 3)].map((v) => Math.round(v * 255));
-}
-
-const clamp01 = (v) => Math.min(1, Math.max(0, v));
-
-// step > 0 = lighter, step < 0 = darker. One step ~ 6% lightness.
+// step > 0 = lighter, step < 0 = darker.
+// Shadows multiply the colour down (keeps it natural rather than neon) and
+// pull green down a touch more, shifting shade warm toward red/purple.
+// Highlights blend toward a warm off-white.
 function shadeTone(tone, step) {
   if (step === 0) return tone.slice();
-  const [h, s, l] = rgbToHsl(tone);
+  const [r, g, b] = tone;
   if (step < 0) {
-    // Shadows: darker, warmer (toward red), a little more saturated.
-    return hslToRgb([h - 4 * -step, clamp01(s + 0.04 * -step), clamp01(l - 0.06 * -step)]);
+    const n = -step;
+    const f = 1 - 0.07 * n;
+    return [r * f, g * f * (1 - 0.025 * n), b * f * (1 - 0.01 * n)].map((v) => Math.round(Math.max(0, v)));
   }
-  // Highlights: lighter, toward yellow, slightly less saturated.
-  return hslToRgb([h + 3 * step, clamp01(s - 0.03 * step), clamp01(l + 0.05 * step)]);
+  const t = 0.1 * step;
+  return [r + (255 - r) * t, g + (246 - g) * t, b + (228 - b) * t].map(Math.round);
 }
 
 // Head base (0,0)-(32,16) and hat overlay (32,0)-(64,16).
 const HEAD_RECT = [0, 0, 64, 16];
 
 function idx(x, y) { return (y * SIZE + x) * 4; }
+const dist = (a, b) => Math.hypot(a[0] - b[0], a[1] - b[1], a[2] - b[2]);
 
 function blank() {
   return { width: SIZE, height: SIZE, data: new Uint8ClampedArray(SIZE * SIZE * 4) };
@@ -98,39 +76,51 @@ function to64(img) {
   return out;
 }
 
-// Most common opaque colour across the face, cheeks (head sides) and chin
-// (head bottom). Colours are bucketed so slight shading noise counts as one tone.
-const TONE_SAMPLE_RECTS = [
-  [8, 8, 8, 8],   // front
-  [0, 8, 8, 8],   // right side
-  [16, 8, 8, 8],  // left side
-  [16, 0, 8, 8],  // bottom (chin/neck)
+// Skin tone = the lower-face colour that best matches the hands. Colours that
+// also cover the back/sides of the head are usually hair, so they're heavily
+// discounted unless the hands confirm them (e.g. furry/creature skins).
+// Nearby shades are grouped so a shaded face still counts as one tone.
+const TONE_FACE = [[9, 11, 6, 5]];          // lower-middle of the face
+const TONE_HANDS = [
+  [44, 30, 4, 2], [36, 62, 4, 2],           // bottom rows of arm fronts
+  [48, 16, 3, 4], [40, 48, 3, 4],           // arm bottom faces (hands)
 ];
+const TONE_HAIR_REF = [[24, 8, 8, 8], [0, 8, 8, 8], [16, 8, 8, 8]]; // head back + sides
 
 function sampleSkinTone(skin) {
   skin = to64(skin);
-  const buckets = new Map();
-  for (const [x0, y0, w, h] of TONE_SAMPLE_RECTS) {
-    for (let y = y0; y < y0 + h; y++) {
-      for (let x = x0; x < x0 + w; x++) {
-        const i = idx(x, y);
-        if (skin.data[i + 3] < 200) continue;
-        const r = skin.data[i], g = skin.data[i + 1], b = skin.data[i + 2];
-        const key = `${r >> 4},${g >> 4},${b >> 4}`;
-        const e = buckets.get(key) || { n: 0, r: 0, g: 0, b: 0 };
-        e.n++; e.r += r; e.g += g; e.b += b;
-        buckets.set(key, e);
+  const collect = (rects) => {
+    const out = [];
+    for (const [x0, y0, w, h] of rects) {
+      for (let y = y0; y < y0 + h; y++) {
+        for (let x = x0; x < x0 + w; x++) {
+          const i = idx(x, y);
+          if (skin.data[i + 3] >= 200) out.push([skin.data[i], skin.data[i + 1], skin.data[i + 2]]);
+        }
       }
     }
+    return out;
+  };
+  const face = collect(TONE_FACE);
+  const hands = collect(TONE_HANDS);
+  const hairRef = collect(TONE_HAIR_REF);
+  const near = (list, c, d) => list.filter((p) => dist(p, c) < d).length;
+
+  let best = null, bestScore = 0;
+  for (const c of face) {
+    const faceN = near(face, c, 30);
+    const handN = near(hands, c, 30);
+    const hairN = near(hairRef, c, 20);
+    const skinLike = c[0] >= c[1] && c[1] >= c[2] * 0.85 ? 1.5 : 1; // warm hue bonus, never required
+    const hairLike = handN === 0 && hairN >= 3 ? 0.2 : 1;
+    const score = (faceN + (handN ? handN * 2 + 6 : 0)) * skinLike * hairLike;
+    if (score > bestScore) { bestScore = score; best = c; }
   }
-  let best = null;
-  for (const e of buckets.values()) if (!best || e.n > best.n) best = e;
-  if (!best) return [224, 172, 140];
-  return [Math.round(best.r / best.n), Math.round(best.g / best.n), Math.round(best.b / best.n)];
+  return best ? best.slice() : [224, 172, 140];
 }
 
 // Builds the new skin: user's head + skin-toned body under the outfit.
-function mergeSkin(userSkin, outfit, tone, slim) {
+function mergeSkin(userSkin, outfit, tone, slim, hairRows = 0) {
   outfit = to64(outfit);
   const out = blank();
   const opaque = (x, y) => x >= 0 && y >= 0 && x < SIZE && y < SIZE && outfit.data[idx(x, y) + 3] > 0;
@@ -185,7 +175,117 @@ function mergeSkin(userSkin, outfit, tone, slim) {
     }
   }
 
+  // 4. Long hair that hangs onto the torso, placed on the jacket layer so it
+  //    sits over the new outfit.
+  for (const { x, y, rgba } of extractHair(userSkin, tone, hairRows)) {
+    const i = idx(x, y);
+    for (let c = 0; c < 4; c++) out.data[i + c] = rgba[c];
+  }
+
   return out;
+}
+
+// --- Hair ----------------------------------------------------------------
+// Torso side faces (base layer UVs); the jacket overlay is 16px below each.
+const TORSO = { right: [16, 20, 4, 12], front: [20, 20, 8, 12], left: [28, 20, 4, 12], back: [32, 20, 8, 12] };
+const JACKET_DY = 16;
+
+
+// Colours on the back and sides of the head (base + hat) - where hair almost
+// always is - minus anything close to the skin tone.
+function hairPalette(skin, tone) {
+  const counts = new Map();
+  const rects = [[24, 8, 8, 8], [0, 8, 8, 8], [16, 8, 8, 8], [56, 8, 8, 8], [32, 8, 8, 8], [48, 8, 8, 8]];
+  for (const [x0, y0, w, h] of rects) {
+    for (let y = y0; y < y0 + h; y++) {
+      for (let x = x0; x < x0 + w; x++) {
+        const i = idx(x, y);
+        if (skin.data[i + 3] < 128) continue;
+        const rgb = [skin.data[i], skin.data[i + 1], skin.data[i + 2]];
+        if (dist(rgb, tone) < 40) continue;
+        const key = rgb.join();
+        counts.set(key, (counts.get(key) || 0) + 1);
+      }
+    }
+  }
+  return [...counts].filter(([, n]) => n >= 2).map(([k]) => k.split(',').map(Number));
+}
+
+// The pixel the viewer actually sees at a torso position: jacket if present, else base.
+function visibleTorsoPixel(skin, x, y) {
+  const o = idx(x, y + JACKET_DY);
+  if (skin.data[o + 3] > 0) return [...skin.data.slice(o, o + 4)];
+  const b = idx(x, y);
+  if (skin.data[b + 3] > 0) return [...skin.data.slice(b, b + 4)];
+  return null;
+}
+
+// Colours covering a big share of the torso are the old outfit, not hair.
+function clothingColours(skin) {
+  const counts = new Map();
+  let total = 0;
+  for (const [x0, y0, w, h] of Object.values(TORSO)) {
+    for (let y = y0; y < y0 + h; y++) {
+      for (let x = x0; x < x0 + w; x++) {
+        const px = visibleTorsoPixel(skin, x, y);
+        if (!px) continue;
+        total++;
+        const key = px.slice(0, 3).map((v) => v >> 4).join();
+        const e = counts.get(key) || { n: 0, c: px };
+        e.n++;
+        counts.set(key, e);
+      }
+    }
+  }
+  return [...counts.values()].filter((e) => e.n / total >= 0.2).map((e) => e.c);
+}
+
+// Returns jacket-layer pixels to paint: [{ x, y, rgba }].
+// Hair is found by flooding down from the neckline through hair-coloured
+// pixels, limited to the top `rows` rows. On the back, anything drawn on the
+// jacket layer counts too (hair there often uses shades the head doesn't).
+function extractHair(skin, tone, rows) {
+  if (!skin || rows <= 0 || skin.height !== SIZE) return [];
+  const clothes = clothingColours(skin);
+  const palette = hairPalette(skin, tone).filter((p) => !clothes.some((c) => dist(c, p) < 20));
+  const notClothes = (rgb) => !clothes.some((c) => dist(c, rgb) < 20);
+  const isHair = (rgb) => dist(rgb, tone) >= 40 && notClothes(rgb) && palette.some((p) => dist(p, rgb) < 28);
+  const found = [];
+
+  for (const [side, [x0, y0, w]] of Object.entries(TORSO)) {
+    const seen = new Set();
+    const queue = [];
+    const ok = (x, y) => {
+      if (x < x0 || x >= x0 + w || y < y0 || y >= y0 + rows) return null;
+      const px = visibleTorsoPixel(skin, x, y);
+      if (!px) return null;
+      const onJacket = skin.data[idx(x, y + JACKET_DY) + 3] > 0;
+      return isHair(px) || (side === 'back' && onJacket && notClothes(px)) ? px : null;
+    };
+    for (let x = x0; x < x0 + w; x++) queue.push([x, y0]);
+    while (queue.length) {
+      const [x, y] = queue.pop();
+      const key = x + ',' + y;
+      if (seen.has(key)) continue;
+      seen.add(key);
+      const px = ok(x, y);
+      if (!px) continue;
+      found.push({ x, y: y + JACKET_DY, rgba: px });
+      queue.push([x + 1, y], [x - 1, y], [x, y + 1]);
+    }
+  }
+  return found;
+}
+
+// Guesses hair length (0 / 4 / 8 / 12 rows) from how far hair reaches down the torso.
+function estimateHairRows(skin, tone) {
+  const hair = extractHair(skin, tone, 12);
+  if (hair.length < 4) return 0;
+  const perRow = new Array(12).fill(0);
+  for (const p of hair) perRow[p.y - JACKET_DY - 20]++;
+  let reach = 0;
+  for (let r = 0; r < 12; r++) if (perRow[r] >= 2) reach = r + 1;
+  return reach <= 1 ? 0 : reach <= 4 ? 4 : reach <= 8 ? 8 : 12;
 }
 
 // Slim (Alex) skins leave the 4th arm column transparent: the right arm's
@@ -198,6 +298,6 @@ function detectSlim(skin) {
   return true;
 }
 
-const SkinLib = { sampleSkinTone, mergeSkin, bodyParts, shadeTone, detectSlim };
+const SkinLib = { sampleSkinTone, mergeSkin, bodyParts, shadeTone, detectSlim, estimateHairRows };
 if (typeof module !== 'undefined') module.exports = SkinLib;
 else window.SkinLib = SkinLib;
