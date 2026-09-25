@@ -1,0 +1,67 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Good Maker</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <main>
+    <h1>Good Maker</h1>
+    <p class="sub">Upload your Minecraft skin and put on a new outfit.</p>
+
+    <section class="step">
+      <h2>1. Your skin</h2>
+      <label class="drop" id="drop">
+        <input type="file" id="file" accept="image/png">
+        <span>Drop a skin PNG here or click to choose</span>
+      </label>
+      <p class="error" id="error" hidden></p>
+    </section>
+
+    <section class="step">
+      <h2>2. Outfit</h2>
+      <div class="outfits" id="outfits"></div>
+    </section>
+
+    <section class="step">
+      <h2>3. Skin tone</h2>
+      <div class="tone">
+        <input type="color" id="tone" value="#e0ac8c">
+        <button type="button" id="auto">Auto-detect from face</button>
+        <span class="hint">or click your face below to pick a colour</span>
+      </div>
+      <div class="ramp" id="ramp" title="Shading generated from your tone"></div>
+      <canvas id="face" width="8" height="8" title="Click to pick skin tone"></canvas>
+    </section>
+
+    <section class="step result">
+      <h2>4. Preview</h2>
+      <div class="previews">
+        <div>
+          <div id="view3d"></div>
+          <div class="controls">
+            <label><input type="checkbox" id="rotate" checked> Rotate</label>
+            <select id="anim">
+              <option value="idle">Idle</option>
+              <option value="walk">Walk</option>
+              <option value="run">Run</option>
+              <option value="none">Still</option>
+            </select>
+          </div>
+          <p class="hint">Drag to turn, scroll to zoom.</p>
+        </div>
+        <canvas id="flat" width="64" height="64"></canvas>
+      </div>
+      <button type="button" id="download" disabled>Download skin</button>
+      <p class="hint" id="modelHint"></p>
+    </section>
+  </main>
+
+  <script src="https://cdn.jsdelivr.net/npm/skinview3d@3.1.0/bundles/skinview3d.bundle.js"></script>
+  <script src="js/skin.js"></script>
+  <script src="js/outfits.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>

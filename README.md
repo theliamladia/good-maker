@@ -1,0 +1,19 @@
+# Good Maker
+
+Static site that dresses a Minecraft skin in a preset outfit.
+
+- Keeps the user's **head + hat layer** from their uploaded skin.
+- Fills arms, legs and torso with a **skin tone** (auto-detected from the face, picked with the colour picker, or clicked on the face preview).
+- Shades that tone per face (lit from above/front, darker inner sides/back/bottom, cast shadows under sleeves and hems, hue-shifted shadows). The same rules apply to any chosen colour.
+- Draws the **outfit** pixels on top, then shows a live 3D preview and a download button.
+
+## Run
+
+Open over HTTP (not `file://`), e.g. `python3 -m http.server`, or host on GitHub Pages.
+
+## Add an outfit
+
+1. Save a 64x64 PNG in `outfits/`. Leave areas transparent where skin should show; the head area is ignored.
+2. Add an entry to `js/outfits.js` (`slim: true` for 3px-arm outfits).
+
+Shading strength is tuned in `js/skin.js` (`FACE_STEP`, `CAST_SHADOW`, `LIMB_END`, `shadeTone`).

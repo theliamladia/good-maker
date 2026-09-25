@@ -1,0 +1,52 @@
+* { box-sizing: border-box; }
+body {
+  margin: 0;
+  font-family: system-ui, sans-serif;
+  background: #1d1f24;
+  color: #eee;
+}
+main { max-width: 760px; margin: 0 auto; padding: 24px 16px 48px; }
+h1 { margin: 0; }
+.sub { color: #aaa; margin-top: 4px; }
+h2 { font-size: 1.05rem; margin: 0 0 10px; }
+.step { background: #282b32; border-radius: 10px; padding: 16px; margin-top: 16px; }
+
+.drop {
+  display: block; border: 2px dashed #555; border-radius: 8px;
+  padding: 24px; text-align: center; cursor: pointer; color: #aaa;
+}
+.drop.over, .drop:hover { border-color: #6cf; color: #fff; }
+.drop input { display: none; }
+.error { color: #f77; }
+
+.outfits { display: flex; gap: 10px; flex-wrap: wrap; }
+.outfit {
+  background: #1d1f24; border: 2px solid transparent; border-radius: 8px;
+  padding: 8px; color: inherit; cursor: pointer; font: inherit;
+}
+.outfit.selected { border-color: #6cf; }
+.outfit img { display: block; width: 96px; height: 96px; image-rendering: pixelated; margin-bottom: 4px; }
+
+.tone { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+.tone input[type=color] { width: 48px; height: 36px; border: 0; background: none; padding: 0; }
+.hint { color: #999; font-size: 0.9rem; }
+#face { width: 96px; height: 96px; image-rendering: pixelated; margin-top: 10px; cursor: crosshair; background: #1d1f24; }
+
+.previews { display: flex; gap: 16px; align-items: center; flex-wrap: wrap; }
+#view3d { width: 240px; height: 320px; }
+#flat { width: 256px; height: 256px; image-rendering: pixelated; background: repeating-conic-gradient(#333 0 25%, #3a3a3a 0 50%) 0 0 / 16px 16px; }
+
+button {
+  background: #3a7bd5; color: #fff; border: 0; border-radius: 6px;
+  padding: 8px 14px; font: inherit; cursor: pointer;
+}
+button:disabled { opacity: 0.5; cursor: default; }
+#download { margin-top: 14px; }
+
+.ramp { display: flex; margin-top: 10px; }
+.ramp span { width: 28px; height: 20px; }
+.ramp span:first-child { border-radius: 4px 0 0 4px; }
+.ramp span:last-child { border-radius: 0 4px 4px 0; }
+.controls { display: flex; gap: 12px; align-items: center; margin-top: 8px; }
+.controls select { background: #1d1f24; color: inherit; border: 1px solid #555; border-radius: 4px; padding: 4px; }
+#view3d canvas { cursor: grab; }
