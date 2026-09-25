@@ -220,7 +220,12 @@ body {
 }
 .outfits::-webkit-scrollbar { display: none; }
 .outfits .outfit { scroll-snap-align: start; min-width: 0; padding: 6px; }
-.outfits .outfit span { display: block; font-size: 0.7rem; line-height: 1.2; overflow-wrap: anywhere; }
+.outfits .outfit span { display: block; line-height: 1.2; overflow-wrap: anywhere; }
+.outfits .outfit .outfit-name { font-size: 0.7rem; }
+.outfits .outfit .outfit-color {
+  margin-top: 1px; font-size: 0.62rem; font-weight: 400;
+  font-variant-caps: all-small-caps; letter-spacing: 0.04em; color: var(--ink-soft);
+}
 .carousel-btn {
   flex: none; width: 26px; height: 26px; border-radius: 50%; padding: 0;
   border: 1px solid rgba(11, 21, 38, 0.14); background: rgba(255, 255, 255, 0.8);

@@ -1,13 +1,15 @@
 // Available outfits. Each has one 64x64 PNG per body type.
 // Leave body areas transparent where skin should show; the head area is ignored.
 // classic = 4px (Steve) arms, slim = 3px (Alex) arms.
+// color (optional) = colourway, shown smaller under the name.
 // long (optional) = long-sleeve versions, picked with the Sleeve control.
 // locked: true = preview only. The PNG isn't in this repo; it's served
 // scrambled by /api/outfit (see api/outfit.js) and can't be downloaded.
 window.OUTFITS = [
   {
     id: 'good-jean',
-    name: 'GOOD® JEAN White/Denim',
+    name: 'GOOD® JEAN',
+    color: 'White/Denim',
     bodies: {
       classic: 'outfits/good-jean-classic.png',
       slim: 'outfits/good-jean-slim.png',
@@ -19,7 +21,8 @@ window.OUTFITS = [
   },
   {
     id: 'good-jean-blaue-powder',
-    name: 'GOOD® JEAN Blaue/Powder',
+    name: 'GOOD® JEAN',
+    color: 'Blaue/Powder',
     bodies: {
       classic: 'outfits/good-jean-blaue-powder-classic.png',
       slim: 'outfits/good-jean-blaue-powder-slim.png',

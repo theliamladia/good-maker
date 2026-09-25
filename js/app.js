@@ -101,6 +101,9 @@
   }
 
   // ---------- Outfits ----------
+  const fullName = (o) => (o.color ? `${o.name} ${o.color}` : o.name);
+  const label = (o) => `<span class="outfit-name">${o.name}</span>${o.color ? `<span class="outfit-color">${o.color}</span>` : ''}`;
+
   function drawOutfits() {
     const keep = $('outfits').scrollLeft; // don't jump the carousel on redraw
     $('outfits').innerHTML = '';
@@ -110,8 +113,8 @@
       btn.className = 'outfit';
       btn.setAttribute('aria-pressed', o === state.outfit);
       btn.innerHTML = o.locked
-        ? `<div class="locked-thumb" aria-hidden="true"></div><span>${o.name}</span>`
-        : `<img src="${setFor(o)[state.body] || setFor(o)[bodiesOf(o)[0]]}" alt=""><span>${o.name}</span>`;
+        ? `<div class="locked-thumb" aria-hidden="true"></div>${label(o)}`
+        : `<img src="${setFor(o)[state.body] || setFor(o)[bodiesOf(o)[0]]}" alt="">${label(o)}`;
       btn.onclick = () => selectOutfit(o);
       $('outfits').appendChild(btn);
     }
@@ -180,7 +183,7 @@
     const available = bodiesOf(state.outfit);
     if (!available.includes(body)) {
       body = available[0];
-      why = `${state.outfit.name} COMES IN ${body.toUpperCase()} ONLY`;
+      why = `${fullName(state.outfit)} COMES IN ${body.toUpperCase()} ONLY`;
     }
     $('body').querySelectorAll('button').forEach((b) => { b.disabled = !available.includes(b.dataset.body); });
     state.body = body;
@@ -402,7 +405,7 @@
       state.resultUrl = null;
       dl.disabled = true;
       dl.firstChild.textContent = 'PREVIEW ONLY ';
-      dl.title = `${o.name} can be previewed but not downloaded`;
+      dl.title = `${fullName(o)} can be previewed but not downloaded`;
       if (viewer) {
         const c = document.createElement('canvas');
         c.width = c.height = 64;
