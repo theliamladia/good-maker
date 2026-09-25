@@ -6,10 +6,18 @@
 window.OUTFITS = [
   {
     id: 'good-jean',
-    name: 'GOOD® JEAN',
+    name: 'GOOD® JEAN White/Denim',
     bodies: {
       classic: 'outfits/good-jean-classic.png',
       slim: 'outfits/good-jean-slim.png',
+    },
+  },
+  {
+    id: 'good-jean-blaue-powder',
+    name: 'GOOD® JEAN Blaue/Powder',
+    bodies: {
+      classic: 'outfits/good-jean-blaue-powder-classic.png',
+      slim: 'outfits/good-jean-blaue-powder-slim.png',
     },
   },
   {
