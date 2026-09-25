@@ -7,6 +7,7 @@
     isDemo: true,
     outfit: window.OUTFITS[0],
     body: 'classic',     // 'classic' | 'slim'
+    sleeve: 'short',     // 'short' | 'long'
     hair: 0,             // torso rows of the user's hair to keep (0 = off)
     hairGuess: 0,        // detected length, applied when the Slim body is chosen
     headwear: 'auto',    // 'keep' | 'auto' (remove hoods) | 'none' (no hat layer)
@@ -58,7 +59,9 @@
     bmp.close();
     return (lockedCache[src] = data);
   }
-  const loadOutfit = (o, body) => (o.locked ? loadLocked(o.bodies[body]) : loadData(o.bodies[body]));
+  // Texture set for the chosen sleeve (falls back to short if there's no long version).
+  const setFor = (o) => (state.sleeve === 'long' && o.long ? o.long : o.bodies);
+  const loadOutfit = (o, body) => (o.locked ? loadLocked(o.bodies[body]) : loadData(setFor(o)[body]));
   const EMPTY_OUTFIT = { width: 64, height: 64, data: new Uint8ClampedArray(64 * 64 * 4) };
   const bodiesOf = (o) => Object.keys(o.bodies);
 
@@ -107,14 +110,32 @@
       btn.setAttribute('aria-pressed', o === state.outfit);
       btn.innerHTML = o.locked
         ? `<div class="locked-thumb" aria-hidden="true"></div><span>${o.name}</span>`
-        : `<img src="${o.bodies[state.body] || o.bodies[bodiesOf(o)[0]]}" alt=""><span>${o.name}</span>`;
+        : `<img src="${setFor(o)[state.body] || setFor(o)[bodiesOf(o)[0]]}" alt=""><span>${o.name}</span>`;
       btn.onclick = () => selectOutfit(o);
       $('outfits').appendChild(btn);
     }
   }
 
+  // ---------- Sleeve ----------
+  function updateSleeveButtons() {
+    const hasLong = !!state.outfit.long;
+    $('sleeve').querySelectorAll('button').forEach((b) => {
+      b.disabled = b.dataset.sleeve === 'long' && !hasLong;
+      b.setAttribute('aria-checked', b.dataset.sleeve === (hasLong ? state.sleeve : 'short'));
+    });
+  }
+  $('sleeve').onclick = (e) => {
+    const btn = e.target.closest('[data-sleeve]');
+    if (!btn || btn.disabled) return;
+    state.sleeve = btn.dataset.sleeve;
+    updateSleeveButtons();
+    drawOutfits();
+    render();
+  };
+
   function selectOutfit(o) {
     state.outfit = o;
+    updateSleeveButtons();
     $('outfitHint').hidden = !o.locked;
     $('outfitHint').textContent = o.locked ? 'PREVIEW ONLY / NOT AVAILABLE TO DOWNLOAD' : '';
     showNotice(o);
@@ -534,6 +555,7 @@
   };
 
   // ---------- Boot with the demo head ----------
+  updateSleeveButtons();
   setHeadwear('auto', false);
   updateEraseHint();
   updateEraserButtons();
