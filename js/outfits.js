@@ -4,7 +4,7 @@
 window.OUTFITS = [
   {
     id: 'good-jean',
-    name: 'Good Jean',
+    name: 'GOOD® JEAN',
     bodies: {
       classic: 'outfits/good-jean-classic.png',
       slim: 'outfits/good-jean-slim.png',

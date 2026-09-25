@@ -129,6 +129,24 @@ body {
   image-rendering: pixelated; background: rgba(11, 21, 38, 0.08); cursor: crosshair;
 }
 
+/* ---------- Username ---------- */
+.username {
+  display: flex; align-items: center; margin-top: 10px;
+  border-bottom: 1.5px solid rgba(11, 21, 38, 0.18); transition: border-color 0.15s;
+}
+.username:focus-within { border-color: var(--blue); }
+.username input {
+  flex: 1; min-width: 0; border: 0; background: transparent; padding: 8px 2px;
+  font-size: 0.72rem; letter-spacing: 0.06em; color: var(--ink); outline: none;
+}
+.username input::placeholder { color: var(--ink-soft); opacity: 0.8; }
+.username button {
+  border: 0; background: transparent; color: var(--ink-soft); font-size: 1rem;
+  padding: 4px 6px; cursor: pointer;
+}
+.username button:hover { color: var(--blue); }
+.username.loading { opacity: 0.6; pointer-events: none; }
+
 /* ---------- Body toggle ---------- */
 .segmented {
   display: grid; grid-template-columns: 1fr 1fr; padding: 4px; gap: 4px;

@@ -20,6 +20,7 @@
 
   const loadImage = (src) => new Promise((resolve, reject) => {
     const img = new Image();
+    img.crossOrigin = 'anonymous'; // needed to read pixels from skin APIs
     img.onload = () => resolve(img);
     img.onerror = () => reject(new Error('Could not load image.'));
     img.src = src;
@@ -129,23 +130,55 @@
     setBody(slim ? 'slim' : 'classic', `DETECTED ${slim ? 'SLIM' : 'CLASSIC'} / TAP TO CHANGE`);
   }
 
+  const showError = (msg) => {
+    $('error').textContent = msg;
+    $('error').hidden = !msg;
+  };
+
+  async function loadSkinFrom(src, name) {
+    const data = imageData(await loadImage(src));
+    if (data.width !== 64 || (data.height !== 64 && data.height !== 32)) {
+      throw new Error(`SKIN MUST BE 64×64 OR 64×32 (GOT ${data.width}×${data.height}).`);
+    }
+    useSkin(data, name, false);
+  }
+
   async function handleFile(file) {
-    $('error').hidden = true;
+    showError('');
     if (!file) return;
     const url = URL.createObjectURL(file);
     try {
-      const data = imageData(await loadImage(url));
-      if (data.width !== 64 || (data.height !== 64 && data.height !== 32)) {
-        throw new Error(`SKIN MUST BE 64×64 OR 64×32 (GOT ${data.width}×${data.height}).`);
-      }
-      useSkin(data, file.name.replace(/\.png$/i, ''), false);
+      await loadSkinFrom(url, file.name.replace(/\.png$/i, ''));
     } catch (e) {
-      $('error').textContent = e.message;
-      $('error').hidden = false;
+      showError(e.message);
     } finally {
       URL.revokeObjectURL(url);
     }
   }
+
+  // Username -> skin via public skin APIs (both send CORS headers).
+  const SKIN_APIS = [
+    (u) => `https://mc-heads.net/skin/${u}`,
+    (u) => `https://minotar.net/skin/${u}`,
+  ];
+  $('userForm').onsubmit = async (e) => {
+    e.preventDefault();
+    const name = $('username').value.trim();
+    if (!/^[A-Za-z0-9_]{3,16}$/.test(name)) return showError('ENTER A VALID MINECRAFT USERNAME.');
+    showError('');
+    $('userForm').classList.add('loading');
+    try {
+      for (const api of SKIN_APIS) {
+        try {
+          await loadSkinFrom(api(encodeURIComponent(name)), name);
+          return;
+        } catch { /* try the next service */ }
+      }
+      showError(`COULDN'T FETCH ${name.toUpperCase()}'S SKIN. TRY UPLOADING IT.`);
+    } finally {
+      $('userForm').classList.remove('loading');
+    }
+  };
 
   $('file').onchange = (e) => handleFile(e.target.files[0]);
   // Whole page is a drop target.
