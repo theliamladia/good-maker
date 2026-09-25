@@ -196,6 +196,15 @@ body {
 .outfit img { display: block; width: 100%; aspect-ratio: 1; image-rendering: pixelated; margin-bottom: 4px; }
 .outfit[aria-pressed="true"] { border-color: var(--blue); background: #fff; }
 
+.outfit .locked-thumb {
+  display: grid; place-items: center; align-content: center; gap: 4px;
+  width: 100%; aspect-ratio: 1; margin-bottom: 4px; border-radius: 8px;
+  background: linear-gradient(160deg, #0b1526, #1a5cff);
+  color: #fff; font-size: 1.6rem;
+}
+.outfit .locked-thumb small { font: 400 0.55rem 'Space Mono', monospace; letter-spacing: 0.1em; opacity: 0.85; }
+.segmented button:disabled { opacity: 0.35; cursor: not-allowed; }
+
 /* ---------- Tone ---------- */
 .tone { display: flex; gap: 10px; align-items: center; }
 .swatch { position: relative; width: 44px; height: 44px; cursor: pointer; }

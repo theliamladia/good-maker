@@ -15,6 +15,12 @@ Static site that dresses a Minecraft skin in a preset outfit.
 
 `api/skin.js` is a Vercel serverless function (`/api/skin?name=<username>`). It asks Mojang for the player's UUID and current skin and returns the PNG from the site's own domain, so it works for renamed players and the browser can read the pixels. Locally (no function), the page falls back to public skin services.
 
+## Preview-only outfits (Founders Edition)
+
+Outfits marked `locked: true` in `js/outfits.js` can be previewed in 3D but not downloaded. Their PNGs are **not in this repo** (it's public). Each is stored in a Vercel environment variable as base64 and served by `api/outfit.js`, XOR-scrambled with a fresh key per request, so there is no PNG URL, `<img>`, texture view or data URL to save. This deters copying but can't make it impossible: the browser has to draw the pixels.
+
+Setup: in Vercel → Project → Settings → Environment Variables, add `FOUNDERS_PNG_B64` = the base64 of the Founders Edition PNG, then redeploy. Never commit that PNG here.
+
 ## Run
 
 Open over HTTP (not `file://`), e.g. `python3 -m http.server`, or host on GitHub Pages.

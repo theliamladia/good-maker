@@ -37,6 +37,25 @@
 
   const loadData = async (src) => (cache[src] ||= imageData(await loadImage(src)));
 
+  // Preview-only outfits arrive XOR-scrambled (see api/outfit.js) and are
+  // decoded straight to pixels: no image URL, <img> or PNG file is created.
+  const lockedCache = {};
+  async function loadLocked(src) {
+    if (lockedCache[src]) return lockedCache[src];
+    const res = await fetch(src, { cache: 'no-store' });
+    if (!res.ok) throw new Error('PREVIEW UNAVAILABLE RIGHT NOW.');
+    const { k, d } = await res.json();
+    const key = Uint8Array.from(atob(k), (c) => c.charCodeAt(0));
+    const bytes = Uint8Array.from(atob(d), (c, i) => c.charCodeAt(0) ^ key[i % key.length]);
+    const bmp = await createImageBitmap(new Blob([bytes]));
+    const data = imageData(bmp);
+    bmp.close();
+    return (lockedCache[src] = data);
+  }
+  const loadOutfit = (o, body) => (o.locked ? loadLocked(o.bodies[body]) : loadData(o.bodies[body]));
+  const EMPTY_OUTFIT = { width: 64, height: 64, data: new Uint8ClampedArray(64 * 64 * 4) };
+  const bodiesOf = (o) => Object.keys(o.bodies);
+
   const toHex = (rgb) => '#' + rgb.map((v) => v.toString(16).padStart(2, '0')).join('');
   const fromHex = (hex) => [1, 3, 5].map((i) => parseInt(hex.slice(i, i + 2), 16));
 
@@ -53,6 +72,7 @@
     viewer.animation = new skinview3d.IdleAnimation();
     viewer.zoom = 0.85;
     view.appendChild(viewer.canvas);
+    viewer.canvas.addEventListener('contextmenu', (e) => { if (state.outfit.locked) e.preventDefault(); });
     new ResizeObserver(() => viewer.setSize(view.clientWidth, view.clientHeight)).observe(view);
 
     $('rotate').onclick = (e) => {
@@ -79,15 +99,30 @@
       btn.type = 'button';
       btn.className = 'outfit';
       btn.setAttribute('aria-pressed', o === state.outfit);
-      btn.innerHTML = `<img src="${o.bodies[state.body]}" alt=""><span>${o.name}</span>`;
-      btn.onclick = () => { state.outfit = o; drawOutfits(); render(); };
+      btn.innerHTML = o.locked
+        ? `<div class="locked-thumb">★<small>PREVIEW ONLY</small></div><span>${o.name}</span>`
+        : `<img src="${o.bodies[state.body] || o.bodies[bodiesOf(o)[0]]}" alt=""><span>${o.name}</span>`;
+      btn.onclick = () => selectOutfit(o);
       $('outfits').appendChild(btn);
     }
+  }
+
+  function selectOutfit(o) {
+    state.outfit = o;
+    $('outfitHint').hidden = !o.locked;
+    $('outfitHint').textContent = o.locked ? 'PREVIEW ONLY / NOT AVAILABLE TO DOWNLOAD' : '';
+    setBody(state.body); // re-checks the body is available for this outfit
   }
 
   // ---------- Body ----------
   // Slim (female) bodies keep the user's hair by default; Classic starts without it.
   function setBody(body, why) {
+    const available = bodiesOf(state.outfit);
+    if (!available.includes(body)) {
+      body = available[0];
+      why = `${state.outfit.name} COMES IN ${body.toUpperCase()} ONLY`;
+    }
+    $('body').querySelectorAll('button').forEach((b) => { b.disabled = !available.includes(b.dataset.body); });
     state.body = body;
     setHair(body === 'slim' ? state.hairGuess : 0, false);
     $('body').querySelectorAll('button').forEach((b) => b.setAttribute('aria-checked', b.dataset.body === body));
@@ -277,20 +312,53 @@
   let renderId = 0;
   async function render() {
     const id = ++renderId;
-    const outfit = await loadData(state.outfit.bodies[state.body]);
+    const o = state.outfit;
+    let outfit;
+    try {
+      outfit = await loadOutfit(o, state.body);
+    } catch (err) {
+      if (id !== renderId) return;
+      $('outfitHint').hidden = false;
+      $('outfitHint').textContent = err.message;
+      return selectOutfit(window.OUTFITS[0]);
+    }
     if (id !== renderId) return; // a newer render started
     const slim = state.body === 'slim';
-    const merged = SkinLib.mergeSkin(state.user, outfit, state.tone, slim, state.hair, state.erased, state.headwear);
-    state.merged = merged;
+    const args = [state.tone, slim, state.hair, state.erased, state.headwear];
+    const merged = SkinLib.mergeSkin(state.user, outfit, ...args);
+    // Eraser maps: for preview-only outfits, draw them without the outfit.
+    state.merged = o.locked ? SkinLib.mergeSkin(state.user, EMPTY_OUTFIT, ...args) : merged;
     state.hairKeys = new Set(
       state.user ? SkinLib.extractHair(state.user, state.tone, state.hair).map((p) => p.x + ',' + p.y) : []
     );
     drawHairMap();
-    const canvas = $('flat');
-    canvas.getContext('2d').putImageData(new ImageData(merged.data, 64, 64), 0, 0);
-    state.resultUrl = canvas.toDataURL('image/png');
-    $('download').disabled = state.isDemo;
-    $('download').title = state.isDemo ? 'Upload your skin first' : '';
+
+    const flat = $('flat');
+    const texture = flat.closest('details');
+    const dl = $('download');
+    if (o.locked) {
+      // Nothing downloadable: no texture view, no data URL, straight to 3D.
+      flat.getContext('2d').clearRect(0, 0, 64, 64);
+      texture.hidden = true;
+      texture.open = false;
+      state.resultUrl = null;
+      dl.disabled = true;
+      dl.firstChild.textContent = 'PREVIEW ONLY ';
+      dl.title = `${o.name} can be previewed but not downloaded`;
+      if (viewer) {
+        const c = document.createElement('canvas');
+        c.width = c.height = 64;
+        c.getContext('2d').putImageData(new ImageData(merged.data, 64, 64), 0, 0);
+        viewer.loadSkin(c, { model: slim ? 'slim' : 'default' });
+      }
+      return;
+    }
+    texture.hidden = false;
+    flat.getContext('2d').putImageData(new ImageData(merged.data, 64, 64), 0, 0);
+    state.resultUrl = flat.toDataURL('image/png');
+    dl.disabled = state.isDemo;
+    dl.firstChild.textContent = 'GOOD ME® ';
+    dl.title = state.isDemo ? 'Upload your skin first' : '';
     if (viewer) viewer.loadSkin(state.resultUrl, { model: slim ? 'slim' : 'default' });
   }
 
@@ -420,6 +488,7 @@
   };
 
   $('download').onclick = () => {
+    if (state.outfit.locked || !state.resultUrl) return;
     const a = document.createElement('a');
     a.href = state.resultUrl;
     a.download = `${(state.userName || 'skin').replace(/[^A-Za-z0-9_-]/g, '')}GOOD.png`;
