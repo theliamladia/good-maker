@@ -106,7 +106,7 @@
       btn.className = 'outfit';
       btn.setAttribute('aria-pressed', o === state.outfit);
       btn.innerHTML = o.locked
-        ? `<div class="locked-thumb">★<small>PREVIEW ONLY</small></div><span>${o.name}</span>`
+        ? `<div class="locked-thumb" aria-hidden="true"></div><span>${o.name}</span>`
         : `<img src="${o.bodies[state.body] || o.bodies[bodiesOf(o)[0]]}" alt=""><span>${o.name}</span>`;
       btn.onclick = () => selectOutfit(o);
       $('outfits').appendChild(btn);
