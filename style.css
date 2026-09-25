@@ -210,7 +210,25 @@ body {
 .chips { display: flex; gap: 4px; flex-wrap: wrap; }
 
 /* ---------- Outfits ---------- */
-.outfits { display: grid; grid-template-columns: repeat(auto-fill, minmax(100px, 1fr)); gap: 8px; }
+/* Two outfits visible at a time; side buttons (or swipe) move through the rest. */
+.outfit-carousel { display: flex; align-items: center; gap: 6px; }
+.outfits {
+  flex: 1; min-width: 0; display: grid; grid-auto-flow: column;
+  grid-auto-columns: calc((100% - 8px) / 2); gap: 8px;
+  overflow-x: auto; scroll-snap-type: x mandatory; scroll-behavior: smooth;
+  scrollbar-width: none; overscroll-behavior-x: contain; padding: 2px 0;
+}
+.outfits::-webkit-scrollbar { display: none; }
+.outfits .outfit { scroll-snap-align: start; min-width: 0; padding: 6px; }
+.outfits .outfit span { display: block; font-size: 0.7rem; line-height: 1.2; overflow-wrap: anywhere; }
+.carousel-btn {
+  flex: none; width: 26px; height: 26px; border-radius: 50%; padding: 0;
+  border: 1px solid rgba(11, 21, 38, 0.14); background: rgba(255, 255, 255, 0.8);
+  color: var(--ink); font: 700 1rem/1 'Inter', sans-serif; cursor: pointer;
+  transition: background 0.15s, color 0.15s, opacity 0.15s;
+}
+.carousel-btn:hover:not(:disabled) { background: var(--ink); color: #fff; }
+.carousel-btn:disabled { opacity: 0.3; cursor: default; }
 .outfit {
   border: 2px solid transparent; background: rgba(255, 255, 255, 0.75); border-radius: 12px;
   padding: 8px; font: 600 0.85rem 'Inter', sans-serif; color: var(--ink); cursor: pointer;
@@ -387,9 +405,24 @@ body { text-shadow: 0.5px 0 rgba(255, 0, 60, 0.22), -0.5px 0 rgba(0, 190, 255, 0
 @keyframes flicker { 0%, 100% { opacity: 1; } 50% { opacity: 0.9; } }
 @keyframes roll { from { top: -20vh; } to { top: 100vh; } }
 
+/* ---------- Intro + idle motion ---------- */
+/* Hidden until js/intro.js flies everything in from the centre. */
+.intro .site-header, .intro .ticker, .intro #view3d, .intro .viewer-bar,
+.intro .viewer-wrap > .micro, .intro .panel, .intro #download { opacity: 0; }
+.hero-sky { transform-origin: 50% 55%; }
+
+/* Very small idle float on the Your Skin and Outfit panels; stops while in use. */
+.panel.left, .panel.right { animation: idle-float 7s ease-in-out infinite; }
+.panel.right { animation-delay: -3.5s; }
+.panel:hover, .panel:focus-within { animation-play-state: paused; }
+@keyframes idle-float {
+  0%, 100% { transform: translateY(0) rotate(0deg); }
+  50% { transform: translateY(-4px) rotate(0.15deg); }
+}
+
 @media (prefers-reduced-motion: reduce) {
   .crt-scanlines, .crt-scanlines::after, .cloud, .ticker-track, .dot-live, .drop-free,
-  .drop-card, .drop-card::before, .drop-card::after { animation: none; }
+  .drop-card, .drop-card::before, .drop-card::after, .panel.left, .panel.right { animation: none; }
 }
 
 /* ---------- Small screens ---------- */

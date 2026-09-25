@@ -102,6 +102,7 @@
 
   // ---------- Outfits ----------
   function drawOutfits() {
+    const keep = $('outfits').scrollLeft; // don't jump the carousel on redraw
     $('outfits').innerHTML = '';
     for (const o of window.OUTFITS) {
       const btn = document.createElement('button');
@@ -114,7 +115,26 @@
       btn.onclick = () => selectOutfit(o);
       $('outfits').appendChild(btn);
     }
+    $('outfits').style.scrollBehavior = 'auto';
+    $('outfits').scrollLeft = keep;
+    $('outfits').style.scrollBehavior = '';
+    updateCarouselButtons();
   }
+
+  // Outfit carousel: two cards visible, side buttons page by one card.
+  function updateCarouselButtons() {
+    const el = $('outfits');
+    $('outfitPrev').disabled = el.scrollLeft <= 2;
+    $('outfitNext').disabled = el.scrollLeft + el.clientWidth >= el.scrollWidth - 2;
+  }
+  const cardStep = () => {
+    const card = $('outfits').querySelector('.outfit');
+    return card ? card.getBoundingClientRect().width + 8 : $('outfits').clientWidth / 2;
+  };
+  $('outfitPrev').onclick = () => $('outfits').scrollBy({ left: -cardStep() });
+  $('outfitNext').onclick = () => $('outfits').scrollBy({ left: cardStep() });
+  $('outfits').addEventListener('scroll', updateCarouselButtons, { passive: true });
+  window.addEventListener('resize', updateCarouselButtons);
 
   // ---------- Sleeve ----------
   function updateSleeveButtons() {

@@ -9,6 +9,14 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="style.css">
+  <script>
+    // Hide the page until js/intro.js plays the entrance (never for reduced motion;
+    // the timeout is a safety net if scripts fail to load).
+    if (!matchMedia('(prefers-reduced-motion: reduce)').matches) {
+      document.documentElement.classList.add('intro');
+      setTimeout(() => document.documentElement.classList.remove('intro'), 5000);
+    }
+  </script>
 </head>
 <body>
 
@@ -140,7 +148,11 @@
   <div class="right-col">
   <aside class="panel right">
     <div class="section-tag mono">Nº005 / OUTFIT</div>
-    <div class="outfits" id="outfits"></div>
+    <div class="outfit-carousel">
+      <button type="button" class="carousel-btn" id="outfitPrev" aria-label="Previous outfits">‹</button>
+      <div class="outfits" id="outfits"></div>
+      <button type="button" class="carousel-btn" id="outfitNext" aria-label="More outfits">›</button>
+    </div>
     <p class="micro mono" id="outfitHint" hidden></p>
 
     <div class="section-tag mono">Nº006 / SLEEVE</div>
@@ -178,5 +190,6 @@
 <script src="js/app.js"></script>
 <script src="js/help.js"></script>
 <script src="js/ticker.js"></script>
+<script src="js/intro.js"></script>
 </body>
 </html>
