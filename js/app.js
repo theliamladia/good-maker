@@ -43,7 +43,14 @@
   async function loadLocked(src) {
     if (lockedCache[src]) return lockedCache[src];
     const res = await fetch(src, { cache: 'no-store' });
-    if (!res.ok) throw new Error('PREVIEW UNAVAILABLE RIGHT NOW.');
+    if (!res.ok) {
+      const { error } = await res.json().catch(() => ({}));
+      throw new Error(
+        error === 'not_configured' ? 'PREVIEW NOT SET UP YET (MISSING ENV VARIABLE).'
+          : error ? `PREVIEW UNAVAILABLE (${error.toUpperCase()}).`
+          : `PREVIEW UNAVAILABLE (HTTP ${res.status}).`
+      );
+    }
     const { k, d } = await res.json();
     const key = Uint8Array.from(atob(k), (c) => c.charCodeAt(0));
     const bytes = Uint8Array.from(atob(d), (c, i) => c.charCodeAt(0) ^ key[i % key.length]);
