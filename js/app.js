@@ -76,7 +76,7 @@
       canvas: document.createElement('canvas'),
       width: view.clientWidth, height: view.clientHeight,
     });
-    viewer.autoRotate = true;
+    viewer.autoRotate = false;
     viewer.autoRotateSpeed = 0.6;
     viewer.animation = new skinview3d.IdleAnimation();
     viewer.zoom = 0.85;
