@@ -257,7 +257,7 @@
     state.body = body;
     setHair(body === 'slim' ? state.hairGuess : 0, false);
     $('body').querySelectorAll('button').forEach((b) => b.setAttribute('aria-checked', b.dataset.body === body));
-    $('bodyHint').textContent = why || (body === 'slim' ? '3PX ARMS / ALEX MODEL' : '4PX ARMS / STEVE MODEL');
+    $('bodyHint').textContent = why || `SAVES AS ${body === 'slim' ? 'SLIM / 3PX ARMS' : 'CLASSIC / 4PX ARMS'}`;
     drawOutfits();
     render();
   }
@@ -310,7 +310,7 @@
     setTone(SkinLib.sampleSkinTone(data), false);
     state.hairGuess = SkinLib.estimateHairRows(data, state.tone);
     const slim = SkinLib.detectSlim(data);
-    setBody(slim ? 'slim' : 'classic', `DETECTED ${slim ? 'SLIM' : 'CLASSIC'} / TAP TO CHANGE`);
+    setBody(slim ? 'slim' : 'classic', `DETECTED ${slim ? 'SLIM' : 'CLASSIC'} / YOU CAN SAVE AS ${slim ? 'CLASSIC' : 'SLIM'}`);
   }
 
   const showError = (msg) => {
@@ -466,6 +466,8 @@
     const flat = $('flat');
     const texture = flat.closest('details');
     const dl = $('download');
+    // The PNG can't carry the arm model, so tell people what to pick in Minecraft.
+    $('downloadHint').innerHTML = o.locked ? '' : `SAVES AS <strong>${slim ? 'SLIM' : 'CLASSIC'}</strong>. CHOOSE THE ${slim ? 'SLIM (ALEX)' : 'CLASSIC (STEVE)'} MODEL WHEN YOU UPLOAD IT TO MINECRAFT.`;
     if (o.locked) {
       // Nothing downloadable: no texture view, no data URL, straight to 3D.
       flat.getContext('2d').clearRect(0, 0, 64, 64);
