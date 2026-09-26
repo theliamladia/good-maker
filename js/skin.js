@@ -341,8 +341,7 @@ const JACKET_SIDES = { x: 16, y: 36, w: 24, h: 12 };
 // Waistband rows: pants continue up onto the torso's outer layer. Working up
 // from the bottom row, a row counts as waist while its pixels mostly match
 // the colours of that file's pants. Returns row numbers (0 = top).
-function waistRows(skin) {
-  skin = to64(skin);
+function pantsPalette(skin) {
   const palette = [];
   for (const [x0, y0, w, h] of PANTS_LAYER) {
     for (let y = y0; y < y0 + h; y++) {
@@ -352,6 +351,14 @@ function waistRows(skin) {
       }
     }
   }
+  return palette;
+}
+const matches = (palette, skin, i) =>
+  palette.some((c) => dist(c, [skin.data[i], skin.data[i + 1], skin.data[i + 2]]) < 24);
+
+function waistRows(skin) {
+  skin = to64(skin);
+  const palette = pantsPalette(skin);
   const rows = [];
   if (!palette.length) return rows;
   const { x, y, w, h } = JACKET_SIDES;
@@ -361,8 +368,7 @@ function waistRows(skin) {
       const i = idx(xx, y + r);
       if (skin.data[i + 3] === 0) continue;
       n++;
-      const rgb = [skin.data[i], skin.data[i + 1], skin.data[i + 2]];
-      if (palette.some((c) => dist(c, rgb) < 24)) match++;
+      if (matches(palette, skin, i)) match++;
     }
     if (!n || match / n < 0.6) break;
     rows.push(r);
@@ -374,6 +380,9 @@ function waistRows(skin) {
 // 20..31 and outer (jacket) rows 36..47. Pants files may draw here too
 // (waistbands, high waists, boxers peeking out of sagging jeans).
 const TORSO_SIDES = [[16, 20, 24, 12], [16, 36, 24, 12]];
+// Underside of the torso's outer layer: seen from below, it's the underside
+// of the waistband, so it goes with the pants too.
+const JACKET_BOTTOM = [28, 32, 8, 4];
 
 // Outfit texture = the shirt file with its pants (legs + waistband) removed,
 // then the pants file put in: its legs, plus anything it draws on the torso.
@@ -387,12 +396,19 @@ function combineOutfit(shirt, pants) {
     for (let c = 0; c < 4; c++) out.data[i + c] = src ? src.data[i + c] : 0;
   };
   const { x, y, w } = JACKET_SIDES;
-  for (const r of waistRows(shirt)) for (let xx = x; xx < x + w; xx++) put(xx, y + r, null);
+  const shirtWaist = waistRows(shirt);
+  for (const r of shirtWaist) for (let xx = x; xx < x + w; xx++) put(xx, y + r, null);
+  if (shirtWaist.length) {
+    // The shirt ends in a waistband, so its outer-layer underside is the
+    // waistband's underside: clear it; the pants supply their own.
+    const [bx, by, bw, bh] = JACKET_BOTTOM;
+    for (let yy = by; yy < by + bh; yy++) for (let xx = bx; xx < bx + bw; xx++) put(xx, yy, null);
+  }
   for (const [x0, y0, lw, lh] of LEG_RECTS) {
     for (let yy = y0; yy < y0 + lh; yy++) for (let xx = x0; xx < x0 + lw; xx++) put(xx, yy, pants);
   }
   if (pants) {
-    for (const [x0, y0, tw, th] of TORSO_SIDES) {
+    for (const [x0, y0, tw, th] of [...TORSO_SIDES, JACKET_BOTTOM]) {
       for (let yy = y0; yy < y0 + th; yy++) {
         for (let xx = x0; xx < x0 + tw; xx++) if (pants.data[idx(xx, yy) + 3] > 0) put(xx, yy, pants);
       }
