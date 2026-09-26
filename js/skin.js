@@ -333,23 +333,66 @@ function detectSlim(skin) {
 // --- Shirt + pants --------------------------------------------------------
 // Leg texture areas, both layers: right leg base/pants layer, left leg base/pants layer.
 const LEG_RECTS = [[0, 16, 16, 16], [0, 32, 16, 16], [16, 48, 16, 16], [0, 48, 16, 16]];
+// Pants layer of the legs (where pants are drawn) and the torso's outer
+// (jacket) layer sides: right, front, left, back faces, rows 0..11.
+const PANTS_LAYER = [[0, 32, 16, 16], [0, 48, 16, 16]];
+const JACKET_SIDES = { x: 16, y: 36, w: 24, h: 12 };
 
-// Outfit texture = the shirt file with its legs replaced by the pants file's legs.
+// Waistband rows: pants continue up onto the torso's outer layer. Working up
+// from the bottom row, a row counts as waist while its pixels mostly match
+// the colours of that file's pants. Returns row numbers (0 = top).
+function waistRows(skin) {
+  skin = to64(skin);
+  const palette = [];
+  for (const [x0, y0, w, h] of PANTS_LAYER) {
+    for (let y = y0; y < y0 + h; y++) {
+      for (let x = x0; x < x0 + w; x++) {
+        const i = idx(x, y);
+        if (skin.data[i + 3] > 0) palette.push([skin.data[i], skin.data[i + 1], skin.data[i + 2]]);
+      }
+    }
+  }
+  const rows = [];
+  if (!palette.length) return rows;
+  const { x, y, w, h } = JACKET_SIDES;
+  for (let r = h - 1; r >= 0; r--) {
+    let n = 0, match = 0;
+    for (let xx = x; xx < x + w; xx++) {
+      const i = idx(xx, y + r);
+      if (skin.data[i + 3] === 0) continue;
+      n++;
+      const rgb = [skin.data[i], skin.data[i + 1], skin.data[i + 2]];
+      if (palette.some((c) => dist(c, rgb) < 24)) match++;
+    }
+    if (!n || match / n < 0.6) break;
+    rows.push(r);
+  }
+  return rows;
+}
+
+// Outfit texture = the shirt file with its pants (legs + waistband) removed,
+// then the pants file's legs and waistband put in.
 function combineOutfit(shirt, pants) {
   shirt = to64(shirt);
   const out = blank();
   out.data.set(shirt.data);
-  for (const [x0, y0, w, h] of LEG_RECTS) {
-    for (let y = y0; y < y0 + h; y++) {
-      for (let x = x0; x < x0 + w; x++) {
-        const i = idx(x, y);
-        for (let c = 0; c < 4; c++) out.data[i + c] = pants ? pants.data[i + c] : 0;
-      }
+  const put = (x, y, src) => {
+    const i = idx(x, y);
+    for (let c = 0; c < 4; c++) out.data[i + c] = src ? src.data[i + c] : 0;
+  };
+  const { x, y, w } = JACKET_SIDES;
+  for (const r of waistRows(shirt)) for (let xx = x; xx < x + w; xx++) put(xx, y + r, null);
+  for (const [x0, y0, lw, lh] of LEG_RECTS) {
+    for (let yy = y0; yy < y0 + lh; yy++) for (let xx = x0; xx < x0 + lw; xx++) put(xx, yy, pants);
+  }
+  if (pants) {
+    for (const r of waistRows(pants)) {
+      for (let xx = x; xx < x + w; xx++) if (pants.data[idx(xx, y + r) + 3] > 0) put(xx, y + r, pants);
     }
   }
   return out;
 }
 
-const SkinLib = { combineOutfit, sampleSkinTone, mergeSkin, bodyParts, shadeTone, detectSlim, estimateHairRows, extractHair };
+const SkinLib = { combineOutfit, waistRows, sampleSkinTone, mergeSkin, bodyParts, shadeTone, detectSlim, estimateHairRows, extractHair };
 if (typeof module !== 'undefined') module.exports = SkinLib;
 else window.SkinLib = SkinLib;
