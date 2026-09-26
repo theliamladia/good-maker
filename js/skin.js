@@ -408,9 +408,16 @@ function combineOutfit(shirt, pants) {
     for (let yy = y0; yy < y0 + lh; yy++) for (let xx = x0; xx < x0 + lw; xx++) put(xx, yy, pants);
   }
   if (pants) {
-    for (const [x0, y0, tw, th] of [...TORSO_SIDES, JACKET_BOTTOM]) {
+    // Base layer: pants win (e.g. boxers peeking out). Outer layer: the shirt
+    // wins, so hoodies and jackets hang over the waistband.
+    const [base, outer] = TORSO_SIDES;
+    for (const [[x0, y0, tw, th], shirtWins] of [[base, false], [outer, true], [JACKET_BOTTOM, true]]) {
       for (let yy = y0; yy < y0 + th; yy++) {
-        for (let xx = x0; xx < x0 + tw; xx++) if (pants.data[idx(xx, yy) + 3] > 0) put(xx, yy, pants);
+        for (let xx = x0; xx < x0 + tw; xx++) {
+          const i = idx(xx, yy);
+          if (pants.data[i + 3] === 0 || (shirtWins && out.data[i + 3] > 0)) continue;
+          put(xx, yy, pants);
+        }
       }
     }
   }

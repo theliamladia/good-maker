@@ -47,6 +47,15 @@ window.OUTFITS = [
     },
   },
   {
+    id: 'smiley-hoodie-pumpkin-neon',
+    name: 'SMILEY HOODIE',
+    color: 'Pumpkin/Neon',
+    long: {
+      classic: 'outfits/smiley-hoodie-pumpkin-neon-long-classic.png',
+      slim: 'outfits/smiley-hoodie-pumpkin-neon-long-slim.png',
+    },
+  },
+  {
     id: 'founders',
     name: 'FOUNDERS EDITION',
     locked: true, // complete outfit incl. its own pants; the Pants picker hides
