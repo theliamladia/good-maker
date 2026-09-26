@@ -370,8 +370,14 @@ function waistRows(skin) {
   return rows;
 }
 
+// Torso sides on both layers (right, front, left, back faces): base rows
+// 20..31 and outer (jacket) rows 36..47. Pants files may draw here too
+// (waistbands, high waists, boxers peeking out of sagging jeans).
+const TORSO_SIDES = [[16, 20, 24, 12], [16, 36, 24, 12]];
+
 // Outfit texture = the shirt file with its pants (legs + waistband) removed,
-// then the pants file's legs and waistband put in.
+// then the pants file put in: its legs, plus anything it draws on the torso.
+// Pants files contain only pants, so every torso pixel in them is pants.
 function combineOutfit(shirt, pants) {
   shirt = to64(shirt);
   const out = blank();
@@ -386,8 +392,10 @@ function combineOutfit(shirt, pants) {
     for (let yy = y0; yy < y0 + lh; yy++) for (let xx = x0; xx < x0 + lw; xx++) put(xx, yy, pants);
   }
   if (pants) {
-    for (const r of waistRows(pants)) {
-      for (let xx = x; xx < x + w; xx++) if (pants.data[idx(xx, y + r) + 3] > 0) put(xx, y + r, pants);
+    for (const [x0, y0, tw, th] of TORSO_SIDES) {
+      for (let yy = y0; yy < y0 + th; yy++) {
+        for (let xx = x0; xx < x0 + tw; xx++) if (pants.data[idx(xx, yy) + 3] > 0) put(xx, yy, pants);
+      }
     }
   }
   return out;

@@ -62,10 +62,12 @@ window.OUTFITS = [
   },
 ];
 
-// Pants: leg-only textures (both layers), shared by Classic and Slim.
+// Pants: legs (both layers) plus anything on the torso that belongs to the
+// pants (waistband, boxers). Shared by Classic and Slim.
 // The first one is the default.
 window.PANTS = [
   { id: 'good-jean-black', name: 'GOOD® JEAN', color: 'Black Shoes', src: 'outfits/pants/good-jean-black.png' },
   { id: 'good-jean-brown', name: 'GOOD® JEAN', color: 'Brown Shoes', src: 'outfits/pants/good-jean-brown.png' },
+  { id: 'good-jean-sagging', name: 'GOOD® JEAN', color: 'Sagging', src: 'outfits/pants/good-jean-sagging.png' },
   { id: 'mosaic-pant-linen-lapis', name: 'MOSAIC PANT', color: 'Linen/Lapis', src: 'outfits/pants/mosaic-pant-linen-lapis.png' },
 ];
