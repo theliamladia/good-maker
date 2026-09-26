@@ -5,6 +5,9 @@
 // Leave body areas transparent where skin should show; the head area is ignored.
 // classic = 4px (Steve) arms, slim = 3px (Alex) arms.
 // color (optional) = colourway, shown smaller under the name.
+// Shirts: the legs of these files are ignored and replaced by the chosen pants
+// (window.PANTS below). pants (optional) = pants picked by default with this
+// shirt, until the user chooses pants themselves.
 // locked: true = preview only. The PNG isn't in this repo; it's served
 // scrambled by /api/outfit (see api/outfit.js) and can't be downloaded.
 window.OUTFITS = [
@@ -38,6 +41,7 @@ window.OUTFITS = [
     id: 'good-lab-destroyed',
     name: 'GOOD LAB®',
     color: 'Destroyed',
+    pants: 'mosaic-pant-linen-lapis',
     long: {
       slim: 'outfits/good-lab-destroyed-long-slim.png',
     },
@@ -45,7 +49,7 @@ window.OUTFITS = [
   {
     id: 'founders',
     name: 'FOUNDERS EDITION',
-    locked: true,
+    locked: true, // complete outfit incl. its own pants; the Pants picker hides
     // Card shown next to the 3D preview while this outfit is selected.
     notice: {
       tag: 'FOUNDERS® / COMING SOON',
@@ -56,4 +60,12 @@ window.OUTFITS = [
       slim: 'api/outfit?id=founders',
     },
   },
+];
+
+// Pants: leg-only textures (both layers), shared by Classic and Slim.
+// The first one is the default.
+window.PANTS = [
+  { id: 'good-jean-black', name: 'GOOD® JEAN', color: 'Black Shoes', src: 'outfits/pants/good-jean-black.png' },
+  { id: 'good-jean-brown', name: 'GOOD® JEAN', color: 'Brown Shoes', src: 'outfits/pants/good-jean-brown.png' },
+  { id: 'mosaic-pant-linen-lapis', name: 'MOSAIC PANT', color: 'Linen/Lapis', src: 'outfits/pants/mosaic-pant-linen-lapis.png' },
 ];

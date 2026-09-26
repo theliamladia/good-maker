@@ -330,6 +330,26 @@ function detectSlim(skin) {
   return true;
 }
 
-const SkinLib = { sampleSkinTone, mergeSkin, bodyParts, shadeTone, detectSlim, estimateHairRows, extractHair };
+// --- Shirt + pants --------------------------------------------------------
+// Leg texture areas, both layers: right leg base/pants layer, left leg base/pants layer.
+const LEG_RECTS = [[0, 16, 16, 16], [0, 32, 16, 16], [16, 48, 16, 16], [0, 48, 16, 16]];
+
+// Outfit texture = the shirt file with its legs replaced by the pants file's legs.
+function combineOutfit(shirt, pants) {
+  shirt = to64(shirt);
+  const out = blank();
+  out.data.set(shirt.data);
+  for (const [x0, y0, w, h] of LEG_RECTS) {
+    for (let y = y0; y < y0 + h; y++) {
+      for (let x = x0; x < x0 + w; x++) {
+        const i = idx(x, y);
+        for (let c = 0; c < 4; c++) out.data[i + c] = pants ? pants.data[i + c] : 0;
+      }
+    }
+  }
+  return out;
+}
+
+const SkinLib = { combineOutfit, sampleSkinTone, mergeSkin, bodyParts, shadeTone, detectSlim, estimateHairRows, extractHair };
 if (typeof module !== 'undefined') module.exports = SkinLib;
 else window.SkinLib = SkinLib;

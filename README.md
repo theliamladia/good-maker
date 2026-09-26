@@ -9,6 +9,7 @@ Static site that dresses a Minecraft skin in a preset outfit.
 - **Headwear**: Keep / No hood / None. "No hood" drops hat-layer pixels matching the old outfit's main colours (hoods), keeping hair, hats and accessories.
 - **Hair & Head cards**: swipeable cards (or tabs) in the same spot. Each has its control, a pixel map eraser (TORSO for hair, HEAD for hoods/hats) and its own undo/reset.
 - **?** buttons on Hair and Headwear open short animated how-tos (`js/help.js`).
+- **Shirt + Pants** are picked separately: pants are leg-only textures in `outfits/pants/` (listed in `window.PANTS`) that replace the legs of the chosen shirt file.
 - Draws the **outfit** pixels on top, then shows a live 3D preview and a GOOD ME® download button.
 
 ## Username lookup

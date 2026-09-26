@@ -220,6 +220,8 @@ body {
 }
 .outfits::-webkit-scrollbar { display: none; }
 .outfits .outfit { scroll-snap-align: start; min-width: 0; padding: 6px; }
+.outfit img.pants-thumb { width: 60%; margin: 0 auto 4px; aspect-ratio: 8 / 12; }
+#pantsSection[hidden] { display: none; }
 .outfits .outfit span { display: block; line-height: 1.2; overflow-wrap: anywhere; }
 .outfits .outfit .outfit-name { font-size: 0.7rem; }
 .outfits .outfit .outfit-color {

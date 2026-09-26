@@ -8,6 +8,8 @@
     outfit: window.OUTFITS[0],
     body: 'classic',     // 'classic' | 'slim'
     sleeve: 'short',     // 'short' | 'long'
+    pants: window.PANTS[0],
+    pantsPicked: false,  // once the user picks pants, shirts stop changing them
     hair: 0,             // torso rows of the user's hair to keep (0 = off)
     hairGuess: 0,        // detected length, applied when the Slim body is chosen
     headwear: 'auto',    // 'keep' | 'auto' (remove hoods) | 'none' (no hat layer)
@@ -118,40 +120,94 @@
   const fullName = (o) => (o.color ? `${o.name} ${o.color}` : o.name);
   const label = (o) => `<span class="outfit-name">${o.name}</span>${o.color ? `<span class="outfit-color">${o.color}</span>` : ''}`;
 
-  function drawOutfits() {
-    const keep = $('outfits').scrollLeft; // don't jump the carousel on redraw
-    $('outfits').innerHTML = '';
-    for (const o of window.OUTFITS) {
-      const btn = document.createElement('button');
-      btn.type = 'button';
-      btn.className = 'outfit';
-      btn.setAttribute('aria-pressed', o === state.outfit);
-      btn.innerHTML = o.locked
-        ? `<div class="locked-thumb" aria-hidden="true"></div>${label(o)}`
-        : `<img src="${setFor(o)[state.body] || setFor(o)[bodiesOf(o)[0]]}" alt="">${label(o)}`;
-      btn.onclick = () => selectOutfit(o);
-      $('outfits').appendChild(btn);
-    }
-    $('outfits').style.scrollBehavior = 'auto';
-    $('outfits').scrollLeft = keep;
-    $('outfits').style.scrollBehavior = '';
-    updateCarouselButtons();
+  // Two-up carousel of cards with side buttons (used for shirts and pants).
+  function carousel(listEl, prevBtn, nextBtn) {
+    const update = () => {
+      prevBtn.disabled = listEl.scrollLeft <= 2;
+      nextBtn.disabled = listEl.scrollLeft + listEl.clientWidth >= listEl.scrollWidth - 2;
+    };
+    const step = () => {
+      const card = listEl.querySelector('.outfit');
+      return card ? card.getBoundingClientRect().width + 8 : listEl.clientWidth / 2;
+    };
+    prevBtn.onclick = () => listEl.scrollBy({ left: -step() });
+    nextBtn.onclick = () => listEl.scrollBy({ left: step() });
+    listEl.addEventListener('scroll', update, { passive: true });
+    window.addEventListener('resize', update);
+    // Rebuild the cards without jumping the scroll position.
+    return (cards) => {
+      const keep = listEl.scrollLeft;
+      listEl.replaceChildren(...cards);
+      listEl.style.scrollBehavior = 'auto';
+      listEl.scrollLeft = keep;
+      listEl.style.scrollBehavior = '';
+      update();
+    };
+  }
+  const fillShirts = carousel($('outfits'), $('outfitPrev'), $('outfitNext'));
+  const fillPants = carousel($('pants'), $('pantsPrev'), $('pantsNext'));
+
+  function card(selected, inner, onPick) {
+    const btn = document.createElement('button');
+    btn.type = 'button';
+    btn.className = 'outfit';
+    btn.setAttribute('aria-pressed', selected);
+    btn.innerHTML = inner;
+    btn.onclick = onPick;
+    return btn;
   }
 
-  // Outfit carousel: two cards visible, side buttons page by one card.
-  function updateCarouselButtons() {
-    const el = $('outfits');
-    $('outfitPrev').disabled = el.scrollLeft <= 2;
-    $('outfitNext').disabled = el.scrollLeft + el.clientWidth >= el.scrollWidth - 2;
+  // Pants thumbnails: the fronts of both legs (pants layer over base), side by side.
+  const pantsThumbs = {};
+  async function pantsThumb(p) {
+    if (pantsThumbs[p.id]) return pantsThumbs[p.id];
+    const d = await loadData(p.src);
+    const c = document.createElement('canvas');
+    c.width = 8; c.height = 12;
+    const ctx = c.getContext('2d');
+    const tmp = document.createElement('canvas');
+    tmp.width = tmp.height = 64;
+    tmp.getContext('2d').putImageData(d, 0, 0);
+    for (const [sx, sy, dx] of [[4, 20, 0], [4, 36, 0], [20, 52, 4], [4, 52, 4]]) ctx.drawImage(tmp, sx, sy, 4, 12, dx, 0, 4, 12);
+    return (pantsThumbs[p.id] = c.toDataURL());
   }
-  const cardStep = () => {
-    const card = $('outfits').querySelector('.outfit');
-    return card ? card.getBoundingClientRect().width + 8 : $('outfits').clientWidth / 2;
-  };
-  $('outfitPrev').onclick = () => $('outfits').scrollBy({ left: -cardStep() });
-  $('outfitNext').onclick = () => $('outfits').scrollBy({ left: cardStep() });
-  $('outfits').addEventListener('scroll', updateCarouselButtons, { passive: true });
-  window.addEventListener('resize', updateCarouselButtons);
+
+  // Shirt thumbnails: the shirt file with its legs removed (pants are picked separately).
+  const shirtThumbs = {};
+  async function shirtThumb(src) {
+    if (shirtThumbs[src]) return shirtThumbs[src];
+    const d = SkinLib.combineOutfit(await loadData(src), null);
+    const c = document.createElement('canvas');
+    c.width = c.height = 64;
+    c.getContext('2d').putImageData(new ImageData(d.data, 64, 64), 0, 0);
+    return (shirtThumbs[src] = c.toDataURL());
+  }
+
+  let drawId = 0;
+  async function drawOutfits() {
+    const id = ++drawId;
+    const thumbs = await Promise.all(window.OUTFITS.map((o) =>
+      (o.locked ? null : shirtThumb(setFor(o)[state.body] || setFor(o)[bodiesOf(o)[0]]))));
+    if (id !== drawId) return; // a newer redraw started
+    fillShirts(window.OUTFITS.map((o, i) => card(
+      o === state.outfit,
+      o.locked
+        ? `<div class="locked-thumb" aria-hidden="true"></div>${label(o)}`
+        : `<img src="${thumbs[i]}" alt="">${label(o)}`,
+      () => selectOutfit(o)
+    )));
+    drawPants();
+  }
+
+  async function drawPants() {
+    $('pantsSection').hidden = !!state.outfit.locked;
+    const thumbs = await Promise.all(window.PANTS.map(pantsThumb));
+    fillPants(window.PANTS.map((p, i) => card(
+      p === state.pants,
+      `<img class="pants-thumb" src="${thumbs[i]}" alt="">${label(p)}`,
+      () => { state.pants = p; state.pantsPicked = true; drawPants(); render(); }
+    )));
+  }
 
   // ---------- Sleeve ----------
   function updateSleeveButtons() {
@@ -169,6 +225,7 @@
 
   function selectOutfit(o) {
     state.outfit = o;
+    if (!state.pantsPicked) state.pants = window.PANTS.find((p) => p.id === o.pants) || window.PANTS[0];
     updateSleeveButtons();
     $('outfitHint').hidden = !o.locked;
     $('outfitHint').textContent = o.locked ? 'PREVIEW ONLY / NOT AVAILABLE TO DOWNLOAD' : '';
@@ -388,6 +445,7 @@
     let outfit;
     try {
       outfit = await loadOutfit(o, state.body);
+      if (!o.locked) outfit = SkinLib.combineOutfit(outfit, await loadData(state.pants.src));
     } catch (err) {
       if (id !== renderId) return;
       $('outfitHint').hidden = false;

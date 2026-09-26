@@ -147,7 +147,7 @@
   <!-- Right: the fit -->
   <div class="right-col">
   <aside class="panel right">
-    <div class="section-tag mono">Nº005 / OUTFIT</div>
+    <div class="section-tag mono">Nº005 / SHIRT</div>
     <div class="outfit-carousel">
       <button type="button" class="carousel-btn" id="outfitPrev" aria-label="Previous outfits">‹</button>
       <div class="outfits" id="outfits"></div>
@@ -155,13 +155,22 @@
     </div>
     <p class="micro mono" id="outfitHint" hidden></p>
 
-    <div class="section-tag mono">Nº006 / SLEEVE</div>
+    <div id="pantsSection">
+      <div class="section-tag mono">Nº006 / PANTS</div>
+      <div class="outfit-carousel">
+        <button type="button" class="carousel-btn" id="pantsPrev" aria-label="Previous pants">‹</button>
+        <div class="outfits" id="pants"></div>
+        <button type="button" class="carousel-btn" id="pantsNext" aria-label="More pants">›</button>
+      </div>
+    </div>
+
+    <div class="section-tag mono">Nº007 / SLEEVE</div>
     <div class="segmented" id="sleeve" role="radiogroup" aria-label="Sleeve length">
       <button type="button" data-sleeve="short" role="radio">Short</button>
       <button type="button" data-sleeve="long" role="radio">Long</button>
     </div>
 
-    <div class="section-tag mono">Nº007 / SKIN TONE</div>
+    <div class="section-tag mono">Nº008 / SKIN TONE</div>
     <div class="tone">
       <label class="swatch" title="Pick a colour"><input type="color" id="tone" value="#e0ac8c"><span id="swatch"></span></label>
       <button type="button" class="chip mono" id="auto">AUTO</button>
