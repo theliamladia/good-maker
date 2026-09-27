@@ -37,9 +37,14 @@
     $('rwPass').value = '';
     $('rwError').hidden = true;
     modal.hidden = false;
+    window.GoodApp.setModalOpen(true);
     ($('rwUser').value ? $('rwPass') : $('rwUser')).focus();
   }
-  function close() { modal.hidden = true; $('rwPass').value = ''; }
+  function close() {
+    modal.hidden = true;
+    $('rwPass').value = '';
+    window.GoodApp.setModalOpen(false);
+  }
   modal.addEventListener('click', (e) => { if (e.target.closest('[data-close]')) close(); });
   document.addEventListener('keydown', (e) => { if (e.key === 'Escape' && !modal.hidden) close(); });
 

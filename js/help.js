@@ -186,6 +186,7 @@
     script = HELP[topic];
     modal.querySelector('#helpTitle').textContent = `HOW TO / ${script.title.toUpperCase()}`;
     modal.hidden = false;
+    if (window.GoodApp) window.GoodApp.setModalOpen(true);
     lastStep = -1;
     start = performance.now();
     cancelAnimationFrame(raf);
@@ -194,6 +195,7 @@
   }
   function close() {
     modal.hidden = true;
+    if (window.GoodApp) window.GoodApp.setModalOpen(false);
     cancelAnimationFrame(raf);
   }
 

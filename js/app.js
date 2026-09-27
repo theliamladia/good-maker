@@ -458,6 +458,11 @@
   window.GoodApp = {
     skinForName,
     current: () => ({ skin: state.user, name: state.userName, isDemo: state.isDemo }),
+    // Pop-ups freeze the page behind them (CSS animations + the 3D render loop).
+    setModalOpen(open) {
+      document.body.classList.toggle('modal-open', open);
+      if (viewer) viewer.renderPaused = open;
+    },
   };
 
   $('file').onchange = (e) => handleFile(e.target.files[0]);
