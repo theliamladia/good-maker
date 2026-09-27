@@ -449,6 +449,7 @@ body { text-shadow: 0.5px 0 rgba(255, 0, 60, 0.22), -0.5px 0 rgba(0, 190, 255, 0
   font: 400 0.95rem 'Space Mono', monospace; color: var(--ink); outline: none;
 }
 .rw-field input:focus { border-color: #0000ff; }
+.rw-warn { margin: -4px 0 12px; color: #e0001b; font-size: 0.66rem; font-weight: 700; letter-spacing: 0.06em; }
 .rw-error { color: #d1123f; font-size: 0.72rem; margin: 0 0 10px; }
 .rw-enter {
   width: 100%; padding: 12px; border: 0; border-radius: 12px; cursor: pointer;

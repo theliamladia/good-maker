@@ -21,9 +21,10 @@
       <label class="rw-field mono">MINECRAFT USERNAME
         <input id="rwUser" type="text" maxlength="16" spellcheck="false" autocapitalize="off" required>
       </label>
-      <label class="rw-field mono">PASSWORD
+      <label class="rw-field mono">SITE PASSWORD
         <input id="rwPass" type="password" autocomplete="off" required>
       </label>
+      <p class="rw-warn mono">DO NOT PUT YOUR MINECRAFT PASSWORD IN</p>
       <p class="rw-error mono" id="rwError" hidden></p>
       <button type="submit" class="rw-enter" id="rwEnter">ENTER</button>
     </form>`;
