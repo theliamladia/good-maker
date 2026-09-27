@@ -48,7 +48,7 @@ window.OUTFITS = [
   },
   {
     id: 'smiley-hoodie-pumpkin-neon',
-    name: 'SMILEY HOODIE',
+    name: 'SMILEY®',
     color: 'Pumpkin/Neon',
     long: {
       classic: 'outfits/smiley-hoodie-pumpkin-neon-long-classic.png',
