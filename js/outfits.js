@@ -9,6 +9,8 @@
 // colours, e.g. Pepsi, GOOD® BLUE/COTTON) use two colours: the dot is split 50/50.
 // Brand rules: GOOD is always written GOOD®, colourway names included;
 // colourway names are written in ALL CAPS.
+// locked: true = preview only (served scrambled by /api/outfit, no download).
+// notice = card shown next to the 3D preview while selected ({ tag, title, free? }).
 // Shirts: the legs of these files are ignored and replaced by the chosen pants
 // (window.PANTS below). pants (optional) = pants colour id picked by default
 // with this shirt, until the user chooses pants themselves.
@@ -77,6 +79,19 @@ window.OUTFITS = [
         long: {
           classic: 'outfits/goodie-oxblood-goldenrod-long-classic.png',
           slim: 'outfits/goodie-oxblood-goldenrod-long-slim.png',
+        },
+      },
+      {
+        // Archived: preview only. PNGs aren't in this repo; /api/outfit serves
+        // them scrambled from Vercel environment variables.
+        id: 'goodie-im-sowwy',
+        color: "I'M SOWWY",
+        swatch: ['#f7cac9', '#92a8d1'],
+        locked: true,
+        notice: { tag: 'ARCHIVE', title: 'ARCHIVE ONLY - THIS HOODIE IS NO LONGER FOR SALE' },
+        long: {
+          classic: 'api/outfit?id=goodie-im-sowwy-classic',
+          slim: 'api/outfit?id=goodie-im-sowwy-slim',
         },
       },
     ],

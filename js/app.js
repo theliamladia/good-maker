@@ -227,22 +227,22 @@
       return shirtThumb(setFor(o)[body], body === 'slim');
     }));
     if (id !== drawId) return; // a newer redraw started
-    fillShirts(SHIRTS.map(({ current: o }, i) => card(
+    fillShirts(SHIRTS.map((k, i) => { const o = k.current, c = cover(k); return card(
       o.kind === state.outfit.kind,
-      o.runway
+      c.runway
         ? `<div class="runway-thumb" aria-hidden="true"></div>${nameOnly(o)}`
-        : o.locked
+        : c.locked
           ? `<div class="locked-thumb" aria-hidden="true"></div>${nameOnly(o)}`
           : `<img class="ghost-thumb" src="${thumbs[i]}" alt="">${nameOnly(o)}`,
       // RUNWAY® isn't a shirt: it opens the password prompt (js/runway.js).
       () => (o.runway ? window.GoodRunway && window.GoodRunway.open() : selectOutfit(o))
-    )));
+    ); }));
     drawColors($('shirtColors'), state.outfit, (c) => selectOutfit(c));
     drawPants();
   }
 
   async function drawPants() {
-    $('pantsSection').hidden = !!state.outfit.locked;
+    $('pantsSection').hidden = false;
     const thumbs = await Promise.all(PANTS.map((k) => pantsThumb(k.current)));
     fillPants(PANTS.map(({ current: p }, i) => card(
       p.kind === state.pants.kind,
@@ -344,7 +344,8 @@
     if (!n) return;
     $('dropTag').textContent = n.tag;
     $('dropTitle').textContent = n.title;
-    $('dropFree').innerHTML = `<span>${n.free}</span><span aria-hidden="true">${n.free}</span>`;
+    $('dropFree').hidden = !n.free;
+    $('dropFree').innerHTML = n.free ? `<span>${n.free}</span><span aria-hidden="true">${n.free}</span>` : '';
   }
   $('dropClose').onclick = () => { $('dropCard').hidden = true; };
 
@@ -609,7 +610,7 @@
     let outfit;
     try {
       outfit = await loadOutfit(o, state.body);
-      if (!o.locked) outfit = SkinLib.combineOutfit(outfit, await loadData(state.pants.src));
+      outfit = SkinLib.combineOutfit(outfit, await loadData(state.pants.src));
     } catch (err) {
       if (id !== renderId) return;
       $('outfitHint').hidden = false;
@@ -641,12 +642,7 @@
       dl.disabled = true;
       dl.firstChild.textContent = 'PREVIEW ONLY ';
       dl.title = `${fullName(o)} can be previewed but not downloaded`;
-      if (viewer) {
-        const c = document.createElement('canvas');
-        c.width = c.height = 64;
-        c.getContext('2d').putImageData(new ImageData(merged.data, 64, 64), 0, 0);
-        viewer.loadSkin(c, { model: slim ? 'slim' : 'default' });
-      }
+      showSkin(merged.data, slim);
       return;
     }
     texture.hidden = false;
