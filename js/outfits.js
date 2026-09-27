@@ -43,6 +43,12 @@ window.OUTFITS = [
           slim: 'outfits/smiley-hoodie-pumpkin-neon-long-slim.png',
         },
       },
+      {
+        id: 'smiley-good-blue',
+        color: 'GOOD BLUE',
+        swatch: '#0000ff',
+        long: { classic: 'outfits/smiley-good-blue-long-classic.png', slim: 'outfits/smiley-good-blue-long-slim.png' },
+      },
     ],
   },
   {
