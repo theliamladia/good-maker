@@ -144,8 +144,8 @@
 
   // preview = view-only: no downloads, PREVIEW MODE shown throughout.
   function buildStage(name, skin, looks, preview) {
-    const tone = SkinLib.sampleSkinTone(skin);
-    const hairRows = SkinLib.estimateHairRows(skin, tone);
+    const autoTone = SkinLib.sampleSkinTone(skin);
+    const hairRows = SkinLib.estimateHairRows(skin, autoTone);
     stage = document.createElement('section');
     stage.className = 'rw-stage';
     stage.innerHTML = `
@@ -154,6 +154,11 @@
         <div class="rw-title">RUNWAY®</div>
         <div class="rw-who mono">${name.toUpperCase()}</div>
       </header>
+      <div class="rw-tone mono">
+        <span>SKIN TONE</span>
+        <label class="rw-swatch" title="Pick a colour"><input type="color" aria-label="Skin tone"><span></span></label>
+        <button type="button" class="rw-auto" aria-pressed="true">AUTO</button>
+      </div>
       ${preview ? '<div class="rw-preview mono">PREVIEW MODE · VIEW ONLY</div>' : ''}
       <div class="rw-looks"></div>
       <p class="rw-legal mono">© ${new Date().getFullYear()} GOOD® DESIGN. RUNWAY® LOOKS ARE PROTECTED WORKS OF GOOD®. ALL RIGHTS RESERVED.</p>`;
@@ -164,13 +169,40 @@
     document.body.appendChild(stage);
     stage.querySelector('.rw-back').onclick = leave;
 
+    // Skin tone override: AUTO samples it from the player's skin; the swatch
+    // picks one by hand (e.g. when white hair gets read as skin).
+    const toHex = (rgb) => '#' + rgb.map((v) => v.toString(16).padStart(2, '0')).join('');
+    const toneInput = stage.querySelector('.rw-swatch input');
+    const toneDot = stage.querySelector('.rw-swatch span');
+    const autoBtn = stage.querySelector('.rw-auto');
+    const drawn = [];
+    const paint = (tone) => {
+      toneInput.value = toHex(tone);
+      toneDot.style.background = toHex(tone);
+      for (const d of drawn) {
+        const merged = SkinLib.mergeSkin(skin, d.texture, tone, d.slim, d.slim ? hairRows : 0, null, 'auto');
+        d.tex.getContext('2d').putImageData(new ImageData(merged.data, 64, 64), 0, 0);
+        if (d.viewer) d.viewer.loadSkin(d.tex, { model: d.slim ? 'slim' : 'default' });
+        else { const c = d.flat.getContext('2d'); c.clearRect(0, 0, 64, 64); c.drawImage(d.tex, 0, 0); }
+      }
+    };
+    toneInput.oninput = () => {
+      const v = toneInput.value;
+      autoBtn.setAttribute('aria-pressed', 'false');
+      paint([1, 3, 5].map((k) => parseInt(v.slice(k, k + 2), 16)));
+    };
+    autoBtn.onclick = () => {
+      autoBtn.setAttribute('aria-pressed', 'true');
+      paint(autoTone);
+    };
+
     const row = stage.querySelector('.rw-looks');
     looks.forEach((look, i) => {
       const slim = SkinLib.detectSlim(look.texture);
-      const merged = SkinLib.mergeSkin(skin, look.texture, tone, slim, slim ? hairRows : 0, null, 'auto');
       const tex = document.createElement('canvas');
       tex.width = tex.height = 64;
-      tex.getContext('2d').putImageData(new ImageData(merged.data, 64, 64), 0, 0);
+      const d = { texture: look.texture, slim, tex };
+      drawn.push(d);
 
       const col = document.createElement('article');
       col.className = 'rw-look';
@@ -188,15 +220,15 @@
         const v = new skinview3d.SkinViewer({ canvas: document.createElement('canvas'), width: view.clientWidth || 240, height: view.clientHeight || 360 });
         v.animation = new skinview3d.IdleAnimation();
         v.zoom = 0.8;
-        v.loadSkin(tex, { model: slim ? 'slim' : 'default' });
         view.appendChild(v.canvas);
         viewers.push(v);
+        d.viewer = v;
       } else {
         const img = document.createElement('canvas');
         img.width = img.height = 64;
-        img.getContext('2d').drawImage(tex, 0, 0);
         img.className = 'rw-flat';
         view.appendChild(img);
+        d.flat = img;
       }
       if (!preview) col.querySelector('.rw-access').onclick = () => {
         const a = document.createElement('a');
@@ -211,6 +243,7 @@
         duration: 1100, delay: 150 + i * 180, easing: EASE_OUT, fill: 'backwards',
       });
     });
+    paint(autoTone);
     stage.querySelector('.rw-head').animate([{ opacity: 0, transform: 'translateY(-20px)' }, { opacity: 1, transform: 'none' }],
       { duration: 700, delay: 700, easing: EASE_OUT, fill: 'backwards' });
   }
