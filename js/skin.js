@@ -451,18 +451,25 @@ function washPants(pants, hex) {
   return out;
 }
 
-// Base-layer colour that sits under an opaque outer-layer pixel is removed,
-// so the base only colours the holes in the outer layer (e.g. a logo cut out
-// of a hoodie) and can't peek out around the neckline. Returns a new texture.
+// Base-layer colour is only kept around holes in the outer layer that it
+// fills (e.g. a logo cut out of a hoodie), plus a 1px border so no skin shows
+// at the hole's edges; the rest is removed so it can't peek out around the
+// neckline. Returns a new texture.
 // [base x, base y, w, h, outer dx, outer dy]: torso, right arm, left arm.
 const BASE_UNDER_OUTER = [[16, 16, 24, 16, 0, 16], [40, 16, 16, 16, 0, 16], [32, 48, 16, 16, 16, 0]];
 function baseUnderHoles(skin) {
   skin = to64(skin);
   const out = new ImageData(new Uint8ClampedArray(skin.data), 64, 64);
+  const a = (x, y) => skin.data[idx(x, y) + 3] > 0;
   for (const [x0, y0, w, h, dx, dy] of BASE_UNDER_OUTER) {
+    const inside = (x, y) => x >= x0 && x < x0 + w && y >= y0 && y < y0 + h;
+    // A filled hole: see-through outer pixel with base colour under it.
+    const hole = (x, y) => inside(x, y) && a(x, y) && !a(x + dx, y + dy);
     for (let y = y0; y < y0 + h; y++) {
       for (let x = x0; x < x0 + w; x++) {
-        if (skin.data[idx(x + dx, y + dy) + 3] > 0) out.data.fill(0, idx(x, y), idx(x, y) + 4);
+        let near = false;
+        for (let j = -1; j <= 1 && !near; j++) for (let i = -1; i <= 1 && !near; i++) near = hole(x + i, y + j);
+        if (!near) out.data.fill(0, idx(x, y), idx(x, y) + 4);
       }
     }
   }
