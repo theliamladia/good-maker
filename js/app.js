@@ -2,13 +2,30 @@
   const $ = (id) => document.getElementById(id);
   const DEMO_SKIN = 'samples/spurdo.png';
 
+  // Catalogue: each kind is a card; its colours are the actual variants.
+  // A variant carries its kind's name and flags (locked, notice) plus its own
+  // colour, files and swatch. kind.current = the colour last picked for it.
+  function catalogue(kinds) {
+    return kinds.map((k) => {
+      const kind = { id: k.id, name: k.name };
+      kind.colors = (k.colors || [k]).map((c) => ({
+        locked: k.locked, notice: k.notice, ...c, name: k.name, kind,
+      }));
+      kind.current = kind.colors[0];
+      return kind;
+    });
+  }
+  const SHIRTS = catalogue(window.OUTFITS);
+  const PANTS = catalogue(window.PANTS);
+  const ALL_PANTS = PANTS.flatMap((k) => k.colors);
+
   const state = {
     user: null,          // ImageData of the head source
     isDemo: true,
-    outfit: window.OUTFITS[0],
+    outfit: SHIRTS[0].current,
     body: 'classic',     // 'classic' | 'slim'
     sleeve: 'short',     // 'short' | 'long'
-    pants: window.PANTS[0],
+    pants: PANTS[0].current,
     pantsPicked: false,  // once the user picks pants, shirts stop changing them
     hair: 0,             // torso rows of the user's hair to keep (0 = off)
     hairGuess: 0,        // detected length, applied when the Slim body is chosen
@@ -186,27 +203,52 @@
   let drawId = 0;
   async function drawOutfits() {
     const id = ++drawId;
-    const thumbs = await Promise.all(window.OUTFITS.map((o) =>
+    const thumbs = await Promise.all(SHIRTS.map(({ current: o }) =>
       (o.locked ? null : shirtThumb(setFor(o)[state.body] || setFor(o)[bodiesOf(o)[0]]))));
     if (id !== drawId) return; // a newer redraw started
-    fillShirts(window.OUTFITS.map((o, i) => card(
-      o === state.outfit,
+    fillShirts(SHIRTS.map(({ current: o }, i) => card(
+      o.kind === state.outfit.kind,
       o.locked
         ? `<div class="locked-thumb" aria-hidden="true"></div>${label(o)}`
         : `<img src="${thumbs[i]}" alt="">${label(o)}`,
       () => selectOutfit(o)
     )));
+    drawColors($('shirtColors'), state.outfit, (c) => selectOutfit(c));
     drawPants();
   }
 
   async function drawPants() {
     $('pantsSection').hidden = !!state.outfit.locked;
-    const thumbs = await Promise.all(window.PANTS.map(pantsThumb));
-    fillPants(window.PANTS.map((p, i) => card(
-      p === state.pants,
+    const thumbs = await Promise.all(PANTS.map((k) => pantsThumb(k.current)));
+    fillPants(PANTS.map(({ current: p }, i) => card(
+      p.kind === state.pants.kind,
       `<img class="pants-thumb" src="${thumbs[i]}" alt="">${label(p)}`,
-      () => { state.pants = p; state.pantsPicked = true; drawPants(); render(); }
+      () => pickPants(p)
     )));
+    drawColors($('pantsColors'), state.pants, pickPants);
+  }
+
+  function pickPants(p) {
+    p.kind.current = p;
+    state.pants = p;
+    state.pantsPicked = true;
+    drawPants();
+    render();
+  }
+
+  // Colour picker for the selected kind (hidden when it only comes in one).
+  function drawColors(el, selected, onPick) {
+    const colors = selected.kind.colors;
+    el.hidden = colors.length < 2;
+    el.replaceChildren(...colors.map((c) => {
+      const b = document.createElement('button');
+      b.type = 'button';
+      b.className = 'swatch-btn';
+      b.setAttribute('aria-pressed', c === selected);
+      b.innerHTML = `<span class="dot" style="background:${c.swatch || '#ccc'}"></span>${c.color}`;
+      b.onclick = () => onPick(c);
+      return b;
+    }));
   }
 
   // ---------- Sleeve ----------
@@ -224,8 +266,9 @@
   };
 
   function selectOutfit(o) {
+    o.kind.current = o;
     state.outfit = o;
-    if (!state.pantsPicked) state.pants = window.PANTS.find((p) => p.id === o.pants) || window.PANTS[0];
+    if (!state.pantsPicked) state.pants = ALL_PANTS.find((p) => p.id === o.pants) || PANTS[0].current;
     updateSleeveButtons();
     $('outfitHint').hidden = !o.locked;
     $('outfitHint').textContent = o.locked ? 'PREVIEW ONLY / NOT AVAILABLE TO DOWNLOAD' : '';
@@ -450,7 +493,7 @@
       if (id !== renderId) return;
       $('outfitHint').hidden = false;
       $('outfitHint').textContent = err.message;
-      return selectOutfit(window.OUTFITS[0]);
+      return selectOutfit(SHIRTS[0].current);
     }
     if (id !== renderId) return; // a newer render started
     const slim = state.body === 'slim';
