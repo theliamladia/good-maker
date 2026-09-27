@@ -16,11 +16,21 @@ Static site that dresses a Minecraft skin in a preset outfit.
 
 `api/skin.js` is a Vercel serverless function (`/api/skin?name=<username>`). It asks Mojang for the player's UUID and current skin and returns the PNG from the site's own domain, so it works for renamed players and the browser can read the pixels. Locally (no function), the page falls back to public skin services.
 
-## Preview-only outfits (Founders Edition)
+## RUNWAY® (password-locked looks)
 
-Outfits marked `locked: true` in `js/outfits.js` can be previewed in 3D but not downloaded. Their PNGs are **not in this repo** (it's public). Each is stored in a Vercel environment variable as base64 and served by `api/outfit.js`, XOR-scrambled with a fresh key per request, so there is no PNG URL, `<img>`, texture view or data URL to save. This deters copying but can't make it impossible: the browser has to draw the pixels.
+The RUNWAY® card opens a prompt for a Minecraft username and a password. `api/runway.js` checks the password on the server; nothing in this repo or the page contains it. The full password unlocks the looks with an ACCESS® LOOK download each; the preview password shows them in PREVIEW MODE (no downloads). The look PNGs are not in this repo either; they're sent XOR-scrambled only after a correct password.
 
-Setup: in Vercel → Project → Settings → Environment Variables, add `FOUNDERS_PNG_B64` = the base64 of the Founders Edition PNG, then redeploy. Never commit that PNG here.
+Vercel → Project → Settings → Environment Variables:
+
+| Variable | Value |
+|---|---|
+| `RUNWAY_PASSWORD` | full-access password |
+| `RUNWAY_PREVIEW_PASSWORD` | preview-only password |
+| `FOUNDERS_PNG_B64` (or `RUNWAY_LOOK1_PNG_B64`) | Look 1® PNG, base64 |
+| `RUNWAY_LOOK2_PNG_B64` | Look 2® PNG, base64 |
+| `RUNWAY_LOOK3_PNG_B64` | Look 3® PNG, base64 |
+
+Redeploy after changing them. Never commit the passwords or look PNGs here.
 
 ## Run
 

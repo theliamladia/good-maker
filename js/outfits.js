@@ -9,8 +9,6 @@
 // Shirts: the legs of these files are ignored and replaced by the chosen pants
 // (window.PANTS below). pants (optional) = pants colour id picked by default
 // with this shirt, until the user chooses pants themselves.
-// locked: true = preview only. The PNG isn't in this repo; it's served
-// scrambled by /api/outfit (see api/outfit.js) and can't be downloaded.
 window.OUTFITS = [
   {
     id: 'shirt',
@@ -29,19 +27,6 @@ window.OUTFITS = [
         swatch: '#2468ff',
         bodies: { classic: 'outfits/good-jean-blaue-powder-classic.png', slim: 'outfits/good-jean-blaue-powder-slim.png' },
         long: { classic: 'outfits/good-jean-blaue-powder-long-classic.png', slim: 'outfits/good-jean-blaue-powder-long-slim.png' },
-      },
-    ],
-  },
-  {
-    id: 'good-lab',
-    name: 'GOOD LAB®',
-    colors: [
-      {
-        id: 'good-lab-destroyed',
-        color: 'Destroyed',
-        swatch: '#0f5aff',
-        pants: 'mosaic-pant-linen-lapis',
-        long: { slim: 'outfits/good-lab-destroyed-long-slim.png' },
       },
     ],
   },
@@ -73,16 +58,12 @@ window.OUTFITS = [
     ],
   },
   {
-    id: 'founders',
-    name: 'FOUNDERS EDITION',
-    locked: true, // complete outfit incl. its own pants; the Pants picker hides
-    // Card shown next to the 3D preview while this outfit is selected.
-    notice: {
-      tag: 'FOUNDERS® / COMING SOON',
-      title: 'FOUNDERS® will drop in limited quantity once released.',
-      free: 'FREE FREE FREE I WILL NOT CHARGE',
-    },
-    colors: [{ id: 'founders', bodies: { slim: 'api/outfit?id=founders' } }],
+    id: 'runway',
+    name: 'RUNWAY®',
+    // Password-locked looks. Nothing about them is in this repo: the password
+    // and the look PNGs live in Vercel environment variables and are only
+    // sent by /api/runway after a correct password (see api/runway.js).
+    runway: true,
   },
 ];
 
@@ -102,10 +83,5 @@ window.PANTS = [
     id: 'jean-sagging',
     name: 'JEAN®',
     colors: [{ id: 'good-jean-sagging', color: 'Sagging', swatch: '#004cae', src: 'outfits/pants/good-jean-sagging.png' }],
-  },
-  {
-    id: 'mosaic-pant',
-    name: 'MOSAIC PANT',
-    colors: [{ id: 'mosaic-pant-linen-lapis', color: 'Linen/Lapis', swatch: '#f5ecd8', src: 'outfits/pants/mosaic-pant-linen-lapis.png' }],
   },
 ];

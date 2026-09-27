@@ -204,14 +204,17 @@
   async function drawOutfits() {
     const id = ++drawId;
     const thumbs = await Promise.all(SHIRTS.map(({ current: o }) =>
-      (o.locked ? null : shirtThumb(setFor(o)[state.body] || setFor(o)[bodiesOf(o)[0]]))));
+      (o.locked || o.runway ? null : shirtThumb(setFor(o)[state.body] || setFor(o)[bodiesOf(o)[0]]))));
     if (id !== drawId) return; // a newer redraw started
     fillShirts(SHIRTS.map(({ current: o }, i) => card(
       o.kind === state.outfit.kind,
-      o.locked
-        ? `<div class="locked-thumb" aria-hidden="true"></div>${label(o)}`
-        : `<img src="${thumbs[i]}" alt="">${label(o)}`,
-      () => selectOutfit(o)
+      o.runway
+        ? `<div class="runway-thumb" aria-hidden="true"></div>${label(o)}`
+        : o.locked
+          ? `<div class="locked-thumb" aria-hidden="true"></div>${label(o)}`
+          : `<img src="${thumbs[i]}" alt="">${label(o)}`,
+      // RUNWAY® isn't a shirt: it opens the password prompt (js/runway.js).
+      () => (o.runway ? window.GoodRunway && window.GoodRunway.open() : selectOutfit(o))
     )));
     drawColors($('shirtColors'), state.outfit, (c) => selectOutfit(c));
     drawPants();
@@ -411,6 +414,31 @@
     return sources;
   }
 
+  // Username -> skin ImageData (throws with a user-facing message).
+  async function skinForName(name) {
+    let own = null;
+    try {
+      own = await fetchOwnApi(name);
+      if (own) return checkSkin(imageData(await loadImage(own)));
+    } catch (err) {
+      if (err.final) throw err;
+    } finally {
+      if (own) URL.revokeObjectURL(own);
+    }
+    for (const src of await fallbackSources(name)) {
+      try {
+        return checkSkin(imageData(await loadImage(src)));
+      } catch { /* try the next service */ }
+    }
+    throw new Error(`COULDN'T FETCH ${name.toUpperCase()}'S SKIN. TRY UPLOADING IT.`);
+  }
+  function checkSkin(data) {
+    if (data.width !== 64 || (data.height !== 64 && data.height !== 32)) {
+      throw new Error(`SKIN MUST BE 64×64 OR 64×32 (GOT ${data.width}×${data.height}).`);
+    }
+    return data;
+  }
+
   $('userForm').onsubmit = async (e) => {
     e.preventDefault();
     const name = $('username').value.trim();
@@ -418,25 +446,18 @@
     showError('');
     $('userForm').classList.add('loading');
     try {
-      let own = null;
-      try {
-        own = await fetchOwnApi(name);
-        if (own) return await loadSkinFrom(own, name);
-      } catch (err) {
-        if (err.final) return showError(err.message);
-      } finally {
-        if (own) URL.revokeObjectURL(own);
-      }
-      for (const src of await fallbackSources(name)) {
-        try {
-          await loadSkinFrom(src, name);
-          return;
-        } catch { /* try the next service */ }
-      }
-      showError(`COULDN'T FETCH ${name.toUpperCase()}'S SKIN. TRY UPLOADING IT.`);
+      useSkin(await skinForName(name), name, false);
+    } catch (err) {
+      showError(err.message);
     } finally {
       $('userForm').classList.remove('loading');
     }
+  };
+
+  // For js/runway.js: fetch a player's skin and read the current skin.
+  window.GoodApp = {
+    skinForName,
+    current: () => ({ skin: state.user, name: state.userName, isDemo: state.isDemo }),
   };
 
   $('file').onchange = (e) => handleFile(e.target.files[0]);
