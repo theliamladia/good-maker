@@ -330,8 +330,9 @@
     state.outfit = o;
     if (!state.pantsPicked) state.pants = ALL_PANTS.find((p) => p.id === o.pants) || PANTS[0].current;
     updateSleeveButtons();
-    $('outfitHint').hidden = !o.locked;
-    $('outfitHint').textContent = o.locked ? 'PREVIEW ONLY / NOT AVAILABLE TO DOWNLOAD' : '';
+    // (Preview-only is already shown on the download button; this line is for errors.)
+    $('outfitHint').hidden = true;
+    $('outfitHint').textContent = '';
     showNotice(o);
     setBody(state.body); // re-checks the body is available for this outfit
   }
