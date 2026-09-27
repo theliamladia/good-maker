@@ -70,6 +70,15 @@ window.OUTFITS = [
         swatch: ['#0000ff', '#ffffff'],
         long: { classic: 'outfits/goodie-good-blue-long-classic.png', slim: 'outfits/goodie-good-blue-long-slim.png' },
       },
+      {
+        id: 'goodie-oxblood-goldenrod',
+        color: 'OXBLOOD/GOLDENROD',
+        swatch: ['#713a40', '#e3a828'],
+        long: {
+          classic: 'outfits/goodie-oxblood-goldenrod-long-classic.png',
+          slim: 'outfits/goodie-oxblood-goldenrod-long-slim.png',
+        },
+      },
     ],
   },
   {
