@@ -136,6 +136,7 @@ window.PANTS = [
     id: 'springsteen-sagging',
     name: 'JEAN® SAGGING',
     src: 'outfits/pants/good-jean-sagging.png',
+    boxers: true, // Boxer control: blue (as drawn) or red tartan (SkinLib.tartanBoxers)
     colors: washes('springsteen-sagging'),
   },
 ];

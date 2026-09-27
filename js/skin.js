@@ -488,6 +488,34 @@ function baseUnderHoles(skin) {
   return out;
 }
 
-const SkinLib = { baseUnderHoles, washPants, combineOutfit, waistRows, sampleSkinTone, mergeSkin, bodyParts, shadeTone, detectSlim, estimateHairRows, extractHair };
+// Boxers: the pants files draw them in blue (hue ~208-220°, apart from the
+// denim and GOOD® BLUE). Tartan repaints those pixels in a red plaid laid out
+// on the texture grid: dark bands every 4px across and 3px down (the boxers
+// only show a few rows), darker where they cross, and a thin gold line down
+// every 8px. Returns a new texture.
+function tartanBoxers(pants) {
+  pants = to64(pants);
+  const out = new ImageData(new Uint8ClampedArray(pants.data), 64, 64);
+  const d = out.data;
+  for (let y = 0; y < 64; y++) {
+    for (let x = 0; x < 64; x++) {
+      const i = idx(x, y);
+      const [r, g, b] = [d[i], d[i + 1], d[i + 2]];
+      const max = Math.max(r, g, b), min = Math.min(r, g, b);
+      if (!d[i + 3] || max !== b || max - min < 60) continue;
+      const hue = 240 + (60 * (r - g)) / (max - min);
+      if (hue < 208 || hue > 220) continue;
+      const bx = x % 4 === 0, by = y % 3 === 0;
+      const c = x % 8 === 2 && !by ? [214, 170, 58]
+        : bx && by ? [70, 8, 16]
+        : bx || by ? [128, 14, 26]
+        : [196, 28, 40];
+      d.set(c, i);
+    }
+  }
+  return out;
+}
+
+const SkinLib = { tartanBoxers, baseUnderHoles, washPants, combineOutfit, waistRows, sampleSkinTone, mergeSkin, bodyParts, shadeTone, detectSlim, estimateHairRows, extractHair };
 if (typeof module !== 'undefined') module.exports = SkinLib;
 else window.SkinLib = SkinLib;
