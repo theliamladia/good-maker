@@ -253,6 +253,7 @@
   }
 
   function pickPants(p) {
+    state.fadeNext = true;
     p.kind.current = p;
     state.pants = p;
     state.pantsPicked = true;
@@ -324,6 +325,7 @@
   };
 
   function selectOutfit(o) {
+    state.fadeNext = true;
     o.kind.current = o;
     state.outfit = o;
     if (!state.pantsPicked) state.pants = ALL_PANTS.find((p) => p.id === o.pants) || PANTS[0].current;
@@ -561,6 +563,44 @@
     if (state.user.data[i + 3] > 0) setTone([...state.user.data.slice(i, i + 3)]);
   };
 
+  // ---------- 3D preview: crossfade between outfits/colours ----------
+  // Picking another outfit or colour blends the old texture into the new one
+  // over ~0.4s. Body changes (different arm model) and other edits switch
+  // straight away.
+  const fadeCanvas = document.createElement('canvas');
+  fadeCanvas.width = fadeCanvas.height = 64;
+  const fadeCtx = fadeCanvas.getContext('2d');
+  let shown = null;     // { data, slim } currently on the model
+  let fadeRaf = 0;
+  function showSkin(data, slim) {
+    if (!viewer) return;
+    cancelAnimationFrame(fadeRaf);
+    const from = shown;
+    const to = { data: new Uint8ClampedArray(data), slim };
+    shown = to;
+    const model = { model: slim ? 'slim' : 'default' };
+    const fade = state.fadeNext && from && from.slim === slim &&
+      !matchMedia('(prefers-reduced-motion: reduce)').matches;
+    state.fadeNext = false;
+    if (!fade) {
+      fadeCtx.putImageData(new ImageData(to.data, 64, 64), 0, 0);
+      viewer.loadSkin(fadeCanvas, model);
+      return;
+    }
+    const DURATION = 400;
+    const mix = new Uint8ClampedArray(to.data.length);
+    const t0 = performance.now();
+    const step = (now) => {
+      const t = Math.min(1, (now - t0) / DURATION);
+      const k = t * t * (3 - 2 * t); // smoothstep
+      for (let i = 0; i < mix.length; i++) mix[i] = from.data[i] + (to.data[i] - from.data[i]) * k;
+      fadeCtx.putImageData(new ImageData(mix, 64, 64), 0, 0);
+      viewer.loadSkin(fadeCanvas, model);
+      if (t < 1) fadeRaf = requestAnimationFrame(step);
+    };
+    fadeRaf = requestAnimationFrame(step);
+  }
+
   // ---------- Render ----------
   let renderId = 0;
   async function render() {
@@ -615,7 +655,7 @@
     dl.disabled = state.isDemo;
     dl.firstChild.textContent = 'GOOD ME® ';
     dl.title = state.isDemo ? 'Upload your skin first' : '';
-    if (viewer) viewer.loadSkin(state.resultUrl, { model: slim ? 'slim' : 'default' });
+    showSkin(merged.data, slim);
   }
 
   // ---------- Eraser ----------
