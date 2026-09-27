@@ -224,6 +224,7 @@ body {
 .outfits .outfit { scroll-snap-align: start; min-width: 0; padding: 6px; }
 .outfit img.pants-thumb { width: 60%; margin: 0 auto 4px; aspect-ratio: 8 / 12; }
 #pantsSection[hidden] { display: none; }
+#pantsSection > .section-tag:first-child { margin-top: 20px; }
 .outfits .outfit span { display: block; line-height: 1.2; overflow-wrap: anywhere; }
 .outfits .outfit .outfit-name { font-size: 0.7rem; }
 .outfits .outfit .outfit-color {
@@ -251,6 +252,8 @@ body {
 }
 .segmented button:disabled { opacity: 0.35; cursor: not-allowed; }
 .segmented button[hidden] { display: none; }
+.segmented.small { padding: 3px; gap: 3px; border-radius: 10px; }
+.segmented.small button { padding: 6px 4px; font-size: 0.78rem; border-radius: 7px; }
 
 /* Colour picker under the Shirt / Pants cards */
 .swatches { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 10px; }
