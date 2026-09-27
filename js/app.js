@@ -158,13 +158,29 @@
       player.skin.rightArm.rotation.set(0, 0, 0.03 * Math.cos(t + Math.PI) - 0.02 * Math.PI);
       $('leanCloudBody').style.transform = `translateY(${-bob * 14}px)`;
     });
-    const ANIMS = { idle: () => new skinview3d.IdleAnimation(), walk: () => new skinview3d.WalkingAnimation(), postup: PostUp };
+    // JOJO: upside down and tilted, one arm overhead past the head, the other
+    // hanging toward the feet, head turned to show the face. Slight sway.
+    const Jojo = () => new skinview3d.FunctionAnimation((player, progress) => {
+      const sway = Math.sin(progress * 1.4) * 2;
+      player.rotation.order = 'YXZ';
+      player.rotation.set(0, -20 * DEG, (200 + sway) * DEG);
+      player.skin.head.rotation.set(-15 * DEG, -50 * DEG, 0);
+      player.skin.body.rotation.set(0, 0, 0);
+      player.skin.leftArm.rotation.set(-170 * DEG, 0, 0);
+      player.skin.rightArm.rotation.set(0, 0, 10 * DEG);
+      player.skin.leftLeg.rotation.set(-48 * DEG, 0, 0);
+      player.skin.rightLeg.rotation.set(-2 * DEG, 0, 0);
+    });
+    const ANIMS = {
+      idle: () => new skinview3d.IdleAnimation(), walk: () => new skinview3d.WalkingAnimation(), postup: PostUp, jojo: Jojo,
+    };
     $('anim').onclick = (e) => {
       const btn = e.target.closest('[data-anim]');
       if (!btn) return;
       $('anim').querySelectorAll('.chip').forEach((b) => b.setAttribute('aria-pressed', b === btn));
       const make = ANIMS[btn.dataset.anim];
       viewer.animation = make ? make() : null;
+      viewer.playerObject.rotation.order = 'XYZ';
       leanCloud(btn.dataset.anim === 'postup');
     };
   } else {
