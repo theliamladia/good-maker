@@ -55,6 +55,12 @@ window.OUTFITS = [
         swatch: '#1f3fcf',
         long: { classic: 'outfits/goodie-pepsi-long-classic.png', slim: 'outfits/goodie-pepsi-long-slim.png' },
       },
+      {
+        id: 'goodie-good-blue',
+        color: 'GOOD BLUE',
+        swatch: '#0000ff',
+        long: { classic: 'outfits/goodie-good-blue-long-classic.png', slim: 'outfits/goodie-good-blue-long-slim.png' },
+      },
     ],
   },
   {
