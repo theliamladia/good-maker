@@ -264,13 +264,20 @@ body {
 .swatches { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 10px; }
 .swatches[hidden] { display: none; }
 .swatch-btn {
-  display: inline-flex; align-items: center; gap: 6px; padding: 5px 10px 5px 6px;
+  display: inline-flex; align-items: center; padding: 5px;
   border: 1px solid rgba(11, 21, 38, 0.14); border-radius: 999px; background: rgba(255, 255, 255, 0.7);
   font: 400 0.72rem 'Inter', sans-serif; font-variant-caps: all-small-caps; letter-spacing: 0.04em;
-  color: var(--ink); cursor: pointer;
+  color: var(--ink); cursor: pointer; transition: padding 0.35s cubic-bezier(0.16, 1, 0.3, 1), background 0.2s;
 }
-.swatch-btn .dot { width: 14px; height: 14px; border-radius: 50%; box-shadow: inset 0 0 0 1px rgba(11, 21, 38, 0.25); }
-.swatch-btn[aria-pressed="true"] { border-color: var(--blue); background: #fff; box-shadow: 0 0 0 1px var(--blue); }
+.swatch-btn .dot { flex: none; width: 14px; height: 14px; border-radius: 50%; box-shadow: inset 0 0 0 1px rgba(11, 21, 38, 0.25); }
+/* Name hidden on dots; the picked colour expands to show it */
+.swatch-btn .sw-name {
+  max-width: 0; opacity: 0; overflow: hidden; white-space: nowrap; margin-left: 0;
+  transition: max-width 0.45s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.25s, margin-left 0.35s;
+}
+.swatch-btn[aria-pressed="true"] { padding: 5px 11px 5px 6px; border-color: var(--blue); background: #fff; box-shadow: 0 0 0 1px var(--blue); }
+.swatch-btn[aria-pressed="true"] .sw-name { max-width: 220px; opacity: 1; margin-left: 6px; transition-delay: 0.08s; }
+.swatch-btn:hover:not([aria-pressed="true"]) { background: #fff; }
 
 .outfit .runway-thumb { width: 100%; aspect-ratio: 1; margin-bottom: 4px; border-radius: 8px; background: #0000ff; }
 

@@ -261,22 +261,50 @@
   }
 
   // Colour picker for the selected kind (hidden when it only comes in one).
+  // Colours show as dots; the picked one moves to the front and expands into
+  // a pill with its colourway name. Buttons are reused while the kind stays
+  // the same, so the move (FLIP) and the expand can animate.
   function drawColors(el, selected, onPick) {
     const colors = selected.kind.colors;
     el.hidden = colors.length < 2;
-    el.replaceChildren(...colors.map((c) => {
-      const b = document.createElement('button');
-      b.type = 'button';
-      b.className = 'swatch-btn';
+    const sameKind = el._kind === selected.kind;
+    el._kind = selected.kind;
+    const before = new Map([...el.children].map((b) => [b._color, b.getBoundingClientRect()]));
+    const buttons = new Map(sameKind ? [...el.children].map((b) => [b._color, b]) : []);
+
+    const order = [selected, ...colors.filter((c) => c !== selected)];
+    el.replaceChildren(...order.map((c) => {
+      let b = buttons.get(c);
+      if (!b) {
+        b = document.createElement('button');
+        b.type = 'button';
+        b.className = 'swatch-btn';
+        b._color = c;
+        // Twin colourways get a dot split 50/50 between their two colours.
+        const sw = Array.isArray(c.swatch)
+          ? `linear-gradient(90deg, ${c.swatch[0]} 50%, ${c.swatch[1]} 50%)`
+          : c.swatch || '#ccc';
+        b.innerHTML = `<span class="dot" style="background:${sw}"></span><span class="sw-name">${c.color}</span>`;
+        b.setAttribute('aria-label', c.color);
+        b.title = c.color;
+        b.onclick = () => onPick(c);
+      }
       b.setAttribute('aria-pressed', c === selected);
-      // Twin colourways get a dot split 50/50 between their two colours.
-      const sw = Array.isArray(c.swatch)
-        ? `linear-gradient(90deg, ${c.swatch[0]} 50%, ${c.swatch[1]} 50%)`
-        : c.swatch || '#ccc';
-      b.innerHTML = `<span class="dot" style="background:${sw}"></span>${c.color}`;
-      b.onclick = () => onPick(c);
       return b;
     }));
+
+    // FLIP: slide each dot from where it was to where it is now.
+    if (!sameKind || matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+    for (const b of el.children) {
+      const was = before.get(b._color);
+      if (!was) continue;
+      const now = b.getBoundingClientRect();
+      const dx = was.left - now.left, dy = was.top - now.top;
+      if (dx || dy) {
+        b.animate([{ transform: `translate(${dx}px, ${dy}px)` }, { transform: 'none' }],
+          { duration: 420, easing: 'cubic-bezier(0.16, 1, 0.3, 1)' });
+      }
+    }
   }
 
   // ---------- Sleeve ----------
@@ -750,5 +778,5 @@
   updateEraseHint();
   updateEraserButtons();
   setBody('classic');
-  loadData(DEMO_SKIN).then((d) => useSkin(d, 'Spurdo', true)).catch(() => render());
+  loadData(DEMO_SKIN).then((d) => useSkin(d, 'Chinny', true)).catch(() => render());
 })();
