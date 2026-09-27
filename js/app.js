@@ -345,10 +345,12 @@
     el.hidden = colors.length < 2;
     const sameKind = el._kind === selected.kind;
     el._kind = selected.kind;
-    const before = new Map([...el.children].map((b) => [b._color, b.getBoundingClientRect()]));
-    const buttons = new Map(sameKind ? [...el.children].map((b) => [b._color, b]) : []);
+    const before = new Map([...el.querySelectorAll('.swatch-btn')].map((b) => [b._color, b.getBoundingClientRect()]));
+    const buttons = new Map(sameKind ? [...el.querySelectorAll('.swatch-btn')].map((b) => [b._color, b]) : []);
 
+    // The picked colour sits on its own row, above the other dots.
     const order = [selected, ...colors.filter((c) => c !== selected)];
+    const brk = el.querySelector('.sw-break') || Object.assign(document.createElement('span'), { className: 'sw-break' });
     el.replaceChildren(...order.map((c) => {
       let b = buttons.get(c);
       if (!b) {
@@ -368,10 +370,11 @@
       b.setAttribute('aria-pressed', c === selected);
       return b;
     }));
+    el.firstChild.after(brk);
 
     // FLIP: slide each dot from where it was to where it is now.
     if (!sameKind || matchMedia('(prefers-reduced-motion: reduce)').matches) return;
-    for (const b of el.children) {
+    for (const b of el.querySelectorAll('.swatch-btn')) {
       const was = before.get(b._color);
       if (!was) continue;
       const now = b.getBoundingClientRect();

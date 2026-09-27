@@ -263,6 +263,7 @@ body {
 /* Colour picker under the Shirt / Pants cards */
 .swatches { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 10px; }
 .swatches[hidden] { display: none; }
+.swatches .sw-break { flex-basis: 100%; height: 0; }
 .swatch-btn {
   display: inline-flex; align-items: center; padding: 5px;
   border: 1px solid rgba(11, 21, 38, 0.14); border-radius: 999px; background: rgba(255, 255, 255, 0.7);
