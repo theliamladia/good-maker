@@ -258,6 +258,8 @@
   function updateSleeveButtons() {
     const o = state.outfit;
     showOnly($('sleeve'), 'sleeve', sleevesOf(o));
+    // Only one sleeve length? Nothing to choose, so hide the whole control.
+    $('sleeveSection').hidden = sleevesOf(o).length < 2;
     $('sleeve').querySelectorAll('button').forEach((b) => b.setAttribute('aria-checked', b.dataset.sleeve === sleeveFor(o)));
   }
   $('sleeve').onclick = (e) => {
