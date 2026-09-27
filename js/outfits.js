@@ -7,7 +7,8 @@
 // classic = 4px (Steve) arms, slim = 3px (Alex) arms.
 // swatch = the colour dot shown in the colour picker. Twin colourways (two
 // colours, e.g. Pepsi, GOOD® BLUE/COTTON) use two colours: the dot is split 50/50.
-// Brand rule: GOOD is always written GOOD®, colourway names included.
+// Brand rules: GOOD is always written GOOD®, colourway names included;
+// colourway names are written in ALL CAPS.
 // Shirts: the legs of these files are ignored and replaced by the chosen pants
 // (window.PANTS below). pants (optional) = pants colour id picked by default
 // with this shirt, until the user chooses pants themselves.
@@ -38,7 +39,7 @@ window.OUTFITS = [
     colors: [
       {
         id: 'smiley-pumpkin-neon',
-        color: 'Pumpkin/Neon',
+        color: 'PUMPKIN/NEON',
         swatch: ['#fda327', '#b5ff61'],
         long: {
           classic: 'outfits/smiley-hoodie-pumpkin-neon-long-classic.png',
@@ -59,7 +60,7 @@ window.OUTFITS = [
     colors: [
       {
         id: 'goodie-pepsi',
-        color: 'Pepsi',
+        color: 'PEPSI',
         swatch: ['#3730fe', '#ff141d'],
         long: { classic: 'outfits/goodie-pepsi-long-classic.png', slim: 'outfits/goodie-pepsi-long-slim.png' },
       },
@@ -89,13 +90,13 @@ window.PANTS = [
     id: 'jean',
     name: 'JEAN®',
     colors: [
-      { id: 'good-jean-black', color: 'Black Shoe', swatch: '#1b1b1f', src: 'outfits/pants/good-jean-black.png' },
-      { id: 'good-jean-brown', color: 'Brown Shoe', swatch: '#5a1e14', src: 'outfits/pants/good-jean-brown.png' },
+      { id: 'good-jean-black', color: 'BLACK SHOE', swatch: '#1b1b1f', src: 'outfits/pants/good-jean-black.png' },
+      { id: 'good-jean-brown', color: 'BROWN SHOE', swatch: '#5a1e14', src: 'outfits/pants/good-jean-brown.png' },
     ],
   },
   {
     id: 'jean-sagging',
     name: 'JEAN®',
-    colors: [{ id: 'good-jean-sagging', color: 'Sagging', swatch: '#004cae', src: 'outfits/pants/good-jean-sagging.png' }],
+    colors: [{ id: 'good-jean-sagging', color: 'SAGGING', swatch: '#004cae', src: 'outfits/pants/good-jean-sagging.png' }],
   },
 ];
