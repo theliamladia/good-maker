@@ -451,6 +451,24 @@ function washPants(pants, hex) {
   return out;
 }
 
-const SkinLib = { washPants, combineOutfit, waistRows, sampleSkinTone, mergeSkin, bodyParts, shadeTone, detectSlim, estimateHairRows, extractHair };
+// Base-layer colour that sits under an opaque outer-layer pixel is removed,
+// so the base only colours the holes in the outer layer (e.g. a logo cut out
+// of a hoodie) and can't peek out around the neckline. Returns a new texture.
+// [base x, base y, w, h, outer dx, outer dy]: torso, right arm, left arm.
+const BASE_UNDER_OUTER = [[16, 16, 24, 16, 0, 16], [40, 16, 16, 16, 0, 16], [32, 48, 16, 16, 16, 0]];
+function baseUnderHoles(skin) {
+  skin = to64(skin);
+  const out = new ImageData(new Uint8ClampedArray(skin.data), 64, 64);
+  for (const [x0, y0, w, h, dx, dy] of BASE_UNDER_OUTER) {
+    for (let y = y0; y < y0 + h; y++) {
+      for (let x = x0; x < x0 + w; x++) {
+        if (skin.data[idx(x + dx, y + dy) + 3] > 0) out.data.fill(0, idx(x, y), idx(x, y) + 4);
+      }
+    }
+  }
+  return out;
+}
+
+const SkinLib = { baseUnderHoles, washPants, combineOutfit, waistRows, sampleSkinTone, mergeSkin, bodyParts, shadeTone, detectSlim, estimateHairRows, extractHair };
 if (typeof module !== 'undefined') module.exports = SkinLib;
 else window.SkinLib = SkinLib;

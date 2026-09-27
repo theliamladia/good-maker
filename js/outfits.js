@@ -59,6 +59,8 @@ window.OUTFITS = [
   {
     id: 'goodie',
     name: 'GOODIE®',
+    // The base layer only colours the G cut out of the hoodie (SkinLib.baseUnderHoles).
+    baseUnderHoles: true,
     colors: [
       {
         id: 'goodie-pepsi',

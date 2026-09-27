@@ -9,7 +9,7 @@
     return kinds.map((k) => {
       const kind = { id: k.id, name: k.name };
       kind.colors = (k.colors || [k]).map((c) => ({
-        locked: k.locked, notice: k.notice, shoes: k.shoes, src: k.src, ...c, name: k.name, kind,
+        locked: k.locked, notice: k.notice, baseUnderHoles: k.baseUnderHoles, shoes: k.shoes, src: k.src, ...c, name: k.name, kind,
       }));
       kind.current = kind.colors[0];
       return kind;
@@ -85,7 +85,11 @@
   const sleevesOf = (o) => ['short', 'long'].filter((k) => (k === 'long' ? o.long : o.bodies));
   const sleeveFor = (o) => (sleevesOf(o).includes(state.sleeve) ? state.sleeve : sleevesOf(o)[0]);
   const setFor = (o) => (sleeveFor(o) === 'long' ? o.long : o.bodies);
-  const loadOutfit = (o, body) => (o.locked ? loadLocked(setFor(o)[body]) : loadData(setFor(o)[body]));
+  const loadOutfit = async (o, body) => {
+    const src = setFor(o)[body];
+    const d = await (o.locked ? loadLocked(src) : loadData(src));
+    return o.baseUnderHoles ? (cache[`${src}|holes`] ||= SkinLib.baseUnderHoles(d)) : d;
+  };
   const EMPTY_OUTFIT = { width: 64, height: 64, data: new Uint8ClampedArray(64 * 64 * 4) };
   const bodiesOf = (o) => Object.keys(setFor(o));
   // Show only the options that exist; the grid shrinks to fit what's left.
