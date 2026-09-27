@@ -65,7 +65,7 @@
     if (!res.ok) {
       const { error } = await res.json().catch(() => ({}));
       throw new Error(
-        error === 'not_configured' ? 'PREVIEW NOT SET UP YET (MISSING ENV VARIABLE).'
+        error === 'not_configured' ? 'ISN\'T AVAILABLE RIGHT NOW.'
           : error ? `PREVIEW UNAVAILABLE (${error.toUpperCase()}).`
           : `PREVIEW UNAVAILABLE (HTTP ${res.status}).`
       );
@@ -604,6 +604,7 @@
 
   // ---------- Render ----------
   let renderId = 0;
+  let lastGood = null; // last outfit colour that loaded and rendered
   async function render() {
     const id = ++renderId;
     const o = state.outfit;
@@ -613,11 +614,19 @@
       outfit = SkinLib.combineOutfit(outfit, await loadData(state.pants.src));
     } catch (err) {
       if (id !== renderId) return;
+      // Couldn't load this colour (e.g. a locked one that isn't set up yet).
+      // Don't leave the card stuck on it: point the card back at a colour that
+      // works and return to the last outfit that rendered, keeping the reason visible.
+      const usable = o.kind.colors.find((c) => c !== o && !c.locked) || o.kind.colors.find((c) => c !== o);
+      if (usable) o.kind.current = usable;
+      const back = lastGood && lastGood !== o ? lastGood : usable || SHIRTS[0].current;
+      selectOutfit(back);
       $('outfitHint').hidden = false;
-      $('outfitHint').textContent = err.message;
-      return selectOutfit(SHIRTS[0].current);
+      $('outfitHint').textContent = `${o.color || o.name} ${err.message}`;
+      return;
     }
     if (id !== renderId) return; // a newer render started
+    lastGood = o;
     const slim = state.body === 'slim';
     const args = [state.tone, slim, state.hair, state.erased, state.headwear];
     const merged = SkinLib.mergeSkin(state.user, outfit, ...args);
