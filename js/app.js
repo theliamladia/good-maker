@@ -128,15 +128,16 @@
       const el = $('leanCloud');
       if (show === cloudUp) return;
       cloudUp = show;
-      const off = `translateY(${-(el.getBoundingClientRect().bottom + 40)}px)`;
+      const off = `translateX(-50%) translateY(${-(el.getBoundingClientRect().bottom + 60)}px)`;
+      const rest = 'translateX(-50%)';
       const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
       if (cloudAnim) cloudAnim.cancel();
       el.style.visibility = 'visible';
       cloudAnim = el.animate(
         show
-          ? [{ transform: off, opacity: 0.6 }, { transform: 'translateY(8px)', opacity: 1, offset: 0.8 }, { transform: 'none', opacity: 1 }]
-          : [{ transform: 'none', opacity: 1 }, { transform: off, opacity: 0.4 }],
-        { duration: reduce ? 1 : show ? 1400 : 2400, easing: show ? 'cubic-bezier(0.16, 1, 0.3, 1)' : 'cubic-bezier(0.5, 0, 0.75, 0)', fill: 'forwards' }
+          ? [{ transform: off, opacity: 0.7 }, { transform: 'translateX(-50%) translateY(14px)', opacity: 1, offset: 0.78 }, { transform: rest, opacity: 1 }]
+          : [{ transform: rest, opacity: 1 }, { transform: 'translateX(-50%) translateY(10px)', opacity: 1, offset: 0.12 }, { transform: off, opacity: 0.5 }],
+        { duration: reduce ? 1 : show ? 1800 : 2600, easing: show ? 'cubic-bezier(0.22, 1, 0.36, 1)' : 'cubic-bezier(0.55, 0, 0.7, 0.2)', fill: 'forwards' }
       );
       cloudAnim.finished.then(() => { if (!cloudUp) el.style.visibility = 'hidden'; }).catch(() => {});
     }
@@ -146,13 +147,16 @@
     const DEG = Math.PI / 180;
     const PostUp = () => new skinview3d.FunctionAnimation((player, progress) => {
       const t = progress * 2;
-      player.rotation.x = -10 * DEG;            // lean back
-      player.skin.head.rotation.set(-1 * DEG, 70 * DEG, 0);
+      const bob = Math.sin(progress * 1.6) * 0.35;   // gentle float, shared with the cloud
+      player.rotation.x = -20 * DEG;            // lean back into the cloud
+      player.position.y = bob;
+      player.skin.head.rotation.set(18 * DEG, 0, 0);  // head level, facing the viewer
       player.skin.body.rotation.set(0, 0, 0);
       player.skin.leftLeg.rotation.set(-25 * DEG, 0, 0);  // left leg forward
       player.skin.rightLeg.rotation.set(0, 0, 0);
       player.skin.leftArm.rotation.set(0, 0, 0.03 * Math.cos(t) + 0.02 * Math.PI);
       player.skin.rightArm.rotation.set(0, 0, 0.03 * Math.cos(t + Math.PI) - 0.02 * Math.PI);
+      $('leanCloudBody').style.transform = `translateY(${-bob * 14}px)`;
     });
     const ANIMS = { idle: () => new skinview3d.IdleAnimation(), walk: () => new skinview3d.WalkingAnimation(), postup: PostUp };
     $('anim').onclick = (e) => {
