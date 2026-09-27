@@ -121,13 +121,26 @@
       viewer.autoRotate = !viewer.autoRotate;
       e.currentTarget.setAttribute('aria-pressed', viewer.autoRotate);
     };
-    const ANIMS = { idle: skinview3d.IdleAnimation, walk: skinview3d.WalkingAnimation, run: skinview3d.RunningAnimation };
+    // POSTUP: leaning back against a wall, head turned to the side, left leg
+    // forward. Held pose with a slight idle breath in the arms.
+    const DEG = Math.PI / 180;
+    const PostUp = () => new skinview3d.FunctionAnimation((player, progress) => {
+      const t = progress * 2;
+      player.rotation.x = -10 * DEG;            // lean back
+      player.skin.head.rotation.set(-1 * DEG, 70 * DEG, 0);
+      player.skin.body.rotation.set(0, 0, 0);
+      player.skin.leftLeg.rotation.set(-25 * DEG, 0, 0);  // left leg forward
+      player.skin.rightLeg.rotation.set(0, 0, 0);
+      player.skin.leftArm.rotation.set(0, 0, 0.03 * Math.cos(t) + 0.02 * Math.PI);
+      player.skin.rightArm.rotation.set(0, 0, 0.03 * Math.cos(t + Math.PI) - 0.02 * Math.PI);
+    });
+    const ANIMS = { idle: () => new skinview3d.IdleAnimation(), walk: () => new skinview3d.WalkingAnimation(), postup: PostUp };
     $('anim').onclick = (e) => {
       const btn = e.target.closest('[data-anim]');
       if (!btn) return;
       $('anim').querySelectorAll('.chip').forEach((b) => b.setAttribute('aria-pressed', b === btn));
-      const A = ANIMS[btn.dataset.anim];
-      viewer.animation = A ? new A() : null;
+      const make = ANIMS[btn.dataset.anim];
+      viewer.animation = make ? make() : null;
     };
   } else {
     view.innerHTML = '<p class="micro mono center" style="padding-top:40%">3D PREVIEW UNAVAILABLE</p>';
