@@ -108,19 +108,32 @@ window.OUTFITS = [
 
 // Pants: legs (both layers) plus anything on the torso that belongs to the
 // pants (waistband, boxers). Shared by Classic and Slim.
+// The pants files are drawn in one light denim; each wash below recolours
+// the denim (SkinLib.washPants) to its colour, lightest to darkest.
+// shoes = one file per shoe colour (picked with the Shoe control); a kind
+// with a single src has no shoe choice.
 // The first colour of the first kind is the default.
+const WASHES = [
+  { id: 'springsteen', color: 'SPRINGSTEEN®', wash: '#86a6c4' },      // lightest wash
+  { id: 'roadworn', color: 'ROADWORN®', wash: '#6285b0' },            // slightly darker
+  { id: 'favorite-jeans', color: 'FAVORITE JEANS®', wash: '#627990' }, // less indigo, more worn
+  { id: 'the-jean', color: 'THE JEAN®', wash: '#3d5886' },            // neutral indigo
+  { id: 'patent', color: 'PATENT®', wash: '#283b62' },                // darker
+  { id: 'selvedge', color: 'SELVEDGE®', wash: '#161d3a' },            // raw / selvedge indigo
+];
+const washes = (kind) => WASHES.map((w) => ({ ...w, id: `${kind}-${w.id}`, swatch: w.wash }));
+
 window.PANTS = [
   {
-    id: 'jean',
+    id: 'springsteen',
     name: 'JEAN®',
-    colors: [
-      { id: 'good-jean-black', color: 'BLACK SHOE', swatch: '#1b1b1f', src: 'outfits/pants/good-jean-black.png' },
-      { id: 'good-jean-brown', color: 'BROWN SHOE', swatch: '#5a1e14', src: 'outfits/pants/good-jean-brown.png' },
-    ],
+    shoes: { black: 'outfits/pants/good-jean-black.png', brown: 'outfits/pants/good-jean-brown.png' },
+    colors: washes('springsteen'),
   },
   {
-    id: 'jean-sagging',
-    name: 'JEAN®',
-    colors: [{ id: 'good-jean-sagging', color: 'SAGGING', swatch: '#004cae', src: 'outfits/pants/good-jean-sagging.png' }],
+    id: 'springsteen-sagging',
+    name: 'JEAN® SAGGING',
+    src: 'outfits/pants/good-jean-sagging.png',
+    colors: washes('springsteen-sagging'),
   },
 ];

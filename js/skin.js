@@ -424,6 +424,33 @@ function combineOutfit(shirt, pants) {
   return out;
 }
 
-const SkinLib = { combineOutfit, waistRows, sampleSkinTone, mergeSkin, bodyParts, shadeTone, detectSlim, estimateHairRows, extractHair };
+// --- Denim washes ---------------------------------------------------------
+// Pants files are drawn in one light sky-blue denim. A wash recolours those
+// pixels (hue ~190-207°, so GOOD® BLUE and boxer blues are left alone) to the
+// wash colour, keeping each pixel's light/dark relative to the file's main
+// denim shade so fades and seams survive. Returns a new texture.
+const DENIM_REF = 0.299 * 55 + 0.587 * 186 + 0.114 * 247;
+function isDenim(r, g, b) {
+  const max = Math.max(r, g, b), min = Math.min(r, g, b);
+  if (max !== b || max - min < 60) return false;
+  const hue = 240 + (60 * (r - g)) / (max - min);
+  return hue >= 190 && hue <= 207;
+}
+function washPants(pants, hex) {
+  pants = to64(pants);
+  const out = new ImageData(new Uint8ClampedArray(pants.data), 64, 64);
+  if (!hex) return out;
+  const base = [1, 3, 5].map((k) => parseInt(hex.slice(k, k + 2), 16));
+  const d = out.data;
+  for (let i = 0; i < d.length; i += 4) {
+    if (!d[i + 3] || !isDenim(d[i], d[i + 1], d[i + 2])) continue;
+    const ratio = (0.299 * d[i] + 0.587 * d[i + 1] + 0.114 * d[i + 2]) / DENIM_REF;
+    const f = 1 + (ratio - 1) * 0.6;
+    for (let k = 0; k < 3; k++) d[i + k] = base[k] * f;
+  }
+  return out;
+}
+
+const SkinLib = { washPants, combineOutfit, waistRows, sampleSkinTone, mergeSkin, bodyParts, shadeTone, detectSlim, estimateHairRows, extractHair };
 if (typeof module !== 'undefined') module.exports = SkinLib;
 else window.SkinLib = SkinLib;

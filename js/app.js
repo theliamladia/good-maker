@@ -9,7 +9,7 @@
     return kinds.map((k) => {
       const kind = { id: k.id, name: k.name };
       kind.colors = (k.colors || [k]).map((c) => ({
-        locked: k.locked, notice: k.notice, ...c, name: k.name, kind,
+        locked: k.locked, notice: k.notice, shoes: k.shoes, src: k.src, ...c, name: k.name, kind,
       }));
       kind.current = kind.colors[0];
       return kind;
@@ -26,7 +26,8 @@
     body: 'classic',     // 'classic' | 'slim'
     sleeve: 'short',     // 'short' | 'long'
     pants: PANTS[0].current,
-    pantsPicked: false,  // once the user picks pants, shirts stop changing them
+    pantsPicked: false,
+    shoe: 'black',       // pants with shoes: key of their shoes files  // once the user picks pants, shirts stop changing them
     hair: 0,             // torso rows of the user's hair to keep (0 = off)
     hairGuess: 0,        // detected length, applied when the Slim body is chosen
     headwear: 'auto',    // 'keep' | 'auto' (remove hoods) | 'none' (no hat layer)
@@ -230,11 +231,20 @@
     return btn;
   }
 
+  // Pants texture: the kind's file (per shoe) recoloured to the wash.
+  const pantsSrc = (p) => (p.shoes ? p.shoes[state.shoe] || Object.values(p.shoes)[0] : p.src);
+  const washed = {};
+  const loadPants = async (p) => {
+    const src = pantsSrc(p);
+    return (washed[`${src}|${p.wash}`] ||= SkinLib.washPants(await loadData(src), p.wash));
+  };
+
   // Pants thumbnails: the fronts of both legs (pants layer over base), side by side.
   const pantsThumbs = {};
   async function pantsThumb(p) {
-    if (pantsThumbs[p.id]) return pantsThumbs[p.id];
-    const d = await loadData(p.src);
+    const key = `${pantsSrc(p)}|${p.wash}`;
+    if (pantsThumbs[key]) return pantsThumbs[key];
+    const d = await loadPants(p);
     const c = document.createElement('canvas');
     c.width = 8; c.height = 12;
     const ctx = c.getContext('2d');
@@ -242,7 +252,7 @@
     tmp.width = tmp.height = 64;
     tmp.getContext('2d').putImageData(d, 0, 0);
     for (const [sx, sy, dx] of [[4, 20, 0], [4, 36, 0], [20, 52, 4], [4, 52, 4]]) ctx.drawImage(tmp, sx, sy, 4, 12, dx, 0, 4, 12);
-    return (pantsThumbs[p.id] = c.toDataURL());
+    return (pantsThumbs[key] = c.toDataURL());
   }
 
   // Top thumbnails: a "ghost mannequin" front view, like the pants cards.
@@ -304,7 +314,18 @@
       () => pickPants(p)
     )));
     drawColors($('pantsColors'), state.pants, pickPants);
+    const shoes = Object.keys(state.pants.shoes || {});
+    $('shoeSection').hidden = shoes.length < 2;
+    $('shoe').querySelectorAll('button').forEach((b) => b.setAttribute('aria-checked', b.dataset.shoe === state.shoe));
   }
+  $('shoe').onclick = (e) => {
+    const btn = e.target.closest('[data-shoe]');
+    if (!btn || btn.dataset.shoe === state.shoe) return;
+    state.shoe = btn.dataset.shoe;
+    state.fadeNext = true;
+    drawPants();
+    render();
+  };
 
   function pickPants(p) {
     state.fadeNext = true;
@@ -666,7 +687,7 @@
     let outfit;
     try {
       outfit = await loadOutfit(o, state.body);
-      outfit = SkinLib.combineOutfit(outfit, await loadData(state.pants.src));
+      outfit = SkinLib.combineOutfit(outfit, await loadPants(state.pants));
     } catch (err) {
       if (id !== renderId) return;
       // Couldn't load this colour (e.g. a locked one that isn't set up yet).
