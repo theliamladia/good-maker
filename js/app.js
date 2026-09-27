@@ -248,7 +248,11 @@
       b.type = 'button';
       b.className = 'swatch-btn';
       b.setAttribute('aria-pressed', c === selected);
-      b.innerHTML = `<span class="dot" style="background:${c.swatch || '#ccc'}"></span>${c.color}`;
+      // Twin colourways get a dot split 50/50 between their two colours.
+      const sw = Array.isArray(c.swatch)
+        ? `linear-gradient(90deg, ${c.swatch[0]} 50%, ${c.swatch[1]} 50%)`
+        : c.swatch || '#ccc';
+      b.innerHTML = `<span class="dot" style="background:${sw}"></span>${c.color}`;
       b.onclick = () => onPick(c);
       return b;
     }));

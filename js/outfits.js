@@ -5,7 +5,9 @@
 // hidden from the Body / Sleeve controls while it's selected.
 // Leave body areas transparent where skin should show; the head area is ignored.
 // classic = 4px (Steve) arms, slim = 3px (Alex) arms.
-// swatch = the colour dot shown in the colour picker.
+// swatch = the colour dot shown in the colour picker. Twin colourways (two
+// colours, e.g. Pepsi, GOOD® BLUE/COTTON) use two colours: the dot is split 50/50.
+// Brand rule: GOOD is always written GOOD®, colourway names included.
 // Shirts: the legs of these files are ignored and replaced by the chosen pants
 // (window.PANTS below). pants (optional) = pants colour id picked by default
 // with this shirt, until the user chooses pants themselves.
@@ -37,7 +39,7 @@ window.OUTFITS = [
       {
         id: 'smiley-pumpkin-neon',
         color: 'Pumpkin/Neon',
-        swatch: '#fda327',
+        swatch: ['#fda327', '#b5ff61'],
         long: {
           classic: 'outfits/smiley-hoodie-pumpkin-neon-long-classic.png',
           slim: 'outfits/smiley-hoodie-pumpkin-neon-long-slim.png',
@@ -45,8 +47,8 @@ window.OUTFITS = [
       },
       {
         id: 'smiley-good-blue',
-        color: 'GOOD BLUE',
-        swatch: '#0000ff',
+        color: 'GOOD® BLUE/COTTON',
+        swatch: ['#0000ff', '#ffffff'],
         long: { classic: 'outfits/smiley-good-blue-long-classic.png', slim: 'outfits/smiley-good-blue-long-slim.png' },
       },
     ],
@@ -58,13 +60,13 @@ window.OUTFITS = [
       {
         id: 'goodie-pepsi',
         color: 'Pepsi',
-        swatch: '#1f3fcf',
+        swatch: ['#3730fe', '#ff141d'],
         long: { classic: 'outfits/goodie-pepsi-long-classic.png', slim: 'outfits/goodie-pepsi-long-slim.png' },
       },
       {
         id: 'goodie-good-blue',
-        color: 'GOOD BLUE',
-        swatch: '#0000ff',
+        color: 'GOOD® BLUE/COTTON',
+        swatch: ['#0000ff', '#ffffff'],
         long: { classic: 'outfits/goodie-good-blue-long-classic.png', slim: 'outfits/goodie-good-blue-long-slim.png' },
       },
     ],
