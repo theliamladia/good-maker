@@ -56,6 +56,15 @@ window.OUTFITS = [
     },
   },
   {
+    id: 'goodie-pepsi',
+    name: 'GOODIE®',
+    color: 'Pepsi',
+    long: {
+      classic: 'outfits/goodie-pepsi-long-classic.png',
+      slim: 'outfits/goodie-pepsi-long-slim.png',
+    },
+  },
+  {
     id: 'founders',
     name: 'FOUNDERS EDITION',
     locked: true, // complete outfit incl. its own pants; the Pants picker hides
