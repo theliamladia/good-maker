@@ -108,20 +108,20 @@ window.OUTFITS = [
 
 // Pants: legs (both layers) plus anything on the torso that belongs to the
 // pants (waistband, boxers). Shared by Classic and Slim.
-// The pants files are drawn in one light denim; each wash below recolours
+// The pants files are drawn in one light denim; each wash below (but the first) recolours
 // the denim (SkinLib.washPants) to its colour, lightest to darkest.
 // shoes = one file per shoe colour (picked with the Shoe control); a kind
 // with a single src has no shoe choice.
 // The first colour of the first kind is the default.
 const WASHES = [
-  { id: 'springsteen', color: 'SPRINGSTEEN®', wash: '#86a6c4' },      // lightest wash
+  { id: 'springsteen', color: 'SPRINGSTEEN®', swatch: '#37baf7' },    // the files' own denim, not recoloured
   { id: 'roadworn', color: 'ROADWORN®', wash: '#6285b0' },            // slightly darker
-  { id: 'favorite-jeans', color: 'FAVORITE JEANS®', wash: '#627990' }, // less indigo, more worn
+  { id: 'favorite-jeans', color: 'FAVORITE JEANS®', wash: '#86a6c4' }, // less indigo, more worn
   { id: 'the-jean', color: 'THE JEAN®', wash: '#3d5886' },            // neutral indigo
   { id: 'patent', color: 'PATENT®', wash: '#283b62' },                // darker
   { id: 'selvedge', color: 'SELVEDGE®', wash: '#161d3a' },            // raw / selvedge indigo
 ];
-const washes = (kind) => WASHES.map((w) => ({ ...w, id: `${kind}-${w.id}`, swatch: w.wash }));
+const washes = (kind) => WASHES.map((w) => ({ swatch: w.wash, ...w, id: `${kind}-${w.id}` }));
 
 window.PANTS = [
   {
