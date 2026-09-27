@@ -252,8 +252,9 @@ function clothingColours(skin) {
 
 // Returns jacket-layer pixels to paint: [{ x, y, rgba }].
 // Hair is found by flooding down from the neckline through hair-coloured
-// pixels, limited to the top `rows` rows. On the back, anything drawn on the
-// jacket layer counts too (hair there often uses shades the head doesn't).
+// pixels (colours from the back/sides of the head), limited to the top `rows`
+// rows. Only hair colours count, so jackets and hoodies on the old skin's
+// outer layer are never mistaken for hair.
 function extractHair(skin, tone, rows) {
   if (!skin || rows <= 0 || skin.height !== SIZE) return [];
   const clothes = clothingColours(skin);
@@ -269,8 +270,7 @@ function extractHair(skin, tone, rows) {
       if (x < x0 || x >= x0 + w || y < y0 || y >= y0 + rows) return null;
       const px = visibleTorsoPixel(skin, x, y);
       if (!px) return null;
-      const onJacket = skin.data[idx(x, y + JACKET_DY) + 3] > 0;
-      return isHair(px) || (side === 'back' && onJacket && notClothes(px)) ? px : null;
+      return isHair(px) ? px : null;
     };
     for (let x = x0; x < x0 + w; x++) queue.push([x, y0]);
     while (queue.length) {
