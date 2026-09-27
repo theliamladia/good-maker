@@ -135,6 +135,8 @@
 
   // ---------- Outfits ----------
   const fullName = (o) => (o.color ? `${o.name} ${o.color}` : o.name);
+  // Top cards show the name only; the colourway is in the colour picker below.
+  const nameOnly = (o) => `<span class="outfit-name">${o.name}</span>`;
   const label = (o) => `<span class="outfit-name">${o.name}</span>${o.color ? `<span class="outfit-color">${o.color}</span>` : ''}`;
 
   // Two-up carousel of cards with side buttons (used for shirts and pants).
@@ -216,19 +218,22 @@
   let drawId = 0;
   async function drawOutfits() {
     const id = ++drawId;
-    const thumbs = await Promise.all(SHIRTS.map(({ current: o }) =>
-      (o.locked || o.runway ? null : (() => {
-        const body = setFor(o)[state.body] ? state.body : bodiesOf(o)[0];
-        return shirtThumb(setFor(o)[body], body === 'slim');
-      })())));
+    // Cover art: a kind's GOOD® BLUE colourway if it has one, else its current colour.
+    const cover = (k) => k.colors.find((c) => /^GOOD® BLUE/.test(c.color || '')) || k.current;
+    const thumbs = await Promise.all(SHIRTS.map((k) => {
+      const o = cover(k);
+      if (o.locked || o.runway) return null;
+      const body = setFor(o)[state.body] ? state.body : bodiesOf(o)[0];
+      return shirtThumb(setFor(o)[body], body === 'slim');
+    }));
     if (id !== drawId) return; // a newer redraw started
     fillShirts(SHIRTS.map(({ current: o }, i) => card(
       o.kind === state.outfit.kind,
       o.runway
-        ? `<div class="runway-thumb" aria-hidden="true"></div>${label(o)}`
+        ? `<div class="runway-thumb" aria-hidden="true"></div>${nameOnly(o)}`
         : o.locked
-          ? `<div class="locked-thumb" aria-hidden="true"></div>${label(o)}`
-          : `<img class="ghost-thumb" src="${thumbs[i]}" alt="">${label(o)}`,
+          ? `<div class="locked-thumb" aria-hidden="true"></div>${nameOnly(o)}`
+          : `<img class="ghost-thumb" src="${thumbs[i]}" alt="">${nameOnly(o)}`,
       // RUNWAY® isn't a shirt: it opens the password prompt (js/runway.js).
       () => (o.runway ? window.GoodRunway && window.GoodRunway.open() : selectOutfit(o))
     )));
