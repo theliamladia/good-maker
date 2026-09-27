@@ -18,15 +18,15 @@ window.OUTFITS = [
     colors: [
       {
         id: 'shirt-denim',
-        color: 'Denim',
-        swatch: '#ffffff',
+        color: 'COTTON/DENIM',
+        swatch: ['#ffffff', '#57b3ea'],
         bodies: { classic: 'outfits/good-jean-classic.png', slim: 'outfits/good-jean-slim.png' },
         long: { classic: 'outfits/good-jean-long-classic.png', slim: 'outfits/good-jean-long-slim.png' },
       },
       {
         id: 'shirt-blaue',
-        color: 'Blaue',
-        swatch: '#2468ff',
+        color: 'BLAUE/COTTON',
+        swatch: ['#2468ff', '#ffffff'],
         bodies: { classic: 'outfits/good-jean-blaue-powder-classic.png', slim: 'outfits/good-jean-blaue-powder-slim.png' },
         long: { classic: 'outfits/good-jean-blaue-powder-long-classic.png', slim: 'outfits/good-jean-blaue-powder-long-slim.png' },
       },
