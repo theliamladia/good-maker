@@ -121,6 +121,26 @@
       viewer.autoRotate = !viewer.autoRotate;
       e.currentTarget.setAttribute('aria-pressed', viewer.autoRotate);
     };
+    // The cloud POSTUP leans on: drops in from above the screen, and floats
+    // slowly back up and away when another animation is picked.
+    let cloudUp = false, cloudAnim = null;
+    function leanCloud(show) {
+      const el = $('leanCloud');
+      if (show === cloudUp) return;
+      cloudUp = show;
+      const off = `translateY(${-(el.getBoundingClientRect().bottom + 40)}px)`;
+      const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+      if (cloudAnim) cloudAnim.cancel();
+      el.style.visibility = 'visible';
+      cloudAnim = el.animate(
+        show
+          ? [{ transform: off, opacity: 0.6 }, { transform: 'translateY(8px)', opacity: 1, offset: 0.8 }, { transform: 'none', opacity: 1 }]
+          : [{ transform: 'none', opacity: 1 }, { transform: off, opacity: 0.4 }],
+        { duration: reduce ? 1 : show ? 1400 : 2400, easing: show ? 'cubic-bezier(0.16, 1, 0.3, 1)' : 'cubic-bezier(0.5, 0, 0.75, 0)', fill: 'forwards' }
+      );
+      cloudAnim.finished.then(() => { if (!cloudUp) el.style.visibility = 'hidden'; }).catch(() => {});
+    }
+
     // POSTUP: leaning back against a wall, head turned to the side, left leg
     // forward. Held pose with a slight idle breath in the arms.
     const DEG = Math.PI / 180;
@@ -141,6 +161,7 @@
       $('anim').querySelectorAll('.chip').forEach((b) => b.setAttribute('aria-pressed', b === btn));
       const make = ANIMS[btn.dataset.anim];
       viewer.animation = make ? make() : null;
+      leanCloud(btn.dataset.anim === 'postup');
     };
   } else {
     view.innerHTML = '<p class="micro mono center" style="padding-top:40%">3D PREVIEW UNAVAILABLE</p>';
