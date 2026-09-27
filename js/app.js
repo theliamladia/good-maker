@@ -189,22 +189,38 @@
     return (pantsThumbs[p.id] = c.toDataURL());
   }
 
-  // Shirt thumbnails: the shirt file with its legs removed (pants are picked separately).
+  // Top thumbnails: a "ghost mannequin" front view, like the pants cards.
+  // Torso front with both sleeve fronts either side (outer layer over base),
+  // no skin or legs. Slim tops have 3px arms, so their mannequin is narrower.
   const shirtThumbs = {};
-  async function shirtThumb(src) {
-    if (shirtThumbs[src]) return shirtThumbs[src];
+  async function shirtThumb(src, slim) {
+    const key = src + (slim ? '|slim' : '');
+    if (shirtThumbs[key]) return shirtThumbs[key];
     const d = SkinLib.combineOutfit(await loadData(src), null);
+    const tex = document.createElement('canvas');
+    tex.width = tex.height = 64;
+    tex.getContext('2d').putImageData(new ImageData(d.data, 64, 64), 0, 0);
+    const a = slim ? 3 : 4;
     const c = document.createElement('canvas');
-    c.width = c.height = 64;
-    c.getContext('2d').putImageData(new ImageData(d.data, 64, 64), 0, 0);
-    return (shirtThumbs[src] = c.toDataURL());
+    c.width = 8 + 2 * a; c.height = 12;
+    const ctx = c.getContext('2d');
+    // [source x, source y, width, destination x]: base first, then outer layer
+    for (const [sx, sy, w, dx] of [
+      [44, 20, a, 0], [44, 36, a, 0],         // right arm front (viewer's left)
+      [20, 20, 8, a], [20, 36, 8, a],         // torso front
+      [36, 52, a, a + 8], [52, 52, a, a + 8], // left arm front (viewer's right)
+    ]) ctx.drawImage(tex, sx, sy, w, 12, dx, 0, w, 12);
+    return (shirtThumbs[key] = c.toDataURL());
   }
 
   let drawId = 0;
   async function drawOutfits() {
     const id = ++drawId;
     const thumbs = await Promise.all(SHIRTS.map(({ current: o }) =>
-      (o.locked || o.runway ? null : shirtThumb(setFor(o)[state.body] || setFor(o)[bodiesOf(o)[0]]))));
+      (o.locked || o.runway ? null : (() => {
+        const body = setFor(o)[state.body] ? state.body : bodiesOf(o)[0];
+        return shirtThumb(setFor(o)[body], body === 'slim');
+      })())));
     if (id !== drawId) return; // a newer redraw started
     fillShirts(SHIRTS.map(({ current: o }, i) => card(
       o.kind === state.outfit.kind,
@@ -212,7 +228,7 @@
         ? `<div class="runway-thumb" aria-hidden="true"></div>${label(o)}`
         : o.locked
           ? `<div class="locked-thumb" aria-hidden="true"></div>${label(o)}`
-          : `<img src="${thumbs[i]}" alt="">${label(o)}`,
+          : `<img class="ghost-thumb" src="${thumbs[i]}" alt="">${label(o)}`,
       // RUNWAY® isn't a shirt: it opens the password prompt (js/runway.js).
       () => (o.runway ? window.GoodRunway && window.GoodRunway.open() : selectOutfit(o))
     )));
