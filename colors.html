@@ -78,8 +78,7 @@
       card.innerHTML = `
         <div class="cl-swatch" style="background:${fill}"><span class="cl-num mono">Nº${String(i + 1).padStart(3, '0')}</span></div>
         <div class="cl-name">${c.name}™</div>
-        <div class="cl-hex mono">${hexes.map((h) => h.toUpperCase()).join(' / ')}</div>
-        <div class="cl-where mono">${c.where.toUpperCase()}</div>`;
+        <div class="cl-hex mono">${hexes.map((h) => h.toUpperCase()).join(' / ')}</div>`;
       card.onclick = () => show(i);
       grid.appendChild(card);
     });
