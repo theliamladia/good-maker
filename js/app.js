@@ -9,7 +9,7 @@
     return kinds.map((k) => {
       const kind = { id: k.id, name: k.name };
       kind.colors = (k.colors || [k]).map((c) => ({
-        locked: k.locked, notice: k.notice, baseUnderHoles: k.baseUnderHoles, shoes: k.shoes, boxers: k.boxers, src: k.src, ...c, name: k.name, kind,
+        locked: k.locked, notice: k.notice, baseUnderHoles: k.baseUnderHoles, hat: k.hat, shoes: k.shoes, boxers: k.boxers, src: k.src, ...c, name: k.name, kind,
       }));
       kind.current = kind.colors[0];
       return kind;
@@ -743,6 +743,13 @@
     const slim = state.body === 'slim';
     const args = [state.tone, slim, state.hair, state.erased, state.headwear];
     const merged = SkinLib.mergeSkin(state.user, outfit, ...args);
+    // Outfits that go over the head (CROPPIE®) replace the hat layer.
+    if (o.hat) {
+      for (let y = 0; y < 16; y++) {
+        const i = (y * 64 + 32) * 4;
+        merged.data.set(outfit.data.subarray(i, i + 32 * 4), i);
+      }
+    }
     // Eraser maps: for preview-only outfits, draw them without the outfit.
     state.merged = o.locked ? SkinLib.mergeSkin(state.user, EMPTY_OUTFIT, ...args) : merged;
     state.hairKeys = new Set(

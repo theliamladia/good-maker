@@ -3,7 +3,8 @@
 // bodies = short-sleeve set, long = long-sleeve set; either may be left out,
 // and within a set a body may be left out. Options a colour doesn't have are
 // hidden from the Body / Sleeve controls while it's selected.
-// Leave body areas transparent where skin should show; the head area is ignored.
+// Leave body areas transparent where skin should show; the head area is ignored
+// (except for kinds with hat: true, whose hat layer replaces the player's).
 // classic = 4px (Steve) arms, slim = 3px (Alex) arms.
 // swatch = the colour dot shown in the colour picker. Twin colourways (two
 // colours, e.g. Pepsi, GOOD® BLUE/COTTON) use two colours: the dot is split 50/50.
@@ -139,6 +140,22 @@ window.OUTFITS = [
         color: 'COTTON/DENIM',
         swatch: ['#ffffff', '#57b3ea'],
         long: { classic: 'outfits/collar-cotton-denim-long-classic.png', slim: 'outfits/collar-cotton-denim-long-slim.png' },
+      },
+    ],
+  },
+  {
+    // The tee pulled up over the head: the hat layer is the shirt (neck hole
+    // round the face), the body is cropped at the chest. hat: true = this
+    // outfit's hat layer replaces the player's.
+    id: 'croppie',
+    name: 'CROPPIE®',
+    hat: true,
+    colors: [
+      {
+        id: 'croppie-dust-pink',
+        color: 'DUST PINK/TOMATO VINE',
+        swatch: ['#c98aa0', '#3f7a55'],
+        bodies: { classic: 'outfits/croppie-dust-pink-classic.png', slim: 'outfits/croppie-dust-pink-slim.png' },
       },
     ],
   },
