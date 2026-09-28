@@ -157,6 +157,12 @@ window.OUTFITS = [
         swatch: ['#c98aa0', '#3f7a55'],
         bodies: { classic: 'outfits/croppie-dust-pink-classic.png', slim: 'outfits/croppie-dust-pink-slim.png' },
       },
+      {
+        id: 'croppie-good-blue',
+        color: 'GOOD® BLUE/COTTON',
+        swatch: ['#0000ff', '#ffffff'],
+        bodies: { classic: 'outfits/croppie-good-blue-classic.png', slim: 'outfits/croppie-good-blue-slim.png' },
+      },
     ],
   },
 ];
