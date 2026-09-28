@@ -54,6 +54,15 @@ window.OUTFITS = [
         swatch: ['#0000ff', '#ffffff'],
         long: { classic: 'outfits/smiley-good-blue-long-classic.png', slim: 'outfits/smiley-good-blue-long-slim.png' },
       },
+      {
+        id: 'smiley-safety-good-blue',
+        color: 'SAFETY/GOOD® BLUE',
+        swatch: ['#ff5a1f', '#0000ff'],
+        long: {
+          classic: 'outfits/smiley-safety-good-blue-long-classic.png',
+          slim: 'outfits/smiley-safety-good-blue-long-slim.png',
+        },
+      },
     ],
   },
   {
@@ -82,6 +91,12 @@ window.OUTFITS = [
           classic: 'outfits/goodie-oxblood-goldenrod-long-classic.png',
           slim: 'outfits/goodie-oxblood-goldenrod-long-slim.png',
         },
+      },
+      {
+        id: 'goodie-sky-cotton',
+        color: 'SKY/COTTON',
+        swatch: ['#8fd0ff', '#ffffff'],
+        long: { classic: 'outfits/goodie-sky-cotton-long-classic.png', slim: 'outfits/goodie-sky-cotton-long-slim.png' },
       },
       {
         // Archived: preview only. PNGs aren't in this repo; /api/outfit serves
@@ -131,6 +146,13 @@ window.PANTS = [
     name: 'JEAN®',
     shoes: { black: 'outfits/pants/good-jean-black.png', brown: 'outfits/pants/good-jean-brown.png' },
     colors: washes('springsteen'),
+  },
+  {
+    // Outer layer only at the hem, so the leg kicks out at the bottom.
+    id: 'jean-bootcut',
+    name: 'JEAN® BOOTCUT',
+    shoes: { black: 'outfits/pants/good-jean-bootcut-black.png', brown: 'outfits/pants/good-jean-bootcut-brown.png' },
+    colors: washes('jean-bootcut'),
   },
   {
     id: 'springsteen-sagging',
