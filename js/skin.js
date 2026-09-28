@@ -391,7 +391,9 @@ const JACKET_BOTTOM = [28, 32, 8, 4];
 // Outfit texture = the shirt file with its pants (legs + waistband) removed,
 // then the pants file put in: its legs, plus anything it draws on the torso.
 // Pants files contain only pants, so every torso pixel in them is pants.
-function combineOutfit(shirt, pants) {
+// tucked = true: the pants' waistband and torso pixels go on (the shirt looks
+// tucked in); false: only the legs do, so the shirt hangs over the waist.
+function combineOutfit(shirt, pants, tucked = true) {
   shirt = to64(shirt);
   const out = blank();
   out.data.set(shirt.data);
@@ -411,7 +413,7 @@ function combineOutfit(shirt, pants) {
   for (const [x0, y0, lw, lh] of LEG_RECTS) {
     for (let yy = y0; yy < y0 + lh; yy++) for (let xx = x0; xx < x0 + lw; xx++) put(xx, yy, pants);
   }
-  if (pants) {
+  if (pants && tucked) {
     // Base layer: pants win (e.g. boxers peeking out). Outer layer: the shirt
     // wins, so hoodies and jackets hang over the waistband.
     const [base, outer] = TORSO_SIDES;

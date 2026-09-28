@@ -28,7 +28,8 @@
     pants: PANTS[0].current,
     pantsPicked: false,  // once the user picks pants, shirts stop changing them
     shoe: 'black',       // pants with shoes: key of their shoes files
-    boxer: 'blue',       // pants with boxers: 'blue' (as drawn) | 'tartan'
+    boxer: 'blue',
+    tucked: true,        // shirt tucked in (pants waistband shows) or hanging over it       // pants with boxers: 'blue' (as drawn) | 'tartan'
     hair: 0,             // torso rows of the user's hair to keep (0 = off)
     hairGuess: 0,        // detected length, applied when the Slim body is chosen
     headwear: 'auto',    // 'keep' | 'auto' (remove hoods) | 'none' (no hat layer)
@@ -334,6 +335,17 @@
     $('boxerSection').hidden = !state.pants.boxers;
     $('boxer').querySelectorAll('button').forEach((b) => b.setAttribute('aria-checked', b.dataset.boxer === state.boxer));
   }
+  // Tuck: tucked shows the pants' waistband; untucked lets the shirt hang over it.
+  const drawTuck = () => $('tuck').querySelectorAll('button').forEach((b) => b.setAttribute('aria-checked', (b.dataset.tuck === 'in') === state.tucked));
+  drawTuck();
+  $('tuck').onclick = (e) => {
+    const btn = e.target.closest('[data-tuck]');
+    if (!btn || (btn.dataset.tuck === 'in') === state.tucked) return;
+    state.tucked = btn.dataset.tuck === 'in';
+    state.fadeNext = true;
+    drawTuck();
+    render();
+  };
   for (const key of ['shoe', 'boxer']) {
     $(key).onclick = (e) => {
       const btn = e.target.closest(`[data-${key}]`);
@@ -712,7 +724,7 @@
     let outfit;
     try {
       outfit = await loadOutfit(o, state.body);
-      outfit = SkinLib.combineOutfit(outfit, await loadPants(state.pants));
+      outfit = SkinLib.combineOutfit(outfit, await loadPants(state.pants), state.tucked);
     } catch (err) {
       if (id !== renderId) return;
       // Couldn't load this colour (e.g. a locked one that isn't set up yet).

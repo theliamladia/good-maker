@@ -230,7 +230,8 @@ body {
 }
 #pantsSection[hidden], #sleeveSection[hidden], #shoeSection[hidden], #boxerSection[hidden] { display: none; }
 #pantsSection > .section-tag:first-child, #sleeveSection > .section-tag:first-child,
-#shoeSection > .section-tag:first-child, #boxerSection > .section-tag:first-child { margin-top: 22px; }
+#shoeSection > .section-tag:first-child, #boxerSection > .section-tag:first-child,
+#tuckSection > .section-tag:first-child { margin-top: 22px; }
 .outfits .outfit span { display: block; line-height: 1.2; overflow-wrap: anywhere; }
 .outfits .outfit .outfit-name { font-size: 0.7rem; }
 .outfits .outfit .outfit-color {

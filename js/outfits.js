@@ -193,6 +193,14 @@ window.PANTS = [
     colors: washes('jean-bootcut'),
   },
   {
+    // Pleated sweat: leg and waistband on the body, bunched hem on the outer
+    // layer; SNEAK01 (white, GOOD® BLUE sole) is built into the outer layer.
+    id: 'pltswt',
+    name: 'PLTSWT®',
+    shoes: { sneak01: 'outfits/pants/pltswt-heather-grey.png' },
+    colors: [{ id: 'pltswt-heather-grey', color: 'HEATHER GREY', swatch: '#9a9ca3' }],
+  },
+  {
     // Shoes: TOBACCO (the only pair, so no Shoe control).
     id: 'mosaic',
     name: 'MOSAIC®',
