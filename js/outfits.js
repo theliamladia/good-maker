@@ -37,6 +37,28 @@ window.OUTFITS = [
     ],
   },
   {
+    // The tee pulled up over the head: the hat layer is the shirt (neck hole
+    // round the face), the body is cropped at the chest. hat: true = this
+    // outfit's hat layer replaces the player's.
+    id: 'croppie',
+    name: 'CROPPIE®',
+    hat: true,
+    colors: [
+      {
+        id: 'croppie-dust-pink',
+        color: 'DUST PINK/TOMATO VINE',
+        swatch: ['#c98aa0', '#3f7a55'],
+        bodies: { classic: 'outfits/croppie-dust-pink-classic.png', slim: 'outfits/croppie-dust-pink-slim.png' },
+      },
+      {
+        id: 'croppie-good-blue',
+        color: 'GOOD® BLUE/COTTON',
+        swatch: ['#0000ff', '#ffffff'],
+        bodies: { classic: 'outfits/croppie-good-blue-classic.png', slim: 'outfits/croppie-good-blue-slim.png' },
+      },
+    ],
+  },
+  {
     id: 'smiley',
     name: 'SMILEY®',
     colors: [
@@ -140,28 +162,6 @@ window.OUTFITS = [
         color: 'COTTON/DENIM',
         swatch: ['#ffffff', '#57b3ea'],
         long: { classic: 'outfits/collar-cotton-denim-long-classic.png', slim: 'outfits/collar-cotton-denim-long-slim.png' },
-      },
-    ],
-  },
-  {
-    // The tee pulled up over the head: the hat layer is the shirt (neck hole
-    // round the face), the body is cropped at the chest. hat: true = this
-    // outfit's hat layer replaces the player's.
-    id: 'croppie',
-    name: 'CROPPIE®',
-    hat: true,
-    colors: [
-      {
-        id: 'croppie-dust-pink',
-        color: 'DUST PINK/TOMATO VINE',
-        swatch: ['#c98aa0', '#3f7a55'],
-        bodies: { classic: 'outfits/croppie-dust-pink-classic.png', slim: 'outfits/croppie-dust-pink-slim.png' },
-      },
-      {
-        id: 'croppie-good-blue',
-        color: 'GOOD® BLUE/COTTON',
-        swatch: ['#0000ff', '#ffffff'],
-        bodies: { classic: 'outfits/croppie-good-blue-classic.png', slim: 'outfits/croppie-good-blue-slim.png' },
       },
     ],
   },
