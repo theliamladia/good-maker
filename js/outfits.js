@@ -156,8 +156,9 @@ window.OUTFITS = [
 // pants (waistband, boxers). Shared by Classic and Slim.
 // The pants files are drawn in one light denim; each wash below (but the first) recolours
 // the denim (SkinLib.washPants) to its colour, lightest to darkest.
-// shoes = one file per shoe colour (picked with the Shoe control); a kind
-// with a single src has no shoe choice.
+// shoes = one file per shoe colour (picked with the Shoe control; it shows
+// only the colours a kind has); a kind with a single src has no shoe choice.
+// TOBACCO shoe files are the black-shoe files with the shoes (and belt) recoloured.
 // The first colour of the first kind is the default.
 const WASHES = [
   { id: 'springsteen', color: 'SPRINGSTEEN®', swatch: '#37baf7' },    // the files' own denim, not recoloured
@@ -173,14 +174,22 @@ window.PANTS = [
   {
     id: 'springsteen',
     name: 'JEAN®',
-    shoes: { black: 'outfits/pants/good-jean-black.png', brown: 'outfits/pants/good-jean-brown.png' },
+    shoes: {
+      black: 'outfits/pants/good-jean-black.png',
+      brown: 'outfits/pants/good-jean-brown.png',
+      tobacco: 'outfits/pants/good-jean-tobacco.png',
+    },
     colors: washes('springsteen'),
   },
   {
     // Outer layer only at the hem, so the leg kicks out at the bottom.
     id: 'jean-bootcut',
     name: 'JEAN® BOOTCUT',
-    shoes: { black: 'outfits/pants/good-jean-bootcut-black.png', brown: 'outfits/pants/good-jean-bootcut-brown.png' },
+    shoes: {
+      black: 'outfits/pants/good-jean-bootcut-black.png',
+      brown: 'outfits/pants/good-jean-bootcut-brown.png',
+      tobacco: 'outfits/pants/good-jean-bootcut-tobacco.png',
+    },
     colors: washes('jean-bootcut'),
   },
   {
@@ -192,7 +201,7 @@ window.PANTS = [
   {
     id: 'springsteen-sagging',
     name: 'JEAN® SAGGING',
-    src: 'outfits/pants/good-jean-sagging.png',
+    shoes: { black: 'outfits/pants/good-jean-sagging.png', tobacco: 'outfits/pants/good-jean-sagging-tobacco.png' },
     boxers: true, // Boxer control: blue (as drawn) or red tartan (SkinLib.tartanBoxers)
     colors: washes('springsteen-sagging'),
   },

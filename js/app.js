@@ -325,9 +325,12 @@
       () => pickPants(p)
     )));
     drawColors($('pantsColors'), state.pants, pickPants);
+    // Only the shoes these pants come in; a missing pick shows the first pair.
     const shoes = Object.keys(state.pants.shoes || {});
+    const shoe = shoes.includes(state.shoe) ? state.shoe : shoes[0];
     $('shoeSection').hidden = shoes.length < 2;
-    $('shoe').querySelectorAll('button').forEach((b) => b.setAttribute('aria-checked', b.dataset.shoe === state.shoe));
+    showOnly($('shoe'), 'shoe', shoes);
+    $('shoe').querySelectorAll('button').forEach((b) => b.setAttribute('aria-checked', b.dataset.shoe === shoe));
     $('boxerSection').hidden = !state.pants.boxers;
     $('boxer').querySelectorAll('button').forEach((b) => b.setAttribute('aria-checked', b.dataset.boxer === state.boxer));
   }
