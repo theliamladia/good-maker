@@ -159,7 +159,8 @@ window.OUTFITS = [
 // shoes = one file per shoe colour (picked with the Shoe control; it shows
 // only the colours a kind has); a kind with a single src has no shoe choice.
 // TOBACCO shoe files are the black-shoe files with the shoes (and belt) recoloured;
-// SNEAK01 files are the black-shoe files with PLTSWT®'s sneaker (and sock) in place of the shoe.
+// SNEAK01 files are the black-shoe files with PLTSWT®'s sneaker (and sock) in place of the shoe;
+// on the outer layer the jeans win, the sneaker only fills where they leave gaps.
 // The first colour of the first kind is the default.
 const WASHES = [
   { id: 'springsteen', color: 'SPRINGSTEEN®', swatch: '#37baf7' },    // the files' own denim, not recoloured
