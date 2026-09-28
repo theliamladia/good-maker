@@ -184,6 +184,12 @@ window.PANTS = [
     colors: washes('jean-bootcut'),
   },
   {
+    // Shoes: TOBACCO (the only pair, so no Shoe control).
+    id: 'mosaic',
+    name: 'MOSAIC®',
+    colors: [{ id: 'mosaic-gray-chrome', color: 'GRAY/CHROME', swatch: ['#56565a', '#ffffff'], src: 'outfits/pants/mosaic-gray-chrome.png' }],
+  },
+  {
     id: 'springsteen-sagging',
     name: 'JEAN® SAGGING',
     src: 'outfits/pants/good-jean-sagging.png',
