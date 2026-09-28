@@ -4,11 +4,19 @@
 // username typed in), each with a GOOD ME® download.
 (() => {
   const EASE_OUT = 'cubic-bezier(0.16, 1, 0.3, 1)';
+  // top = shirt file per body; pants = pants file; holes = GOODIE® (base layer
+  // only fills the G, see SkinLib.baseUnderHoles).
+  const deep = (id) => ({ top: (b) => `outfits/deep/goodie-${id}-${b}.png`, bottom: `outfits/deep/pants-${id}.png`, holes: true });
   const LOOKS = [
-    { id: 'square', name: 'GOODIE® SQUARE', color: 'SPONGE/GOOD® BLUE', pants: 'JEAN® TROUSER BROWN' },
-    { id: 'star', name: 'GOODIE® STAR', color: 'STARFISH PINK/GOOD® BLUE', pants: 'JORT® SEAFOAM GREEN' },
-    { id: 'drop', name: 'GOODIE® DROP', color: 'TENTACLE TEAL/GOOD® BLUE', pants: 'JEAN® DEEP TEAL' },
-    { id: 'claw', name: 'GOODIE® CLAW', color: 'CLAW RED/GOOD® BLUE', pants: 'JEAN® ANCHOR BLUE' },
+    { name: 'GOODIE® SQUARE', color: 'SPONGE/GOOD® BLUE', pants: 'JEAN® TROUSER BROWN', ...deep('square') },
+    { name: 'GOODIE® STAR', color: 'STARFISH PINK/GOOD® BLUE', pants: 'JORT® SEAFOAM GREEN', ...deep('star') },
+    { name: 'GOODIE® DROP', color: 'TENTACLE TEAL/GOOD® BLUE', pants: 'JEAN® DEEP TEAL', ...deep('drop') },
+    { name: 'GOODIE® CLAW', color: 'CLAW RED/GOOD® BLUE', pants: 'JEAN® ANCHOR BLUE', ...deep('claw') },
+    {
+      // Krusty employee: the GOOD® shirt with a Krab red G, bootcut SPRINGSTEEN® jeans.
+      name: 'SHIRT® KRAB', color: 'COTTON/KRAB RED', pants: 'JEAN® BOOTCUT SPRINGSTEEN®',
+      top: (b) => `outfits/deep/shirt-krab-${b}.png`, bottom: 'outfits/pants/good-jean-bootcut-black.png',
+    },
   ];
   const reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
 
@@ -165,8 +173,9 @@
       const tone = SkinLib.sampleSkinTone(skin);
       const hairRows = slim ? SkinLib.estimateHairRows(skin, tone) : 0;
       for (const c of cards) {
-        const top = SkinLib.baseUnderHoles(await pixels(`outfits/deep/goodie-${c.look.id}-${slim ? 'slim' : 'classic'}.png`));
-        const outfit = SkinLib.combineOutfit(top, await pixels(`outfits/deep/pants-${c.look.id}.png`));
+        let top = await pixels(c.look.top(slim ? 'slim' : 'classic'));
+        if (c.look.holes) top = SkinLib.baseUnderHoles(top);
+        const outfit = SkinLib.combineOutfit(top, await pixels(c.look.bottom));
         const merged = SkinLib.mergeSkin(skin, outfit, tone, slim, hairRows, null, 'auto');
         if (!c.tex) { c.tex = document.createElement('canvas'); c.tex.width = c.tex.height = 64; }
         c.tex.getContext('2d').putImageData(new ImageData(merged.data, 64, 64), 0, 0);

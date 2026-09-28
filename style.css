@@ -654,7 +654,7 @@ body { text-shadow: 0.5px 0 rgba(255, 0, 60, 0.22), -0.5px 0 rgba(0, 190, 255, 0
 .dp-user input::placeholder { color: rgba(255, 255, 255, 0.7); }
 .dp-user button { border: 0; background: transparent; color: #fff; font-size: 1.1rem; cursor: pointer; }
 .dp-msg { text-align: center; min-height: 1.2em; margin: 8px 0 0; font-size: 0.7rem; letter-spacing: 0.12em; }
-.dp-looks { flex: 1; display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 18px; align-items: center; }
+.dp-looks { flex: 1; display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 18px; align-items: center; }
 .dp-look { display: flex; flex-direction: column; align-items: center; text-align: center; }
 .dp-view { width: 100%; height: min(52vh, 460px); }
 .dp-name { font: 800 1.15rem 'Inter', sans-serif; letter-spacing: -0.02em; margin: 4px 0 4px; }
