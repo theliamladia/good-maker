@@ -244,9 +244,10 @@
   const washed = {};
   const loadPants = async (p) => {
     if (washed[pantsKey(p)]) return washed[pantsKey(p)];
-    let d = SkinLib.washPants(await loadData(pantsSrc(p)), p.wash);
+    // Tartan first: once washed, darker denim falls in the boxers' blue range.
+    let d = await loadData(pantsSrc(p));
     if (tartan(p)) d = SkinLib.tartanBoxers(d);
-    return (washed[pantsKey(p)] = d);
+    return (washed[pantsKey(p)] = SkinLib.washPants(d, p.wash));
   };
 
   // Pants thumbnails: the fronts of both legs (pants layer over base), side by side.
