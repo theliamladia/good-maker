@@ -4,7 +4,8 @@
 // hex = the colour (two for colours that are always worn as a pair);
 // where = what it's used in; desc = the description shown on the page.
 // Colour names are trademarked (™, added on the page), not registered (®);
-// GOOD® itself always stays GOOD®.
+// GOOD® itself always stays GOOD®. pantone = a PANTONE® colour: credited on
+// the page and in the modal, and not marked ™ (the name is Pantone's).
 window.GOOD_COLORS = [
   { name: 'GOOD® BLUE', hex: '#0000ff', where: 'SHIRT®, CROPPIE®, SMILEY®, GOODIE®, COLLAR®, SNEAK01 sole', desc: 'Our flagship blue is the purest blue we could create. Calming yet exciting, modern yet timeless, and imitable but never replicable. This is the purest iteration of GOOD® we can ever hope to create.' },
   { name: 'COTTON', hex: '#ffffff', where: 'SHIRT®, CROPPIE®, SMILEY®, GOODIE®, COLLAR®', desc: 'A clean blend of whites and greys proprietary to the created fabric. Represented here as Clean White.' },
@@ -17,12 +18,12 @@ window.GOOD_COLORS = [
   { name: 'SAFETY', hex: '#ff5a1f', where: 'SMILEY® SAFETY/GOOD® BLUE', desc: 'A tasteful vibrant orange to bring attention to the care and attention we put into our creations.' },
   { name: 'PEPSI', hex: ['#3730fe', '#ff141d'], where: 'GOODIE® PEPSI', desc: 'A unique color harmony featuring one of the most iconic pairings: fire and ice, good vs. evil, right vs. wrong, soda and a hot day.' },
   { name: 'OXBLOOD', hex: '#713a40', where: 'GOODIE® OXBLOOD/GOLDENROD', desc: 'A truly classy color for any discerning individual. This is our unique immortalization.' },
-  { name: 'GOLDENROD', hex: '#e3a828', where: 'GOODIE® OXBLOOD/GOLDENROD', desc: '' },
+  { name: 'GOLDENROD', pantone: 'PANTONE® GOLDENROD', hex: '#e3a828', where: 'GOODIE® OXBLOOD/GOLDENROD', desc: '' },
   { name: 'SKY', hex: '#8fd0ff', where: 'GOODIE® SKY/COTTON', desc: '' },
   { name: 'BLACK', hex: '#161616', where: 'GOODIE® BLACK/CHROME', desc: '' },
   { name: 'CHROME', hex: '#c9ced6', where: 'GOODIE® BLACK/CHROME, MOSAIC® GRAY/CHROME', desc: '' },
-  { name: 'ROSE QUARTZ', hex: '#f7cac9', where: "GOODIE® I'M SOWWY (archive)", desc: '' },
-  { name: 'SERENITY', hex: '#92a8d1', where: "GOODIE® I'M SOWWY (archive)", desc: '' },
+  { name: 'ROSE QUARTZ', pantone: 'PANTONE® 13-1520 ROSE QUARTZ', hex: '#f7cac9', where: "GOODIE® I'M SOWWY (archive)", desc: '' },
+  { name: 'SERENITY', pantone: 'PANTONE® 15-3919 SERENITY', hex: '#92a8d1', where: "GOODIE® I'M SOWWY (archive)", desc: '' },
   { name: 'SPRINGSTEEN', hex: '#37baf7', where: 'JEAN® wash', desc: '' },
   { name: 'ROADWORN', hex: '#6285b0', where: 'JEAN® wash', desc: '' },
   { name: 'FAVORITE JEANS', hex: '#86a6c4', where: 'JEAN® wash', desc: '' },

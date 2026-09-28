@@ -37,6 +37,7 @@
     <p class="cl-hint mono">CLICK A COLOR TO LEARN MORE</p>
   </section>
   <div class="cl-grid" id="clGrid"></div>
+  <p class="cl-credit mono">GOLDENROD, ROSE QUARTZ AND SERENITY ARE PANTONE® COLORS. PANTONE® IS A REGISTERED TRADEMARK OF PANTONE LLC. COLOUR NAMES AND NUMBERS USED WITH ATTRIBUTION TO PANTONE.</p>
 </main>
 
 <!-- One colour up close: half the colour, half its name and story. -->
@@ -51,6 +52,7 @@
       <div class="cl-m-hex mono" id="clmHex"></div>
       <p class="cl-m-desc" id="clmDesc"></p>
       <div class="cl-m-where mono" id="clmWhere"></div>
+      <p class="cl-m-pantone mono" id="clmPantone" hidden></p>
       <div class="cl-m-nav">
         <button type="button" class="nav-link mono" id="clmPrev">← PREV</button>
         <span class="cl-m-pos mono" id="clmPos"></span>
@@ -66,6 +68,9 @@
   (() => {
     const grid = document.getElementById('clGrid');
     const colors = window.GOOD_COLORS;
+    // GOOD® colour names are ™; PANTONE® colours keep Pantone's name as is.
+    const label = (c) => (c.pantone ? c.name : `${c.name}™`);
+    const PANTONE_NOTE = 'PANTONE® is a registered trademark of Pantone LLC. Colour names and numbers used with attribution to Pantone.';
     document.getElementById('clCount').textContent = `${colors.length} COLORS`;
     colors.forEach((c, i) => {
       const hexes = Array.isArray(c.hex) ? c.hex : [c.hex];
@@ -74,11 +79,12 @@
       card.type = 'button';
       card.className = 'cl-card';
       card.style.setProperty('--d', `${Math.min(i, 24) * 40}ms`);
-      card.setAttribute('aria-label', `${c.name}™, learn more`);
+      card.setAttribute('aria-label', `${label(c)}, learn more`);
       card.innerHTML = `
         <div class="cl-swatch" style="background:${fill}"><span class="cl-num mono">Nº${String(i + 1).padStart(3, '0')}</span></div>
-        <div class="cl-name">${c.name}™</div>
-        <div class="cl-hex mono">${hexes.map((h) => h.toUpperCase()).join(' / ')}</div>`;
+        <div class="cl-name">${label(c)}</div>
+        <div class="cl-hex mono">${hexes.map((h) => h.toUpperCase()).join(' / ')}</div>
+        ${c.pantone ? `<div class="cl-pantone mono">${c.pantone}</div>` : ''}`;
       card.onclick = () => show(i);
       grid.appendChild(card);
     });
@@ -93,11 +99,13 @@
       const hexes = Array.isArray(c.hex) ? c.hex : [c.hex];
       $('clmColor').style.background = hexes.length > 1 ? `linear-gradient(90deg, ${hexes[0]} 50%, ${hexes[1]} 50%)` : hexes[0];
       $('clmNum').textContent = `Nº${String(at + 1).padStart(3, '0')}`;
-      $('clmName').textContent = `${c.name}™`;
+      $('clmName').textContent = label(c);
       $('clmHex').textContent = hexes.map((h) => h.toUpperCase()).join(' / ');
       $('clmDesc').textContent = c.desc || 'DESCRIPTION COMING SOON.';
       $('clmDesc').classList.toggle('is-soon', !c.desc);
       $('clmWhere').textContent = `FOUND IN: ${c.where.toUpperCase()}`;
+      $('clmPantone').hidden = !c.pantone;
+      $('clmPantone').textContent = c.pantone ? `${c.pantone}. ${PANTONE_NOTE}` : '';
       $('clmPos').textContent = `${at + 1} / ${colors.length}`;
       if (modal.hidden) { modal.hidden = false; document.body.style.overflow = 'hidden'; $('clmNext').focus(); }
       else modal.querySelector('.cl-sheet').animate([{ opacity: 0.4 }, { opacity: 1 }], { duration: 220 });

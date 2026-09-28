@@ -751,3 +751,8 @@ button.cl-card:focus-visible { outline: 2px solid #0000ff; outline-offset: 2px; 
   .cl-sheet { grid-template-columns: 1fr; grid-template-rows: 38% 62%; height: calc(100vh - 32px); }
   .cl-m-info { padding: 22px 20px 18px; }
 }
+
+.cl-pantone { margin: 6px 0 0; display: inline-block; padding: 2px 6px; border-radius: 4px; background: var(--ink); color: #fff; font-size: 0.56rem; letter-spacing: 0.1em; }
+.cl-m-pantone { margin: 14px 0 0; padding: 10px 12px; border-radius: 10px; background: rgba(11, 21, 38, 0.06); font-size: 0.6rem; letter-spacing: 0.06em; line-height: 1.6; color: var(--ink-soft); }
+.cl-m-pantone[hidden] { display: none; }
+.cl-credit { margin: 30px auto 0; max-width: 720px; text-align: center; font-size: 0.6rem; letter-spacing: 0.1em; line-height: 1.7; color: var(--ink); opacity: 0.75; }
