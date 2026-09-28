@@ -51,6 +51,7 @@
       <h2 class="cl-m-name" id="clmName"></h2>
       <div class="cl-m-hex mono" id="clmHex"></div>
       <p class="cl-m-desc" id="clmDesc"></p>
+      <p class="cl-m-thanks" id="clmThanks" hidden>GOOD® Thanks PANTONE® for their collaboration in creating our GOOD® MASTERPIECE</p>
       <div class="cl-m-where mono" id="clmWhere"></div>
       <p class="cl-m-pantone mono" id="clmPantone" hidden></p>
       <div class="cl-m-nav">
@@ -105,6 +106,7 @@
       $('clmDesc').classList.toggle('is-soon', !c.desc);
       $('clmWhere').textContent = `FOUND IN: ${c.where.toUpperCase()}`;
       $('clmPantone').hidden = !c.pantone;
+      $('clmThanks').hidden = !c.pantone;
       $('clmPantone').textContent = c.pantone ? `${c.pantone}. ${PANTONE_NOTE}` : '';
       $('clmPos').textContent = `${at + 1} / ${colors.length}`;
       if (modal.hidden) { modal.hidden = false; document.body.style.overflow = 'hidden'; $('clmNext').focus(); }
