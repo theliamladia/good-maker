@@ -53,7 +53,7 @@
       card.style.setProperty('--d', `${Math.min(i, 24) * 40}ms`);
       card.innerHTML = `
         <div class="cl-swatch" style="background:${fill}"><span class="cl-num mono">Nº${String(i + 1).padStart(3, '0')}</span></div>
-        <div class="cl-name">${c.name}</div>
+        <div class="cl-name">${c.name}™</div>
         <div class="cl-hex mono">${hexes.map((h) => h.toUpperCase()).join(' / ')}</div>
         ${c.desc ? `<p class="cl-desc">${c.desc}</p>` : ''}
         <div class="cl-where mono">${c.where.toUpperCase()}</div>`;

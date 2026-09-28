@@ -10,6 +10,7 @@
 // colours, e.g. Pepsi, GOOD® BLUE/COTTON) use two colours: the dot is split 50/50.
 // New colours: also add them to js/colors.js (the COLORS® page).
 // Brand rules: GOOD is always written GOOD®, colourway names included;
+// colour names (e.g. the washes) are trademarked ™, not registered ®;
 // colourway names are written in ALL CAPS.
 // locked: true = preview only (served scrambled by /api/outfit, no download).
 // notice = card shown next to the 3D preview while selected ({ tag, title, free? }).
@@ -179,12 +180,12 @@ window.OUTFITS = [
 // on the outer layer the jeans win, the sneaker only fills where they leave gaps.
 // The first colour of the first kind is the default.
 const WASHES = [
-  { id: 'springsteen', color: 'SPRINGSTEEN®', swatch: '#37baf7' },    // the files' own denim, not recoloured
-  { id: 'roadworn', color: 'ROADWORN®', wash: '#6285b0' },            // slightly darker
-  { id: 'favorite-jeans', color: 'FAVORITE JEANS®', wash: '#86a6c4' }, // less indigo, more worn
-  { id: 'the-jean', color: 'THE JEAN®', wash: '#3d5886' },            // neutral indigo
-  { id: 'patent', color: 'PATENT®', wash: '#283b62' },                // darker
-  { id: 'selvedge', color: 'SELVEDGE®', wash: '#161d3a' },            // raw / selvedge indigo
+  { id: 'springsteen', color: 'SPRINGSTEEN™', swatch: '#37baf7' },    // the files' own denim, not recoloured
+  { id: 'roadworn', color: 'ROADWORN™', wash: '#6285b0' },            // slightly darker
+  { id: 'favorite-jeans', color: 'FAVORITE JEANS™', wash: '#86a6c4' }, // less indigo, more worn
+  { id: 'the-jean', color: 'THE JEAN™', wash: '#3d5886' },            // neutral indigo
+  { id: 'patent', color: 'PATENT™', wash: '#283b62' },                // darker
+  { id: 'selvedge', color: 'SELVEDGE™', wash: '#161d3a' },            // raw / selvedge indigo
 ];
 const washes = (kind) => WASHES.map((w) => ({ swatch: w.wash, ...w, id: `${kind}-${w.id}` }));
 

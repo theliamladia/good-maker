@@ -13,8 +13,8 @@
     { name: 'GOODIE® DROP', color: 'TENTACLE TEAL/GOOD® BLUE', pants: 'JEAN® DEEP TEAL', ...deep('drop') },
     { name: 'GOODIE® CLAW', color: 'CLAW RED/GOOD® BLUE', pants: 'JEAN® ANCHOR BLUE', ...deep('claw') },
     {
-      // Krusty employee: the GOOD® shirt with a Krab red G, bootcut SPRINGSTEEN® jeans.
-      name: 'SHIRT® KRAB', color: 'COTTON/KRAB RED', pants: 'JEAN® BOOTCUT SPRINGSTEEN®',
+      // Krusty employee: the GOOD® shirt with a Krab red G, bootcut SPRINGSTEEN™ jeans.
+      name: 'SHIRT® KRAB', color: 'COTTON/KRAB RED', pants: 'JEAN® BOOTCUT SPRINGSTEEN™',
       top: (b) => `outfits/deep/shirt-krab-${b}.png`, bottom: 'outfits/pants/good-jean-bootcut-black.png',
     },
   ];

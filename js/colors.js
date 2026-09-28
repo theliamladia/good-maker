@@ -3,6 +3,8 @@
 // colourway, a wash, a shoe, a DEEP END® look), add it here.
 // hex = the colour (two for colours that are always worn as a pair);
 // where = what it's used in; desc = the description shown on the page.
+// Colour names are trademarked (™, added on the page), not registered (®);
+// GOOD® itself always stays GOOD®.
 window.GOOD_COLORS = [
   { name: 'GOOD® BLUE', hex: '#0000ff', where: 'SHIRT®, CROPPIE®, SMILEY®, GOODIE®, COLLAR®, SNEAK01 sole', desc: '' },
   { name: 'COTTON', hex: '#ffffff', where: 'SHIRT®, CROPPIE®, SMILEY®, GOODIE®, COLLAR®', desc: '' },
@@ -21,12 +23,12 @@ window.GOOD_COLORS = [
   { name: 'CHROME', hex: '#c9ced6', where: 'GOODIE® BLACK/CHROME, MOSAIC® GRAY/CHROME', desc: '' },
   { name: 'ROSE QUARTZ', hex: '#f7cac9', where: "GOODIE® I'M SOWWY (archive)", desc: '' },
   { name: 'SERENITY', hex: '#92a8d1', where: "GOODIE® I'M SOWWY (archive)", desc: '' },
-  { name: 'SPRINGSTEEN®', hex: '#37baf7', where: 'JEAN® wash', desc: '' },
-  { name: 'ROADWORN®', hex: '#6285b0', where: 'JEAN® wash', desc: '' },
-  { name: 'FAVORITE JEANS®', hex: '#86a6c4', where: 'JEAN® wash', desc: '' },
-  { name: 'THE JEAN®', hex: '#3d5886', where: 'JEAN® wash', desc: '' },
-  { name: 'PATENT®', hex: '#283b62', where: 'JEAN® wash', desc: '' },
-  { name: 'SELVEDGE®', hex: '#161d3a', where: 'JEAN® wash', desc: '' },
+  { name: 'SPRINGSTEEN', hex: '#37baf7', where: 'JEAN® wash', desc: '' },
+  { name: 'ROADWORN', hex: '#6285b0', where: 'JEAN® wash', desc: '' },
+  { name: 'FAVORITE JEANS', hex: '#86a6c4', where: 'JEAN® wash', desc: '' },
+  { name: 'THE JEAN', hex: '#3d5886', where: 'JEAN® wash', desc: '' },
+  { name: 'PATENT', hex: '#283b62', where: 'JEAN® wash', desc: '' },
+  { name: 'SELVEDGE', hex: '#161d3a', where: 'JEAN® wash', desc: '' },
   { name: 'HEATHER GREY', hex: '#9a9ca3', where: 'PLTSWT® HEATHER GREY', desc: '' },
   { name: 'GRAY', hex: '#56565a', where: 'MOSAIC® GRAY/CHROME', desc: '' },
   { name: 'TOBACCO', hex: '#b57a36', where: 'Shoe: JEAN®, MOSAIC®', desc: '' },
