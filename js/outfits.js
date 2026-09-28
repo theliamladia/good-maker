@@ -125,6 +125,24 @@ window.OUTFITS = [
     ],
   },
   {
+    id: 'collar',
+    name: 'COLLAR®',
+    colors: [
+      {
+        id: 'collar-good-blue',
+        color: 'GOOD® BLUE/COTTON',
+        swatch: ['#0000ff', '#ffffff'],
+        long: { classic: 'outfits/collar-good-blue-long-classic.png', slim: 'outfits/collar-good-blue-long-slim.png' },
+      },
+      {
+        id: 'collar-cotton-denim',
+        color: 'COTTON/DENIM',
+        swatch: ['#ffffff', '#57b3ea'],
+        long: { classic: 'outfits/collar-cotton-denim-long-classic.png', slim: 'outfits/collar-cotton-denim-long-slim.png' },
+      },
+    ],
+  },
+  {
     id: 'runway',
     name: 'RUNWAY®',
     // Password-locked looks. Nothing about them is in this repo: the password
