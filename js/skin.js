@@ -392,7 +392,7 @@ const JACKET_BOTTOM = [28, 32, 8, 4];
 // then the pants file put in: its legs, plus anything it draws on the torso.
 // Pants files contain only pants, so every torso pixel in them is pants.
 // Untucked pants: the waistband moves from the torso onto the top row of the
-// legs, all the way round and in a darker shade of the pants, with rips there
+// legs, all the way round and matching the tucked band, with rips there
 // filled; whatever sat at the top of the legs (e.g. back pockets) moves down a
 // row so it starts below the waistband. Uses the leg's outer layer if the
 // pants are drawn there, else the base layer.
@@ -425,7 +425,17 @@ function untuckPants(pants) {
       for (let x = fx; x < fx + 4; x++) {
         const i = idx(x, y0 + 1);
         if (!d[i + 3]) continue;
-        d.set([d[i] * 0.55, d[i + 1] * 0.55, d[i + 2] * 0.55, 255], idx(x, y0));
+        // Same colour as the tucked waistband: the pixel of the pants' torso
+        // band on that side (the inside of the leg borrows the front's).
+        const u = x - fx;
+        const tx = [
+          [16 + u, 20 + u, 20 + u, 36 + u],   // right leg: right, front, inner, back
+          [24 + u, 24 + u, 28 + u, 32 + u],   // left leg: inner, front, left, back
+        ][leg][f];
+        let src = null;
+        for (const ty of [46, 45, 47, 30, 31]) if (pants.data[idx(tx, ty) + 3]) { src = idx(tx, ty); break; }
+        if (src !== null) d.set(pants.data.subarray(src, src + 4), idx(x, y0));
+        else d.set([d[i] * 0.55, d[i + 1] * 0.55, d[i + 2] * 0.55, 255], idx(x, y0));
       }
     }
   }
