@@ -34,9 +34,31 @@
     <h1 class="cl-title">ALL <span>®</span> OUR <span>®</span> COLORS</h1>
     <p class="cl-copy">GOOD® uses proprietary techniques to source truly unique color algorithms for its creations. For your enjoyment, we have prepared all current existing colors here.</p>
     <p class="cl-count mono" id="clCount"></p>
+    <p class="cl-hint mono">CLICK A COLOR TO LEARN MORE</p>
   </section>
   <div class="cl-grid" id="clGrid"></div>
 </main>
+
+<!-- One colour up close: half the colour, half its name and story. -->
+<div class="cl-modal" id="clModal" hidden>
+  <div class="cl-backdrop" data-close></div>
+  <div class="cl-sheet" role="dialog" aria-modal="true" aria-labelledby="clmName">
+    <div class="cl-m-color" id="clmColor"><span class="cl-m-num mono" id="clmNum"></span></div>
+    <div class="cl-m-info">
+      <button type="button" class="cl-m-close mono" data-close aria-label="Close">✕</button>
+      <div class="section-tag mono">COLORS®</div>
+      <h2 class="cl-m-name" id="clmName"></h2>
+      <div class="cl-m-hex mono" id="clmHex"></div>
+      <p class="cl-m-desc" id="clmDesc"></p>
+      <div class="cl-m-where mono" id="clmWhere"></div>
+      <div class="cl-m-nav">
+        <button type="button" class="nav-link mono" id="clmPrev">← PREV</button>
+        <span class="cl-m-pos mono" id="clmPos"></span>
+        <button type="button" class="nav-link mono" id="clmNext">NEXT →</button>
+      </div>
+    </div>
+  </div>
+</div>
 
 <script src="js/colors.js"></script>
 <script>
@@ -48,16 +70,55 @@
     colors.forEach((c, i) => {
       const hexes = Array.isArray(c.hex) ? c.hex : [c.hex];
       const fill = hexes.length > 1 ? `linear-gradient(90deg, ${hexes[0]} 50%, ${hexes[1]} 50%)` : hexes[0];
-      const card = document.createElement('article');
+      const card = document.createElement('button');
+      card.type = 'button';
       card.className = 'cl-card';
       card.style.setProperty('--d', `${Math.min(i, 24) * 40}ms`);
+      card.setAttribute('aria-label', `${c.name}™, learn more`);
       card.innerHTML = `
         <div class="cl-swatch" style="background:${fill}"><span class="cl-num mono">Nº${String(i + 1).padStart(3, '0')}</span></div>
         <div class="cl-name">${c.name}™</div>
         <div class="cl-hex mono">${hexes.map((h) => h.toUpperCase()).join(' / ')}</div>
-        ${c.desc ? `<p class="cl-desc">${c.desc}</p>` : ''}
         <div class="cl-where mono">${c.where.toUpperCase()}</div>`;
+      card.onclick = () => show(i);
       grid.appendChild(card);
+    });
+
+    // Modal with previous / next (buttons, arrow keys, swipe).
+    const $ = (id) => document.getElementById(id);
+    const modal = $('clModal');
+    let at = 0;
+    function show(i) {
+      at = (i + colors.length) % colors.length;
+      const c = colors[at];
+      const hexes = Array.isArray(c.hex) ? c.hex : [c.hex];
+      $('clmColor').style.background = hexes.length > 1 ? `linear-gradient(90deg, ${hexes[0]} 50%, ${hexes[1]} 50%)` : hexes[0];
+      $('clmNum').textContent = `Nº${String(at + 1).padStart(3, '0')}`;
+      $('clmName').textContent = `${c.name}™`;
+      $('clmHex').textContent = hexes.map((h) => h.toUpperCase()).join(' / ');
+      $('clmDesc').textContent = c.desc || 'DESCRIPTION COMING SOON.';
+      $('clmDesc').classList.toggle('is-soon', !c.desc);
+      $('clmWhere').textContent = `FOUND IN: ${c.where.toUpperCase()}`;
+      $('clmPos').textContent = `${at + 1} / ${colors.length}`;
+      if (modal.hidden) { modal.hidden = false; document.body.style.overflow = 'hidden'; $('clmNext').focus(); }
+      else modal.querySelector('.cl-sheet').animate([{ opacity: 0.4 }, { opacity: 1 }], { duration: 220 });
+    }
+    function close() { modal.hidden = true; document.body.style.overflow = ''; grid.children[at].focus(); }
+    $('clmPrev').onclick = () => show(at - 1);
+    $('clmNext').onclick = () => show(at + 1);
+    modal.addEventListener('click', (e) => { if (e.target.closest('[data-close]')) close(); });
+    document.addEventListener('keydown', (e) => {
+      if (modal.hidden) return;
+      if (e.key === 'Escape') close();
+      if (e.key === 'ArrowLeft') show(at - 1);
+      if (e.key === 'ArrowRight') show(at + 1);
+    });
+    let x0 = null;
+    modal.addEventListener('touchstart', (e) => { x0 = e.touches[0].clientX; }, { passive: true });
+    modal.addEventListener('touchend', (e) => {
+      if (x0 === null) return;
+      const dx = e.changedTouches[0].clientX - x0; x0 = null;
+      if (Math.abs(dx) > 50) show(at + (dx < 0 ? 1 : -1));
     });
   })();
 </script>
