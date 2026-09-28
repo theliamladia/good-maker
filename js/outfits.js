@@ -158,7 +158,8 @@ window.OUTFITS = [
 // the denim (SkinLib.washPants) to its colour, lightest to darkest.
 // shoes = one file per shoe colour (picked with the Shoe control; it shows
 // only the colours a kind has); a kind with a single src has no shoe choice.
-// TOBACCO shoe files are the black-shoe files with the shoes (and belt) recoloured.
+// TOBACCO shoe files are the black-shoe files with the shoes (and belt) recoloured;
+// SNEAK01 files are the black-shoe files with PLTSWT®'s sneaker (and sock) in place of the shoe.
 // The first colour of the first kind is the default.
 const WASHES = [
   { id: 'springsteen', color: 'SPRINGSTEEN®', swatch: '#37baf7' },    // the files' own denim, not recoloured
@@ -178,6 +179,7 @@ window.PANTS = [
       black: 'outfits/pants/good-jean-black.png',
       brown: 'outfits/pants/good-jean-brown.png',
       tobacco: 'outfits/pants/good-jean-tobacco.png',
+      sneak01: 'outfits/pants/good-jean-sneak01.png',
     },
     colors: washes('springsteen'),
   },
@@ -189,6 +191,7 @@ window.PANTS = [
       black: 'outfits/pants/good-jean-bootcut-black.png',
       brown: 'outfits/pants/good-jean-bootcut-brown.png',
       tobacco: 'outfits/pants/good-jean-bootcut-tobacco.png',
+      sneak01: 'outfits/pants/good-jean-bootcut-sneak01.png',
     },
     colors: washes('jean-bootcut'),
   },
@@ -209,7 +212,11 @@ window.PANTS = [
   {
     id: 'springsteen-sagging',
     name: 'JEAN® SAGGING',
-    shoes: { black: 'outfits/pants/good-jean-sagging.png', tobacco: 'outfits/pants/good-jean-sagging-tobacco.png' },
+    shoes: {
+      black: 'outfits/pants/good-jean-sagging.png',
+      tobacco: 'outfits/pants/good-jean-sagging-tobacco.png',
+      sneak01: 'outfits/pants/good-jean-sagging-sneak01.png',
+    },
     boxers: true, // Boxer control: blue (as drawn) or red tartan (SkinLib.tartanBoxers)
     colors: washes('springsteen-sagging'),
   },

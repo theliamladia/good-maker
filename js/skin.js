@@ -391,9 +391,52 @@ const JACKET_BOTTOM = [28, 32, 8, 4];
 // Outfit texture = the shirt file with its pants (legs + waistband) removed,
 // then the pants file put in: its legs, plus anything it draws on the torso.
 // Pants files contain only pants, so every torso pixel in them is pants.
+// Untucked pants: the waistband moves from the torso onto the top row of the
+// legs, all the way round and in a darker shade of the pants, with rips there
+// filled; whatever sat at the top of the legs (e.g. back pockets) moves down a
+// row so it starts below the waistband. Uses the leg's outer layer if the
+// pants are drawn there, else the base layer.
+// Leg side faces (right, front, left, back), base and outer layer origins.
+const LEG_SIDES = { base: [[0, 20], [16, 52]], outer: [[0, 36], [0, 52]] };
+function untuckPants(pants) {
+  const out = new ImageData(new Uint8ClampedArray(pants.data), 64, 64);
+  const d = out.data;
+  const a = (x, y) => d[idx(x, y) + 3] > 0;
+  for (let leg = 0; leg < 2; leg++) {
+    const [ox, oy] = LEG_SIDES.outer[leg];
+    let [x0, y0] = LEG_SIDES.base[leg];
+    let onOuter = false;
+    for (let x = ox; x < ox + 16; x++) if (a(x, oy) || a(x, oy + 1)) onOuter = true;
+    if (onOuter) [x0, y0] = [ox, oy];
+    for (let f = 0; f < 4; f++) {
+      const fx = x0 + f * 4;
+      // Fill holes in the top rows from the nearest pixel in the same row.
+      for (let y = y0; y < y0 + 4; y++) {
+        for (let x = fx; x < fx + 4; x++) {
+          if (a(x, y)) continue;
+          for (const dx of [1, -1, 2, -2, 3, -3]) {
+            const xx = x + dx;
+            if (xx >= fx && xx < fx + 4 && a(xx, y)) { d.copyWithin(idx(x, y), idx(xx, y), idx(xx, y) + 4); break; }
+          }
+        }
+      }
+      // Shift the top three rows down one; the top row becomes the waistband.
+      for (let y = y0 + 3; y > y0; y--) for (let x = fx; x < fx + 4; x++) d.copyWithin(idx(x, y), idx(x, y - 1), idx(x, y - 1) + 4);
+      for (let x = fx; x < fx + 4; x++) {
+        const i = idx(x, y0 + 1);
+        if (!d[i + 3]) continue;
+        d.set([d[i] * 0.55, d[i + 1] * 0.55, d[i + 2] * 0.55, 255], idx(x, y0));
+      }
+    }
+  }
+  return out;
+}
+
 // tucked = true: the pants' waistband and torso pixels go on (the shirt looks
-// tucked in); false: only the legs do, so the shirt hangs over the waist.
+// tucked in); false: only the legs do, with the waistband at their top row,
+// so the shirt hangs over the waist.
 function combineOutfit(shirt, pants, tucked = true) {
+  if (pants && !tucked) pants = untuckPants(to64(pants));
   shirt = to64(shirt);
   const out = blank();
   out.data.set(shirt.data);
