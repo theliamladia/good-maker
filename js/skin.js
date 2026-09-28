@@ -113,7 +113,11 @@ function sampleSkinTone(skin) {
     const hairN = near(hairRef, c, 20);
     const skinLike = c[0] >= c[1] && c[1] >= c[2] * 0.85 ? 1.5 : 1; // warm hue bonus, never required
     const hairLike = handN === 0 && hairN >= 3 ? 0.2 : 1;
-    const score = (faceN + (handN ? handN * 2 + 6 : 0)) * skinLike * hairLike;
+    // Near-white / grey is almost always hair, a hood or a sleeve, not skin
+    // (white hair plus white cuffs would otherwise win on the hands bonus).
+    const sat = (Math.max(...c) - Math.min(...c)) / 255;
+    const greyish = sat < 0.07 ? 0.05 : 1;
+    const score = (faceN + (handN ? handN * 2 + 6 : 0)) * skinLike * hairLike * greyish;
     if (score > bestScore) { bestScore = score; best = c; }
   }
   return best ? best.slice() : [224, 172, 140];

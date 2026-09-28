@@ -451,8 +451,11 @@
       why = `${fullName(state.outfit)} COMES IN ${body.toUpperCase()} ONLY`;
     }
     showOnly($('body'), 'body', available);
+    // Hair resets to the detected length only for a new skin or a new body,
+    // not when an outfit, colour or sleeve re-checks the body.
+    if (body !== state.body || state.newSkin) setHair(body === 'slim' ? state.hairGuess : 0, false);
+    state.newSkin = false;
     state.body = body;
-    setHair(body === 'slim' ? state.hairGuess : 0, false);
     $('body').querySelectorAll('button').forEach((b) => b.setAttribute('aria-checked', b.dataset.body === body));
     $('bodyHint').textContent = why || `SAVES AS ${body === 'slim' ? 'SLIM / 3PX ARMS' : 'CLASSIC / 4PX ARMS'}`;
     drawOutfits();
@@ -507,6 +510,7 @@
     setTone(SkinLib.sampleSkinTone(data), false);
     state.hairGuess = SkinLib.estimateHairRows(data, state.tone);
     const slim = SkinLib.detectSlim(data);
+    state.newSkin = true;
     setBody(slim ? 'slim' : 'classic', `DETECTED ${slim ? 'SLIM' : 'CLASSIC'} / YOU CAN SAVE AS ${slim ? 'CLASSIC' : 'SLIM'}`);
   }
 
