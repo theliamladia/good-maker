@@ -8,6 +8,7 @@
 // classic = 4px (Steve) arms, slim = 3px (Alex) arms.
 // swatch = the colour dot shown in the colour picker. Twin colourways (two
 // colours, e.g. Pepsi, GOOD® BLUE/COTTON) use two colours: the dot is split 50/50.
+// New colours: also add them to js/colors.js (the COLORS® page).
 // Brand rules: GOOD is always written GOOD®, colourway names included;
 // colourway names are written in ALL CAPS.
 // locked: true = preview only (served scrambled by /api/outfit, no download).

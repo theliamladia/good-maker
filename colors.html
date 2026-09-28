@@ -1,0 +1,65 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>COLORS® · GOOD® DESIGN</title>
+  <meta name="description" content="ALL ® OUR ® COLORS: every GOOD® colour in one place.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body class="cl-page">
+
+<div class="crt-scanlines" aria-hidden="true"></div>
+<div class="crt-vignette" aria-hidden="true"></div>
+<div class="hero-sky" aria-hidden="true">
+  <div class="cloud cloud-1"></div>
+  <div class="cloud cloud-2"></div>
+  <div class="cloud cloud-3"></div>
+  <div class="cloud cloud-4"></div>
+</div>
+
+<header class="site-header">
+  <a class="wordmark" href="./">GOOD® <span>DESIGN</span></a>
+  <nav class="site-nav" aria-label="Main">
+    <a class="nav-link mono" href="./">← BACK</a>
+  </nav>
+</header>
+
+<main class="cl-main">
+  <section class="cl-hero">
+    <div class="section-tag mono">COLORS®</div>
+    <h1 class="cl-title">ALL <span>®</span> OUR <span>®</span> COLORS</h1>
+    <p class="cl-copy">GOOD® uses proprietary techniques to source truly unique color algorithms for its creations. For your enjoyment, we have prepared all current existing colors here.</p>
+    <p class="cl-count mono" id="clCount"></p>
+  </section>
+  <div class="cl-grid" id="clGrid"></div>
+</main>
+
+<script src="js/colors.js"></script>
+<script>
+  // Colour cards from js/colors.js (the list to update when a colour ships).
+  (() => {
+    const grid = document.getElementById('clGrid');
+    const colors = window.GOOD_COLORS;
+    document.getElementById('clCount').textContent = `${colors.length} COLORS`;
+    colors.forEach((c, i) => {
+      const hexes = Array.isArray(c.hex) ? c.hex : [c.hex];
+      const fill = hexes.length > 1 ? `linear-gradient(90deg, ${hexes[0]} 50%, ${hexes[1]} 50%)` : hexes[0];
+      const card = document.createElement('article');
+      card.className = 'cl-card';
+      card.style.setProperty('--d', `${Math.min(i, 24) * 40}ms`);
+      card.innerHTML = `
+        <div class="cl-swatch" style="background:${fill}"><span class="cl-num mono">Nº${String(i + 1).padStart(3, '0')}</span></div>
+        <div class="cl-name">${c.name}</div>
+        <div class="cl-hex mono">${hexes.map((h) => h.toUpperCase()).join(' / ')}</div>
+        ${c.desc ? `<p class="cl-desc">${c.desc}</p>` : ''}
+        <div class="cl-where mono">${c.where.toUpperCase()}</div>`;
+      grid.appendChild(card);
+    });
+  })();
+</script>
+</body>
+</html>
