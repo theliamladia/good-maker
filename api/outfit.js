@@ -11,6 +11,8 @@ const crypto = require('crypto');
 const LOCKED = {
   'goodie-im-sowwy-classic': 'GOODIE_IM_SOWWY_CLASSIC_PNG_B64',
   'goodie-im-sowwy-slim': 'GOODIE_IM_SOWWY_SLIM_PNG_B64',
+  'goodie-black-chrome-classic': 'GOODIE_BLACK_CHROME_CLASSIC_PNG_B64',
+  'goodie-black-chrome-slim': 'GOODIE_BLACK_CHROME_SLIM_PNG_B64',
 };
 
 module.exports = function handler(req, res) {

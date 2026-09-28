@@ -99,6 +99,17 @@ window.OUTFITS = [
         long: { classic: 'outfits/goodie-sky-cotton-long-classic.png', slim: 'outfits/goodie-sky-cotton-long-slim.png' },
       },
       {
+        // Preview only: served scrambled by /api/outfit from environment variables.
+        id: 'goodie-black-chrome',
+        color: 'BLACK/CHROME',
+        swatch: ['#161616', '#c9ced6'],
+        locked: true,
+        long: {
+          classic: 'api/outfit?id=goodie-black-chrome-classic',
+          slim: 'api/outfit?id=goodie-black-chrome-slim',
+        },
+      },
+      {
         // Archived: preview only. PNGs aren't in this repo; /api/outfit serves
         // them scrambled from Vercel environment variables.
         id: 'goodie-im-sowwy',
