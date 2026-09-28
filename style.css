@@ -56,6 +56,13 @@ body {
   text-shadow: 0 2px 0 rgba(11, 21, 38, 0.18);
 }
 .wordmark span { font-weight: 400; letter-spacing: -0.03em; }
+.site-nav { display: flex; gap: 8px; margin-right: 110px; }
+.nav-link {
+  border: 0; background: #0000ff; color: #fff; cursor: pointer; font-weight: 700;
+  padding: 9px 18px; border-radius: 999px; font-size: 0.8rem; letter-spacing: 0.16em;
+  box-shadow: 0 6px 18px rgba(0, 0, 90, 0.28); transition: background 0.15s, color 0.15s, transform 0.15s;
+}
+.nav-link:hover, .nav-link:focus-visible { background: #fff; color: #0000ff; transform: translateY(-1px); }
 .right-col { display: flex; flex-direction: column; gap: 14px; }
 .download-btn {
   display: inline-flex; align-items: center; justify-content: center; gap: 10px;
@@ -579,6 +586,7 @@ body { text-shadow: 0.5px 0 rgba(255, 0, 60, 0.22), -0.5px 0 rgba(0, 190, 255, 0
 /* ---------- Small screens ---------- */
 @media (max-width: 900px) {
   .site-header { padding: 14px 16px; }
+  .site-nav { margin-right: 0; }
   .stage { grid-template-columns: 1fr; padding: 8px 16px 32px; min-height: 0; }
   .viewer-wrap { order: -1; }
   .drop-card { position: static; width: 100%; margin-bottom: 10px; }

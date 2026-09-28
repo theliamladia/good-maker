@@ -34,6 +34,9 @@
 
 <header class="site-header">
   <a class="wordmark" href="#">GOOD® <span>DESIGN</span></a>
+  <nav class="site-nav" aria-label="Main">
+    <button type="button" class="nav-link mono" id="navRunway">RUNWAY®</button>
+  </nav>
 </header>
 
 <div class="ticker ticker-top" aria-hidden="true">
@@ -68,11 +71,19 @@
     </div>
     <p class="micro mono" id="bodyHint"></p>
 
+    <div class="section-tag mono">Nº003 / SKIN TONE</div>
+    <div class="tone">
+      <label class="swatch" title="Pick a colour"><input type="color" id="tone" value="#e0ac8c"><span id="swatch"></span></label>
+      <button type="button" class="chip mono" id="auto">AUTO</button>
+    </div>
+    <div class="ramp" id="ramp" title="Shading built from your tone"></div>
+    <p class="micro mono">CLICK YOUR FACE TO EYEDROP.</p>
+
     <!-- Hair & Head: two swipeable cards in the same spot -->
     <div class="swiper" id="swiper">
       <div class="swiper-tabs mono" role="tablist" aria-label="Hair and head">
-        <button type="button" role="tab" data-slide="0" aria-selected="true">Nº003 / HAIR</button>
-        <button type="button" role="tab" data-slide="1" aria-selected="false">Nº004 / HEAD</button>
+        <button type="button" role="tab" data-slide="0" aria-selected="true">Nº004 / HAIR</button>
+        <button type="button" role="tab" data-slide="1" aria-selected="false">Nº005 / HEAD</button>
       </div>
       <div class="slides" id="slides">
         <section class="slide" role="tabpanel" aria-label="Hair">
@@ -147,7 +158,7 @@
   <!-- Right: the fit -->
   <div class="right-col">
   <aside class="panel right">
-    <div class="section-tag mono">Nº005 / SHIRT</div>
+    <div class="section-tag mono">Nº006 / SHIRT</div>
     <div class="outfit-carousel">
       <button type="button" class="carousel-btn" id="outfitPrev" aria-label="Previous outfits">‹</button>
       <div class="outfits" id="outfits"></div>
@@ -157,7 +168,7 @@
     <p class="micro mono" id="outfitHint" hidden></p>
 
     <div id="sleeveSection">
-      <div class="section-tag mono">Nº006 / SLEEVE</div>
+      <div class="section-tag mono">Nº007 / SLEEVE</div>
       <div class="segmented small" id="sleeve" role="radiogroup" aria-label="Sleeve length">
         <button type="button" data-sleeve="short" role="radio">Short</button>
         <button type="button" data-sleeve="long" role="radio">Long</button>
@@ -165,7 +176,7 @@
     </div>
 
     <div id="tuckSection">
-      <div class="section-tag mono">Nº007 / TUCK</div>
+      <div class="section-tag mono">Nº008 / TUCK</div>
       <div class="segmented small" id="tuck" role="radiogroup" aria-label="Tuck the shirt">
         <button type="button" data-tuck="in" role="radio">Tucked</button>
         <button type="button" data-tuck="out" role="radio">Untucked</button>
@@ -173,7 +184,7 @@
     </div>
 
     <div id="pantsSection">
-      <div class="section-tag mono">Nº008 / PANTS</div>
+      <div class="section-tag mono">Nº009 / PANTS</div>
       <div class="outfit-carousel">
         <button type="button" class="carousel-btn" id="pantsPrev" aria-label="Previous pants">‹</button>
         <div class="outfits" id="pants"></div>
@@ -181,7 +192,7 @@
       </div>
       <div class="swatches" id="pantsColors" hidden></div>
       <div id="shoeSection">
-        <div class="section-tag mono">Nº009 / SHOE</div>
+        <div class="section-tag mono">Nº010 / SHOE</div>
         <div class="segmented small" id="shoe" role="radiogroup" aria-label="Shoe colour">
           <button type="button" data-shoe="black" role="radio">Black</button>
           <button type="button" data-shoe="brown" role="radio">Brown</button>
@@ -190,7 +201,7 @@
         </div>
       </div>
       <div id="boxerSection" hidden>
-        <div class="section-tag mono">Nº009 / BOXER</div>
+        <div class="section-tag mono">Nº010 / BOXER</div>
         <div class="segmented small" id="boxer" role="radiogroup" aria-label="Boxer">
           <button type="button" data-boxer="blue" role="radio">Blue</button>
           <button type="button" data-boxer="tartan" role="radio">Red Tartan</button>
@@ -198,14 +209,6 @@
       </div>
     </div>
 
-
-    <div class="section-tag mono">Nº010 / SKIN TONE</div>
-    <div class="tone">
-      <label class="swatch" title="Pick a colour"><input type="color" id="tone" value="#e0ac8c"><span id="swatch"></span></label>
-      <button type="button" class="chip mono" id="auto">AUTO</button>
-    </div>
-    <div class="ramp" id="ramp" title="Shading built from your tone"></div>
-    <p class="micro mono">CLICK YOUR FACE TO EYEDROP.</p>
 
     <details class="texture">
       <summary class="mono">VIEW TEXTURE</summary>

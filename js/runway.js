@@ -261,5 +261,7 @@
     document.body.classList.remove('rw-on');
   }
 
+  // Opened from the RUNWAY® link in the header.
+  document.getElementById('navRunway').onclick = open;
   window.GoodRunway = { open };
 })();

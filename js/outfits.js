@@ -159,14 +159,6 @@ window.OUTFITS = [
       },
     ],
   },
-  {
-    id: 'runway',
-    name: 'RUNWAY®',
-    // Password-locked looks. Nothing about them is in this repo: the password
-    // and the look PNGs live in Vercel environment variables and are only
-    // sent by /api/runway after a correct password (see api/runway.js).
-    runway: true,
-  },
 ];
 
 // Pants: legs (both layers) plus anything on the torso that belongs to the

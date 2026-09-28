@@ -32,7 +32,7 @@
     tucked: true,        // shirt tucked in (pants waistband shows) or hanging over it       // pants with boxers: 'blue' (as drawn) | 'tartan'
     hair: 0,             // torso rows of the user's hair to keep (0 = off)
     hairGuess: 0,        // detected length, applied when the Slim body is chosen
-    headwear: 'auto',    // 'keep' | 'auto' (remove hoods) | 'none' (no hat layer)
+    headwear: 'keep',    // 'keep' | 'auto' (remove hoods) | 'none' (no hat layer)
     erased: new Set(),   // "x,y" keys brushed away (hair on the jacket layer, hat pixels)
     hairKeys: new Set(), // hair pixels in the current render (erasable)
     merged: null,
@@ -939,7 +939,7 @@
 
   // ---------- Boot with the demo head ----------
   updateSleeveButtons();
-  setHeadwear('auto', false);
+  setHeadwear('keep', false);
   updateEraseHint();
   updateEraserButtons();
   setBody('classic');
