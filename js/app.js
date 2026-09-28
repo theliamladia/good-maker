@@ -196,7 +196,7 @@
 
   // ---------- Outfits ----------
   const fullName = (o) => (o.color ? `${o.name} ${o.color}` : o.name);
-  // Top cards show the name only; the colourway is in the colour picker below.
+  // Cards show the name with the pictured colourway in small type underneath.
   const nameOnly = (o) => `<span class="outfit-name">${o.name}</span>`;
   const label = (o) => `<span class="outfit-name">${o.name}</span>${o.color ? `<span class="outfit-color">${o.color}</span>` : ''}`;
 
@@ -308,8 +308,8 @@
       c.runway
         ? `<div class="runway-thumb" aria-hidden="true"></div>${nameOnly(o)}`
         : c.locked
-          ? `<div class="locked-thumb" aria-hidden="true"></div>${nameOnly(o)}`
-          : `<img class="ghost-thumb" src="${thumbs[i]}" alt="">${nameOnly(o)}`,
+          ? `<div class="locked-thumb" aria-hidden="true"></div>${label(c)}`
+          : `<img class="ghost-thumb" src="${thumbs[i]}" alt="">${label(c)}`,
       // RUNWAY® isn't a shirt: it opens the password prompt (js/runway.js).
       () => (o.runway ? window.GoodRunway && window.GoodRunway.open() : selectOutfit(o))
     ); }));
