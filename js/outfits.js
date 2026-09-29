@@ -61,6 +61,21 @@ window.OUTFITS = [
     ],
   },
   {
+    // A CROPPIE® worn over a long-sleeve tee: the CROPPIE® (hat layer + outer
+    // chest) over the tee (base layer torso and full sleeves). Two logos.
+    id: 'doubbie',
+    name: 'DOUBBIE®',
+    hat: true,
+    colors: [
+      {
+        id: 'doubbie-good-blue',
+        color: 'GOOD® BLUE/COTTON',
+        swatch: ['#0000ff', '#ffffff'],
+        long: { classic: 'outfits/doubbie-good-blue-classic.png', slim: 'outfits/doubbie-good-blue-slim.png' },
+      },
+    ],
+  },
+  {
     id: 'smiley',
     name: 'SMILEY®',
     colors: [
