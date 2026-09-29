@@ -214,6 +214,18 @@ window.PANTS = [
     colors: washes('jean-bootcut'),
   },
   {
+    // Baggy jort: the jean cut above the knee, frayed hem, white crew socks.
+    id: 'jort',
+    name: 'JORT®',
+    shoes: {
+      black: 'outfits/pants/good-jort-black.png',
+      brown: 'outfits/pants/good-jort-brown.png',
+      tobacco: 'outfits/pants/good-jort-tobacco.png',
+      sneak01: 'outfits/pants/good-jort-sneak01.png',
+    },
+    colors: washes('jort'),
+  },
+  {
     // Pleated sweat: leg and waistband on the body, bunched hem on the outer
     // layer; SNEAK01 (white, GOOD® BLUE sole) is built into the outer layer.
     id: 'pltswt',
