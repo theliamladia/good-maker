@@ -9,7 +9,7 @@
 window.GOOD_COLORS = [
   { name: 'GOOD® BLUE', hex: '#0000ff', where: 'SHIRT®, CROPPIE®, DOUBBIE®, SMILEY®, GOODIE®, COLLAR®, SNEAK01 sole', desc: 'Our flagship, and the purest blue we could make. Calm but electric, modern but timeless. It can be imitated, never replicated. This is GOOD® at its most distilled, the version we\'ll always be chasing.' },
   { name: 'COTTON', hex: '#ffffff', where: 'SHIRT®, CROPPIE®, DOUBBIE®, SMILEY®, GOODIE®, COLLAR®', desc: 'A clean blend of whites and soft greys, native to the fabric itself. Rendered here as Clean White: the blank page every piece starts from.' },
-  { name: 'DENIM', hex: '#57b3ea', where: 'SHIRT® COTTON/DENIM, COLLAR® COTTON/DENIM', desc: 'Second only to SPRINGSTEEN™, and our favorite take on the perfect wash. Not too dark, not too light. Just (almost) right.' },
+  { name: 'DENIM', hex: '#57b3ea', where: 'SHIRT® COTTON/DENIM, COLLAR® COTTON/DENIM, DOUBBIE® DUST PINK (tee logo)', desc: 'Second only to SPRINGSTEEN™, and our favorite take on the perfect wash. Not too dark, not too light. Just (almost) right.' },
   { name: 'BLAUE', hex: '#2468ff', where: 'SHIRT® BLAUE/COTTON', desc: 'Named for the Blaue Blume, the blue flower the Romantics chased as a symbol of longing and inspiration. Vivid and alive, like the first wildflowers of spring in an overgrown garden.' },
   { name: 'DUST PINK', hex: '#c98aa0', where: 'CROPPIE® and DOUBBIE® DUST PINK/TOMATO VINE', desc: 'A sleepy, warm pink, soft at the edges like late-afternoon light. One of our favorites, and one we hold close.' },
   { name: 'TOMATO VINE', hex: '#3f7a55', where: 'CROPPIE® and DOUBBIE® DUST PINK/TOMATO VINE', desc: 'Earthy and punchy, with a little tang. The green of things still growing: stems, leaves, and a garden mid-season.' },
