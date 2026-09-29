@@ -73,6 +73,12 @@ window.OUTFITS = [
         swatch: ['#0000ff', '#ffffff'],
         long: { classic: 'outfits/doubbie-good-blue-classic.png', slim: 'outfits/doubbie-good-blue-slim.png' },
       },
+      {
+        id: 'doubbie-dust-pink',
+        color: 'DUST PINK/TOMATO VINE',
+        swatch: ['#c98aa0', '#3f7a55'],
+        long: { classic: 'outfits/doubbie-dust-pink-classic.png', slim: 'outfits/doubbie-dust-pink-slim.png' },
+      },
     ],
   },
   {
