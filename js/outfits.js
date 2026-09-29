@@ -79,6 +79,12 @@ window.OUTFITS = [
         swatch: ['#c98aa0', '#3f7a55'],
         long: { classic: 'outfits/doubbie-dust-pink-classic.png', slim: 'outfits/doubbie-dust-pink-slim.png' },
       },
+      {
+        id: 'doubbie-double-blue',
+        color: 'GOOD® BLUE/GOOD® BLUE',
+        swatch: ['#0000ff', '#0000ff'],
+        long: { classic: 'outfits/doubbie-double-blue-classic.png', slim: 'outfits/doubbie-double-blue-slim.png' },
+      },
     ],
   },
   {
