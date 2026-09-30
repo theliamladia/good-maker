@@ -2,15 +2,20 @@
 //   GET  /api/comments?post=<slug>              -> { comments: [{ name, text, at }] } (newest first)
 //   POST /api/comments  { post, name, text, website }
 // Stored in Upstash Redis over its REST API (add the Upstash Redis integration
-// from the Vercel Marketplace; it sets KV_REST_API_URL / KV_REST_API_TOKEN, or
-// UPSTASH_REDIS_REST_URL / UPSTASH_REDIS_REST_TOKEN). Without it, 503.
+// from the Vercel Marketplace; with prefix KV it sets KV_REST_API_URL /
+// KV_REST_API_TOKEN). Without it, 503.
 // Comments are plain text: the page renders them with textContent, never HTML.
 // Light abuse guards: a honeypot field, length limits, 3 posts a minute per IP.
 
 const crypto = require('crypto');
 
-const URL_ = process.env.KV_REST_API_URL || process.env.UPSTASH_REDIS_REST_URL;
-const TOKEN = process.env.KV_REST_API_TOKEN || process.env.UPSTASH_REDIS_REST_TOKEN;
+// Any prefix works (KV_, STORAGE_, ...): take the first *_REST_API_URL with a matching token.
+const env = process.env;
+const pre = ['KV', 'STORAGE', 'UPSTASH_REDIS']
+  .concat(Object.keys(env).filter((k) => k.endsWith('_REST_API_URL')).map((k) => k.slice(0, -'_REST_API_URL'.length)))
+  .find((p) => env[`${p}_REST_API_URL`] && env[`${p}_REST_API_TOKEN`]);
+const URL_ = pre ? env[`${pre}_REST_API_URL`] : env.UPSTASH_REDIS_REST_URL;
+const TOKEN = pre ? env[`${pre}_REST_API_TOKEN`] : env.UPSTASH_REDIS_REST_TOKEN;
 const KEEP = 500;                     // comments kept per post
 const SLUG = /^[a-z0-9-]{1,60}$/;
 
