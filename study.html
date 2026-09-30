@@ -1,0 +1,176 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>STUDY® · GOOD® DESIGN</title>
+  <meta name="description" content="STUDY®: notes, experiments and interviews from GOOD® DESIGN.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body class="cl-page st-page">
+
+<div class="crt-scanlines" aria-hidden="true"></div>
+<div class="crt-vignette" aria-hidden="true"></div>
+<div class="hero-sky" aria-hidden="true">
+  <div class="cloud cloud-1"></div>
+  <div class="cloud cloud-2"></div>
+  <div class="cloud cloud-3"></div>
+  <div class="cloud cloud-4"></div>
+</div>
+
+<header class="site-header">
+  <a class="wordmark" href="./">GOOD® <span>DESIGN</span></a>
+  <nav class="site-nav" aria-label="Main">
+    <a class="nav-link mono" id="stBack" href="./">← BACK</a>
+  </nav>
+</header>
+
+<main class="cl-main st-main">
+  <!-- The list of posts -->
+  <section id="stList">
+    <div class="cl-hero">
+      <div class="section-tag mono">STUDY®</div>
+      <h1 class="cl-title">STUDY<span>®</span></h1>
+      <p class="cl-copy">Notes, experiments and conversations from the GOOD® studio. Everything we try, including what didn’t make it.</p>
+    </div>
+    <div class="st-grid" id="stGrid"></div>
+  </section>
+
+  <!-- One post -->
+  <article class="st-post" id="stPost" hidden>
+    <header class="st-post-head">
+      <div class="section-tag mono" id="stDate"></div>
+      <h1 class="st-title" id="stTitle"></h1>
+      <p class="st-sub" id="stSub"></p>
+    </header>
+    <figure class="st-cover"><img id="stCover" alt=""><figcaption class="mono" id="stCoverCap"></figcaption></figure>
+    <p class="st-intro" id="stIntro"></p>
+    <div class="st-body" id="stBody"></div>
+
+    <section class="st-comments" aria-labelledby="stCommentsTitle">
+      <div class="section-tag mono" id="stCommentsTitle">COMMENTS</div>
+      <form class="st-form" id="stForm" autocomplete="off">
+        <input class="mono" name="name" maxlength="40" placeholder="NAME (OPTIONAL)" aria-label="Name">
+        <textarea name="text" maxlength="1000" rows="3" placeholder="SAY SOMETHING GOOD" aria-label="Comment" required></textarea>
+        <!-- Honeypot: hidden from people, bots fill it in. -->
+        <input class="st-hp" name="website" tabindex="-1" autocomplete="off" aria-hidden="true">
+        <div class="st-form-foot">
+          <span class="micro mono" id="stFormMsg" aria-live="polite"></span>
+          <button type="submit" class="nav-link mono">POST →</button>
+        </div>
+      </form>
+      <ol class="st-list" id="stComments"></ol>
+    </section>
+  </article>
+</main>
+
+<script src="js/study.js"></script>
+<script>
+  (() => {
+    const $ = (id) => document.getElementById(id);
+    const posts = window.GOOD_STUDY;
+    const fmt = (d) => new Date(d + (d.length === 10 ? 'T12:00:00' : '')).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' }).toUpperCase();
+    const slug = new URLSearchParams(location.search).get('p');
+    const post = posts.find((p) => p.slug === slug);
+
+    if (!post) {
+      // List: newest first, each card a link to its post.
+      posts.forEach((p, i) => {
+        const a = document.createElement('a');
+        a.className = 'st-card';
+        a.href = `study.html?p=${p.slug}`;
+        a.style.setProperty('--d', `${i * 60}ms`);
+        a.innerHTML = `
+          <div class="st-card-img"><img src="${p.cover}" alt=""></div>
+          <div class="st-card-text">
+            <div class="section-tag mono">Nº${String(posts.length - i).padStart(3, '0')} / ${fmt(p.date)}</div>
+            <h2>${p.title}</h2>
+            <p class="st-card-sub">${p.subtitle}</p>
+            <p class="st-card-intro">${p.intro}</p>
+            <span class="st-read mono">READ →</span>
+          </div>`;
+        $('stGrid').appendChild(a);
+      });
+      return;
+    }
+
+    // One post.
+    document.title = `${post.title} · STUDY® · GOOD® DESIGN`;
+    $('stList').hidden = true;
+    $('stPost').hidden = false;
+    $('stBack').href = 'study.html';
+    $('stBack').textContent = '← STUDY®';
+    $('stDate').textContent = `STUDY® / ${fmt(post.date)}`;
+    $('stTitle').textContent = post.title;
+    $('stSub').textContent = post.subtitle;
+    $('stCover').src = post.cover;
+    $('stCover').alt = post.coverAlt || '';
+    $('stCoverCap').textContent = post.coverCaption || '';
+    $('stIntro').textContent = post.intro;
+    for (const b of post.body) {
+      const el = document.createElement(b.img ? 'figure' : 'div');
+      if (b.img) {
+        el.className = 'st-fig';
+        const img = document.createElement('img');
+        img.src = b.img; img.alt = b.alt || ''; img.loading = 'lazy';
+        const cap = document.createElement('figcaption');
+        cap.className = 'mono'; cap.textContent = b.caption || '';
+        el.append(img, cap);
+      } else {
+        el.className = 'st-qa';
+        el.innerHTML = `<p class="st-q">${b.q}</p><div class="st-a">${b.a}</div>`; // our own copy (js/study.js)
+      }
+      $('stBody').appendChild(el);
+    }
+
+    // Comments: plain text only, drawn with textContent.
+    const list = $('stComments');
+    const msg = $('stFormMsg');
+    const draw = (c, top) => {
+      const li = document.createElement('li');
+      const head = document.createElement('div');
+      head.className = 'st-c-head mono';
+      const who = document.createElement('span'); who.textContent = c.name || 'ANONYMOUS';
+      const when = document.createElement('span'); when.textContent = fmt(c.at);
+      head.append(who, when);
+      const p = document.createElement('p'); p.textContent = c.text;
+      li.append(head, p);
+      top ? list.prepend(li) : list.append(li);
+    };
+    fetch(`api/comments?post=${post.slug}`).then(async (r) => {
+      if (r.status === 503) { msg.textContent = 'COMMENTS OPEN SOON.'; $('stForm').querySelector('button').disabled = true; return; }
+      if (!r.ok) throw new Error();
+      const { comments } = await r.json();
+      comments.forEach((c) => draw(c));
+      if (!comments.length) msg.textContent = 'BE THE FIRST.';
+    }).catch(() => { msg.textContent = 'COMMENTS COULDN’T LOAD.'; });
+
+    $('stForm').onsubmit = async (e) => {
+      e.preventDefault();
+      const f = e.target;
+      const btn = f.querySelector('button');
+      btn.disabled = true; msg.textContent = 'POSTING…';
+      try {
+        const r = await fetch('api/comments', {
+          method: 'POST', headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ post: post.slug, name: f.elements.name.value, text: f.elements.text.value, website: f.elements.website.value }),
+        });
+        if (r.status === 429) { msg.textContent = 'SLOW DOWN. TRY AGAIN IN A MINUTE.'; return; }
+        if (!r.ok) throw new Error();
+        const { comment } = await r.json();
+        if (comment) draw(comment, true);
+        f.elements.text.value = '';
+        msg.textContent = 'POSTED. THANK YOU.';
+      } catch {
+        msg.textContent = 'COULDN’T POST. TRY AGAIN.';
+      } finally {
+        btn.disabled = false;
+      }
+    };
+  })();
+</script>
+</body>
+</html>

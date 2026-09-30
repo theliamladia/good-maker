@@ -763,3 +763,62 @@ button.cl-card:focus-visible { outline: 2px solid #0000ff; outline-offset: 2px; 
 
 .cl-m-thanks { margin: 16px 0 0; padding: 12px 14px; border-radius: 12px; background: #0000ff; color: #fff; font-weight: 700; font-size: 0.85rem; letter-spacing: 0.02em; line-height: 1.45; }
 .cl-m-thanks[hidden] { display: none; }
+
+/* ---------- STUDY® ---------- */
+.st-main { max-width: 980px; position: relative; z-index: 2; }
+.st-grid { display: grid; gap: 22px; }
+.st-card {
+  display: grid; grid-template-columns: minmax(0, 1.1fr) minmax(0, 1fr); gap: 0; overflow: hidden;
+  text-decoration: none; color: var(--ink); background: var(--glass); border: 1px solid var(--glass-edge);
+  border-radius: var(--radius); box-shadow: 0 20px 50px rgba(11, 21, 38, 0.14);
+  transition: transform 0.25s ease; animation: rise 0.6s var(--d, 0ms) both cubic-bezier(0.16, 1, 0.3, 1);
+}
+.st-card:hover { transform: translateY(-3px); }
+.st-card-img { background: #5aa0e8; }
+.st-card-img img { display: block; width: 100%; height: 100%; object-fit: cover; image-rendering: pixelated; }
+.st-card-text { padding: 26px 26px 24px; display: flex; flex-direction: column; }
+.st-card-text .section-tag { margin: 0 0 10px; }
+.st-card h2 { margin: 0; font-size: clamp(1.6rem, 4vw, 2.4rem); font-weight: 800; letter-spacing: -0.04em; line-height: 1; color: #0000ff; }
+.st-card-sub { margin: 8px 0 0; font-weight: 600; }
+.st-card-intro { margin: 14px 0 0; font-size: 0.92rem; line-height: 1.5; color: var(--ink-soft); }
+.st-read { margin-top: auto; padding-top: 18px; font-size: 0.72rem; letter-spacing: 0.16em; color: #0000ff; }
+@keyframes rise { from { opacity: 0; transform: translateY(24px); } to { opacity: 1; transform: none; } }
+
+.st-post {
+  background: var(--glass); border: 1px solid var(--glass-edge); border-radius: var(--radius);
+  box-shadow: 0 20px 50px rgba(11, 21, 38, 0.14); padding: 34px clamp(18px, 5vw, 56px) 40px; margin: 10px 0 0;
+}
+.st-post-head { text-align: center; }
+.st-post-head .section-tag { margin: 0 0 10px; }
+.st-title { margin: 0; font-size: clamp(2.2rem, 8vw, 4.4rem); font-weight: 800; letter-spacing: -0.05em; line-height: 0.95; color: #0000ff; }
+.st-sub { margin: 12px 0 0; font-size: 1.05rem; font-weight: 600; }
+.st-cover, .st-fig { margin: 28px 0 0; }
+.st-cover img, .st-fig img { display: block; width: 100%; border-radius: 14px; image-rendering: pixelated; background: #5aa0e8; }
+.st-fig figcaption, .st-cover figcaption { margin-top: 8px; font-size: 0.64rem; letter-spacing: 0.08em; line-height: 1.5; color: var(--ink-soft); text-align: center; }
+.st-intro { margin: 26px auto 0; max-width: 640px; font-size: 1.12rem; line-height: 1.55; font-weight: 600; }
+.st-body { max-width: 640px; margin: 0 auto; }
+.st-body .st-fig { margin: 30px -40px 0; }
+.st-qa { margin-top: 30px; }
+.st-q { margin: 0; font-family: 'Space Mono', monospace; font-size: 0.8rem; letter-spacing: 0.04em; line-height: 1.5; color: #0000ff; text-transform: uppercase; }
+.st-a p { margin: 10px 0 0; font-size: 1rem; line-height: 1.65; }
+.st-a a { color: #0000ff; font-weight: 600; }
+
+.st-comments { max-width: 640px; margin: 44px auto 0; padding-top: 24px; border-top: 1px solid rgba(11, 21, 38, 0.12); }
+.st-form { display: grid; gap: 8px; margin-top: 10px; }
+.st-form input, .st-form textarea {
+  width: 100%; box-sizing: border-box; padding: 12px 14px; border: 1px solid rgba(11, 21, 38, 0.14); border-radius: 12px;
+  background: rgba(255, 255, 255, 0.8); font: 400 0.95rem 'Inter', sans-serif; color: var(--ink); resize: vertical;
+}
+.st-form input.mono { font-family: 'Space Mono', monospace; font-size: 0.78rem; letter-spacing: 0.08em; }
+.st-form .st-hp { position: absolute; left: -9999px; width: 1px; height: 1px; opacity: 0; }
+.st-form-foot { display: flex; justify-content: space-between; align-items: center; gap: 10px; }
+.st-form-foot button:disabled { opacity: 0.4; cursor: default; }
+.st-list { list-style: none; margin: 22px 0 0; padding: 0; display: grid; gap: 12px; }
+.st-list li { padding: 14px 16px; border-radius: 14px; background: rgba(255, 255, 255, 0.7); }
+.st-c-head { display: flex; justify-content: space-between; gap: 10px; font-size: 0.66rem; letter-spacing: 0.1em; color: var(--ink-soft); }
+.st-c-head span:first-child { color: #0000ff; font-weight: 700; }
+.st-list p { margin: 6px 0 0; white-space: pre-wrap; overflow-wrap: anywhere; line-height: 1.5; }
+@media (max-width: 700px) {
+  .st-card { grid-template-columns: 1fr; }
+  .st-body .st-fig { margin-left: 0; margin-right: 0; }
+}
