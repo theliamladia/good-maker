@@ -25,8 +25,8 @@ const STUDY = [
     description: 'How GOOD® made the JEAN®: SPRINGSTEEN™ Americana, six washes, two layers, and the best jean in Minecraft. An interview.',
     lead: {
       img: '/assets/study/jean-lineup.png',
-      alt: 'Seven Minecraft players posing in GOOD® jeans: DaJiggler, Leeeeems, Chinny, BobaYeet, RacerJack, LindseyyHazel and Austin1333.',
-      caption: 'Left to right: DaJiggler, Leeeeems, Chinny, BobaYeet, RacerJack, LindseyyHazel and Austin1333, all in the JEAN®.',
+      alt: 'Seven Minecraft players posing in GOOD® jeans: DaJiggler, Leeeeems, Chinny, BobaYeet, Isabelleblanco, LindseyyHazel and Austin1333.',
+      caption: 'Left to right: DaJiggler, Leeeeems, Chinny, BobaYeet, Isabelleblanco, LindseyyHazel and Austin1333, all in the JEAN®.',
     },
     og: '/assets/study/og-a-study-in-jean.png',
     thumb: '/assets/study/jean-lineup.png',
@@ -72,9 +72,9 @@ const STUDY = [
       { quote: 'You know it’s going to rip, and you’re willing to chance it because you love it so much.' },
       { pair: [
           { img: '/assets/study/model-bobayeet.png', alt: 'BobaYeet waving, one knee up, in a collared shirt and jorts.' },
-          { img: '/assets/study/model-racerjack.png', alt: 'RacerJack looking back over a shoulder in a pink hood and mid-wash jeans.' },
+          { img: '/assets/study/model-isabelleblanco.png', alt: 'Isabelleblanco looking back over a shoulder in a pink hood and mid-wash jeans.' },
         ],
-        caption: 'BobaYeet in COLLAR® COTTON/DENIM and the JORT® in SPRINGSTEEN™ with SNEAK01. RacerJack in DOUBBIE® DUST PINK/TOMATO VINE and the JEAN® in ROADWORN™.' },
+        caption: 'BobaYeet in COLLAR® COTTON/DENIM and the JORT® in SPRINGSTEEN™ with SNEAK01. Isabelleblanco in DOUBBIE® DUST PINK/TOMATO VINE and the JEAN® in ROADWORN™.' },
 
       { q: 'Out of the twenty-wash study and the twelve rip experiments, which ones stuck with you?' },
       { p: 'Honestly, nothing so far. The only things available are the ones that stuck.' },
