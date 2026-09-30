@@ -100,6 +100,12 @@ const STUDY = [
 
       { q: 'Where does the JEAN® go next?' },
       { p: 'Exactly where it is, with a lot more shades, and maybe a lot more cuts. But we’ll never lose the heart of what we made here.' },
+      { gallery: [
+          { img: '/assets/study/stylized-mosaic.png', label: 'MOSAIC®', sub: 'GRAY/CHROME, on the site' },
+          { img: '/assets/study/stylized-runway-look-1.png', label: 'LOOK 1®', sub: 'RUNWAY®' },
+          { img: '/assets/study/stylized-runway-look-2.png', label: 'LOOK 2®', sub: 'RUNWAY®' },
+          { img: '/assets/study/stylized-runway-look-3.png', label: 'LOOK 3®', sub: 'RUNWAY®' },
+        ], title: 'The stylized pieces', caption: 'Where the jean goes when we let it: MOSAIC® on DaJiggler, and three RUNWAY® looks on Chinny, BobaYeet and Austin1333.' },
 
       { q: 'If someone only ever owns one GOOD® piece, why should it be the jeans?' },
       { p: 'It’s free. You should own all of them. But we make the best jean in Minecraft. Period.', end: true },
