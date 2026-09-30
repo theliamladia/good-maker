@@ -200,7 +200,7 @@
   const nameOnly = (o) => `<span class="outfit-name">${o.name}</span>`;
   const label = (o) => `<span class="outfit-name">${o.name}</span>${o.color ? `<span class="outfit-color">${o.color}</span>` : ''}`;
 
-  // Two-up carousel of cards with side buttons (used for shirts and pants).
+  // Three-up carousel of cards with side buttons (used for shirts and pants).
   function carousel(listEl, prevBtn, nextBtn) {
     const update = () => {
       prevBtn.disabled = listEl.scrollLeft <= 2;
@@ -208,19 +208,30 @@
     };
     const step = () => {
       const card = listEl.querySelector('.outfit');
-      return card ? card.getBoundingClientRect().width + 8 : listEl.clientWidth / 2;
+      return card ? card.getBoundingClientRect().width + 8 : listEl.clientWidth / 3;
     };
     prevBtn.onclick = () => listEl.scrollBy({ left: -step() });
     nextBtn.onclick = () => listEl.scrollBy({ left: step() });
     listEl.addEventListener('scroll', update, { passive: true });
     window.addEventListener('resize', update);
-    // Rebuild the cards without jumping the scroll position.
+    // Rebuild the cards without jumping the scroll position; when the selected
+    // card changes (e.g. a shirt picks its pants) and is out of view, scroll to it.
+    let lastPicked = -1;
     return (cards) => {
       const keep = listEl.scrollLeft;
       listEl.replaceChildren(...cards);
       listEl.style.scrollBehavior = 'auto';
       listEl.scrollLeft = keep;
       listEl.style.scrollBehavior = '';
+      const picked = cards.findIndex((c) => c.getAttribute('aria-pressed') === 'true');
+      if (picked !== lastPicked && picked >= 0) {
+        const c = cards[picked];
+        const left = c.getBoundingClientRect().left - listEl.getBoundingClientRect().left + listEl.scrollLeft;
+        if (left < listEl.scrollLeft || left + c.offsetWidth > listEl.scrollLeft + listEl.clientWidth) {
+          listEl.scrollTo({ left: Math.min(left, listEl.scrollWidth - listEl.clientWidth) });
+        }
+      }
+      lastPicked = picked;
       update();
     };
   }

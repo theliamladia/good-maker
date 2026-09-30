@@ -100,9 +100,9 @@ body {
 /* ---------- Layout ---------- */
 .stage {
   display: grid;
-  grid-template-columns: 290px minmax(0, 1fr) 290px;
+  grid-template-columns: 290px minmax(0, 1fr) 400px;
   gap: 24px; align-items: center;
-  max-width: 1240px; margin: 0 auto; padding: 12px 24px 40px;
+  max-width: 1360px; margin: 0 auto; padding: 12px 24px 40px;
   min-height: calc(100vh - 150px);
 }
 .panel {
@@ -224,7 +224,7 @@ body {
 .outfit-carousel { display: flex; align-items: center; gap: 6px; }
 .outfits {
   flex: 1; min-width: 0; display: grid; grid-auto-flow: column;
-  grid-auto-columns: calc((100% - 8px) / 2); gap: 8px;
+  grid-auto-columns: calc((100% - 16px) / 3); gap: 8px;  /* three cards at a time */
   overflow-x: auto; scroll-snap-type: x mandatory; scroll-behavior: smooth;
   scrollbar-width: none; overscroll-behavior-x: contain; padding: 2px 0;
 }
@@ -241,7 +241,7 @@ body {
 #shoeSection > .section-tag:first-child, #boxerSection > .section-tag:first-child,
 #tuckSection > .section-tag:first-child { margin-top: 22px; }
 .outfits .outfit span { display: block; line-height: 1.2; overflow-wrap: anywhere; }
-.outfits .outfit .outfit-name { font-size: 0.7rem; }
+.outfits .outfit .outfit-name { font-size: 0.64rem; overflow-wrap: normal; letter-spacing: -0.01em; } /* whole words: WATERMELONS® fits a third of the panel */
 .outfits .outfit .outfit-color {
   margin-top: 1px; font-size: 0.62rem; font-weight: 400;
   font-variant-caps: all-small-caps; letter-spacing: 0.04em; color: var(--ink-soft);

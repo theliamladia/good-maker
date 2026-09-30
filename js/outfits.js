@@ -422,6 +422,7 @@ window.PANTS = [
     shoes: {
       tobacco: 'outfits/pants/watermelons-tomato-vine-tobacco.png',
       black: 'outfits/pants/watermelons-tomato-vine-black.png',
+      brown: 'outfits/pants/watermelons-tomato-vine-brown.png',
       sneak01: 'outfits/pants/watermelons-tomato-vine-sneak01.png',
     },
     colors: [{ id: 'watermelons-tomato-vine', color: 'TOMATO VINE', swatch: '#3f7a55' }],
