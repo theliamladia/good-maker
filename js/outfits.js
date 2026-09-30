@@ -14,8 +14,8 @@
 // colourway names are written in ALL CAPS.
 // locked: true = preview only (served scrambled by /api/outfit, no download).
 // notice = card shown next to the 3D preview while selected ({ tag, title, free? }).
-// line = which side of the MEN / WOMEN toggle a kind shows under: 'men' (the
-// default), 'women' or 'both'. Pants kinds use it too.
+// line = which side of the GOOD® / BABY® toggle a kind shows under: 'good' (the
+// default), 'baby' or 'both'. Pants kinds use it too.
 // Shirts: the legs of these files are ignored and replaced by the chosen pants
 // (window.PANTS below). pants (optional) = pants colour id picked by default
 // with this shirt, until the user chooses pants themselves.
@@ -231,7 +231,7 @@ window.OUTFITS = [
   {
     // Cropped cardigan, pearl buttons, a G knitted into the outside of the left sleeve.
     id: 'cardie',
-    line: 'women',
+    line: 'baby',
     name: 'CARDIE®',
     cropped: true, // ends above the waist: no Tuck control
     colors: [
@@ -261,7 +261,7 @@ window.OUTFITS = [
   {
     // Fitted tee cropped above the waist; the midriff shows.
     id: 'baby-tee',
-    line: 'women',
+    line: 'baby',
     name: 'BABY TEE®',
     cropped: true, // ends above the waist: no Tuck control
     colors: [
@@ -298,7 +298,7 @@ window.OUTFITS = [
   {
     // Tied at the neck, open back, cropped.
     id: 'halter',
-    line: 'women',
+    line: 'baby',
     name: 'HALTER®',
     cropped: true, // ends above the waist: no Tuck control
     colors: [
@@ -331,7 +331,7 @@ window.OUTFITS = [
   {
     // Strapless, boned, laced up the front in the second colour.
     id: 'corset',
-    line: 'women',
+    line: 'baby',
     name: 'CORSET®',
     cropped: true, // ends above the waist: no Tuck control
     colors: [
@@ -380,7 +380,7 @@ const washes = (kind) => WASHES.map((w) => ({ swatch: w.wash, ...w, id: `${kind}
 window.PANTS = [
   {
     id: 'springsteen',
-    line: 'both', // shown under MEN and WOMEN
+    line: 'both', // shown under GOOD® and BABY®
     name: 'JEAN®',
     shoes: {
       black: 'outfits/pants/good-jean-black.png',
@@ -393,7 +393,7 @@ window.PANTS = [
   {
     // Outer layer only at the hem, so the leg kicks out at the bottom.
     id: 'jean-bootcut',
-    line: 'both', // shown under MEN and WOMEN
+    line: 'both', // shown under GOOD® and BABY®
     name: 'JEAN® BOOTCUT',
     shoes: {
       black: 'outfits/pants/good-jean-bootcut-black.png',
@@ -406,7 +406,7 @@ window.PANTS = [
   {
     // Baggy jort: the jean cut above the knee, frayed hem, white crew socks.
     id: 'jort',
-    line: 'both', // shown under MEN and WOMEN
+    line: 'both', // shown under GOOD® and BABY®
     name: 'JORT®',
     shoes: {
       black: 'outfits/pants/good-jort-black.png',
@@ -444,7 +444,7 @@ window.PANTS = [
   {
     // Pleated midi skirt: pleats on the outer layer of the legs, bare shins, shoes.
     id: 'watermelons',
-    line: 'women',
+    line: 'baby',
     name: 'WATERMELONS®',
     noTuck: true, // a skirt: tops always tuck in
     shoes: {

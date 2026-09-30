@@ -7,7 +7,7 @@
   // colour, files and swatch. kind.current = the colour last picked for it.
   function catalogue(kinds) {
     return kinds.map((k) => {
-      const kind = { id: k.id, name: k.name, line: k.line || 'men' };
+      const kind = { id: k.id, name: k.name, line: k.line || 'good' };
       kind.colors = (k.colors || [k]).map((c) => ({
         locked: k.locked, notice: k.notice, baseUnderHoles: k.baseUnderHoles, hat: k.hat, shoes: k.shoes, boxers: k.boxers, src: k.src, cropped: k.cropped, noTuck: k.noTuck, ...c, name: k.name, kind,
       }));
@@ -18,7 +18,7 @@
   const SHIRTS = catalogue(window.OUTFITS);
   const PANTS = catalogue(window.PANTS);
   const ALL_PANTS = PANTS.flatMap((k) => k.colors);
-  // MEN / WOMEN: kinds shown under the current line ('both' shows under either).
+  // GOOD® / BABY®: kinds shown under the current line ('both' shows under either).
   const inLine = (k) => k.line === 'both' || k.line === state.line;
   const lineShirts = () => SHIRTS.filter(inLine);
   const linePants = () => PANTS.filter(inLine);
@@ -26,7 +26,7 @@
   const state = {
     user: null,          // ImageData of the head source
     isDemo: true,
-    line: 'men',         // MEN / WOMEN toggle: which kinds are shown
+    line: 'good',        // GOOD® / BABY® toggle: which kinds are shown
     outfit: SHIRTS[0].current,
     body: 'classic',     // 'classic' | 'slim'
     sleeve: 'short',     // 'short' | 'long'
@@ -453,7 +453,7 @@
     setBody(state.body); // bodies can differ per sleeve; also redraws and renders
   };
 
-  // MEN / WOMEN toggle: switching lines picks that line's first shirt (and its
+  // GOOD® / BABY® toggle: switching lines picks that line's first shirt (and its
   // pants) unless the current pick is shown under both.
   const drawLine = () => $('line').querySelectorAll('button').forEach((b) => b.setAttribute('aria-checked', b.dataset.line === state.line));
   drawLine();
