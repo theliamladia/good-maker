@@ -183,10 +183,10 @@ window.OUTFITS = [
     name: 'G-KNIT®',
     colors: [
       {
-        id: 'gknit-cream-good-blue',
-        color: 'CREAM/GOOD® BLUE',
+        id: 'gknit-vanilla-bean-good-blue',
+        color: 'VANILLA BEAN/GOOD® BLUE',
         swatch: ['#ece4d2', '#0000ff'],
-        long: { classic: 'outfits/gknit-cream-good-blue-long-classic.png', slim: 'outfits/gknit-cream-good-blue-long-slim.png' },
+        long: { classic: 'outfits/gknit-vanilla-bean-good-blue-long-classic.png', slim: 'outfits/gknit-vanilla-bean-good-blue-long-slim.png' },
       },
       {
         id: 'gknit-good-blue-cotton',
