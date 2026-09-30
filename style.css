@@ -162,9 +162,13 @@ body {
   display: grid; grid-template-columns: 1fr 1fr; padding: 4px; gap: 4px;
   background: rgba(11, 21, 38, 0.08); border-radius: 12px;
 }
+.line-toggle { margin-bottom: 16px; }
+.line-toggle button { font-family: "Space Mono", monospace; font-size: 0.72rem; letter-spacing: 0.14em; }
 .segmented.four { grid-template-columns: repeat(4, 1fr); }
 .segmented.three { grid-template-columns: repeat(3, 1fr); }
 .segmented.three button { padding: 9px 4px; font-size: 0.85rem; }
+.line-toggle { margin-bottom: 16px; }
+.line-toggle button { font-family: "Space Mono", monospace; font-size: 0.72rem; letter-spacing: 0.14em; }
 .segmented.four button { padding: 9px 4px; font-size: 0.85rem; }
 .segmented button {
   border: 0; background: transparent; padding: 10px; border-radius: 9px;
