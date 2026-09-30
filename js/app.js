@@ -9,7 +9,7 @@
     return kinds.map((k) => {
       const kind = { id: k.id, name: k.name };
       kind.colors = (k.colors || [k]).map((c) => ({
-        locked: k.locked, notice: k.notice, baseUnderHoles: k.baseUnderHoles, hat: k.hat, shoes: k.shoes, boxers: k.boxers, src: k.src, ...c, name: k.name, kind,
+        locked: k.locked, notice: k.notice, baseUnderHoles: k.baseUnderHoles, hat: k.hat, shoes: k.shoes, boxers: k.boxers, src: k.src, cropped: k.cropped, noTuck: k.noTuck, ...c, name: k.name, kind,
       }));
       kind.current = kind.colors[0];
       return kind;
@@ -333,9 +333,12 @@
     showOnly($('shoe'), 'shoe', shoes);
     $('shoe').querySelectorAll('button').forEach((b) => b.setAttribute('aria-checked', b.dataset.shoe === shoe));
     $('boxerSection').hidden = !state.pants.boxers;
+    $('tuckSection').hidden = !canTuck();
     $('boxer').querySelectorAll('button').forEach((b) => b.setAttribute('aria-checked', b.dataset.boxer === state.boxer));
   }
   // Tuck: tucked shows the pants' waistband; untucked lets the shirt hang over it.
+  // Cropped tops and skirts (noTuck) have nothing to tuck: always tucked, control hidden.
+  const canTuck = () => !state.outfit.cropped && !state.pants.noTuck;
   const drawTuck = () => $('tuck').querySelectorAll('button').forEach((b) => b.setAttribute('aria-checked', (b.dataset.tuck === 'in') === state.tucked));
   drawTuck();
   $('tuck').onclick = (e) => {
@@ -724,7 +727,7 @@
     let outfit;
     try {
       outfit = await loadOutfit(o, state.body);
-      outfit = SkinLib.combineOutfit(outfit, await loadPants(state.pants), state.tucked);
+      outfit = SkinLib.combineOutfit(outfit, await loadPants(state.pants), state.tucked || !canTuck());
     } catch (err) {
       if (id !== renderId) return;
       // Couldn't load this colour (e.g. a locked one that isn't set up yet).

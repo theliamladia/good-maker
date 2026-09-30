@@ -226,6 +226,111 @@ window.OUTFITS = [
       },
     ],
   },
+  {
+    // Cropped cardigan, pearl buttons, a G knitted into the outside of the left sleeve.
+    id: 'cardie',
+    name: 'CARDIE®',
+    cropped: true, // ends above the waist: no Tuck control
+    colors: [
+      {
+        id: 'cardie-strawberry-milk',
+        color: 'STRAWBERRY MILK/TOMATO VINE',
+        swatch: ['#f6c6d4', '#3f7a55'],
+        long: { classic: 'outfits/cardie-strawberry-milk-long-classic.png', slim: 'outfits/cardie-strawberry-milk-long-slim.png' },
+        pants: 'watermelons-tomato-vine',
+      },
+    ],
+  },
+  {
+    // Fitted tee cropped above the waist; the midriff shows.
+    id: 'baby-tee',
+    name: 'BABY TEE®',
+    cropped: true, // ends above the waist: no Tuck control
+    colors: [
+      {
+        id: 'baby-tee-good-blue-cotton',
+        color: 'GOOD® BLUE/COTTON',
+        swatch: ['#0000ff', '#ffffff'],
+        bodies: { classic: 'outfits/baby-tee-good-blue-cotton-classic.png', slim: 'outfits/baby-tee-good-blue-cotton-slim.png' },
+      },
+      {
+        id: 'baby-tee-cotton-good-blue',
+        color: 'COTTON/GOOD® BLUE',
+        swatch: ['#ffffff', '#0000ff'],
+        bodies: { classic: 'outfits/baby-tee-cotton-good-blue-classic.png', slim: 'outfits/baby-tee-cotton-good-blue-slim.png' },
+      },
+      {
+        id: 'baby-tee-sky-cotton',
+        color: 'SKY/COTTON',
+        swatch: ['#8fd0ff', '#ffffff'],
+        bodies: { classic: 'outfits/baby-tee-sky-cotton-classic.png', slim: 'outfits/baby-tee-sky-cotton-slim.png' },
+      },
+      {
+        id: 'baby-tee-dust-pink-tomato-vine',
+        color: 'DUST PINK/TOMATO VINE',
+        swatch: ['#c98aa0', '#3f7a55'],
+        bodies: { classic: 'outfits/baby-tee-dust-pink-tomato-vine-classic.png', slim: 'outfits/baby-tee-dust-pink-tomato-vine-slim.png' },
+      },
+    ],
+  },
+  {
+    // Tied at the neck, open back, cropped.
+    id: 'halter',
+    name: 'HALTER®',
+    cropped: true, // ends above the waist: no Tuck control
+    colors: [
+      {
+        id: 'halter-sky-cotton',
+        color: 'SKY/COTTON',
+        swatch: ['#8fd0ff', '#ffffff'],
+        bodies: { classic: 'outfits/halter-sky-cotton-classic.png', slim: 'outfits/halter-sky-cotton-slim.png' },
+      },
+      {
+        id: 'halter-good-blue-cotton',
+        color: 'GOOD® BLUE/COTTON',
+        swatch: ['#0000ff', '#ffffff'],
+        bodies: { classic: 'outfits/halter-good-blue-cotton-classic.png', slim: 'outfits/halter-good-blue-cotton-slim.png' },
+      },
+      {
+        id: 'halter-neon-good-blue',
+        color: 'NEON/GOOD® BLUE',
+        swatch: ['#b5ff61', '#0000ff'],
+        bodies: { classic: 'outfits/halter-neon-good-blue-classic.png', slim: 'outfits/halter-neon-good-blue-slim.png' },
+      },
+      {
+        id: 'halter-black-chrome',
+        color: 'BLACK/CHROME',
+        swatch: ['#161616', '#c9ced6'],
+        bodies: { classic: 'outfits/halter-black-chrome-classic.png', slim: 'outfits/halter-black-chrome-slim.png' },
+      },
+    ],
+  },
+  {
+    // Strapless, boned, laced up the front in the second colour.
+    id: 'corset',
+    name: 'CORSET®',
+    cropped: true, // ends above the waist: no Tuck control
+    colors: [
+      {
+        id: 'corset-good-blue-cotton',
+        color: 'GOOD® BLUE/COTTON',
+        swatch: ['#0000ff', '#ffffff'],
+        bodies: { classic: 'outfits/corset-good-blue-cotton-classic.png', slim: 'outfits/corset-good-blue-cotton-slim.png' },
+      },
+      {
+        id: 'corset-black-chrome',
+        color: 'BLACK/CHROME',
+        swatch: ['#161616', '#c9ced6'],
+        bodies: { classic: 'outfits/corset-black-chrome-classic.png', slim: 'outfits/corset-black-chrome-slim.png' },
+      },
+      {
+        id: 'corset-oxblood-goldenrod',
+        color: 'OXBLOOD/GOLDENROD',
+        swatch: ['#713a40', '#e3a828'],
+        bodies: { classic: 'outfits/corset-oxblood-goldenrod-classic.png', slim: 'outfits/corset-oxblood-goldenrod-slim.png' },
+      },
+    ],
+  },
 ];
 
 // Pants: legs (both layers) plus anything on the torso that belongs to the
@@ -308,5 +413,17 @@ window.PANTS = [
     },
     boxers: true, // Boxer control: blue (as drawn) or red tartan (SkinLib.tartanBoxers)
     colors: washes('springsteen-sagging'),
+  },
+  {
+    // Pleated midi skirt: pleats on the outer layer of the legs, bare shins, shoes.
+    id: 'watermelons',
+    name: 'WATERMELONS®',
+    noTuck: true, // a skirt: tops always tuck in
+    shoes: {
+      tobacco: 'outfits/pants/watermelons-tomato-vine-tobacco.png',
+      black: 'outfits/pants/watermelons-tomato-vine-black.png',
+      sneak01: 'outfits/pants/watermelons-tomato-vine-sneak01.png',
+    },
+    colors: [{ id: 'watermelons-tomato-vine', color: 'TOMATO VINE', swatch: '#3f7a55' }],
   },
 ];
