@@ -21,7 +21,6 @@
   // GOOD® / BABY®: kinds shown under the current line ('both' shows under either).
   const inLine = (k) => k.line === 'both' || k.line === state.line;
   const lineShirts = () => SHIRTS.filter(inLine);
-  const linePants = () => PANTS.filter(inLine);
 
   const state = {
     user: null,          // ImageData of the head source
@@ -336,7 +335,7 @@
 
   async function drawPants() {
     $('pantsSection').hidden = false;
-    const pants = linePants();
+    const pants = PANTS; // every bottom shows under both lines
     const thumbs = await Promise.all(pants.map((k) => pantsThumb(k.current)));
     fillPants(pants.map(({ current: p }, i) => card(
       p.kind === state.pants.kind,
@@ -453,8 +452,8 @@
     setBody(state.body); // bodies can differ per sleeve; also redraws and renders
   };
 
-  // GOOD® / BABY® toggle: switching lines picks that line's first shirt (and its
-  // pants) unless the current pick is shown under both.
+  // GOOD® / BABY® toggle: switching lines picks that line's first shirt (unless
+  // the current one shows under both) and keeps the pants and shoe as they are.
   const drawLine = () => $('line').querySelectorAll('button').forEach((b) => b.setAttribute('aria-checked', b.dataset.line === state.line));
   drawLine();
   $('line').onclick = (e) => {
@@ -462,16 +461,20 @@
     if (!btn || btn.dataset.line === state.line) return;
     state.line = btn.dataset.line;
     drawLine();
-    if (!inLine(state.pants.kind)) state.pantsPicked = false;
-    if (inLine(state.outfit.kind)) { drawOutfits(); render(); } else selectOutfit(lineShirts()[0].current);
+    if (inLine(state.outfit.kind)) { drawOutfits(); render(); return; }
+    // The pants (and so the shoe) stay as they are: only the shirt changes.
+    const picked = state.pantsPicked;
+    state.pantsPicked = true;
+    selectOutfit(lineShirts()[0].current);
+    state.pantsPicked = picked;
   };
 
   function selectOutfit(o) {
     state.fadeNext = true;
     o.kind.current = o;
     state.outfit = o;
-    if (!state.pantsPicked || !inLine(state.pants.kind)) {
-      state.pants = ALL_PANTS.find((p) => p.id === o.pants) || linePants()[0].current;
+    if (!state.pantsPicked) {
+      state.pants = ALL_PANTS.find((p) => p.id === o.pants) || PANTS[0].current;
     }
     updateSleeveButtons();
     // (Preview-only is already shown on the download button; this line is for errors.)
