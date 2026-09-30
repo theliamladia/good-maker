@@ -177,6 +177,38 @@ window.OUTFITS = [
     ],
   },
   {
+    // All-over knit of the GOODIE® G: whole Gs only, zig-zagged on the body and
+    // spiralling round the sleeves so none touch.
+    id: 'gknit',
+    name: 'G-KNIT®',
+    colors: [
+      {
+        id: 'gknit-cream-good-blue',
+        color: 'CREAM/GOOD® BLUE',
+        swatch: ['#ece4d2', '#0000ff'],
+        long: { classic: 'outfits/gknit-cream-good-blue-long-classic.png', slim: 'outfits/gknit-cream-good-blue-long-slim.png' },
+      },
+      {
+        id: 'gknit-good-blue-cotton',
+        color: 'GOOD® BLUE/COTTON',
+        swatch: ['#0000ff', '#ffffff'],
+        long: { classic: 'outfits/gknit-good-blue-cotton-long-classic.png', slim: 'outfits/gknit-good-blue-cotton-long-slim.png' },
+      },
+      {
+        id: 'gknit-oxblood-goldenrod',
+        color: 'OXBLOOD/GOLDENROD',
+        swatch: ['#713a40', '#e3a828'],
+        long: { classic: 'outfits/gknit-oxblood-goldenrod-long-classic.png', slim: 'outfits/gknit-oxblood-goldenrod-long-slim.png' },
+      },
+      {
+        id: 'gknit-dust-pink-tomato-vine',
+        color: 'DUST PINK/TOMATO VINE',
+        swatch: ['#c98aa0', '#3f7a55'],
+        long: { classic: 'outfits/gknit-dust-pink-tomato-vine-long-classic.png', slim: 'outfits/gknit-dust-pink-tomato-vine-long-slim.png' },
+      },
+    ],
+  },
+  {
     id: 'collar',
     name: 'COLLAR®',
     colors: [
