@@ -119,6 +119,7 @@ ${masthead('<a href="/study.html">← STUDY®</a>')}
 </main>
 <footer class="st-foot">© 2026 GOOD® DESIGN. <a href="/study.html">More from STUDY®</a></footer>
 <script src="/js/study-comments.js"></script>
+<script src="/js/nav.js"></script>
 </body>
 </html>
 `;
@@ -151,6 +152,7 @@ ${masthead('<a href="/">← BACK</a>')}
   ${items}
 </main>
 <footer class="st-foot">© 2026 GOOD® DESIGN.</footer>
+<script src="/js/nav.js"></script>
 </body>
 </html>
 `;
