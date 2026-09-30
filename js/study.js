@@ -72,9 +72,9 @@ const STUDY = [
       { quote: 'You know it’s going to rip, and you’re willing to chance it because you love it so much.' },
       { pair: [
           { img: '/assets/study/model-bobayeet.png', alt: 'BobaYeet waving, one knee up, in a collared shirt and jorts.' },
-          { img: '/assets/study/model-isabelleblanco.png', alt: 'Isabelleblanco looking back over a shoulder in a pink hood and mid-wash jeans.' },
+          { img: '/assets/study/model-isabelleblanco.png', alt: 'Isabelleblanco in a pastel pink cardigan and indigo bootcut jeans.' },
         ],
-        caption: 'BobaYeet in COLLAR® COTTON/DENIM and the JORT® in SPRINGSTEEN™ with SNEAK01. Isabelleblanco in DOUBBIE® DUST PINK/TOMATO VINE and the JEAN® in ROADWORN™.' },
+        caption: 'BobaYeet in COLLAR® COTTON/DENIM and the JORT® in SPRINGSTEEN™ with SNEAK01. Isabelleblanco in CARDIE® STRAWBERRY MILK/TOMATO VINE and the JEAN® BOOTCUT in THE JEAN™.' },
 
       { q: 'Out of the twenty-wash study and the twelve rip experiments, which ones stuck with you?' },
       { p: 'Honestly, nothing so far. The only things available are the ones that stuck.' },
