@@ -257,6 +257,20 @@ window.OUTFITS = [
         long: { classic: 'outfits/cardie-marshmallow-long-classic.png', slim: 'outfits/cardie-marshmallow-long-slim.png' },
         pants: 'watermelons-tomato-vine',
       },
+      {
+        id: 'cardie-tweetie',
+        color: 'TWEETIE/TOMATO VINE',
+        swatch: ['#ffd92e', '#3f7a55'],
+        long: { classic: 'outfits/cardie-tweetie-long-classic.png', slim: 'outfits/cardie-tweetie-long-slim.png' },
+        pants: 'watermelons-tomato-vine',
+      },
+      {
+        id: 'cardie-sky',
+        color: 'SKY/TOMATO VINE',
+        swatch: ['#8fd0ff', '#3f7a55'],
+        long: { classic: 'outfits/cardie-sky-long-classic.png', slim: 'outfits/cardie-sky-long-slim.png' },
+        pants: 'watermelons-tomato-vine',
+      },
     ],
   },
   {

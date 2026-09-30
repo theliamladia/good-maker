@@ -452,8 +452,7 @@
     setBody(state.body); // bodies can differ per sleeve; also redraws and renders
   };
 
-  // GOOD® / BABY® toggle: switching lines picks that line's first shirt (unless
-  // the current one shows under both) and keeps the pants and shoe as they are.
+  // GOOD® / BABY® toggle: a filter for the shirt cards; it never changes the outfit.
   const drawLine = () => $('line').querySelectorAll('button').forEach((b) => b.setAttribute('aria-checked', b.dataset.line === state.line));
   drawLine();
   $('line').onclick = (e) => {
@@ -461,12 +460,9 @@
     if (!btn || btn.dataset.line === state.line) return;
     state.line = btn.dataset.line;
     drawLine();
-    if (inLine(state.outfit.kind)) { drawOutfits(); render(); return; }
-    // The pants (and so the shoe) stay as they are: only the shirt changes.
-    const picked = state.pantsPicked;
-    state.pantsPicked = true;
-    selectOutfit(lineShirts()[0].current);
-    state.pantsPicked = picked;
+    // Only the cards change: whatever is on (shirt, pants, shoe) stays on, so a
+    // BABY® top can be worn with pants picked under GOOD® and back again.
+    drawOutfits();
   };
 
   function selectOutfit(o) {
