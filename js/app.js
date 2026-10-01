@@ -202,7 +202,6 @@
   const fullName = (o) => (o.color ? `${o.name} ${o.color}` : o.name);
   // Cards show the name with the pictured colourway in small type underneath.
   const nameOnly = (o) => `<span class="outfit-name">${o.name}</span>`;
-  const label = (o) => `<span class="outfit-name">${o.name}</span>${o.color ? `<span class="outfit-color">${o.color}</span>` : ''}`;
 
   // Three-up carousel of cards with side buttons (used for shirts and pants).
   function carousel(listEl, prevBtn, nextBtn) {
@@ -324,8 +323,8 @@
       c.runway
         ? `<div class="runway-thumb" aria-hidden="true"></div>${nameOnly(o)}`
         : c.locked
-          ? `<div class="locked-thumb" aria-hidden="true"></div>${label(c)}`
-          : `<img class="ghost-thumb" src="${thumbs[i]}" alt="">${label(c)}`,
+          ? `<div class="locked-thumb" aria-hidden="true"></div>${nameOnly(c)}`
+          : `<img class="ghost-thumb" src="${thumbs[i]}" alt="">${nameOnly(c)}`,
       // RUNWAY® isn't a shirt: it opens the password prompt (js/runway.js).
       () => (o.runway ? window.GoodRunway && window.GoodRunway.open() : selectOutfit(o))
     ); }));
@@ -339,7 +338,7 @@
     const thumbs = await Promise.all(pants.map((k) => pantsThumb(k.current)));
     fillPants(pants.map(({ current: p }, i) => card(
       p.kind === state.pants.kind,
-      `<img class="pants-thumb" src="${thumbs[i]}" alt="">${label(p)}`,
+      `<img class="pants-thumb" src="${thumbs[i]}" alt="">${nameOnly(p)}`,
       () => pickPants(p)
     )));
     drawColors($('pantsColors'), state.pants, pickPants);
@@ -391,20 +390,17 @@
   // a pill with its colourway name. Buttons are reused while the kind stays
   // the same, so the move (FLIP) and the expand can animate.
   function drawColors(el, selected, onPick) {
+    // One row: a dot per colour (in catalogue order), then the picked colourway's
+    // name. A kind with one colour shows just its name (nothing to choose).
     const colors = selected.kind.colors;
-    el.hidden = colors.length < 2;
-    const sameKind = el._kind === selected.kind;
-    el._kind = selected.kind;
-    const before = new Map([...el.querySelectorAll('.swatch-btn')].map((b) => [b._color, b.getBoundingClientRect()]));
-    const buttons = new Map(sameKind ? [...el.querySelectorAll('.swatch-btn')].map((b) => [b._color, b]) : []);
-
-    // The picked colour sits on its own row, above the other dots.
-    const order = [selected, ...colors.filter((c) => c !== selected)];
-    const brk = el.querySelector('.sw-break') || Object.assign(document.createElement('span'), { className: 'sw-break' });
-    el.replaceChildren(...order.map((c) => {
-      let b = buttons.get(c);
-      if (!b) {
-        b = document.createElement('button');
+    el.hidden = false;
+    if (el._kind !== selected.kind) {
+      el._kind = selected.kind;
+      const dots = document.createElement('div');
+      dots.className = 'sw-dots';
+      dots.hidden = colors.length < 2;
+      for (const c of colors) {
+        const b = document.createElement('button');
         b.type = 'button';
         b.className = 'swatch-btn';
         b._color = c;
@@ -412,28 +408,19 @@
         const sw = Array.isArray(c.swatch)
           ? `linear-gradient(90deg, ${c.swatch[0]} 50%, ${c.swatch[1]} 50%)`
           : c.swatch || '#ccc';
-        b.innerHTML = `<span class="dot" style="background:${sw}"></span><span class="sw-name">${c.color}</span>`;
+        b.innerHTML = `<span class="dot" style="background:${sw}"></span>`;
         b.setAttribute('aria-label', c.color);
         b.title = c.color;
         b.onclick = () => onPick(c);
+        dots.appendChild(b);
       }
-      b.setAttribute('aria-pressed', c === selected);
-      return b;
-    }));
-    el.firstChild.after(brk);
-
-    // FLIP: slide each dot from where it was to where it is now.
-    if (!sameKind || matchMedia('(prefers-reduced-motion: reduce)').matches) return;
-    for (const b of el.querySelectorAll('.swatch-btn')) {
-      const was = before.get(b._color);
-      if (!was) continue;
-      const now = b.getBoundingClientRect();
-      const dx = was.left - now.left, dy = was.top - now.top;
-      if (dx || dy) {
-        b.animate([{ transform: `translate(${dx}px, ${dy}px)` }, { transform: 'none' }],
-          { duration: 420, easing: 'cubic-bezier(0.16, 1, 0.3, 1)' });
-      }
+      const name = document.createElement('span');
+      name.className = 'sw-label';
+      name.setAttribute('aria-live', 'polite');
+      el.replaceChildren(dots, name);
     }
+    for (const b of el.querySelectorAll('.swatch-btn')) b.setAttribute('aria-pressed', b._color === selected);
+    el.querySelector('.sw-label').textContent = selected.color || '';
   }
 
   // ---------- Sleeve ----------

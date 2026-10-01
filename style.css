@@ -274,25 +274,23 @@ body {
 .segmented.small { padding: 3px; gap: 3px; border-radius: 10px; }
 .segmented.small button { padding: 6px 4px; font-size: 0.78rem; border-radius: 7px; }
 
-/* Colour picker under the Shirt / Pants cards */
-.swatches { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 10px; }
+/* Colour picker under the Shirt / Pants cards: dots, then the picked colourway's name */
+.swatches { display: flex; align-items: center; gap: 12px; margin-top: 12px; min-height: 28px; }
 .swatches[hidden] { display: none; }
-.swatches .sw-break { flex-basis: 100%; height: 0; }
-.swatch-btn {
-  display: inline-flex; align-items: center; padding: 5px;
-  border: 1px solid rgba(11, 21, 38, 0.14); border-radius: 999px; background: rgba(255, 255, 255, 0.7);
-  font: 400 0.72rem 'Inter', sans-serif; font-variant-caps: all-small-caps; letter-spacing: 0.04em;
-  color: var(--ink); cursor: pointer; transition: padding 0.35s cubic-bezier(0.16, 1, 0.3, 1), background 0.2s;
+.sw-dots { display: flex; flex-wrap: wrap; gap: 4px; }
+.sw-dots[hidden] { display: none; }
+.swatch-btn { display: grid; place-items: center; width: 28px; height: 28px; padding: 0; border: 0; border-radius: 50%; background: none; cursor: pointer; }
+.swatch-btn .dot {
+  width: 18px; height: 18px; border-radius: 50%; box-shadow: inset 0 0 0 1px rgba(11, 21, 38, 0.22);
+  transition: transform 0.2s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.2s;
 }
-.swatch-btn .dot { flex: none; width: 14px; height: 14px; border-radius: 50%; box-shadow: inset 0 0 0 1px rgba(11, 21, 38, 0.25); }
-/* Name hidden on dots; the picked colour expands to show it */
-.swatch-btn .sw-name {
-  max-width: 0; opacity: 0; overflow: hidden; white-space: nowrap; margin-left: 0;
-  transition: max-width 0.45s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.25s, margin-left 0.35s;
+.swatch-btn:hover .dot { transform: scale(1.12); }
+.swatch-btn[aria-pressed="true"] .dot { box-shadow: inset 0 0 0 1px rgba(11, 21, 38, 0.22), 0 0 0 2px #fff, 0 0 0 4px var(--blue); }
+.sw-label {
+  font-family: 'Space Mono', monospace; font-size: 0.66rem; letter-spacing: 0.12em; color: var(--ink);
+  line-height: 1.3; min-width: 0;
 }
-.swatch-btn[aria-pressed="true"] { padding: 5px 11px 5px 6px; border-color: var(--blue); background: #fff; box-shadow: 0 0 0 1px var(--blue); }
-.swatch-btn[aria-pressed="true"] .sw-name { max-width: 220px; opacity: 1; margin-left: 6px; transition-delay: 0.08s; }
-.swatch-btn:hover:not([aria-pressed="true"]) { background: #fff; }
+.sw-dots:not([hidden]) + .sw-label { padding-left: 12px; border-left: 1px solid rgba(11, 21, 38, 0.18); }
 
 .outfit .runway-thumb { width: 100%; aspect-ratio: 1; margin-bottom: 4px; border-radius: 8px; background: #0000ff; }
 
