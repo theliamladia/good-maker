@@ -230,6 +230,132 @@ window.OUTFITS = [
     ],
   },
   {
+    // Workwear jacket over a COTTON tee: open collar, patch pockets, G stitched on the chest and back in the button colour.
+    id: 'chore',
+    name: 'CHORE COAT®',
+    colors: [
+      {
+        id: 'chore-duck-canvas',
+        color: 'DUCK CANVAS',
+        swatch: '#b98f55',
+        long: { classic: 'outfits/chore-duck-canvas-long-classic.png', slim: 'outfits/chore-duck-canvas-long-slim.png' },
+      },
+      {
+        id: 'chore-black-rinse',
+        color: 'BLACK RINSE',
+        swatch: '#26272d',
+        long: { classic: 'outfits/chore-black-rinse-long-classic.png', slim: 'outfits/chore-black-rinse-long-slim.png' },
+      },
+      {
+        id: 'chore-ecru-twill',
+        color: 'ECRU TWILL',
+        swatch: '#ddd2b8',
+        long: { classic: 'outfits/chore-ecru-twill-long-classic.png', slim: 'outfits/chore-ecru-twill-long-slim.png' },
+      },
+      {
+        id: 'chore-fern',
+        color: 'FERN',
+        swatch: '#4f6b45',
+        long: { classic: 'outfits/chore-fern-long-classic.png', slim: 'outfits/chore-fern-long-slim.png' },
+      },
+    ],
+  },
+  {
+    // Neon rain slicker, smooth and glossy, hood up (hat: true), G on the right sleeve and the back.
+    id: 'slicker',
+    name: 'SLICKER®',
+    hat: true,
+    colors: [
+      {
+        id: 'slicker-volt',
+        color: 'VOLT',
+        swatch: '#c8ff2e',
+        long: { classic: 'outfits/slicker-volt-long-classic.png', slim: 'outfits/slicker-volt-long-slim.png' },
+      },
+      {
+        id: 'slicker-hot-flamingo',
+        color: 'HOT FLAMINGO',
+        swatch: '#ff4fb3',
+        long: { classic: 'outfits/slicker-hot-flamingo-long-classic.png', slim: 'outfits/slicker-hot-flamingo-long-slim.png' },
+      },
+      {
+        id: 'slicker-electric-tangerine',
+        color: 'ELECTRIC TANGERINE',
+        swatch: '#ff7a1a',
+        long: { classic: 'outfits/slicker-electric-tangerine-long-classic.png', slim: 'outfits/slicker-electric-tangerine-long-slim.png' },
+      },
+      {
+        id: 'slicker-ultraviolet',
+        color: 'ULTRAVIOLET',
+        swatch: '#8a3dff',
+        long: { classic: 'outfits/slicker-ultraviolet-long-classic.png', slim: 'outfits/slicker-ultraviolet-long-slim.png' },
+      },
+    ],
+  },
+  {
+    // Zip pile fleece: contrast zip, collar, chest pocket, hem and cuffs; G on the right sleeve.
+    id: 'fleece',
+    name: 'FLEECE®',
+    colors: [
+      {
+        id: 'fleece-oatmilk-cocoa',
+        color: 'OATMILK/COCOA',
+        swatch: ['#e7dcc8', '#5a3a2a'],
+        long: { classic: 'outfits/fleece-oatmilk-cocoa-long-classic.png', slim: 'outfits/fleece-oatmilk-cocoa-long-slim.png' },
+      },
+      {
+        id: 'fleece-pebble-terracotta',
+        color: 'PEBBLE/TERRACOTTA',
+        swatch: ['#a9a59c', '#c7623f'],
+        long: { classic: 'outfits/fleece-pebble-terracotta-long-classic.png', slim: 'outfits/fleece-pebble-terracotta-long-slim.png' },
+      },
+      {
+        id: 'fleece-sage-forest',
+        color: 'SAGE/FOREST',
+        swatch: ['#a7b59a', '#2f4a33'],
+        long: { classic: 'outfits/fleece-sage-forest-long-classic.png', slim: 'outfits/fleece-sage-forest-long-slim.png' },
+      },
+      {
+        id: 'fleece-berry-peony',
+        color: 'BERRY/PEONY',
+        swatch: ['#8a2a4b', '#f2a7c0'],
+        long: { classic: 'outfits/fleece-berry-peony-long-classic.png', slim: 'outfits/fleece-berry-peony-long-slim.png' },
+      },
+    ],
+  },
+  {
+    // Quilted puffer cut at the ribs over a COTTON tee; GOOD® BLUE G on the chest.
+    id: 'puffer-cropped',
+    name: 'CROPPED PUFFER®',
+    line: 'baby',
+    colors: [
+      {
+        id: 'puffer-cropped-matcha',
+        color: 'MATCHA/GOOD® BLUE',
+        swatch: ['#9bb77a', '#0000ff'],
+        long: { classic: 'outfits/puffer-cropped-matcha-long-classic.png', slim: 'outfits/puffer-cropped-matcha-long-slim.png' },
+      },
+      {
+        id: 'puffer-cropped-lilac-haze',
+        color: 'LILAC HAZE/GOOD® BLUE',
+        swatch: ['#b9a3d9', '#0000ff'],
+        long: { classic: 'outfits/puffer-cropped-lilac-haze-long-classic.png', slim: 'outfits/puffer-cropped-lilac-haze-long-slim.png' },
+      },
+      {
+        id: 'puffer-cropped-butterscotch',
+        color: 'BUTTERSCOTCH/GOOD® BLUE',
+        swatch: ['#e0a24a', '#0000ff'],
+        long: { classic: 'outfits/puffer-cropped-butterscotch-long-classic.png', slim: 'outfits/puffer-cropped-butterscotch-long-slim.png' },
+      },
+      {
+        id: 'puffer-cropped-glacier',
+        color: 'GLACIER/GOOD® BLUE',
+        swatch: ['#bcd9e6', '#0000ff'],
+        long: { classic: 'outfits/puffer-cropped-glacier-long-classic.png', slim: 'outfits/puffer-cropped-glacier-long-slim.png' },
+      },
+    ],
+  },
+  {
     // Cropped cardigan, pearl buttons, a G knitted into the outside of the left sleeve.
     id: 'cardie',
     line: 'baby',
