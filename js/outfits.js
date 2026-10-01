@@ -558,7 +558,7 @@ window.PANTS = [
     id: 'pltswt',
     name: 'PLTSWT®',
     shoes: { sneak01: 'outfits/pants/pltswt-heather-grey.png' },
-    colors: [{ id: 'pltswt-heather-grey', color: 'HEATHER GREY', swatch: '#9a9ca3' }],
+    colors: [{ id: 'pltswt-heather-grey', color: 'FLECK', swatch: '#9a9ca3' }],
   },
   {
     // Shoes: TOBACCO (the only pair, so no Shoe control).

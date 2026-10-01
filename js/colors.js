@@ -55,7 +55,7 @@ window.GOOD_COLORS = [
   { name: 'THE JEAN', hex: '#3d5886', where: 'JEAN® wash', desc: 'Sort of the middle, but not quite. Casual? Preppy? Dressed up or down? The answer is yes.' },
   { name: 'PATENT', hex: '#283b62', where: 'JEAN® wash', desc: 'The color of selvedge denim just starting to wear in: almost broken in, still holding its original sheen. Do not wash with other clothes.' },
   { name: 'SELVEDGE', hex: '#161d3a', where: 'JEAN® wash', desc: 'Hot off the loom and made with care. The color of a brand-new pair: deep, luxurious, glossy, and full of shape.' },
-  { name: 'HEATHER GREY', hex: '#9a9ca3', where: 'PLTSWT® HEATHER GREY', desc: 'The grey of a well-loved sweatshirt: flecked, soft, and quietly expensive. Made for PLTSWT®, where comfort gets a pressed pleat and a little ambition.' },
+  { name: 'FLECK', hex: '#9a9ca3', where: 'PLTSWT® FLECK', desc: 'The colour of a well-loved sweatshirt: flecked, soft, and quietly expensive. Made for PLTSWT®, where comfort gets a pressed pleat and a little ambition.' },
   { name: 'SIDEWALK', hex: '#56565a', where: 'MOSAIC® SIDEWALK/CHROME', desc: 'A mineral, matter-of-fact grey, the concrete under the MOSAIC®. Neutral enough to disappear, confident enough not to.' },
   { name: 'TOBACCO', hex: '#b57a36', where: 'Shoe: JEAN®, JEAN® BOOTCUT, JORT®, JEAN® SAGGING, MOSAIC®, WATERMELONS®', desc: 'Warm, oiled leather after years of good walks. A brown with a story, spelled out in scuffs, creases and patina.' },
   { name: 'MAHOGANY', hex: '#5a1e14', where: 'Shoe: JEAN®, JEAN® BOOTCUT, JORT®, WATERMELONS®', desc: 'A deep, polished brown with a little red in its blood. The shoe you wear when you mean it.' },
