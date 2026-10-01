@@ -171,7 +171,6 @@ window.OUTFITS = [
         color: "I'M SOWWY",
         swatch: ['#f7cac9', '#92a8d1'],
         locked: true,
-        notice: { tag: 'ARCHIVE', title: 'ARCHIVE ONLY - THIS HOODIE IS NO LONGER FOR SALE' },
         long: {
           classic: 'api/outfit?id=goodie-im-sowwy-classic',
           slim: 'api/outfit?id=goodie-im-sowwy-slim',
