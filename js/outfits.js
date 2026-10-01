@@ -156,8 +156,8 @@ window.OUTFITS = [
       {
         // Preview only: served scrambled by /api/outfit from environment variables.
         id: 'goodie-black-chrome',
-        color: 'BLACK/CHROME',
-        swatch: ['#161616', '#c9ced6'],
+        color: 'AFTER HOURS/CHROME',
+        swatch: ['#14141b', '#c9ced6'],
         locked: true,
         long: {
           classic: 'api/outfit?id=goodie-black-chrome-classic',
@@ -241,7 +241,7 @@ window.OUTFITS = [
       },
       {
         id: 'chore-black-rinse',
-        color: 'BLACK RINSE/GOLDENROD',
+        color: 'INKWELL/GOLDENROD',
         swatch: ['#26272d', '#e3a828'],
         long: { classic: 'outfits/chore-black-rinse-long-classic.png', slim: 'outfits/chore-black-rinse-long-slim.png' },
       },
@@ -267,20 +267,20 @@ window.OUTFITS = [
     colors: [
       {
         id: 'slicker-volt',
-        color: 'VOLT/BLACK',
-        swatch: ['#c8ff2e', '#161616'],
+        color: 'VOLT/AFTER HOURS',
+        swatch: ['#c8ff2e', '#14141b'],
         long: { classic: 'outfits/slicker-volt-long-classic.png', slim: 'outfits/slicker-volt-long-slim.png' },
       },
       {
         id: 'slicker-hot-flamingo',
-        color: 'HOT FLAMINGO/BLACK',
-        swatch: ['#ff4fb3', '#161616'],
+        color: 'HOT FLAMINGO/AFTER HOURS',
+        swatch: ['#ff4fb3', '#14141b'],
         long: { classic: 'outfits/slicker-hot-flamingo-long-classic.png', slim: 'outfits/slicker-hot-flamingo-long-slim.png' },
       },
       {
         id: 'slicker-electric-tangerine',
-        color: 'ELECTRIC TANGERINE/BLACK',
-        swatch: ['#ff7a1a', '#161616'],
+        color: 'ELECTRIC TANGERINE/AFTER HOURS',
+        swatch: ['#ff7a1a', '#14141b'],
         long: { classic: 'outfits/slicker-electric-tangerine-long-classic.png', slim: 'outfits/slicker-electric-tangerine-long-slim.png' },
       },
       {
@@ -462,8 +462,8 @@ window.OUTFITS = [
       },
       {
         id: 'halter-black-chrome',
-        color: 'BLACK/CHROME',
-        swatch: ['#161616', '#c9ced6'],
+        color: 'AFTER HOURS/CHROME',
+        swatch: ['#14141b', '#c9ced6'],
         bodies: { classic: 'outfits/halter-black-chrome-classic.png', slim: 'outfits/halter-black-chrome-slim.png' },
       },
     ],
@@ -483,8 +483,8 @@ window.OUTFITS = [
       },
       {
         id: 'corset-black-chrome',
-        color: 'BLACK/CHROME',
-        swatch: ['#161616', '#c9ced6'],
+        color: 'AFTER HOURS/CHROME',
+        swatch: ['#14141b', '#c9ced6'],
         bodies: { classic: 'outfits/corset-black-chrome-classic.png', slim: 'outfits/corset-black-chrome-slim.png' },
       },
       {
@@ -565,7 +565,7 @@ window.PANTS = [
     // Shoes: TOBACCO (the only pair, so no Shoe control).
     id: 'mosaic',
     name: 'MOSAIC®',
-    colors: [{ id: 'mosaic-gray-chrome', color: 'GRAY/CHROME', swatch: ['#56565a', '#ffffff'], src: 'outfits/pants/mosaic-gray-chrome.png' }],
+    colors: [{ id: 'mosaic-gray-chrome', color: 'SIDEWALK/CHROME', swatch: ['#56565a', '#c9ced6'], src: 'outfits/pants/mosaic-gray-chrome.png' }],
   },
   {
     id: 'springsteen-sagging',

@@ -101,7 +101,7 @@ const STUDY = [
       { q: 'Where does the JEAN® go next?' },
       { p: 'Exactly where it is, with a lot more shades, and maybe a lot more cuts. But we’ll never lose the heart of what we made here.' },
       { gallery: [
-          { img: '/assets/study/stylized-mosaic.png', label: 'MOSAIC®', sub: 'GRAY/CHROME, on the site' },
+          { img: '/assets/study/stylized-mosaic.png', label: 'MOSAIC®', sub: 'SIDEWALK/CHROME, on the site' },
           { img: '/assets/study/stylized-runway-look-1.png', label: 'LOOK 1®', sub: 'RUNWAY®' },
           { img: '/assets/study/stylized-runway-look-2.png', label: 'LOOK 2®', sub: 'RUNWAY®' },
           { img: '/assets/study/stylized-runway-look-3.png', label: 'LOOK 3®', sub: 'RUNWAY®' },
