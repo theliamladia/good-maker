@@ -780,7 +780,7 @@
     flat.getContext('2d').putImageData(new ImageData(merged.data, 64, 64), 0, 0);
     state.resultUrl = flat.toDataURL('image/png');
     dl.disabled = state.isDemo;
-    dl.firstChild.textContent = 'GOOD ME® ';
+    dl.firstChild.textContent = 'GOOD® ME ';
     dl.title = state.isDemo ? 'Upload your skin first' : '';
     showSkin(merged.data, slim);
   }

@@ -1,7 +1,7 @@
 // DEEP END®: the underwater drop. A pineapple floats in the corner; clicking
 // it sends bubbles up the screen, the page sinks underwater, and the looks
 // appear on the player's own skin (from the main page, or any Minecraft
-// username typed in), each with a GOOD ME® download.
+// username typed in), each with a GOOD® ME download.
 (() => {
   const EASE_OUT = 'cubic-bezier(0.16, 1, 0.3, 1)';
   // top = shirt file per body; pants = pants file; holes = GOODIE® (base layer
@@ -158,7 +158,7 @@
         <div class="dp-view"></div>
         <div class="dp-name">${look.name}</div>
         <div class="dp-color mono">${look.color}<br>${look.pants}</div>
-        <button type="button" class="dp-get">GOOD ME®</button>`;
+        <button type="button" class="dp-get">GOOD® ME</button>`;
       row.appendChild(col);
       col.animate([{ transform: 'translateY(80px)', opacity: 0 }, { transform: 'none', opacity: 1 }],
         { duration: 1000, delay: 150 + i * 140, easing: EASE_OUT, fill: 'backwards' });
