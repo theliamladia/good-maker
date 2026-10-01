@@ -167,7 +167,7 @@
     stage.querySelector('.dp-head').animate([{ opacity: 0, transform: 'translateY(-16px)' }, { opacity: 1, transform: 'none' }],
       { duration: 700, delay: 200, easing: EASE_OUT, fill: 'backwards' });
 
-    let name = cur.isDemo ? 'GOOD' : (cur.name || 'GOOD');
+    let name = cur.isDemo ? '' : (cur.name || ''); // download: <name>GOOD.png
     const show = async (skin) => {
       const slim = SkinLib.detectSlim(skin);
       const tone = SkinLib.sampleSkinTone(skin);

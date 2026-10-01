@@ -65,8 +65,10 @@ module.exports = async function handler(req, res) {
 
     const ip = String(req.headers['x-forwarded-for'] || '').split(',')[0].trim() || 'unknown';
     const rl = `study:rl:${crypto.createHash('sha256').update(ip).digest('hex').slice(0, 24)}`;
+    // Create the counter with its expiry first (NX), so a failed call can never
+    // leave a counter without a TTL.
+    await redis('SET', rl, 0, 'EX', 60, 'NX');
     const n = await redis('INCR', rl);
-    if (n === 1) await redis('EXPIRE', rl, 60);
     if (n > 3) { res.status(429).json({ error: 'slow_down' }); return; }
 
     const comment = { name, text, at: new Date().toISOString() };

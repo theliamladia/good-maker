@@ -23,6 +23,7 @@
   <meta name="twitter:title" content="GOOD® DESIGN">
   <meta name="twitter:description" content="Put your Minecraft skin in a GOOD® fit. Free Minecraft skin outfitter: GOODIE®, G-KNIT®, JEAN® and more, in Classic and Slim.">
   <meta name="twitter:image" content="https://good-maker.vercel.app/assets/og-site.png">
+  <meta name="twitter:image:alt" content="Seven Minecraft players posing in GOOD® outfits and jeans.">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
@@ -93,7 +94,7 @@
 
     <div class="section-tag mono">Nº003 / SKIN TONE</div>
     <div class="tone">
-      <label class="swatch" title="Pick a colour"><input type="color" id="tone" value="#e0ac8c"><span id="swatch"></span></label>
+      <label class="swatch" title="Pick a colour"><input type="color" id="tone" value="#e0ac8c" aria-label="Skin tone"><span id="swatch"></span></label>
       <button type="button" class="chip mono" id="auto">AUTO</button>
     </div>
     <div class="ramp" id="ramp" title="Shading built from your tone"></div>
@@ -155,12 +156,6 @@
 
   <!-- Center: the model -->
   <section class="viewer-wrap">
-    <aside class="drop-card" id="dropCard" hidden aria-live="polite">
-      <button type="button" class="drop-close" id="dropClose" aria-label="Close">✕</button>
-      <div class="section-tag mono" id="dropTag"></div>
-      <p class="drop-title" id="dropTitle"></p>
-      <div class="drop-free mono" id="dropFree"></div>
-    </aside>
     <div id="view3d"><div class="lean-cloud" id="leanCloud" aria-hidden="true"><div class="lean-cloud-body" id="leanCloudBody"><span class="lean-shadow"></span></div></div></div>
     <div class="viewer-bar mono">
       <button type="button" class="chip" id="rotate" aria-pressed="false">↻ SPIN</button>
@@ -218,17 +213,17 @@
       <div id="shoeSection">
         <div class="section-tag mono">Nº010 / SHOE</div>
         <div class="segmented small" id="shoe" role="radiogroup" aria-label="Shoe colour">
-          <button type="button" data-shoe="black" role="radio">Tuxedo</button>
-          <button type="button" data-shoe="brown" role="radio">Mahogany</button>
-          <button type="button" data-shoe="tobacco" role="radio">Tobacco</button>
+          <button type="button" data-shoe="black" role="radio">TUXEDO™</button>
+          <button type="button" data-shoe="brown" role="radio">MAHOGANY™</button>
+          <button type="button" data-shoe="tobacco" role="radio">TOBACCO™</button>
           <button type="button" data-shoe="sneak01" role="radio">SNEAK01</button>
         </div>
       </div>
       <div id="boxerSection" hidden>
-        <div class="section-tag mono">Nº010 / BOXER</div>
+        <div class="section-tag mono">Nº011 / BOXER</div>
         <div class="segmented small" id="boxer" role="radiogroup" aria-label="Boxer">
-          <button type="button" data-boxer="blue" role="radio">GOOD® BLUE</button>
-          <button type="button" data-boxer="tartan" role="radio">Highland</button>
+          <button type="button" data-boxer="blue" role="radio">POOLSIDE™</button>
+          <button type="button" data-boxer="tartan" role="radio">HIGHLAND™</button>
         </div>
       </div>
     </div>

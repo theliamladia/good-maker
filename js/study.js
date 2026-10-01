@@ -7,6 +7,7 @@
 //
 // Blocks in body:
 //   { p }                    a paragraph (HTML); the first one gets the drop cap
+//   { note }                 a small italic note (e.g. "edited and condensed")
 //   { q }                    an interview question
 //   { quote }                a pull quote
 //   { fig, alt, caption }    a full-width figure
@@ -47,8 +48,8 @@ const STUDY = [
       { quote: 'You did it all in this pair of jeans.' },
       { p: 'We always thought jeans told a story, and this is the story we wanted to tell.' },
       { pair: [
-          { img: '/assets/study/model-dajiggler.png', alt: 'DaJiggler mid-stride in a white tee and light jeans.' },
-          { img: '/assets/study/model-leeeeems.png', alt: 'Leeeeems in a G-KNIT® sweater and dark bootcut jeans.' },
+          { img: '/assets/study/model-dajiggler.png', alt: 'DaJiggler mid-stride in SHIRT® COTTON/DENIM and the JEAN® in SPRINGSTEEN™.' },
+          { img: '/assets/study/model-leeeeems.png', alt: 'Leeeeems in G-KNIT® VANILLA BEAN/GOOD® BLUE and the JEAN® BOOTCUT in PATENT™.' },
         ],
         caption: 'DaJiggler in SHIRT® COTTON/DENIM and the JEAN® in SPRINGSTEEN™. Leeeeems in G-KNIT® VANILLA BEAN/GOOD® BLUE and the JEAN® BOOTCUT in PATENT™.' },
 
@@ -72,7 +73,7 @@ const STUDY = [
       { quote: 'You know it’s going to rip, and you’re willing to chance it because you love it so much.' },
       { pair: [
           { img: '/assets/study/model-bobayeet.png', alt: 'BobaYeet waving, one knee up, in a collared shirt and jorts.' },
-          { img: '/assets/study/model-isabelleblanco.png', alt: 'Isabelleblanco in a pastel pink cardigan and indigo bootcut jeans.' },
+          { img: '/assets/study/model-isabelleblanco.png', alt: 'Isabelleblanco in CARDIE® STRAWBERRY MILK/TOMATO VINE and the JEAN® BOOTCUT in THE JEAN™.' },
         ],
         caption: 'BobaYeet in COLLAR® COTTON/DENIM and the JORT® in SPRINGSTEEN™ with SNEAK01. Isabelleblanco in CARDIE® STRAWBERRY MILK/TOMATO VINE and the JEAN® BOOTCUT in THE JEAN™.' },
 
@@ -87,7 +88,7 @@ const STUDY = [
       { p: 'When we make a silhouette, we want it to be universal: for anyone, in 1990, 2023, 2033 or 2043. Fast fashion comes and goes, and trends come and go, but you can always come back to GOOD® and feel like you’re home again.' },
       { quote: 'You can always come back to GOOD® and feel like you’re home again.' },
       { pair: [
-          { img: '/assets/study/model-lindseyyhazel.png', alt: 'LindseyyHazel, hand out, in a sky-blue baby tee and light bootcut jeans.' },
+          { img: '/assets/study/model-lindseyyhazel.png', alt: 'LindseyyHazel, hand out, in BABY TEE® SKY/COTTON and the JEAN® BOOTCUT in FAVORITE JEANS™.' },
           { img: '/assets/study/model-chinny.png', alt: 'Chinny in a GOOD® BLUE GOODIE® and sagging jeans.' },
           { img: '/assets/study/model-austin1333.png', alt: 'Austin1333 sitting in a GOOD® BLUE CROPPIE® and dark jeans.' },
         ],

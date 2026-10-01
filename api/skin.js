@@ -35,7 +35,13 @@ module.exports = async function handler(req, res) {
       return;
     }
 
-    const png = await fetch(skin.url.replace(/^http:/, 'https:'));
+    // Only fetch textures from Mojang's texture server.
+    const texUrl = new URL(skin.url.replace(/^http:/, 'https:'));
+    if (texUrl.hostname !== 'textures.minecraft.net') {
+      res.status(502).json({ error: 'upstream' });
+      return;
+    }
+    const png = await fetch(texUrl);
     if (!png.ok) throw new Error(`texture -> ${png.status}`);
     const body = Buffer.from(await png.arrayBuffer());
 
@@ -46,6 +52,6 @@ module.exports = async function handler(req, res) {
     res.setHeader('Cache-Control', 'public, max-age=60, s-maxage=300');
     res.status(200).send(body);
   } catch (err) {
-    res.status(502).json({ error: 'upstream', detail: String(err.message || err) });
+    res.status(502).json({ error: 'upstream' });
   }
 };

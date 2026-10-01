@@ -3,13 +3,13 @@
   const DEMO_SKIN = 'samples/spurdo.png';
 
   // Catalogue: each kind is a card; its colours are the actual variants.
-  // A variant carries its kind's name and flags (locked, notice) plus its own
+  // A variant carries its kind's name and flags (locked, hat, ...) plus its own
   // colour, files and swatch. kind.current = the colour last picked for it.
   function catalogue(kinds) {
     return kinds.map((k) => {
       const kind = { id: k.id, name: k.name, line: k.line || 'good' };
       kind.colors = (k.colors || [k]).map((c) => ({
-        locked: k.locked, notice: k.notice, baseUnderHoles: k.baseUnderHoles, hat: k.hat, shoes: k.shoes, boxers: k.boxers, src: k.src, cropped: k.cropped, noTuck: k.noTuck, ...c, name: k.name, kind,
+        locked: k.locked, baseUnderHoles: k.baseUnderHoles, hat: k.hat, shoes: k.shoes, boxers: k.boxers, src: k.src, cropped: k.cropped, noTuck: k.noTuck, ...c, name: k.name, kind,
       }));
       kind.current = kind.colors[0];
       return kind;
@@ -32,8 +32,8 @@
     pants: PANTS[0].current,
     pantsPicked: false,  // once the user picks pants, shirts stop changing them
     shoe: 'black',       // pants with shoes: key of their shoes files
-    boxer: 'blue',
-    tucked: true,        // shirt tucked in (pants waistband shows) or hanging over it       // pants with boxers: 'blue' (as drawn) | 'tartan'
+    boxer: 'blue',       // pants with boxers: 'blue' (POOLSIDE™, as drawn) | 'tartan' (HIGHLAND™)
+    tucked: true,        // shirt tucked in (pants waistband shows) or hanging over it
     hair: 0,             // torso rows of the user's hair to keep (0 = off)
     hairGuess: 0,        // detected length, applied when the Slim body is chosen
     headwear: 'keep',    // 'keep' | 'auto' (remove hoods) | 'none' (no hat layer)
@@ -313,20 +313,17 @@
     const shirts = lineShirts();
     const thumbs = await Promise.all(shirts.map((k) => {
       const o = cover(k);
-      if (o.locked || o.runway) return null;
+      if (o.locked) return null;
       const body = setFor(o)[state.body] ? state.body : bodiesOf(o)[0];
       return shirtThumb(setFor(o)[body], body === 'slim');
     }));
     if (id !== drawId) return; // a newer redraw started
     fillShirts(shirts.map((k, i) => { const o = k.current, c = cover(k); return card(
       o.kind === state.outfit.kind,
-      c.runway
-        ? `<div class="runway-thumb" aria-hidden="true"></div>${nameOnly(o)}`
-        : c.locked
-          ? `<div class="locked-thumb" aria-hidden="true"></div>${nameOnly(c)}`
-          : `<img class="ghost-thumb" src="${thumbs[i]}" alt="">${nameOnly(c)}`,
-      // RUNWAY® isn't a shirt: it opens the password prompt (js/runway.js).
-      () => (o.runway ? window.GoodRunway && window.GoodRunway.open() : selectOutfit(o))
+      c.locked
+        ? `<div class="locked-thumb" aria-hidden="true"></div>${nameOnly(c)}`
+        : `<img class="ghost-thumb" src="${thumbs[i]}" alt="">${nameOnly(c)}`,
+      () => selectOutfit(o)
     ); }));
     drawColors($('shirtColors'), state.outfit, (c) => selectOutfit(c));
     drawPants();
@@ -385,10 +382,7 @@
     render();
   }
 
-  // Colour picker for the selected kind (hidden when it only comes in one).
-  // Colours show as dots; the picked one moves to the front and expands into
-  // a pill with its colourway name. Buttons are reused while the kind stays
-  // the same, so the move (FLIP) and the expand can animate.
+  // Colour picker for the selected kind.
   function drawColors(el, selected, onPick) {
     // One row: a dot per colour (in catalogue order), then the picked colourway's
     // name. A kind with one colour shows just its name (nothing to choose).
@@ -463,22 +457,8 @@
     // (Preview-only is already shown on the download button; this line is for errors.)
     $('outfitHint').hidden = true;
     $('outfitHint').textContent = '';
-    showNotice(o);
     setBody(state.body); // re-checks the body is available for this outfit
   }
-
-  // Card next to the 3D preview for outfits with a notice (e.g. Founders).
-  // Closing it hides it until a different outfit is picked and this one again.
-  function showNotice(o) {
-    const n = o.notice;
-    $('dropCard').hidden = !n;
-    if (!n) return;
-    $('dropTag').textContent = n.tag;
-    $('dropTitle').textContent = n.title;
-    $('dropFree').hidden = !n.free;
-    $('dropFree').innerHTML = n.free ? `<span>${n.free}</span><span aria-hidden="true">${n.free}</span>` : '';
-  }
-  $('dropClose').onclick = () => { $('dropCard').hidden = true; };
 
   // ---------- Body ----------
   // Slim (female) bodies keep the user's hair by default; Classic starts without it.

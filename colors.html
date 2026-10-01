@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>COLORS® · GOOD® DESIGN</title>
-  <meta name="description" content="ALL ® OUR ® COLORS: every GOOD® colour in one place, from GOOD® BLUE to SELVEDGE™.">
+  <meta name="description" content="ALL ® OUR ® COLORS: every GOOD® colour in one place, from GOOD® BLUE to AFTER HOURS™.">
   <link rel="canonical" href="https://good-maker.vercel.app/colors.html">
   <meta name="theme-color" content="#0000ff">
   <link rel="icon" href="/favicon.svg" type="image/svg+xml">
@@ -14,15 +14,16 @@
   <meta property="og:type" content="website">
   <meta property="og:url" content="https://good-maker.vercel.app/colors.html">
   <meta property="og:title" content="COLORS® · GOOD® DESIGN">
-  <meta property="og:description" content="ALL ® OUR ® COLORS: every GOOD® colour in one place, from GOOD® BLUE to SELVEDGE™.">
+  <meta property="og:description" content="ALL ® OUR ® COLORS: every GOOD® colour in one place, from GOOD® BLUE to AFTER HOURS™.">
   <meta property="og:image" content="https://good-maker.vercel.app/assets/og-site.png">
   <meta property="og:image:width" content="1200">
   <meta property="og:image:height" content="630">
   <meta property="og:image:alt" content="Seven Minecraft players posing in GOOD® outfits and jeans.">
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:title" content="COLORS® · GOOD® DESIGN">
-  <meta name="twitter:description" content="ALL ® OUR ® COLORS: every GOOD® colour in one place, from GOOD® BLUE to SELVEDGE™.">
+  <meta name="twitter:description" content="ALL ® OUR ® COLORS: every GOOD® colour in one place, from GOOD® BLUE to AFTER HOURS™.">
   <meta name="twitter:image" content="https://good-maker.vercel.app/assets/og-site.png">
+  <meta name="twitter:image:alt" content="Seven Minecraft players posing in GOOD® outfits and jeans.">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
@@ -89,7 +90,7 @@
     const grid = document.getElementById('clGrid');
     const colors = window.GOOD_COLORS;
     // GOOD® colour names are ™; PANTONE® colours keep Pantone's name as is.
-    const label = (c) => (c.pantone ? c.name : `${c.name}™`);
+    const label = (c) => (c.pantone || c.name.includes('®') ? c.name : `${c.name}™`);
     const PANTONE_NOTE = 'PANTONE® is a registered trademark of Pantone LLC. Colour names and numbers used with attribution to Pantone.';
     document.getElementById('clCount').textContent = `${colors.length} COLORS`;
     colors.forEach((c, i) => {

@@ -13,7 +13,6 @@
 // colour names (e.g. the washes) are trademarked ™, not registered ®;
 // colourway names are written in ALL CAPS.
 // locked: true = preview only (served scrambled by /api/outfit, no download).
-// notice = card shown next to the 3D preview while selected ({ tag, title, free? }).
 // line = which side of the GOOD® / BABY® toggle a kind shows under: 'good' (the
 // default), 'baby' or 'both'. Shirts only: every pants kind shows under both,
 // and switching lines keeps the pants and shoe you picked.
