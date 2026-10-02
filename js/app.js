@@ -41,6 +41,7 @@
     hairKeys: new Set(), // hair pixels in the current render (erasable)
     merged: null,
     tone: [224, 172, 140],
+    keepSkin: false,     // MY SKIN: bare skin keeps the player's own texture, not the tone
     resultUrl: null,
   };
   const cache = {};
@@ -654,6 +655,7 @@
   // the ramp previews the highlight -> shadow shades that will be used.
   function setTone(rgb, rerender = true) {
     state.tone = rgb;
+    if (rerender) setKeepSkin(false, false); // picking a tone means using it
     const hex = toHex(rgb);
     $('tone').value = hex;
     $('swatch').style.background = hex;
@@ -662,6 +664,14 @@
     if (rerender) render();
   }
   $('tone').oninput = (e) => setTone(fromHex(e.target.value));
+  // MY SKIN: keep the player's own skin texture on bare arms, legs and midriff.
+  function setKeepSkin(on, rerender = true) {
+    state.keepSkin = on;
+    $('mySkin').setAttribute('aria-pressed', on);
+    $('toneRow').classList.toggle('off', on);
+    if (rerender) render();
+  }
+  $('mySkin').onclick = () => setKeepSkin(!state.keepSkin);
   $('auto').onclick = () => state.user && setTone(SkinLib.sampleSkinTone(state.user));
 
   function drawFace() {
@@ -743,7 +753,7 @@
     if (id !== renderId) return; // a newer render started
     lastGood = o;
     const slim = state.body === 'slim';
-    const args = [state.tone, slim, state.hair, state.erased, state.headwear];
+    const args = [state.tone, slim, state.hair, state.erased, state.headwear, state.keepSkin];
     const merged = SkinLib.mergeSkin(state.user, outfit, ...args);
     // Outfits that go over the head (CROPPIE®) replace the hat layer.
     if (o.hat) {

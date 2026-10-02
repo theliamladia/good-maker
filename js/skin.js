@@ -128,12 +128,17 @@ function sampleSkinTone(skin) {
 // erased   = Set of "x,y" keys the user brushed away (hair on the jacket
 //            layer, or hat-layer pixels).
 // headwear = 'keep' | 'auto' (drop hoods) | 'none' (drop the whole hat layer).
-function mergeSkin(userSkin, outfit, tone, slim, hairRows = 0, erased = null, headwear = 'auto') {
+// keepSkin = true: bare skin keeps the player's own skin texture (both layers)
+//            instead of the shaded tone; the outfit still goes on top.
+function mergeSkin(userSkin, outfit, tone, slim, hairRows = 0, erased = null, headwear = 'auto', keepSkin = false) {
   outfit = to64(outfit);
   const out = blank();
   const opaque = (x, y) => x >= 0 && y >= 0 && x < SIZE && y < SIZE && outfit.data[idx(x, y) + 3] > 0;
 
-  // 1. Shaded skin tone on every base-layer body face.
+  const own = keepSkin && userSkin ? to64(userSkin) : null;
+  const ownAt = (x, y) => own && own.data[idx(x, y) + 3] > 0;
+
+  // 1. Shaded skin tone on every base-layer body face (or the player's own skin).
   for (const part of bodyParts(slim)) {
     for (const [side, [x0, y0, w, h]] of Object.entries(part.faces)) {
       const isSide = side !== 'top' && side !== 'bottom';
@@ -152,7 +157,7 @@ function mergeSkin(userSkin, outfit, tone, slim, hairRows = 0, erased = null, he
             if (opaque(x, y - 1) || opaque(x + ox, y - 1 + oy)) step += CAST_SHADOW;
           }
           if (isSide && part.name !== 'torso' && y === y0 + h - 1) step += LIMB_END;
-          const c = shadeTone(tone, step);
+          const c = ownAt(x, y) ? own.data.subarray(idx(x, y), idx(x, y) + 3) : shadeTone(tone, step);
           const i = idx(x, y);
           out.data[i] = c[0]; out.data[i + 1] = c[1]; out.data[i + 2] = c[2]; out.data[i + 3] = 255;
         }
@@ -170,6 +175,23 @@ function mergeSkin(userSkin, outfit, tone, slim, hairRows = 0, erased = null, he
       out.data[i + c] = Math.round((outfit.data[i + c] * a + out.data[i + c] * da * (1 - a)) / oa);
     }
     out.data[i + 3] = Math.round(oa * 255);
+  }
+
+  // 2b. Keeping their skin: the player's own outer layer shows wherever the
+  //     outfit leaves that spot bare on both layers (e.g. textured forearms).
+  if (own) {
+    for (const part of bodyParts(slim)) {
+      const [ox, oy] = part.ov;
+      for (const [x0, y0, w, h] of Object.values(part.faces)) {
+        for (let y = y0; y < y0 + h; y++) {
+          for (let x = x0; x < x0 + w; x++) {
+            if (opaque(x, y) || opaque(x + ox, y + oy) || !ownAt(x + ox, y + oy)) continue;
+            const i = idx(x + ox, y + oy);
+            for (let c = 0; c < 4; c++) out.data[i + c] = own.data[i + c];
+          }
+        }
+      }
+    }
   }
 
   // 3. User's head, then their hat layer filtered by the headwear setting.
