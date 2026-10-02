@@ -322,6 +322,68 @@ window.OUTFITS = [
     ],
   },
   {
+    // The CROPPIE® for BABY®: the tee pulled over the head and cropped at the chest, in BABY® pastels.
+    id: 'croppie-baby',
+    name: 'BABY CROPPIE®',
+    line: 'baby',
+    hat: true,
+    cropped: true, // ends above the waist: no Tuck control
+    colors: [
+      {
+        id: 'croppie-baby-strawberry-milk-tomato-vine',
+        color: 'STRAWBERRY MILK/TOMATO VINE',
+        swatch: ['#f6c6d4', '#3f7a55'],
+        bodies: { classic: 'outfits/croppie-baby-strawberry-milk-tomato-vine-classic.png', slim: 'outfits/croppie-baby-strawberry-milk-tomato-vine-slim.png' },
+      },
+      {
+        id: 'croppie-baby-creamsicle-good-blue',
+        color: 'CREAMSICLE/GOOD® BLUE',
+        swatch: ['#fcc9a2', '#0000ff'],
+        bodies: { classic: 'outfits/croppie-baby-creamsicle-good-blue-classic.png', slim: 'outfits/croppie-baby-creamsicle-good-blue-slim.png' },
+      },
+      {
+        id: 'croppie-baby-lilac-haze-cotton',
+        color: 'LILAC HAZE/COTTON',
+        swatch: ['#b9a3d9', '#ffffff'],
+        bodies: { classic: 'outfits/croppie-baby-lilac-haze-cotton-classic.png', slim: 'outfits/croppie-baby-lilac-haze-cotton-slim.png' },
+      },
+      {
+        id: 'croppie-baby-glacier-good-blue',
+        color: 'GLACIER/GOOD® BLUE',
+        swatch: ['#bcd9e6', '#0000ff'],
+        bodies: { classic: 'outfits/croppie-baby-glacier-good-blue-classic.png', slim: 'outfits/croppie-baby-glacier-good-blue-slim.png' },
+      },
+    ],
+  },
+  {
+    // A CROPPIE® over a cropped long-sleeve BABY TEE®: two Gs, midriff showing. Colourway = CROPPIE®/tee; each G is in the other colour.
+    id: 'doubbie-baby',
+    name: 'BABY DOUBBIE®',
+    line: 'baby',
+    hat: true,
+    cropped: true, // ends above the waist: no Tuck control
+    colors: [
+      {
+        id: 'doubbie-baby-strawberry-milk-marshmallow',
+        color: 'STRAWBERRY MILK/MARSHMALLOW',
+        swatch: ['#f6c6d4', '#f7f2ea'],
+        long: { classic: 'outfits/doubbie-baby-strawberry-milk-marshmallow-classic.png', slim: 'outfits/doubbie-baby-strawberry-milk-marshmallow-slim.png' },
+      },
+      {
+        id: 'doubbie-baby-sky-strawberry-milk',
+        color: 'SKY/STRAWBERRY MILK',
+        swatch: ['#8fd0ff', '#f6c6d4'],
+        long: { classic: 'outfits/doubbie-baby-sky-strawberry-milk-classic.png', slim: 'outfits/doubbie-baby-sky-strawberry-milk-slim.png' },
+      },
+      {
+        id: 'doubbie-baby-lilac-haze-glacier',
+        color: 'LILAC HAZE/GLACIER',
+        swatch: ['#b9a3d9', '#bcd9e6'],
+        long: { classic: 'outfits/doubbie-baby-lilac-haze-glacier-classic.png', slim: 'outfits/doubbie-baby-lilac-haze-glacier-slim.png' },
+      },
+    ],
+  },
+  {
     // Quilted puffer cut at the ribs over a COTTON tee; GOOD® BLUE G on the chest.
     id: 'puffer-cropped',
     name: 'CROPPED PUFFER®',
