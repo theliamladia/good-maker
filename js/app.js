@@ -90,10 +90,10 @@
   // Sleeve lengths an outfit comes in, and the one in effect for it (the
   // user's choice if available, otherwise whatever the outfit has).
   const sleevesOf = (o) => ['short', 'long'].filter((k) => (k === 'long' ? o.long : o.bodies));
-  const sleeveFor = (o) => (sleevesOf(o).includes(state.sleeve) ? state.sleeve : sleevesOf(o)[0]);
-  const setFor = (o) => (sleeveFor(o) === 'long' ? o.long : o.bodies);
-  const loadOutfit = async (o, body) => {
-    const src = setFor(o)[body];
+  const sleeveFor = (o, sleeve = state.sleeve) => (sleevesOf(o).includes(sleeve) ? sleeve : sleevesOf(o)[0]);
+  const setFor = (o, sleeve = state.sleeve) => (sleeveFor(o, sleeve) === 'long' ? o.long : o.bodies);
+  const loadOutfit = async (o, body, sleeve = state.sleeve) => {
+    const src = setFor(o, sleeve)[body];
     const d = await (o.locked ? loadLocked(src) : loadData(src));
     return o.baseUnderHoles ? (cache[`${src}|holes`] ||= SkinLib.baseUnderHoles(d)) : d;
   };
@@ -254,16 +254,17 @@
 
   // Pants texture: the kind's file (per shoe) recoloured to the wash, with
   // tartan boxers if picked.
-  const pantsSrc = (p) => (p.shoes ? p.shoes[state.shoe] || Object.values(p.shoes)[0] : p.src);
-  const tartan = (p) => !!p.boxers && state.boxer === 'tartan';
-  const pantsKey = (p) => `${pantsSrc(p)}|${p.wash}|${tartan(p)}`;
+  const pantsSrc = (p, shoe = state.shoe) => (p.shoes ? p.shoes[shoe] || Object.values(p.shoes)[0] : p.src);
+  const tartan = (p, boxer = state.boxer) => !!p.boxers && boxer === 'tartan';
+  const pantsKey = (p, shoe, boxer) => `${pantsSrc(p, shoe)}|${p.wash}|${tartan(p, boxer)}`;
   const washed = {};
-  const loadPants = async (p) => {
-    if (washed[pantsKey(p)]) return washed[pantsKey(p)];
+  const loadPants = async (p, shoe = state.shoe, boxer = state.boxer) => {
+    const key = pantsKey(p, shoe, boxer);
+    if (washed[key]) return washed[key];
     // Tartan first: once washed, darker denim falls in the boxers' blue range.
-    let d = await loadData(pantsSrc(p));
-    if (tartan(p)) d = SkinLib.tartanBoxers(d);
-    return (washed[pantsKey(p)] = SkinLib.washPants(d, p.wash));
+    let d = await loadData(pantsSrc(p, shoe));
+    if (tartan(p, boxer)) d = SkinLib.tartanBoxers(d);
+    return (washed[key] = SkinLib.washPants(d, p.wash));
   };
 
   // Pants thumbnails: the fronts of both legs (pants layer over base), side by side.
@@ -522,6 +523,7 @@
     state.user = data;
     state.userName = name;
     state.isDemo = isDemo;
+    state.fromName = false; // set by the username form: only then can the look link carry the name
     resetErasers();
     $('uploadTitle').textContent = name;
     $('uploadSub').textContent = isDemo ? 'DEMO / TAP TO UPLOAD YOURS' : 'TAP TO SWAP SKIN';
@@ -621,6 +623,8 @@
     $('userForm').classList.add('loading');
     try {
       useSkin(await skinForName(name), name, false);
+      state.fromName = true;
+      syncUrl();
     } catch (err) {
       showError(err.message);
     } finally {
@@ -752,6 +756,7 @@
     }
     if (id !== renderId) return; // a newer render started
     lastGood = o;
+    syncUrl();
     const slim = state.body === 'slim';
     const args = [state.tone, slim, state.hair, state.erased, state.headwear, state.keepSkin];
     const merged = SkinLib.mergeSkin(state.user, outfit, ...args);
@@ -949,11 +954,220 @@
     a.click();
   };
 
+  // ---------- Look links ----------
+  // A look is a recipe: shirt + pants colour ids and the options in effect
+  // (?u=<name>&top=<id>&bottom=<id>&shoe=&sleeve=&body=&tuck=out&boxer=tartan).
+  // The address bar follows the look, so any outfit can be copied and shared.
+  let booted = false;
+  const allTops = () => SHIRTS.flatMap((k) => k.colors);
+  const topById = (id) => allTops().find((c) => c.id === id);
+  const pantsById = (id) => ALL_PANTS.find((p) => p.id === id);
+  function currentLook(withName = true) {
+    const o = state.outfit, p = state.pants;
+    const L = {};
+    if (withName && state.fromName && state.userName) L.u = state.userName;
+    L.top = o.id;
+    L.bottom = p.id;
+    const shoes = Object.keys(p.shoes || {});
+    if (shoes.length > 1) L.shoe = shoes.includes(state.shoe) ? state.shoe : shoes[0];
+    if (sleevesOf(o).length > 1) L.sleeve = sleeveFor(o);
+    if (bodiesOf(o).length > 1) L.body = state.body;
+    if (canTuck() && !state.tucked) L.tuck = 'out';
+    if (p.boxers && state.boxer === 'tartan') L.boxer = 'tartan';
+    return L;
+  }
+  const lookUrl = (L) => `${location.origin}${location.pathname}?${new URLSearchParams(L)}`;
+  function syncUrl() {
+    if (booted) history.replaceState(null, '', lookUrl(currentLook()));
+  }
+  function lookFromUrl() {
+    const q = new URLSearchParams(location.search);
+    if (!q.get('top') && !q.get('bottom')) return null;
+    return Object.fromEntries(['u', 'top', 'bottom', 'shoe', 'sleeve', 'body', 'tuck', 'boxer'].filter((k) => q.get(k)).map((k) => [k, q.get(k)]));
+  }
+  // Put a look on. withSkin: also load the player named in it (shared links);
+  // gallery picks keep your own skin.
+  async function applyLook(L, withSkin) {
+    const top = topById(L.top), bottom = pantsById(L.bottom);
+    if (['short', 'long'].includes(L.sleeve)) state.sleeve = L.sleeve;
+    if (['black', 'brown', 'tobacco', 'sneak01'].includes(L.shoe)) state.shoe = L.shoe;
+    state.boxer = L.boxer === 'tartan' ? 'tartan' : 'blue';
+    state.tucked = L.tuck !== 'out';
+    drawTuck();
+    if (bottom) { bottom.kind.current = bottom; state.pants = bottom; state.pantsPicked = true; }
+    if (top) {
+      if (top.kind.line !== 'both' && top.kind.line !== state.line) { state.line = top.kind.line; drawLine(); }
+      top.kind.current = top;
+      state.outfit = top;
+    }
+    updateSleeveButtons();
+    if (withSkin && /^[A-Za-z0-9_]{3,16}$/.test(L.u || '')) {
+      $('username').value = L.u;
+      $('userForm').classList.add('loading');
+      try {
+        useSkin(await skinForName(L.u), L.u, false);
+        state.fromName = true;
+      } catch (err) {
+        showError(err.message);
+      } finally {
+        $('userForm').classList.remove('loading');
+      }
+    }
+    setBody(['classic', 'slim'].includes(L.body) ? L.body : state.body);
+  }
+
+  const shareHint = (msg) => { $('shareHint').textContent = msg; };
+  $('shareLook').onclick = async () => {
+    const url = lookUrl(currentLook());
+    const title = `${fullName(state.outfit)} · GOOD®`;
+    if (navigator.share && matchMedia('(pointer: coarse)').matches) {
+      try { await navigator.share({ title, url }); return; } catch (e) { if (e.name === 'AbortError') return; }
+    }
+    try {
+      await navigator.clipboard.writeText(url);
+      shareHint('LINK COPIED. PASTE IT ANYWHERE.');
+    } catch {
+      window.prompt('Copy this link:', url);
+    }
+  };
+
+  // ---------- GOOD® GALLERY ----------
+  // The newest posted looks, each rebuilt from the player's own skin and drawn
+  // as a flat front view. Tap one to put it on your skin.
+  const GALLERY_PAGE = 24;
+  let galleryLooks = [];
+  let galleryShown = 0;
+  const skinCache = {};
+  const skinOf = (name) => (skinCache[name.toLowerCase()] ||= skinForName(name));
+
+  async function composeLook(user, L) {
+    const o = topById(L.top), p = pantsById(L.bottom);
+    if (!o || !p || o.locked) throw new Error('unavailable');
+    const sleeve = sleeveFor(o, L.sleeve);
+    const set = setFor(o, sleeve);
+    const detected = SkinLib.detectSlim(user) ? 'slim' : 'classic';
+    const body = set[L.body] ? L.body : set[detected] ? detected : Object.keys(set)[0];
+    const shoes = Object.keys(p.shoes || {});
+    const shoe = shoes.includes(L.shoe) ? L.shoe : shoes[0];
+    let outfit = await loadOutfit(o, body, sleeve);
+    outfit = SkinLib.combineOutfit(outfit, await loadPants(p, shoe, L.boxer), L.tuck !== 'out' || o.cropped || p.noTuck);
+    const slim = body === 'slim';
+    const tone = SkinLib.sampleSkinTone(user);
+    const merged = SkinLib.mergeSkin(user, outfit, tone, slim, slim ? SkinLib.estimateHairRows(user, tone) : 0, null, 'keep', false);
+    if (o.hat) {
+      for (let y = 0; y < 16; y++) {
+        const i = (y * 64 + 32) * 4;
+        merged.data.set(outfit.data.subarray(i, i + 32 * 4), i);
+      }
+    }
+    return { merged, slim, o, p };
+  }
+  // Front view, 16×32: head, torso, arms and legs, outer layer over base.
+  function frontView(merged, slim) {
+    const tex = document.createElement('canvas');
+    tex.width = tex.height = 64;
+    tex.getContext('2d').putImageData(new ImageData(merged.data, 64, 64), 0, 0);
+    const c = document.createElement('canvas');
+    c.width = 16; c.height = 32;
+    const ctx = c.getContext('2d');
+    const a = slim ? 3 : 4;
+    // [x, y, w, h, dest x, dest y]: base, then the outer layer
+    for (const [x, y, w, h, dx, dy] of [
+      [8, 8, 8, 8, 4, 0], [40, 8, 8, 8, 4, 0],
+      [20, 20, 8, 12, 4, 8], [20, 36, 8, 12, 4, 8],
+      [44, 20, a, 12, 4 - a, 8], [44, 36, a, 12, 4 - a, 8],
+      [36, 52, a, 12, 12, 8], [52, 52, a, 12, 12, 8],
+      [4, 20, 4, 12, 4, 20], [4, 36, 4, 12, 4, 20],
+      [20, 52, 4, 12, 8, 20], [4, 52, 4, 12, 8, 20],
+    ]) ctx.drawImage(tex, x, y, w, h, dx, dy, w, h);
+    return c;
+  }
+  function galleryCard(L) {
+    const btn = document.createElement('button');
+    btn.type = 'button';
+    btn.className = 'gal-card';
+    btn.hidden = true; // shown once it renders
+    btn.innerHTML = '<span class="gal-fig"></span><span class="gal-name mono"></span><span class="gal-piece"></span><span class="gal-color micro mono"></span>';
+    btn.onclick = () => {
+      applyLook(L, false);
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    };
+    (async () => {
+      try {
+        const { merged, slim, o, p } = await composeLook(await skinOf(L.u), L);
+        btn.querySelector('.gal-fig').append(frontView(merged, slim));
+        btn.querySelector('.gal-name').textContent = L.u;
+        btn.querySelector('.gal-piece').textContent = o.name;
+        btn.querySelector('.gal-color').textContent = [o.color, `${p.name}${p.color ? ' ' + p.color : ''}`].filter(Boolean).join(' / ');
+        btn.setAttribute('aria-label', `${L.u} in ${fullName(o)} and ${fullName(p)}. Try it on.`);
+        btn.hidden = false;
+      } catch {
+        btn.remove(); // player renamed, default skin, or a retired piece
+      }
+    })();
+    return btn;
+  }
+  function showMoreLooks() {
+    const next = galleryLooks.slice(galleryShown, galleryShown + GALLERY_PAGE);
+    galleryShown += next.length;
+    $('galleryGrid').append(...next.map(galleryCard));
+    $('galleryMore').hidden = galleryShown >= galleryLooks.length;
+  }
+  async function loadGallery() {
+    try {
+      const r = await fetch('api/gallery');
+      if (!r.ok) throw new Error();
+      galleryLooks = (await r.json()).looks || [];
+    } catch {
+      $('gallery').hidden = true; // not set up (e.g. local dev): no section at all
+      return;
+    }
+    $('gallery').hidden = false;
+    $('galleryMsg').textContent = galleryLooks.length ? '' : 'NOTHING HERE YET. BE THE FIRST.';
+    showMoreLooks();
+  }
+  $('galleryMore').onclick = showMoreLooks;
+
+  $('postLook').onclick = async () => {
+    if (!state.fromName) return shareHint('LOAD YOUR SKIN BY USERNAME TO POST YOUR LOOK.');
+    if (state.outfit.locked) return shareHint('PREVIEW-ONLY PIECES CAN’T BE POSTED.');
+    const btn = $('postLook');
+    btn.disabled = true;
+    shareHint('POSTING…');
+    try {
+      const r = await fetch('api/gallery', {
+        method: 'POST', headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ ...currentLook(), website: '' }),
+      });
+      if (r.status === 429) return shareHint('SLOW DOWN. TRY AGAIN IN A MINUTE.');
+      if (!r.ok) throw new Error();
+      const { look } = await r.json();
+      // Replace this player's old card with the new one, on top.
+      const shown = galleryLooks.slice(0, galleryShown).some((l) => l.u.toLowerCase() === look.u.toLowerCase());
+      galleryLooks = [look, ...galleryLooks.filter((l) => l.u.toLowerCase() !== look.u.toLowerCase())];
+      if (!shown) galleryShown++; // one more card on screen
+      $('galleryMore').hidden = galleryShown >= galleryLooks.length;
+      $('galleryGrid').querySelectorAll('.gal-card').forEach((c) => { if (c.querySelector('.gal-name').textContent.toLowerCase() === look.u.toLowerCase()) c.remove(); });
+      $('galleryGrid').prepend(galleryCard(look));
+      $('galleryMsg').textContent = '';
+      $('gallery').hidden = false;
+      shareHint('POSTED TO THE GOOD® GALLERY.');
+    } catch {
+      shareHint('COULDN’T POST. TRY AGAIN.');
+    } finally {
+      btn.disabled = false;
+    }
+  };
+
   // ---------- Boot with the demo head ----------
   updateSleeveButtons();
   setHeadwear('keep', false);
   updateEraseHint();
   updateEraserButtons();
   setBody('classic');
-  loadData(DEMO_SKIN).then((d) => useSkin(d, 'Chinny', true)).catch(() => render());
+  const linked = lookFromUrl();
+  loadData(DEMO_SKIN).then((d) => useSkin(d, 'Chinny', true)).catch(() => render())
+    .then(() => linked && applyLook(linked, true))
+    .finally(() => { booted = true; if (linked) syncUrl(); }); // a plain visit keeps a clean address until something changes
+  loadGallery();
 })();

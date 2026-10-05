@@ -237,8 +237,23 @@
   </aside>
     <button type="button" class="download-btn" id="download">GOOD® ME <span class="dot-live"></span></button>
     <p class="micro mono download-hint" id="downloadHint"></p>
+    <div class="share-row">
+      <button type="button" class="chip" id="shareLook">SHARE LOOK</button>
+      <button type="button" class="chip" id="postLook">POST TO GALLERY</button>
+    </div>
+    <p class="micro mono center" id="shareHint" aria-live="polite"></p>
   </div>
 </main>
+
+<section class="gallery" id="gallery" aria-labelledby="galleryTitle" hidden>
+  <header class="gallery-head">
+    <h2 id="galleryTitle">GOOD® GALLERY</h2>
+    <p class="micro mono">THE NEWEST FITS FROM THE GOOD® COMMUNITY. TAP ONE TO TRY IT ON.</p>
+  </header>
+  <div class="gallery-grid" id="galleryGrid"></div>
+  <p class="micro mono center" id="galleryMsg"></p>
+  <button type="button" class="chip gallery-more" id="galleryMore" hidden>MORE LOOKS</button>
+</section>
 
 <div class="ticker ticker-band" aria-hidden="true">
   <div class="ticker-track slow">
