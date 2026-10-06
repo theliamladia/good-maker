@@ -49,7 +49,7 @@
   const el = (tag, cls, html) => { const e = document.createElement(tag); if (cls) e.className = cls; if (html != null) e.innerHTML = html; return e; };
 
   $('colourways').append(...CW.map((c) => {
-    const card = el('article', 'att-cw att-glass');
+    const card = el('article', 'att-cw');
     card.append(el('span', 'att-cw-dot'), el('h3', null, cwName(c)));
     card.querySelector('.att-cw-dot').style.background = twin(c);
     for (const k of ['a', 'b']) {
@@ -63,7 +63,7 @@
 
   let cw = 0;
   const looks = LOOKS.map((l, i) => {
-    const fig = el('figure', 'att-look att-glass', `<div class="att-fig"><img alt="" draggable="false"></div><figcaption><div class="who"></div><div class="what"></div><div class="cw"></div></figcaption>`);
+    const fig = el('figure', 'att-look', `<div class="att-fig"><img alt="" draggable="false"></div><figcaption><div class="who"></div><div class="what"></div><div class="cw"></div></figcaption>`);
     fig.querySelector('.who').textContent = l.who;
     fig.querySelector('.what').textContent = `${l.top} + ${l.bottom}`;
     fig.addEventListener('contextmenu', (e) => e.preventDefault());
@@ -76,7 +76,7 @@
     $('switch').querySelectorAll('button').forEach((b, j) => b.setAttribute('aria-checked', j === c));
     for (const l of looks) {
       const c0 = CW[c];
-      l.cap.textContent = `${l.top} ${c0.a.name}™ · ${l.bottom} ${c0.b.name}™`;
+      l.cap.textContent = `${c0.a.name}™ and ${c0.b.name}™`;
       l.img.alt = `${l.who} in ${l.top} ${c0.a.name}™ and ${l.bottom} ${c0.b.name}™.`;
       if (!fade) { l.img.src = src(l, c); continue; }
       l.img.style.opacity = 0;
@@ -95,7 +95,7 @@
   addEventListener('load', () => { for (const l of looks) for (let c = 0; c < CW.length; c++) new Image().src = src(l, c); });
 
   $('pieceList').append(...PIECES.map(([title, list]) => {
-    const g = el('div', 'att-group att-glass', `<h3>${title}</h3><ul></ul>`);
+    const g = el('div', 'att-group', `<h3>${title}</h3><ul></ul>`);
     g.querySelector('ul').append(...list.map(([n, d]) => { const li = el('li', null, '<strong></strong><span></span>'); li.firstChild.textContent = n; li.lastChild.textContent = d; return li; }));
     return g;
   }));
