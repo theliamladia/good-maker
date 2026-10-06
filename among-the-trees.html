@@ -1,0 +1,110 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>FALL INTO GOOD®</title>
+  <meta name="description" content="GOOD® will be with you in this wondrous occasion.">
+  <link rel="canonical" href="https://good-maker.vercel.app/among-the-trees.html">
+  <meta name="theme-color" content="#a65a2e">
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+  <link rel="icon" href="/favicon-32.png" sizes="32x32" type="image/png">
+  <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+  <meta property="og:site_name" content="GOOD® DESIGN">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://good-maker.vercel.app/among-the-trees.html">
+  <meta property="og:title" content="FALL INTO GOOD®">
+  <meta property="og:description" content="GOOD® will be with you in this wondrous occasion.">
+  <meta property="og:image" content="https://good-maker.vercel.app/assets/att/og.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:image:alt" content="Six Minecraft players in GOOD® Capsule Nº2, AMONG THE TREES®, in front of a fall treeline.">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="FALL INTO GOOD®">
+  <meta name="twitter:description" content="GOOD® will be with you in this wondrous occasion.">
+  <meta name="twitter:image" content="https://good-maker.vercel.app/assets/att/og.png">
+  <meta name="twitter:image:alt" content="Six Minecraft players in GOOD® Capsule Nº2, AMONG THE TREES®, in front of a fall treeline.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="att.css">
+  <script>
+    // The descent plays once per visit; reduced motion lands straight away.
+    if (!matchMedia('(prefers-reduced-motion: reduce)').matches) document.documentElement.classList.add('att-falling');
+  </script>
+</head>
+<body class="att-page">
+
+<canvas class="att-leaves" id="leaves" aria-hidden="true"></canvas>
+
+<!-- The descent: a tall dusk sky we fall down through, into the treeline. -->
+<section class="att-hero" id="hero" aria-labelledby="attTitle">
+  <div class="att-sky" id="sky" aria-hidden="true">
+    <div class="att-cloud" style="--x:8%;--y:6%;--w:340px"></div>
+    <div class="att-cloud" style="--x:62%;--y:11%;--w:260px"></div>
+    <div class="att-cloud" style="--x:30%;--y:22%;--w:420px"></div>
+    <div class="att-cloud" style="--x:74%;--y:31%;--w:300px"></div>
+    <div class="att-cloud" style="--x:4%;--y:40%;--w:280px"></div>
+    <div class="att-cloud" style="--x:48%;--y:49%;--w:380px"></div>
+    <div class="att-cloud" style="--x:80%;--y:58%;--w:240px"></div>
+    <div class="att-cloud" style="--x:18%;--y:66%;--w:320px"></div>
+    <div class="att-sun"></div>
+  </div>
+  <div class="att-treeline" id="trees" aria-hidden="true"></div>
+
+  <header class="site-header att-header">
+    <a class="wordmark" href="./">GOOD® <span>DESIGN</span></a>
+    <nav class="site-nav" aria-label="Main">
+      <a class="nav-link mono" href="./">OUTFITTER</a>
+      <a class="nav-link mono" href="colors.html">COLORS®</a>
+      <a class="nav-link mono" href="study.html">STUDY®</a>
+    </nav>
+  </header>
+
+  <div class="att-title">
+    <p class="att-kicker mono">GOOD® CAPSULE Nº2 · PREVIEW</p>
+    <h1 id="attTitle">AMONG THE TREES<span>®</span></h1>
+    <p class="att-dek">Twelve pieces in three colourways, for the long walk home through the leaves.</p>
+    <a class="att-down mono" href="#colours">SEE THE CAPSULE ↓</a>
+  </div>
+  <button type="button" class="att-skip mono" id="skip">SKIP ↓</button>
+</section>
+
+<main class="att-main">
+  <section class="att-section" id="colours" aria-labelledby="coloursTitle">
+    <p class="att-tag mono">Nº01 / THE COLOURS</p>
+    <h2 id="coloursTitle">Three colourways</h2>
+    <div class="att-colourways" id="colourways"></div>
+  </section>
+
+  <section class="att-section" id="looks" aria-labelledby="looksTitle">
+    <p class="att-tag mono">Nº02 / THE LOOKS</p>
+    <h2 id="looksTitle">Six looks, worn by the crew</h2>
+    <div class="att-switch" id="switch" role="radiogroup" aria-label="Colourway"></div>
+    <h3 class="att-line mono">GOOD®</h3>
+    <div class="att-looks" id="looksGood"></div>
+    <h3 class="att-line mono">BABY®</h3>
+    <div class="att-looks" id="looksBaby"></div>
+  </section>
+
+  <section class="att-section" id="pieces" aria-labelledby="piecesTitle">
+    <p class="att-tag mono">Nº03 / THE PIECES</p>
+    <h2 id="piecesTitle">Twelve pieces</h2>
+    <div class="att-pieces" id="pieceList"></div>
+  </section>
+
+  <section class="att-soon">
+    <p class="att-kicker mono">PREVIEW ONLY</p>
+    <p class="att-soon-big">Not available yet.</p>
+    <p class="att-dek">AMONG THE TREES® lands in the outfitter soon. Until then, look but don’t touch.</p>
+    <a class="nav-link mono" href="./">BACK TO THE OUTFITTER</a>
+  </section>
+</main>
+
+<footer class="att-foot mono">© 2026 GOOD® DESIGN · AMONG THE TREES® · GOOD® CAPSULE Nº2</footer>
+
+<script src="js/att.js"></script>
+<script src="js/nav.js"></script>
+</body>
+</html>

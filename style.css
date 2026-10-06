@@ -63,6 +63,8 @@ body {
   box-shadow: 0 6px 18px rgba(0, 0, 90, 0.28); transition: background 0.15s, color 0.15s, transform 0.15s;
 }
 .nav-link { text-decoration: none; display: inline-block; }
+.nav-att { background: #a65a2e; box-shadow: 0 6px 18px rgba(90, 30, 0, 0.3); }
+.nav-att:hover, .nav-att:focus-visible { color: #a65a2e; }
 .nav-link:hover, .nav-link:focus-visible { background: #fff; color: #0000ff; transform: translateY(-1px); }
 .right-col { display: flex; flex-direction: column; gap: 14px; }
 .download-btn {

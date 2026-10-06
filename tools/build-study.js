@@ -162,7 +162,7 @@ fs.mkdirSync(path.join(ROOT, 'study'), { recursive: true });
 fs.writeFileSync(path.join(ROOT, 'study.html'), archivePage());
 for (const p of POSTS) fs.writeFileSync(path.join(ROOT, 'study', `${p.slug}.html`), postPage(p));
 // Sitemap: the fixed pages plus every post.
-const urls = ['/', '/colors.html', '/study.html'].map((u) => `  <url><loc>${SITE}${u}</loc></url>`)
+const urls = ['/', '/colors.html', '/study.html', '/among-the-trees.html'].map((u) => `  <url><loc>${SITE}${u}</loc></url>`)
   .concat(POSTS.map((p) => `  <url><loc>${SITE}/study/${p.slug}.html</loc><lastmod>${p.date}</lastmod></url>`));
 fs.writeFileSync(path.join(ROOT, 'sitemap.xml'), `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n${urls.join('\n')}\n</urlset>\n`);
 console.log(`STUDY®: archive + ${POSTS.length} post(s) + sitemap written.`);
