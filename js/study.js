@@ -27,8 +27,8 @@ const STUDY = [
     description: 'Three generations of the GOOD® G: the narrow Gen 0, the square, brutalist Gen 1, and the open new G. Why it changed, and what never will.',
     lead: {
       img: '/assets/study/g-lineup.png',
-      alt: 'Chinny in the same COTTON shirt three times: with the narrow Gen 0 G, the square Gen 1 G, and the open new G.',
-      caption: 'The same shirt, three Gs. Left to right: Gen 0, Gen 1 and the new G, worn by Chinny.',
+      alt: 'Austin1333 in the same COTTON shirt three times: with the narrow Gen 0 G, the square Gen 1 G, and the open new G.',
+      caption: 'The same shirt, three Gs. Left to right: Gen 0, Gen 1 and the new G, worn by Austin1333.',
     },
     og: '/assets/study/og-old-g-to-new-g.png',
     thumb: '/assets/study/g-lineup.png',
