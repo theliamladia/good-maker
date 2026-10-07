@@ -359,6 +359,8 @@
     { id: 'loafer', name: 'LOAFER®', colors: [['black', 'TUXEDO™', '#1b1b1f'], ['brown', 'MAHOGANY™', '#5a1e14'], ['tobacco', 'TOBACCO™', '#b57a36']] },
     { id: 'sneak01', name: 'SNEAK01', colors: [['sneak01', 'COTTON™/GOOD® BLUE', ['#f4f4f2', '#0000ff']]] },
     { id: 'chelsea', name: 'CHELSEA®', colors: [['chelsea-tobacco', 'TOBACCO™', '#b57a36'], ['chelsea-tuxedo', 'TUXEDO™', '#1b1b1f'], ['chelsea-mahogany', 'MAHOGANY™', '#5a1e14']] },
+    { id: 'workboot', name: 'WORKBOOT®', colors: [['workboot-wheat', 'WHEAT™', '#c8913f'], ['workboot-oxblood', 'OXBLOOD™', '#713a40'], ['workboot-tuxedo', 'TUXEDO™', '#1b1b1f']] },
+    { id: 'duck', name: 'DUCK BOOT®', colors: [['duck-duck-canvas-mahogany', 'DUCK CANVAS™/MAHOGANY™', ['#b98f55', '#5a1e14']], ['duck-trench-good-blue', 'TRENCH™/GOOD® BLUE', ['#c4b38a', '#0000ff']], ['duck-ecru-twill-tuxedo', 'ECRU TWILL™/TUXEDO™', ['#ddd2b8', '#1b1b1f']]] },
   ].map((k) => ({ ...k, colors: k.colors.map(([id, color, swatch]) => ({ id, color, swatch })) }));
   const SHOE = Object.fromEntries(SHOE_KINDS.flatMap((k) => k.colors.map((c) => [c.id, { ...c, kindId: k.id, name: k.name }])));
   // The kinds a bottom comes in, cut down to its colours (same objects each time, for drawColors).
@@ -1094,14 +1096,17 @@
     (y >= 46 && y <= 47 && x < 16) || (y >= 32 && y <= 35 && x >= 8 && x < 12) ||          // right leg outer
     (y >= 62 && y <= 63 && x >= 16 && x < 32) || (y >= 48 && y <= 51 && x >= 24 && x < 28) || // left leg base
     (y >= 62 && y <= 63 && x < 16) || (y >= 48 && y <= 51 && x >= 8 && x < 12);             // left leg outer
-  // CHELSEA®: the boot is the base layer from row 7 down (and the sole); the
-  // outer layer over it is the bottom's hem draped on top, so it stays with the pants.
-  const isBoot = (x, y) =>
-    (y >= 27 && y <= 31 && x < 16) || (y >= 16 && y <= 19 && x >= 8 && x < 12) ||          // right leg base
-    (y >= 59 && y <= 63 && x >= 16 && x < 32) || (y >= 48 && y <= 51 && x >= 24 && x < 28);  // left leg base
-  const isChelsea = (shoe) => /^chelsea-/.test(shoe || '');
+  // Boots (CHELSEA®, WORKBOOT®, DUCK BOOT®): the boot is the base layer from its
+  // top row down (and the sole); the outer layer over it is the bottom's hem
+  // draped on top, so it stays with the pants.
+  const BOOT_TOP = { chelsea: 7, workboot: 6, duck: 5 };
+  const bootTop = (shoe) => BOOT_TOP[(shoe || '').split('-')[0]];
+  const isBoot = (t) => (x, y) =>
+    (y >= 20 + t && y <= 31 && x < 16) || (y >= 16 && y <= 19 && x >= 8 && x < 12) ||          // right leg base
+    (y >= 52 + t && y <= 63 && x >= 16 && x < 32) || (y >= 48 && y <= 51 && x >= 24 && x < 28);  // left leg base
   function shoePart(src, keep) {
-    const test = isChelsea(shoeKey()) ? isBoot : isShoe;
+    const t = bootTop(shoeKey());
+    const test = t ? isBoot(t) : isShoe;
     const data = new Uint8ClampedArray(src.data);
     for (let y = 0; y < 64; y++) for (let x = 0; x < 64; x++) {
       if (test(x, y) !== keep) data[(y * 64 + x) * 4 + 3] = 0;
@@ -1115,15 +1120,17 @@
     const d = await loadPants(state.pants, key);
     const tex = document.createElement('canvas'); tex.width = tex.height = 64;
     tex.getContext('2d').putImageData(new ImageData(new Uint8ClampedArray(d.data), 64, 64), 0, 0);
-    const c = document.createElement('canvas'); c.width = 8; c.height = 5;
+    const c = document.createElement('canvas'); c.width = 8; c.height = 7;
     const ctx = c.getContext('2d');
-    if (isChelsea(key)) {
-      // the boots alone (base layer, rows 7-11), no hem over them
-      for (const [sx, sy, dx] of [[4, 27, 0], [20, 59, 4]]) ctx.drawImage(tex, sx, sy, 4, 5, dx, 0, 4, 5);
+    const t = bootTop(key);
+    if (t) {
+      // the boots alone (base layer, from the boot's top row down), no hem over them
+      const h = 12 - t;
+      for (const [sx, sy, dx] of [[4, 20 + t, 0], [20, 52 + t, 4]]) ctx.drawImage(tex, sx, sy, 4, h, dx, 7 - h, 4, h);
       return c.toDataURL();
     }
     // fronts of both feet, base then outer: rows 10-11 of each leg
-    for (const [sx, sy, dx] of [[4, 30, 0], [4, 46, 0], [20, 62, 4], [4, 62, 4]]) ctx.drawImage(tex, sx, sy, 4, 2, dx, 2, 4, 2);
+    for (const [sx, sy, dx] of [[4, 30, 0], [4, 46, 0], [20, 62, 4], [4, 62, 4]]) ctx.drawImage(tex, sx, sy, 4, 2, dx, 5, 4, 2);
     return c.toDataURL();
   }
 
