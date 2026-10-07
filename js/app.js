@@ -31,6 +31,8 @@
     sleeve: 'short',     // 'short' | 'long'
     pants: PANTS[0].current,
     pantsPicked: false,  // once the user picks pants, shirts stop changing them
+    noTop: false,        // the top was taken off (equipped squares by the model)
+    noBottom: false,     // the bottom (pants and their shoes) was taken off
     shoe: 'black',       // pants with shoes: key of their shoes files
     boxer: 'blue',       // pants with boxers: 'blue' (POOLSIDE™, as drawn) | 'tartan' (HIGHLAND™)
     tucked: true,        // shirt tucked in (pants waistband shows) or hanging over it
@@ -321,13 +323,14 @@
     }));
     if (id !== drawId) return; // a newer redraw started
     fillShirts(shirts.map((k, i) => { const o = k.current, c = cover(k); return card(
-      o.kind === state.outfit.kind,
+      !state.noTop && o.kind === state.outfit.kind,
       c.locked
         ? `<div class="locked-thumb" aria-hidden="true"></div>${nameOnly(c)}`
         : `<img class="ghost-thumb" src="${thumbs[i]}" alt="">${nameOnly(c)}`,
       () => selectOutfit(o)
     ); }));
     drawColors($('shirtColors'), state.outfit, (c) => selectOutfit(c));
+    if (state.noTop) $('shirtColors').hidden = true;
     drawPants();
   }
 
@@ -336,24 +339,25 @@
     const pants = PANTS; // every bottom shows under both lines
     const thumbs = await Promise.all(pants.map((k) => pantsThumb(k.current)));
     fillPants(pants.map(({ current: p }, i) => card(
-      p.kind === state.pants.kind,
+      !state.noBottom && p.kind === state.pants.kind,
       `<img class="pants-thumb" src="${thumbs[i]}" alt="">${nameOnly(p)}`,
       () => pickPants(p)
     )));
     drawColors($('pantsColors'), state.pants, pickPants);
+    if (state.noBottom) $('pantsColors').hidden = true;
     // Only the shoes these pants come in; a missing pick shows the first pair.
     const shoes = Object.keys(state.pants.shoes || {});
     const shoe = shoes.includes(state.shoe) ? state.shoe : shoes[0];
-    $('shoeSection').hidden = shoes.length < 2;
+    $('shoeSection').hidden = shoes.length < 2 || state.noBottom;
     showOnly($('shoe'), 'shoe', shoes);
     $('shoe').querySelectorAll('button').forEach((b) => b.setAttribute('aria-checked', b.dataset.shoe === shoe));
-    $('boxerSection').hidden = !state.pants.boxers;
+    $('boxerSection').hidden = !state.pants.boxers || state.noBottom;
     $('tuckSection').hidden = !canTuck();
     $('boxer').querySelectorAll('button').forEach((b) => b.setAttribute('aria-checked', b.dataset.boxer === state.boxer));
   }
   // Tuck: tucked shows the pants' waistband; untucked lets the shirt hang over it.
   // Cropped tops and skirts (noTuck) have nothing to tuck: always tucked, control hidden.
-  const canTuck = () => !state.outfit.cropped && !state.pants.noTuck;
+  const canTuck = () => !state.noTop && !state.noBottom && !state.outfit.cropped && !state.pants.noTuck;
   const drawTuck = () => $('tuck').querySelectorAll('button').forEach((b) => b.setAttribute('aria-checked', (b.dataset.tuck === 'in') === state.tucked));
   drawTuck();
   $('tuck').onclick = (e) => {
@@ -380,6 +384,7 @@
     p.kind.current = p;
     state.pants = p;
     state.pantsPicked = true;
+    state.noBottom = false;
     drawPants();
     render();
   }
@@ -424,7 +429,7 @@
     const o = state.outfit;
     showOnly($('sleeve'), 'sleeve', sleevesOf(o));
     // Only one sleeve length? Nothing to choose, so hide the whole control.
-    $('sleeveSection').hidden = sleevesOf(o).length < 2;
+    $('sleeveSection').hidden = sleevesOf(o).length < 2 || state.noTop;
     $('sleeve').querySelectorAll('button').forEach((b) => b.setAttribute('aria-checked', b.dataset.sleeve === sleeveFor(o)));
   }
   $('sleeve').onclick = (e) => {
@@ -452,6 +457,7 @@
     state.fadeNext = true;
     o.kind.current = o;
     state.outfit = o;
+    state.noTop = false;
     if (!state.pantsPicked) {
       state.pants = ALL_PANTS.find((p) => p.id === o.pants) || PANTS[0].current;
     }
@@ -737,10 +743,12 @@
   async function render() {
     const id = ++renderId;
     const o = state.outfit;
+    const noTop = state.noTop;
+    const locked = !noTop && o.locked;
     let outfit;
     try {
-      outfit = await loadOutfit(o, state.body);
-      outfit = SkinLib.combineOutfit(outfit, await loadPants(state.pants), state.tucked || !canTuck());
+      outfit = noTop ? EMPTY_OUTFIT : await loadOutfit(o, state.body);
+      outfit = SkinLib.combineOutfit(outfit, state.noBottom ? null : await loadPants(state.pants), state.tucked || !canTuck());
     } catch (err) {
       if (id !== renderId) return;
       // Couldn't load this colour (e.g. a locked one that isn't set up yet).
@@ -755,20 +763,21 @@
       return;
     }
     if (id !== renderId) return; // a newer render started
-    lastGood = o;
+    if (!noTop) lastGood = o;
     syncUrl();
+    drawSlots();
     const slim = state.body === 'slim';
     const args = [state.tone, slim, state.hair, state.erased, state.headwear, state.keepSkin];
     const merged = SkinLib.mergeSkin(state.user, outfit, ...args);
     // Outfits that go over the head (CROPPIE®) replace the hat layer.
-    if (o.hat) {
+    if (!noTop && o.hat) {
       for (let y = 0; y < 16; y++) {
         const i = (y * 64 + 32) * 4;
         merged.data.set(outfit.data.subarray(i, i + 32 * 4), i);
       }
     }
     // Eraser maps: for preview-only outfits, draw them without the outfit.
-    state.merged = o.locked ? SkinLib.mergeSkin(state.user, EMPTY_OUTFIT, ...args) : merged;
+    state.merged = locked ? SkinLib.mergeSkin(state.user, EMPTY_OUTFIT, ...args) : merged;
     state.hairKeys = new Set(
       state.user ? SkinLib.extractHair(state.user, state.tone, state.hair).map((p) => p.x + ',' + p.y) : []
     );
@@ -778,8 +787,8 @@
     const texture = flat.closest('details');
     const dl = $('download');
     // The PNG can't carry the arm model, so tell people what to pick in Minecraft.
-    $('downloadHint').innerHTML = o.locked ? '' : `SAVES AS <strong>${slim ? 'SLIM' : 'CLASSIC'}</strong>. CHOOSE THE ${slim ? 'SLIM (ALEX)' : 'CLASSIC (STEVE)'} MODEL WHEN YOU UPLOAD IT TO MINECRAFT.`;
-    if (o.locked) {
+    $('downloadHint').innerHTML = locked ? '' : `SAVES AS <strong>${slim ? 'SLIM' : 'CLASSIC'}</strong>. CHOOSE THE ${slim ? 'SLIM (ALEX)' : 'CLASSIC (STEVE)'} MODEL WHEN YOU UPLOAD IT TO MINECRAFT.`;
+    if (locked) {
       // Nothing downloadable: no texture view, no data URL, straight to 3D.
       flat.getContext('2d').clearRect(0, 0, 64, 64);
       texture.hidden = true;
@@ -947,12 +956,60 @@
   }, { passive: true });
 
   $('download').onclick = () => {
-    if (state.outfit.locked || !state.resultUrl) return;
+    if ((state.outfit.locked && !state.noTop) || !state.resultUrl) return;
     const a = document.createElement('a');
     a.href = state.resultUrl;
     a.download = `${(state.userName || 'skin').replace(/[^A-Za-z0-9_-]/g, '')}GOOD.png`;
     a.click();
   };
+
+  // ---------- Equipped ----------
+  // Squares by the model: what's on right now (piece + colour). Hover shows an
+  // ×; clicking takes that piece off. Picking a card puts it back on.
+  let slotsId = 0;
+  const swatchBg = (c) => (Array.isArray(c.swatch) ? `linear-gradient(90deg, ${c.swatch[0]} 50%, ${c.swatch[1]} 50%)` : c.swatch || '#ccc');
+  async function drawSlots() {
+    const box = $('equipped');
+    if (!box) return;
+    const id = ++slotsId;
+    const o = state.outfit, p = state.pants;
+    const topBody = bodiesOf(o).includes(state.body) ? state.body : bodiesOf(o)[0];
+    const slots = [
+      { label: 'TOP', item: state.noTop ? null : o,
+        thumb: () => (o.locked ? null : shirtThumb(setFor(o)[topBody], topBody === 'slim')),
+        off: () => { state.noTop = true; } },
+      { label: 'BOTTOM', item: state.noBottom ? null : p,
+        thumb: () => pantsThumb(p),
+        off: () => { state.noBottom = true; } },
+    ];
+    const thumbs = await Promise.all(slots.map((s) => (s.item ? s.thumb() : null)));
+    if (id !== slotsId) return;
+    box.replaceChildren(...slots.map((s, i) => {
+      const b = document.createElement('button');
+      b.type = 'button';
+      b.className = 'eq-slot';
+      if (!s.item) {
+        b.classList.add('eq-empty');
+        b.disabled = true;
+        b.innerHTML = `<span class="eq-none mono">NO ${s.label}</span>`;
+        b.setAttribute('aria-label', `No ${s.label.toLowerCase()} on`);
+        return b;
+      }
+      const name = fullName(s.item);
+      b.title = `${name}. Click to take it off.`;
+      b.setAttribute('aria-label', `${name}. Take it off`);
+      b.innerHTML = (thumbs[i] ? `<img src="${thumbs[i]}" alt="">` : '<span class="eq-locked"></span>') + '<span class="eq-dot"></span><span class="eq-x" aria-hidden="true">×</span>';
+      b.querySelector('.eq-dot').style.background = swatchBg(s.item);
+      b.onclick = () => {
+        s.off();
+        state.fadeNext = true;
+        updateSleeveButtons();
+        drawOutfits();
+        render();
+      };
+      return b;
+    }));
+  }
 
   // ---------- Look links ----------
   // A look is a recipe: shirt + pants colour ids and the options in effect
@@ -966,14 +1023,14 @@
     const o = state.outfit, p = state.pants;
     const L = {};
     if (withName && state.fromName && state.userName) L.u = state.userName;
-    L.top = o.id;
-    L.bottom = p.id;
+    if (!state.noTop) L.top = o.id;
+    if (!state.noBottom) L.bottom = p.id;
     const shoes = Object.keys(p.shoes || {});
-    if (shoes.length > 1) L.shoe = shoes.includes(state.shoe) ? state.shoe : shoes[0];
-    if (sleevesOf(o).length > 1) L.sleeve = sleeveFor(o);
+    if (!state.noBottom && shoes.length > 1) L.shoe = shoes.includes(state.shoe) ? state.shoe : shoes[0];
+    if (!state.noTop && sleevesOf(o).length > 1) L.sleeve = sleeveFor(o);
     if (bodiesOf(o).length > 1) L.body = state.body;
     if (canTuck() && !state.tucked) L.tuck = 'out';
-    if (p.boxers && state.boxer === 'tartan') L.boxer = 'tartan';
+    if (!state.noBottom && p.boxers && state.boxer === 'tartan') L.boxer = 'tartan';
     return L;
   }
   const lookUrl = (L) => `${location.origin}${location.pathname}?${new URLSearchParams(L)}`;
@@ -995,6 +1052,8 @@
     state.tucked = L.tuck !== 'out';
     drawTuck();
     if (bottom) { bottom.kind.current = bottom; state.pants = bottom; state.pantsPicked = true; }
+    state.noTop = !top;
+    state.noBottom = !bottom;
     if (top) {
       if (top.kind.line !== 'both' && top.kind.line !== state.line) { state.line = top.kind.line; drawLine(); }
       top.kind.current = top;
@@ -1019,7 +1078,7 @@
   const shareHint = (msg) => { $('shareHint').textContent = msg; };
   $('shareLook').onclick = async () => {
     const url = lookUrl(currentLook());
-    const title = `${fullName(state.outfit)} · GOOD®`;
+    const title = `${fullName(state.noTop ? state.pants : state.outfit)} · GOOD®`;
     if (navigator.share && matchMedia('(pointer: coarse)').matches) {
       try { await navigator.share({ title, url }); return; } catch (e) { if (e.name === 'AbortError') return; }
     }
@@ -1130,6 +1189,7 @@
 
   $('postLook').onclick = async () => {
     if (!state.fromName) return shareHint('LOAD YOUR SKIN BY USERNAME TO POST YOUR LOOK.');
+    if (state.noTop || state.noBottom) return shareHint('PUT ON A TOP AND A BOTTOM TO POST YOUR LOOK.');
     if (state.outfit.locked) return shareHint('PREVIEW-ONLY PIECES CAN’T BE POSTED.');
     const btn = $('postLook');
     btn.disabled = true;

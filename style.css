@@ -1074,3 +1074,27 @@ body.st {
 }
 .st-body .st-h, .st-body .st-pull, .st-body figure, .st-body section { clear: both; }
 @media (max-width: 700px) { .st-wrap { max-width: 40%; margin-right: 14px; shape-margin: 8px; } }
+
+/* ---------- Equipped: what's on, by the model ---------- */
+.viewer-wrap { position: relative; }
+.equipped { position: absolute; z-index: 4; left: 0; top: 50%; transform: translateY(-50%); display: flex; flex-direction: column; gap: 12px; }
+.eq-slot {
+  position: relative; width: 58px; height: 58px; padding: 6px; border-radius: 14px; cursor: pointer;
+  background: rgba(255, 255, 255, 0.72); border: 1px solid var(--glass-edge);
+  backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px);
+  box-shadow: 0 8px 22px rgba(11, 21, 38, 0.14); transition: transform 0.15s, box-shadow 0.15s;
+}
+.eq-slot img { display: block; width: 100%; height: 100%; object-fit: contain; image-rendering: pixelated; }
+.eq-slot .eq-locked { display: block; width: 100%; height: 100%; border-radius: 8px; background: #87cefa; }
+.eq-dot { position: absolute; right: -4px; bottom: -4px; width: 16px; height: 16px; border-radius: 50%; box-shadow: 0 0 0 2px #fff, 0 2px 6px rgba(11, 21, 38, 0.25); }
+.eq-x {
+  position: absolute; inset: 0; display: grid; place-items: center; border-radius: 14px;
+  background: rgba(11, 21, 38, 0.55); color: #fff; font: 300 1.6rem/1 'Inter', sans-serif;
+  opacity: 0; transition: opacity 0.15s;
+}
+.eq-slot:not(.eq-empty):hover .eq-x, .eq-slot:not(.eq-empty):focus-visible .eq-x { opacity: 1; }
+.eq-slot:not(.eq-empty):hover { transform: translateY(-1px); box-shadow: 0 10px 26px rgba(11, 21, 38, 0.2); }
+.eq-empty { cursor: default; background: rgba(255, 255, 255, 0.3); border-style: dashed; border-color: rgba(11, 21, 38, 0.25); box-shadow: none; }
+.eq-none { display: grid; place-items: center; height: 100%; font-size: 0.5rem; letter-spacing: 0.1em; color: var(--ink-soft); text-align: center; line-height: 1.3; }
+.intro .equipped { opacity: 0; }
+@media (max-width: 900px) { .equipped { left: 4px; } .eq-slot { width: 52px; height: 52px; } }
