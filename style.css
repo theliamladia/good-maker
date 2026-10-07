@@ -115,11 +115,26 @@ body {
 /* ---------- Layout ---------- */
 .stage {
   display: grid;
-  grid-template-columns: 290px minmax(0, 1fr) 400px;
+  /* 20% you / 20% the model / 60% the fit: the catalogue gets the room */
+  grid-template-columns: minmax(250px, 2fr) minmax(220px, 2fr) minmax(0, 6fr);
   gap: 24px; align-items: center;
-  max-width: 1360px; margin: 0 auto; padding: 12px 24px 40px;
+  max-width: 1760px; margin: 0 auto; padding: 12px 28px 40px;
   min-height: calc(100vh - 150px);
 }
+/* Right panel: shirts and pants side by side */
+.fit-cols { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 28px; }
+.fit-col { min-width: 0; }
+.fit-col #pantsSection > .section-tag:first-child { margin-top: 0; }
+/* FINE TUNE: hair and head tools, folded away */
+.fine-tune { margin-top: 20px; border-top: 1px solid rgba(11, 21, 38, 0.1); padding-top: 14px; }
+.fine-tune > summary {
+  cursor: pointer; list-style: none; display: flex; align-items: center; justify-content: space-between;
+  font-size: 0.72rem; letter-spacing: 0.12em; color: var(--ink-soft);
+}
+.fine-tune > summary::-webkit-details-marker { display: none; }
+.fine-tune > summary::after { content: '+'; font: 400 1.1rem/1 'Inter', sans-serif; transition: transform 0.2s; }
+.fine-tune[open] > summary::after { transform: rotate(45deg); }
+.fine-tune .swiper { margin-top: 14px; }
 .panel {
   background: var(--glass);
   border: 1px solid var(--glass-edge);
@@ -243,7 +258,8 @@ body {
 .outfit-carousel { display: flex; align-items: center; gap: 6px; }
 .outfits {
   flex: 1; min-width: 0; display: grid; grid-auto-flow: column;
-  grid-auto-columns: calc((100% - 16px) / 3); gap: 8px;  /* three cards at a time */
+  grid-template-rows: repeat(var(--rows, 3), auto);  /* three rows of cards ... */
+  grid-auto-columns: calc((100% - 16px) / 3); gap: 8px;  /* ... three columns at a time; scroll for more */
   overflow-x: auto; scroll-snap-type: x mandatory; scroll-behavior: smooth;
   scrollbar-width: none; overscroll-behavior-x: contain; padding: 2px 0;
 }
@@ -319,7 +335,7 @@ body {
 .texture { margin-top: 16px; }
 .texture summary { cursor: pointer; font-size: 0.7rem; letter-spacing: 0.08em; color: var(--ink-soft); }
 #flat {
-  display: block; width: 100%; aspect-ratio: 1; margin-top: 8px; border-radius: 10px;
+  display: block; width: 100%; max-width: 280px; aspect-ratio: 1; margin-top: 8px; border-radius: 10px;
   image-rendering: pixelated;
   background: repeating-conic-gradient(#e6edf5 0 25%, #fff 0 50%) 0 0 / 16px 16px;
 }
@@ -365,6 +381,11 @@ body {
 .viewer-bar .chip { border-color: transparent; background: transparent; }
 .viewer-bar .chip[aria-pressed="true"] { background: var(--ink); }
 .viewer-bar .sep { width: 1px; height: 18px; background: rgba(11, 21, 38, 0.15); margin: 0 4px; }
+/* the model's column is narrow now: keep the bar on one line */
+.viewer-bar { flex-wrap: nowrap; gap: 2px; max-width: 100%; }
+.viewer-bar .chips { flex-wrap: nowrap; gap: 2px; }
+.viewer-bar .chip { padding: 6px 9px; font-size: 0.64rem; white-space: nowrap; }
+.viewer-bar .sep { margin: 0 2px; }
 
 /* ---------- Help ---------- */
 .help-btn {
@@ -553,12 +574,19 @@ body { text-shadow: 0.5px 0 rgba(255, 0, 60, 0.22), -0.5px 0 rgba(0, 190, 255, 0
 }
 
 /* ---------- Small screens ---------- */
+@media (max-width: 1250px) {
+  .stage { grid-template-columns: minmax(240px, 1fr) minmax(220px, 1fr) minmax(0, 2fr); }
+  .fit-cols { grid-template-columns: minmax(0, 1fr); gap: 0; }
+  .fit-col #pantsSection > .section-tag:first-child { margin-top: 22px; }
+  .outfits { --rows: 2; grid-auto-columns: calc((100% - 24px) / 4); }
+}
 @media (max-width: 900px) {
   .site-header { padding: 14px 16px; }
   .site-nav { margin-right: 0; }
   .stage { grid-template-columns: 1fr; padding: 8px 16px 32px; min-height: 0; }
   .viewer-wrap { order: -1; }
   #view3d { height: 58vh; }
+  .outfits { grid-auto-columns: calc((100% - 16px) / 3); }
 }
 
 /* ---------- DEEP END® ---------- */
