@@ -13,7 +13,7 @@
 .cx-hero { padding: clamp(80px, 16vh, 180px) 0 clamp(64px, 11vh, 120px); }
 .cx-hero .cx-tag { margin-bottom: 28px; color: #0000ff; }
 .cx-title { margin: 0; font-weight: 800; letter-spacing: -0.06em; line-height: 0.88; font-size: clamp(3.4rem, 12vw, 11rem); color: #0000ff; }
-.cx-title span { font-weight: 400; font-size: 0.32em; vertical-align: 1.5em; letter-spacing: 0; color: #0b1526; }
+.cx-title span { font-weight: 400; font-size: 0.32em; vertical-align: 2.1em; margin-left: 0.08em; letter-spacing: 0; color: #0b1526; }
 .cx-copy { margin: 40px 0 0; max-width: 32em; font-size: clamp(1rem, 1.4vw, 1.2rem); line-height: 1.6; }
 
 /* Spectrum strip */
