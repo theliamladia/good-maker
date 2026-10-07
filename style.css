@@ -1071,9 +1071,9 @@ body.st {
    Locked to the text's line grid: one shape row = two lines (one on phones),
    so the open side of each G takes whole lines. The gap lives in the mask. */
 .st-wrap {
-  --cell: 1.62em; /* one G pixel per line of text, so each notch takes whole lines */
+  --cell: 1.62em; /* one G pixel per line of text: a four-line drop cap */
   float: left; width: calc((var(--cols) + 0.4) * var(--cell)); height: auto; /* PNG carries the gutter */
-  margin: 0; shape-image-threshold: 0.5; -webkit-user-drag: none;
+  margin: 0 0 -0.5em; -webkit-user-drag: none; /* lets line five clear the cap even if a line box runs tall */
 }
 .st-wrap ~ p { margin-bottom: 1.62em; }
 .st-body .st-h, .st-body .st-pull, .st-body figure, .st-body section { clear: both; }

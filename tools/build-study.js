@@ -66,7 +66,7 @@ function block(b, first) {
   if (b.quote) return `<blockquote class="st-pull"><p>${b.quote}</p></blockquote>`;
   // A shape the text wraps around (CSS shape-outside follows the image's outline).
   // The mask carries the gap beside each row, so nothing bleeds up or down into the gaps.
-  if (b.wrap) return `<img class="st-wrap" src="${b.wrap}" alt="${esc(b.alt)}" style="--cols:${b.cols || 4};shape-outside:url('${b.mask || b.wrap}')">`;
+  if (b.wrap) return `<img class="st-wrap" src="${b.wrap}" alt="${esc(b.alt)}" style="--cols:${b.cols || 4}">`;
   if (b.head) return `<h2 class="st-h">${b.head}</h2>`;
   if (b.fig) return `<figure class="st-fig st-wide"><img src="${b.fig}" alt="${esc(b.alt)}" loading="lazy"><figcaption>${b.caption || ''}</figcaption></figure>`;
   if (b.pair) return `<figure class="st-fig st-wide st-pair st-n${b.pair.length}">${b.pair.map((i) => `<div class="st-tile"><img src="${i.img}" alt="${esc(i.alt)}" loading="lazy"></div>`).join('')}<figcaption>${b.caption || ''}</figcaption></figure>`;
