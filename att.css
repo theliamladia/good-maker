@@ -128,6 +128,23 @@ html.att-falling, html.att-falling body { overflow: hidden; }
 .att-group { min-width: 0; padding-top: 28px; border-top: 1px solid var(--att-line); }
 .att-group h3 { margin: 0 0 36px; font: 400 0.64rem 'Space Mono', monospace; letter-spacing: 0.3em; opacity: 0.75; }
 .att-group ul { list-style: none; margin: 0; padding: 0; display: grid; gap: 34px; }
+.att-group ul { gap: 56px; }
+.att-ghost {   /* the garment hangs in the air, drifting gently, its shadow on the ground below */
+  position: relative; width: 100%; max-width: 230px; aspect-ratio: 1; margin: 0 0 22px;
+  animation: att-hover 6s ease-in-out infinite;
+}
+.att-ghost::after {
+  content: ''; position: absolute; left: 22%; right: 22%; bottom: -4%; height: 8%; border-radius: 50%;
+  background: radial-gradient(closest-side, rgba(40, 12, 0, 0.35), rgba(40, 12, 0, 0));
+  animation: att-shadow 6s ease-in-out infinite; animation-delay: inherit;
+}
+.att-ghost img {
+  position: relative; z-index: 1; width: 100%; height: 100%; object-fit: contain; transition: opacity 0.6s ease;
+  filter: drop-shadow(0 10px 14px rgba(40, 12, 0, 0.18)); -webkit-user-drag: none; user-select: none;
+}
+@keyframes att-hover { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-12px); } }
+@keyframes att-shadow { 0%, 100% { transform: translateY(0) scale(1); opacity: 1; } 50% { transform: translateY(12px) scale(0.82); opacity: 0.6; } }
+#switch2 { margin-top: -24px; }
 .att-group li strong { display: block; margin-bottom: 10px; font: 400 1.35rem/1.15 'Libre Caslon Display', Georgia, serif; }
 .att-group li span { font: italic 400 0.95rem/1.6 'Libre Caslon Text', Georgia, serif; opacity: 0.85; }
 
@@ -152,6 +169,8 @@ html.att-falling, html.att-falling body { overflow: hidden; }
   .att-looks { grid-template-columns: minmax(0, 1fr); gap: 80px; }
   .att-look .att-fig { max-height: 400px; }
   .att-pieces { grid-template-columns: minmax(0, 1fr); row-gap: 64px; }
+  .att-ghost { max-width: 260px; margin-left: auto; margin-right: auto; }
+  .att-group li, .att-group h3 { text-align: center; }
   .att-switch { flex-direction: column; align-items: center; gap: 18px; }
   .att-title { top: 18%; }
   .att-page .nav-burger { background: var(--att-cream); box-shadow: 0 6px 18px rgba(60, 20, 0, 0.25); }
@@ -159,5 +178,6 @@ html.att-falling, html.att-falling body { overflow: hidden; }
   .att-page .site-nav .nav-link { color: #7e3a1d; }
 }
 @media (prefers-reduced-motion: reduce) {
-  .att-title, .att-look img { transition: none; }
+  .att-title, .att-look img, .att-ghost img { transition: none; }
+  .att-ghost, .att-ghost::after { animation: none; }
 }

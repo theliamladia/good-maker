@@ -73,7 +73,13 @@
   const src = (l, c) => `assets/att/${l.i}-${CW[c].id}.webp`;
   function showCw(c, fade) {
     cw = c;
-    $('switch').querySelectorAll('button').forEach((b, j) => b.setAttribute('aria-checked', j === c));
+    for (const id of ['switch', 'switch2']) $(id).querySelectorAll('button').forEach((b, j) => b.setAttribute('aria-checked', j === c));
+    for (const gh of ghosts) {
+      gh.img.alt = `${gh.name} in ${cwName(CW[c])}, shown without a body.`;
+      if (!fade) { gh.img.src = ghostSrc(gh, c); continue; }
+      gh.img.style.opacity = 0;
+      setTimeout(() => { gh.img.src = ghostSrc(gh, c); gh.img.onload = () => { gh.img.style.opacity = 1; }; }, 250);
+    }
     for (const l of looks) {
       const c0 = CW[c];
       l.cap.textContent = `${c0.a.name}™ and ${c0.b.name}™`;
@@ -83,22 +89,41 @@
       setTimeout(() => { l.img.src = src(l, c); l.img.onload = () => { l.img.style.opacity = 1; }; }, 250);
     }
   }
-  $('switch').append(...CW.map((c, j) => {
-    const b = el('button', null, `<i></i>${cwName(c)}`);
-    b.type = 'button'; b.setAttribute('role', 'radio');
-    b.querySelector('i').style.background = twin(c);
-    b.onclick = () => { if (j !== cw) showCw(j, true); };
-    return b;
-  }));
-  showCw(0, false);
-  // Warm the cache for the other colourways.
-  addEventListener('load', () => { for (const l of looks) for (let c = 0; c < CW.length; c++) new Image().src = src(l, c); });
-
+  // The twelve pieces as ghost mannequins (garment only, no body), floating
+  // over their names. They follow the same colourway switch as the looks.
+  const slug = (n) => n.replace(/®/g, '').trim().toLowerCase().replace(/\s+/g, '-');
+  const ghosts = [];
   $('pieceList').append(...PIECES.map(([title, list]) => {
     const g = el('div', 'att-group', `<h3>${title}</h3><ul></ul>`);
-    g.querySelector('ul').append(...list.map(([n, d]) => { const li = el('li', null, '<strong></strong><span></span>'); li.firstChild.textContent = n; li.lastChild.textContent = d; return li; }));
+    g.querySelector('ul').append(...list.map(([n, d]) => {
+      const li = el('li', null, '<div class="att-ghost"><img alt="" draggable="false"></div><strong></strong><span></span>');
+      li.querySelector('strong').textContent = n;
+      li.querySelector('span').textContent = d;
+      li.querySelector('.att-ghost').style.animationDelay = `${-(ghosts.length * 0.7) % 6}s`;
+      li.addEventListener('contextmenu', (e) => e.preventDefault());
+      ghosts.push({ name: n, slug: slug(n), img: li.querySelector('img') });
+      return li;
+    }));
     return g;
   }));
+  const ghostSrc = (gh, c) => `assets/att/pieces/${gh.slug}-${CW[c].id}.webp`;
+
+  // Colourway switches (one over the looks, one over the pieces), kept in step.
+  for (const id of ['switch', 'switch2']) {
+    $(id).append(...CW.map((c, j) => {
+      const b = el('button', null, `<i></i>${cwName(c)}`);
+      b.type = 'button'; b.setAttribute('role', 'radio');
+      b.querySelector('i').style.background = twin(c);
+      b.onclick = () => { if (j !== cw) showCw(j, true); };
+      return b;
+    }));
+  }
+  showCw(0, false);
+  // Warm the cache for the other colourways.
+  addEventListener('load', () => {
+    for (let c = 0; c < CW.length; c++) { for (const l of looks) new Image().src = src(l, c); for (const gh of ghosts) new Image().src = ghostSrc(gh, c); }
+  });
+
 
   // ---------- Treeline ----------
   // Three SVG layers, back to front: hazy far hills of trees, the fall canopy,
