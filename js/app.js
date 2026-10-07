@@ -360,7 +360,7 @@
     { id: 'sneak01', name: 'SNEAK01', colors: [['sneak01', 'COTTON™/GOOD® BLUE', ['#f4f4f2', '#0000ff']]] },
     { id: 'chelsea', name: 'CHELSEA®', colors: [['chelsea-tobacco', 'TOBACCO™', '#b57a36'], ['chelsea-tuxedo', 'TUXEDO™', '#1b1b1f'], ['chelsea-mahogany', 'MAHOGANY™', '#5a1e14']] },
     { id: 'workboot', name: 'WORKBOOT®', colors: [['workboot-wheat', 'WHEAT™', '#c8913f'], ['workboot-oxblood', 'OXBLOOD™', '#713a40'], ['workboot-tuxedo', 'TUXEDO™', '#1b1b1f']] },
-    { id: 'duck', name: 'DUCK BOOT®', colors: [['duck-duck-canvas-mahogany', 'DUCK CANVAS™/MAHOGANY™', ['#b98f55', '#5a1e14']], ['duck-trench-good-blue', 'TRENCH™/GOOD® BLUE', ['#c4b38a', '#0000ff']], ['duck-ecru-twill-tuxedo', 'ECRU TWILL™/TUXEDO™', ['#ddd2b8', '#1b1b1f']]] },
+    { id: 'duck', name: 'DUCK BOOT®', colors: [['duck-peyote', 'PEYOTE™/PEYOTE™', ['#c4b294', '#e4d9c6']], ['duck-inkwell-after-hours', 'INKWELL™/AFTER HOURS™', ['#2f343c', '#16171d']], ['duck-chocolate-cacao', 'CHOCOLATE™/CACAO™', ['#6e4631', '#3b2527']]] },
   ].map((k) => ({ ...k, colors: k.colors.map(([id, color, swatch]) => ({ id, color, swatch })) }));
   const SHOE = Object.fromEntries(SHOE_KINDS.flatMap((k) => k.colors.map((c) => [c.id, { ...c, kindId: k.id, name: k.name }])));
   // The kinds a bottom comes in, cut down to its colours (same objects each time, for drawColors).
@@ -1099,7 +1099,7 @@
   // Boots (CHELSEA®, WORKBOOT®, DUCK BOOT®): the boot is the base layer from its
   // top row down (and the sole); the outer layer over it is the bottom's hem
   // draped on top, so it stays with the pants.
-  const BOOT_TOP = { chelsea: 7, workboot: 6, duck: 5 };
+  const BOOT_TOP = { chelsea: 7, workboot: 6, duck: 4 };
   const bootTop = (shoe) => BOOT_TOP[(shoe || '').split('-')[0]];
   const isBoot = (t) => (x, y) =>
     (y >= 20 + t && y <= 31 && x < 16) || (y >= 16 && y <= 19 && x >= 8 && x < 12) ||          // right leg base
