@@ -41,6 +41,179 @@ window.OUTFITS = [
     ],
   },
   {
+    // AMONG THE TREES® (GOOD® CAPSULE Nº2): COTTON with the new G on the chest in MAPLE LEAF.
+    id: 'shirt-ii',
+    name: 'SHIRT® II',
+    colors: [
+      {
+        id: 'shirt-cotton-maple-leaf',
+        color: 'COTTON/MAPLE LEAF',
+        swatch: ['#ffffff', '#c2452b'],
+        bodies: { classic: 'outfits/good-shirt-cotton-maple-leaf-classic.png', slim: 'outfits/good-shirt-cotton-maple-leaf-slim.png' },
+        long: { classic: 'outfits/good-shirt-cotton-maple-leaf-long-classic.png', slim: 'outfits/good-shirt-cotton-maple-leaf-long-slim.png' },
+      },
+    ],
+  },
+  {
+    // AMONG THE TREES® (GOOD® CAPSULE Nº2). Zip at the neck, the new G under it, contrast cuffs and hem.
+    id: 'half-zip',
+    name: 'HALF-ZIP®',
+    line: 'good',
+    colors: [
+      {
+        id: 'half-zip-cinnamon-toast-fern',
+        color: 'CINNAMON TOAST/FERN',
+        swatch: ['#a65a2e', '#4f6b45'],
+        long: { classic: 'outfits/att/half-zip-cinnamon-toast-fern-long-classic.png', slim: 'outfits/att/half-zip-cinnamon-toast-fern-long-slim.png' },
+      },
+      {
+        id: 'half-zip-wash-day-trench',
+        color: 'WASH DAY/TRENCH',
+        swatch: ['#8eaee6', '#c4b38a'],
+        long: { classic: 'outfits/att/half-zip-wash-day-trench-long-classic.png', slim: 'outfits/att/half-zip-wash-day-trench-long-slim.png' },
+      },
+      {
+        id: 'half-zip-maple-leaf-fatigue',
+        color: 'MAPLE LEAF/FATIGUE',
+        swatch: ['#c2452b', '#4a4f2f'],
+        long: { classic: 'outfits/att/half-zip-maple-leaf-fatigue-long-classic.png', slim: 'outfits/att/half-zip-maple-leaf-fatigue-long-slim.png' },
+      },
+    ],
+  },
+  {
+    // AMONG THE TREES® (GOOD® CAPSULE Nº2). Hooped rugby shirt, COTTON collar and cuffs, the new G in COTTON.
+    id: 'rugby',
+    name: 'RUGBY®',
+    line: 'good',
+    colors: [
+      {
+        id: 'rugby-cinnamon-toast-fern',
+        color: 'CINNAMON TOAST/FERN',
+        swatch: ['#a65a2e', '#4f6b45'],
+        long: { classic: 'outfits/att/rugby-cinnamon-toast-fern-long-classic.png', slim: 'outfits/att/rugby-cinnamon-toast-fern-long-slim.png' },
+      },
+      {
+        id: 'rugby-wash-day-trench',
+        color: 'WASH DAY/TRENCH',
+        swatch: ['#8eaee6', '#c4b38a'],
+        long: { classic: 'outfits/att/rugby-wash-day-trench-long-classic.png', slim: 'outfits/att/rugby-wash-day-trench-long-slim.png' },
+      },
+      {
+        id: 'rugby-maple-leaf-fatigue',
+        color: 'MAPLE LEAF/FATIGUE',
+        swatch: ['#c2452b', '#4a4f2f'],
+        long: { classic: 'outfits/att/rugby-maple-leaf-fatigue-long-classic.png', slim: 'outfits/att/rugby-maple-leaf-fatigue-long-slim.png' },
+      },
+    ],
+  },
+  {
+    // AMONG THE TREES® (GOOD® CAPSULE Nº2). Cardigan over a tee in the other colour, the new G set off on the right front panel.
+    id: 'grandpa',
+    name: 'GRANDPA®',
+    line: 'good',
+    colors: [
+      {
+        id: 'grandpa-cinnamon-toast-fern',
+        color: 'CINNAMON TOAST/FERN',
+        swatch: ['#a65a2e', '#4f6b45'],
+        long: { classic: 'outfits/att/grandpa-cinnamon-toast-fern-long-classic.png', slim: 'outfits/att/grandpa-cinnamon-toast-fern-long-slim.png' },
+      },
+      {
+        id: 'grandpa-wash-day-trench',
+        color: 'WASH DAY/TRENCH',
+        swatch: ['#8eaee6', '#c4b38a'],
+        long: { classic: 'outfits/att/grandpa-wash-day-trench-long-classic.png', slim: 'outfits/att/grandpa-wash-day-trench-long-slim.png' },
+      },
+      {
+        id: 'grandpa-maple-leaf-fatigue',
+        color: 'MAPLE LEAF/FATIGUE',
+        swatch: ['#c2452b', '#4a4f2f'],
+        long: { classic: 'outfits/att/grandpa-maple-leaf-fatigue-long-classic.png', slim: 'outfits/att/grandpa-maple-leaf-fatigue-long-slim.png' },
+      },
+    ],
+  },
+  {
+    // AMONG THE TREES® (GOOD® CAPSULE Nº2). A knit shrug over a cropped tank; the new G on the tank.
+    id: 'shrug',
+    name: 'SHRUG®',
+    line: 'baby',
+    cropped: true, // ends above the waist: no Tuck control
+    colors: [
+      {
+        id: 'shrug-cinnamon-toast-fern',
+        color: 'CINNAMON TOAST/FERN',
+        swatch: ['#a65a2e', '#4f6b45'],
+        long: { classic: 'outfits/att/shrug-cinnamon-toast-fern-long-classic.png', slim: 'outfits/att/shrug-cinnamon-toast-fern-long-slim.png' },
+      },
+      {
+        id: 'shrug-wash-day-trench',
+        color: 'WASH DAY/TRENCH',
+        swatch: ['#8eaee6', '#c4b38a'],
+        long: { classic: 'outfits/att/shrug-wash-day-trench-long-classic.png', slim: 'outfits/att/shrug-wash-day-trench-long-slim.png' },
+      },
+      {
+        id: 'shrug-maple-leaf-fatigue',
+        color: 'MAPLE LEAF/FATIGUE',
+        swatch: ['#c2452b', '#4a4f2f'],
+        long: { classic: 'outfits/att/shrug-maple-leaf-fatigue-long-classic.png', slim: 'outfits/att/shrug-maple-leaf-fatigue-long-slim.png' },
+      },
+    ],
+  },
+  {
+    // AMONG THE TREES® (GOOD® CAPSULE Nº2). Cropped varsity jacket, COTTON body, the new G on the chest.
+    id: 'varsity',
+    name: 'VARSITY®',
+    line: 'baby',
+    cropped: true, // ends above the waist: no Tuck control
+    colors: [
+      {
+        id: 'varsity-cinnamon-toast-fern',
+        color: 'CINNAMON TOAST/FERN',
+        swatch: ['#a65a2e', '#4f6b45'],
+        long: { classic: 'outfits/att/varsity-cinnamon-toast-fern-long-classic.png', slim: 'outfits/att/varsity-cinnamon-toast-fern-long-slim.png' },
+      },
+      {
+        id: 'varsity-wash-day-trench',
+        color: 'WASH DAY/TRENCH',
+        swatch: ['#8eaee6', '#c4b38a'],
+        long: { classic: 'outfits/att/varsity-wash-day-trench-long-classic.png', slim: 'outfits/att/varsity-wash-day-trench-long-slim.png' },
+      },
+      {
+        id: 'varsity-maple-leaf-fatigue',
+        color: 'MAPLE LEAF/FATIGUE',
+        swatch: ['#c2452b', '#4a4f2f'],
+        long: { classic: 'outfits/att/varsity-maple-leaf-fatigue-long-classic.png', slim: 'outfits/att/varsity-maple-leaf-fatigue-long-slim.png' },
+      },
+    ],
+  },
+  {
+    // AMONG THE TREES® (GOOD® CAPSULE Nº2). Cropped wrap top crossing over the front; the new G small on the left.
+    id: 'wrap',
+    name: 'WRAP®',
+    line: 'baby',
+    cropped: true, // ends above the waist: no Tuck control
+    colors: [
+      {
+        id: 'wrap-cinnamon-toast-fern',
+        color: 'CINNAMON TOAST/FERN',
+        swatch: ['#a65a2e', '#4f6b45'],
+        long: { classic: 'outfits/att/wrap-cinnamon-toast-fern-long-classic.png', slim: 'outfits/att/wrap-cinnamon-toast-fern-long-slim.png' },
+      },
+      {
+        id: 'wrap-wash-day-trench',
+        color: 'WASH DAY/TRENCH',
+        swatch: ['#8eaee6', '#c4b38a'],
+        long: { classic: 'outfits/att/wrap-wash-day-trench-long-classic.png', slim: 'outfits/att/wrap-wash-day-trench-long-slim.png' },
+      },
+      {
+        id: 'wrap-maple-leaf-fatigue',
+        color: 'MAPLE LEAF/FATIGUE',
+        swatch: ['#c2452b', '#4a4f2f'],
+        long: { classic: 'outfits/att/wrap-maple-leaf-fatigue-long-classic.png', slim: 'outfits/att/wrap-maple-leaf-fatigue-long-slim.png' },
+      },
+    ],
+  },
+  {
     // The tee pulled up over the head: the hat layer is the shirt (neck hole
     // round the face), the body is cropped at the chest. hat: true = this
     // outfit's hat layer replaces the player's.
@@ -589,6 +762,249 @@ window.PANTS = [
       sneak01: 'outfits/pants/good-jean-sneak01.png',
     },
     colors: washes('springsteen'),
+  },
+  {
+    // AMONG THE TREES® (GOOD® CAPSULE Nº2). Cargo pocket on each outer leg, contrast waistband.
+    id: 'cargo',
+    name: 'CARGO®',
+    colors: [
+      {
+        id: 'cargo-cinnamon-toast-fern',
+        color: 'CINNAMON TOAST/FERN',
+        swatch: ['#a65a2e', '#4f6b45'],
+        shoes: {
+          black: 'outfits/pants/att/cargo-cinnamon-toast-fern-black.png',
+          brown: 'outfits/pants/att/cargo-cinnamon-toast-fern-brown.png',
+          tobacco: 'outfits/pants/att/cargo-cinnamon-toast-fern-tobacco.png',
+          sneak01: 'outfits/pants/att/cargo-cinnamon-toast-fern-sneak01.png',
+        },
+      },
+      {
+        id: 'cargo-wash-day-trench',
+        color: 'WASH DAY/TRENCH',
+        swatch: ['#8eaee6', '#c4b38a'],
+        shoes: {
+          black: 'outfits/pants/att/cargo-wash-day-trench-black.png',
+          brown: 'outfits/pants/att/cargo-wash-day-trench-brown.png',
+          tobacco: 'outfits/pants/att/cargo-wash-day-trench-tobacco.png',
+          sneak01: 'outfits/pants/att/cargo-wash-day-trench-sneak01.png',
+        },
+      },
+      {
+        id: 'cargo-maple-leaf-fatigue',
+        color: 'MAPLE LEAF/FATIGUE',
+        swatch: ['#c2452b', '#4a4f2f'],
+        shoes: {
+          black: 'outfits/pants/att/cargo-maple-leaf-fatigue-black.png',
+          brown: 'outfits/pants/att/cargo-maple-leaf-fatigue-brown.png',
+          tobacco: 'outfits/pants/att/cargo-maple-leaf-fatigue-tobacco.png',
+          sneak01: 'outfits/pants/att/cargo-maple-leaf-fatigue-sneak01.png',
+        },
+      },
+    ],
+  },
+  {
+    // AMONG THE TREES® (GOOD® CAPSULE Nº2). Pressed front pleat.
+    id: 'pleat',
+    name: 'PLEAT®',
+    colors: [
+      {
+        id: 'pleat-cinnamon-toast-fern',
+        color: 'CINNAMON TOAST/FERN',
+        swatch: ['#a65a2e', '#4f6b45'],
+        shoes: {
+          black: 'outfits/pants/att/pleat-cinnamon-toast-fern-black.png',
+          brown: 'outfits/pants/att/pleat-cinnamon-toast-fern-brown.png',
+          tobacco: 'outfits/pants/att/pleat-cinnamon-toast-fern-tobacco.png',
+          sneak01: 'outfits/pants/att/pleat-cinnamon-toast-fern-sneak01.png',
+        },
+      },
+      {
+        id: 'pleat-wash-day-trench',
+        color: 'WASH DAY/TRENCH',
+        swatch: ['#8eaee6', '#c4b38a'],
+        shoes: {
+          black: 'outfits/pants/att/pleat-wash-day-trench-black.png',
+          brown: 'outfits/pants/att/pleat-wash-day-trench-brown.png',
+          tobacco: 'outfits/pants/att/pleat-wash-day-trench-tobacco.png',
+          sneak01: 'outfits/pants/att/pleat-wash-day-trench-sneak01.png',
+        },
+      },
+      {
+        id: 'pleat-maple-leaf-fatigue',
+        color: 'MAPLE LEAF/FATIGUE',
+        swatch: ['#c2452b', '#4a4f2f'],
+        shoes: {
+          black: 'outfits/pants/att/pleat-maple-leaf-fatigue-black.png',
+          brown: 'outfits/pants/att/pleat-maple-leaf-fatigue-brown.png',
+          tobacco: 'outfits/pants/att/pleat-maple-leaf-fatigue-tobacco.png',
+          sneak01: 'outfits/pants/att/pleat-maple-leaf-fatigue-sneak01.png',
+        },
+      },
+    ],
+  },
+  {
+    // AMONG THE TREES® (GOOD® CAPSULE Nº2). Wide-wale corduroy.
+    id: 'cord',
+    name: 'CORD®',
+    colors: [
+      {
+        id: 'cord-cinnamon-toast-fern',
+        color: 'CINNAMON TOAST/FERN',
+        swatch: ['#a65a2e', '#4f6b45'],
+        shoes: {
+          black: 'outfits/pants/att/cord-cinnamon-toast-fern-black.png',
+          brown: 'outfits/pants/att/cord-cinnamon-toast-fern-brown.png',
+          tobacco: 'outfits/pants/att/cord-cinnamon-toast-fern-tobacco.png',
+          sneak01: 'outfits/pants/att/cord-cinnamon-toast-fern-sneak01.png',
+        },
+      },
+      {
+        id: 'cord-wash-day-trench',
+        color: 'WASH DAY/TRENCH',
+        swatch: ['#8eaee6', '#c4b38a'],
+        shoes: {
+          black: 'outfits/pants/att/cord-wash-day-trench-black.png',
+          brown: 'outfits/pants/att/cord-wash-day-trench-brown.png',
+          tobacco: 'outfits/pants/att/cord-wash-day-trench-tobacco.png',
+          sneak01: 'outfits/pants/att/cord-wash-day-trench-sneak01.png',
+        },
+      },
+      {
+        id: 'cord-maple-leaf-fatigue',
+        color: 'MAPLE LEAF/FATIGUE',
+        swatch: ['#c2452b', '#4a4f2f'],
+        shoes: {
+          black: 'outfits/pants/att/cord-maple-leaf-fatigue-black.png',
+          brown: 'outfits/pants/att/cord-maple-leaf-fatigue-brown.png',
+          tobacco: 'outfits/pants/att/cord-maple-leaf-fatigue-tobacco.png',
+          sneak01: 'outfits/pants/att/cord-maple-leaf-fatigue-sneak01.png',
+        },
+      },
+    ],
+  },
+  {
+    // AMONG THE TREES® (GOOD® CAPSULE Nº2). Ribbed knit midi skirt.
+    id: 'knit-midi',
+    name: 'KNIT MIDI®',
+    noTuck: true, // a skirt: tops always tuck in
+    colors: [
+      {
+        id: 'knit-midi-cinnamon-toast-fern',
+        color: 'CINNAMON TOAST/FERN',
+        swatch: ['#a65a2e', '#4f6b45'],
+        shoes: {
+          black: 'outfits/pants/att/knit-midi-cinnamon-toast-fern-black.png',
+          brown: 'outfits/pants/att/knit-midi-cinnamon-toast-fern-brown.png',
+          tobacco: 'outfits/pants/att/knit-midi-cinnamon-toast-fern-tobacco.png',
+          sneak01: 'outfits/pants/att/knit-midi-cinnamon-toast-fern-sneak01.png',
+        },
+      },
+      {
+        id: 'knit-midi-wash-day-trench',
+        color: 'WASH DAY/TRENCH',
+        swatch: ['#8eaee6', '#c4b38a'],
+        shoes: {
+          black: 'outfits/pants/att/knit-midi-wash-day-trench-black.png',
+          brown: 'outfits/pants/att/knit-midi-wash-day-trench-brown.png',
+          tobacco: 'outfits/pants/att/knit-midi-wash-day-trench-tobacco.png',
+          sneak01: 'outfits/pants/att/knit-midi-wash-day-trench-sneak01.png',
+        },
+      },
+      {
+        id: 'knit-midi-maple-leaf-fatigue',
+        color: 'MAPLE LEAF/FATIGUE',
+        swatch: ['#c2452b', '#4a4f2f'],
+        shoes: {
+          black: 'outfits/pants/att/knit-midi-maple-leaf-fatigue-black.png',
+          brown: 'outfits/pants/att/knit-midi-maple-leaf-fatigue-brown.png',
+          tobacco: 'outfits/pants/att/knit-midi-maple-leaf-fatigue-tobacco.png',
+          sneak01: 'outfits/pants/att/knit-midi-maple-leaf-fatigue-sneak01.png',
+        },
+      },
+    ],
+  },
+  {
+    // AMONG THE TREES® (GOOD® CAPSULE Nº2). Tartan kilt with white knee socks.
+    id: 'kilt',
+    name: 'KILT®',
+    noTuck: true, // a skirt: tops always tuck in
+    colors: [
+      {
+        id: 'kilt-cinnamon-toast-fern',
+        color: 'CINNAMON TOAST/FERN',
+        swatch: ['#a65a2e', '#4f6b45'],
+        shoes: {
+          black: 'outfits/pants/att/kilt-cinnamon-toast-fern-black.png',
+          brown: 'outfits/pants/att/kilt-cinnamon-toast-fern-brown.png',
+          tobacco: 'outfits/pants/att/kilt-cinnamon-toast-fern-tobacco.png',
+          sneak01: 'outfits/pants/att/kilt-cinnamon-toast-fern-sneak01.png',
+        },
+      },
+      {
+        id: 'kilt-wash-day-trench',
+        color: 'WASH DAY/TRENCH',
+        swatch: ['#8eaee6', '#c4b38a'],
+        shoes: {
+          black: 'outfits/pants/att/kilt-wash-day-trench-black.png',
+          brown: 'outfits/pants/att/kilt-wash-day-trench-brown.png',
+          tobacco: 'outfits/pants/att/kilt-wash-day-trench-tobacco.png',
+          sneak01: 'outfits/pants/att/kilt-wash-day-trench-sneak01.png',
+        },
+      },
+      {
+        id: 'kilt-maple-leaf-fatigue',
+        color: 'MAPLE LEAF/FATIGUE',
+        swatch: ['#c2452b', '#4a4f2f'],
+        shoes: {
+          black: 'outfits/pants/att/kilt-maple-leaf-fatigue-black.png',
+          brown: 'outfits/pants/att/kilt-maple-leaf-fatigue-brown.png',
+          tobacco: 'outfits/pants/att/kilt-maple-leaf-fatigue-tobacco.png',
+          sneak01: 'outfits/pants/att/kilt-maple-leaf-fatigue-sneak01.png',
+        },
+      },
+    ],
+  },
+  {
+    // AMONG THE TREES® (GOOD® CAPSULE Nº2). Long skirt with a side slit.
+    id: 'maxi',
+    name: 'MAXI®',
+    noTuck: true, // a skirt: tops always tuck in
+    colors: [
+      {
+        id: 'maxi-cinnamon-toast-fern',
+        color: 'CINNAMON TOAST/FERN',
+        swatch: ['#a65a2e', '#4f6b45'],
+        shoes: {
+          black: 'outfits/pants/att/maxi-cinnamon-toast-fern-black.png',
+          brown: 'outfits/pants/att/maxi-cinnamon-toast-fern-brown.png',
+          tobacco: 'outfits/pants/att/maxi-cinnamon-toast-fern-tobacco.png',
+          sneak01: 'outfits/pants/att/maxi-cinnamon-toast-fern-sneak01.png',
+        },
+      },
+      {
+        id: 'maxi-wash-day-trench',
+        color: 'WASH DAY/TRENCH',
+        swatch: ['#8eaee6', '#c4b38a'],
+        shoes: {
+          black: 'outfits/pants/att/maxi-wash-day-trench-black.png',
+          brown: 'outfits/pants/att/maxi-wash-day-trench-brown.png',
+          tobacco: 'outfits/pants/att/maxi-wash-day-trench-tobacco.png',
+          sneak01: 'outfits/pants/att/maxi-wash-day-trench-sneak01.png',
+        },
+      },
+      {
+        id: 'maxi-maple-leaf-fatigue',
+        color: 'MAPLE LEAF/FATIGUE',
+        swatch: ['#c2452b', '#4a4f2f'],
+        shoes: {
+          black: 'outfits/pants/att/maxi-maple-leaf-fatigue-black.png',
+          brown: 'outfits/pants/att/maxi-maple-leaf-fatigue-brown.png',
+          tobacco: 'outfits/pants/att/maxi-maple-leaf-fatigue-tobacco.png',
+          sneak01: 'outfits/pants/att/maxi-maple-leaf-fatigue-sneak01.png',
+        },
+      },
+    ],
   },
   {
     // Outer layer only at the hem, so the leg kicks out at the bottom.

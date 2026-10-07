@@ -212,3 +212,13 @@ html.att-falling, html.att-falling body { overflow: hidden; }
   .att-title, .att-look img, .att-ghost img { transition: none; }
   .att-ghost img, .att-ghost::after, .att-feature-shirt img { animation: none; }
 }
+
+/* Try-on links into the outfitter */
+.att-try {
+  display: inline-block; margin-top: 12px; color: inherit; text-decoration: underline;
+  text-decoration-thickness: 1px; text-underline-offset: 5px; font-size: 0.66rem; letter-spacing: 0.2em;
+  transition: opacity 0.2s, text-underline-offset 0.2s;
+}
+.att-try:hover, .att-try:focus-visible { opacity: 0.7; text-underline-offset: 8px; }
+.att-feature-text .att-try { margin-top: 26px; }
+.att-pieces .att-try { display: table; }

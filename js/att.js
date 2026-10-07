@@ -1,4 +1,5 @@
-// AMONG THE TREES® (GOOD® CAPSULE Nº2) preview page.
+// AMONG THE TREES® (GOOD® CAPSULE Nº2): the capsule page. Every piece is live in
+// the outfitter; the looks and pieces link straight to it.
 // 1. The descent: on load the camera falls gently down a tall dusk sky (clouds
 //    passing) while three layers of fall treeline rise into view; it lands on
 //    the title. Skip button, scroll, keys or touch land it early; reduced
@@ -63,18 +64,20 @@
 
   let cw = 0;
   const looks = LOOKS.map((l, i) => {
-    const fig = el('figure', 'att-look', `<div class="att-fig"><img alt="" draggable="false"></div><figcaption><div class="who"></div><div class="what"></div><div class="cw"></div></figcaption>`);
+    const fig = el('figure', 'att-look', `<div class="att-fig"><img alt="" draggable="false"></div><figcaption><div class="who"></div><div class="what"></div><div class="cw"></div><a class="att-try mono">TRY IT ON →</a></figcaption>`);
     fig.querySelector('.who').textContent = l.who;
     fig.querySelector('.what').textContent = `${l.top} + ${l.bottom}`;
     fig.addEventListener('contextmenu', (e) => e.preventDefault());
     $(l.line === 'good' ? 'looksGood' : 'looksBaby').append(fig);
-    return { ...l, i, img: fig.querySelector('img'), cap: fig.querySelector('.cw') };
+    return { ...l, i, img: fig.querySelector('img'), cap: fig.querySelector('.cw'), link: fig.querySelector('.att-try') };
   });
   const src = (l, c) => `assets/att/${l.i}-${CW[c].id}.webp`;
   function showCw(c, fade) {
     cw = c;
     for (const id of ['switch', 'switch2']) $(id).querySelectorAll('button').forEach((b, j) => b.setAttribute('aria-checked', j === c));
+    $('wearIt').href = lookHref(LOOKS[0], c);
     for (const gh of ghosts) {
+      gh.link.href = `./?${gh.bottom ? 'bottom' : 'top'}=${gh.slug}-${CW[c].id}&sleeve=long`;
       gh.img.alt = `${gh.name} in ${cwName(CW[c])}, shown without a body.`;
       if (!fade) { gh.img.src = ghostSrc(gh, c); continue; }
       gh.img.style.opacity = 0;
@@ -83,6 +86,8 @@
     for (const l of looks) {
       const c0 = CW[c];
       l.cap.textContent = `${c0.a.name}™ and ${c0.b.name}™`;
+      l.link.href = lookHref(l, c);
+      l.link.setAttribute('aria-label', `Try ${l.top} and ${l.bottom} in ${cwName(c0)} on in the outfitter`);
       l.img.alt = `${l.who} in ${l.top} ${c0.a.name}™ and ${l.bottom} ${c0.b.name}™.`;
       if (!fade) { l.img.src = src(l, c); continue; }
       l.img.style.opacity = 0;
@@ -92,16 +97,18 @@
   // The twelve pieces as ghost mannequins (garment only, no body), floating
   // over their names. They follow the same colourway switch as the looks.
   const slug = (n) => n.replace(/®/g, '').trim().toLowerCase().replace(/\s+/g, '-');
+  // A look in the outfitter: ?top=<piece>-<colourway>&bottom=<piece>-<colourway>.
+  const lookHref = (l, c) => `./?top=${slug(l.top)}-${CW[c].id}&bottom=${slug(l.bottom)}-${CW[c].id}&sleeve=long`;
   const ghosts = [];
   $('pieceList').append(...PIECES.map(([title, list]) => {
     const g = el('div', 'att-group', `<h3>${title}</h3><ul></ul>`);
     g.querySelector('ul').append(...list.map(([n, d]) => {
-      const li = el('li', null, '<div class="att-ghost"><img alt="" draggable="false"></div><strong></strong><span></span>');
+      const li = el('li', null, '<div class="att-ghost"><img alt="" draggable="false"></div><strong></strong><span></span><a class="att-try mono">TRY IT ON →</a>');
       li.querySelector('strong').textContent = n;
       li.querySelector('span').textContent = d;
       li.querySelector('.att-ghost').style.setProperty('--d', `${-(ghosts.length * 0.7) % 6}s`);
       li.addEventListener('contextmenu', (e) => e.preventDefault());
-      ghosts.push({ name: n, slug: slug(n), img: li.querySelector('img') });
+      ghosts.push({ name: n, slug: slug(n), img: li.querySelector('img'), link: li.querySelector('.att-try'), bottom: title.includes('BOTTOMS') });
       return li;
     }));
     return g;
@@ -127,21 +134,6 @@
 
   for (const img of document.querySelectorAll('#shirt img')) img.addEventListener('contextmenu', (e) => e.preventDefault());
 
-  // ---------- Countdown to the release ----------
-  const RELEASE = new Date('2026-10-15T00:00:00-04:00'); // midnight, New York
-  const units = {};
-  document.querySelectorAll('#count .att-n').forEach((n) => { units[n.dataset.u] = n; });
-  const pad = (n) => String(n).padStart(2, '0');
-  function count() {
-    let s = Math.max(0, Math.floor((RELEASE - Date.now()) / 1000));
-    if (!s) { $('soonLine').textContent = 'Arriving today.'; $('count').hidden = true; return; }
-    units.d.textContent = pad(Math.floor(s / 86400)); s %= 86400;
-    units.h.textContent = pad(Math.floor(s / 3600)); s %= 3600;
-    units.m.textContent = pad(Math.floor(s / 60));
-    units.s.textContent = pad(s % 60);
-    setTimeout(count, 1000 - (Date.now() % 1000));
-  }
-  count();
 
   // ---------- Treeline ----------
   // Three SVG layers, back to front: hazy far hills of trees, the fall canopy,
