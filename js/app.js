@@ -7,7 +7,7 @@
   // colour, files and swatch. kind.current = the colour last picked for it.
   function catalogue(kinds) {
     return kinds.map((k) => {
-      const kind = { id: k.id, name: k.name, line: k.line || 'good' };
+      const kind = { id: k.id, name: k.name, line: k.line || 'good', isNew: !!k.isNew };
       kind.colors = (k.colors || [k]).map((c) => ({
         locked: k.locked, baseUnderHoles: k.baseUnderHoles, hat: k.hat, shoes: k.shoes, boxers: k.boxers, src: k.src, cropped: k.cropped, noTuck: k.noTuck, ...c, name: k.name, kind,
       }));
@@ -29,7 +29,7 @@
     outfit: SHIRTS[0].current,
     body: 'classic',     // 'classic' | 'slim'
     sleeve: 'short',     // 'short' | 'long'
-    pants: PANTS[0].current,
+    pants: ALL_PANTS.find((p) => p.id === SHIRTS[0].current.pants) || PANTS[0].current, // the default top's pairing
     pantsPicked: false,  // once the user picks pants, shirts stop changing them
     noTop: false,        // the top was taken off (equipped squares by the model)
     noBottom: false,     // the bottom (pants) was taken off
@@ -245,6 +245,7 @@
   const fillShirts = carousel($('outfits'), $('outfitPrev'), $('outfitNext'));
   const fillPants = carousel($('pants'), $('pantsPrev'), $('pantsNext'));
 
+  const NEW_TAG = '<span class="new-tag mono" aria-label="New">NEW</span>';
   function card(selected, inner, onPick) {
     const btn = document.createElement('button');
     btn.type = 'button';
@@ -327,7 +328,7 @@
       !state.noTop && o.kind === state.outfit.kind,
       c.locked
         ? `<div class="locked-thumb" aria-hidden="true"></div>${nameOnly(c)}`
-        : `<img class="ghost-thumb" src="${thumbs[i]}" alt="">${nameOnly(c)}`,
+        : `${k.isNew ? NEW_TAG : ''}<img class="ghost-thumb" src="${thumbs[i]}" alt="">${nameOnly(c)}`,
       () => selectOutfit(o)
     ); }));
     drawColors($('shirtColors'), state.outfit, (c) => selectOutfit(c));
@@ -341,7 +342,7 @@
     const thumbs = await Promise.all(pants.map((k) => pantsThumb(k.current)));
     fillPants(pants.map(({ current: p }, i) => card(
       !state.noBottom && p.kind === state.pants.kind,
-      `<img class="pants-thumb" src="${thumbs[i]}" alt="">${nameOnly(p)}`,
+      `${p.kind.isNew ? NEW_TAG : ''}<img class="pants-thumb" src="${thumbs[i]}" alt="">${nameOnly(p)}`,
       () => pickPants(p)
     )));
     drawColors($('pantsColors'), state.pants, pickPants);

@@ -21,6 +21,205 @@
 // with this shirt, until the user chooses pants themselves.
 window.OUTFITS = [
   {
+    // AMONG THE TREES® (GOOD® CAPSULE Nº2): COTTON with the new G on the chest in MAPLE LEAF.
+    id: 'shirt-ii',
+    name: 'SHIRT® II',
+    isNew: true, // AMONG THE TREES®: NEW tag on the card
+    colors: [
+      {
+        id: 'shirt-cotton-maple-leaf',
+        pants: 'cargo-maple-leaf-fatigue',
+        color: 'COTTON/MAPLE LEAF',
+        swatch: ['#ffffff', '#c2452b'],
+        bodies: { classic: 'outfits/good-shirt-cotton-maple-leaf-classic.png', slim: 'outfits/good-shirt-cotton-maple-leaf-slim.png' },
+        long: { classic: 'outfits/good-shirt-cotton-maple-leaf-long-classic.png', slim: 'outfits/good-shirt-cotton-maple-leaf-long-slim.png' },
+      },
+    ],
+  },
+  {
+    // AMONG THE TREES® (GOOD® CAPSULE Nº2). Zip at the neck, the new G under it, contrast cuffs and hem.
+    id: 'half-zip',
+    name: 'HALF-ZIP®',
+    isNew: true, // AMONG THE TREES®: NEW tag on the card
+    line: 'good',
+    colors: [
+      {
+        id: 'half-zip-cinnamon-toast-fern',
+        pants: 'cargo-cinnamon-toast-fern',
+        color: 'CINNAMON TOAST/FERN',
+        swatch: ['#a65a2e', '#4f6b45'],
+        long: { classic: 'outfits/att/half-zip-cinnamon-toast-fern-long-classic.png', slim: 'outfits/att/half-zip-cinnamon-toast-fern-long-slim.png' },
+      },
+      {
+        id: 'half-zip-wash-day-trench',
+        pants: 'cargo-wash-day-trench',
+        color: 'WASH DAY/TRENCH',
+        swatch: ['#8eaee6', '#c4b38a'],
+        long: { classic: 'outfits/att/half-zip-wash-day-trench-long-classic.png', slim: 'outfits/att/half-zip-wash-day-trench-long-slim.png' },
+      },
+      {
+        id: 'half-zip-maple-leaf-fatigue',
+        pants: 'cargo-maple-leaf-fatigue',
+        color: 'MAPLE LEAF/FATIGUE',
+        swatch: ['#c2452b', '#4a4f2f'],
+        long: { classic: 'outfits/att/half-zip-maple-leaf-fatigue-long-classic.png', slim: 'outfits/att/half-zip-maple-leaf-fatigue-long-slim.png' },
+      },
+    ],
+  },
+  {
+    // AMONG THE TREES® (GOOD® CAPSULE Nº2). Hooped rugby shirt, COTTON collar and cuffs, the new G in COTTON.
+    id: 'rugby',
+    name: 'RUGBY®',
+    isNew: true, // AMONG THE TREES®: NEW tag on the card
+    line: 'good',
+    colors: [
+      {
+        id: 'rugby-cinnamon-toast-fern',
+        pants: 'pleat-cinnamon-toast-fern',
+        color: 'CINNAMON TOAST/FERN',
+        swatch: ['#a65a2e', '#4f6b45'],
+        long: { classic: 'outfits/att/rugby-cinnamon-toast-fern-long-classic.png', slim: 'outfits/att/rugby-cinnamon-toast-fern-long-slim.png' },
+      },
+      {
+        id: 'rugby-wash-day-trench',
+        pants: 'pleat-wash-day-trench',
+        color: 'WASH DAY/TRENCH',
+        swatch: ['#8eaee6', '#c4b38a'],
+        long: { classic: 'outfits/att/rugby-wash-day-trench-long-classic.png', slim: 'outfits/att/rugby-wash-day-trench-long-slim.png' },
+      },
+      {
+        id: 'rugby-maple-leaf-fatigue',
+        pants: 'pleat-maple-leaf-fatigue',
+        color: 'MAPLE LEAF/FATIGUE',
+        swatch: ['#c2452b', '#4a4f2f'],
+        long: { classic: 'outfits/att/rugby-maple-leaf-fatigue-long-classic.png', slim: 'outfits/att/rugby-maple-leaf-fatigue-long-slim.png' },
+      },
+    ],
+  },
+  {
+    // AMONG THE TREES® (GOOD® CAPSULE Nº2). Cardigan over a tee in the other colour, the new G set off on the right front panel.
+    id: 'grandpa',
+    name: 'GRANDPA®',
+    isNew: true, // AMONG THE TREES®: NEW tag on the card
+    line: 'good',
+    colors: [
+      {
+        id: 'grandpa-cinnamon-toast-fern',
+        pants: 'cord-cinnamon-toast-fern',
+        color: 'CINNAMON TOAST/FERN',
+        swatch: ['#a65a2e', '#4f6b45'],
+        long: { classic: 'outfits/att/grandpa-cinnamon-toast-fern-long-classic.png', slim: 'outfits/att/grandpa-cinnamon-toast-fern-long-slim.png' },
+      },
+      {
+        id: 'grandpa-wash-day-trench',
+        pants: 'cord-wash-day-trench',
+        color: 'WASH DAY/TRENCH',
+        swatch: ['#8eaee6', '#c4b38a'],
+        long: { classic: 'outfits/att/grandpa-wash-day-trench-long-classic.png', slim: 'outfits/att/grandpa-wash-day-trench-long-slim.png' },
+      },
+      {
+        id: 'grandpa-maple-leaf-fatigue',
+        pants: 'cord-maple-leaf-fatigue',
+        color: 'MAPLE LEAF/FATIGUE',
+        swatch: ['#c2452b', '#4a4f2f'],
+        long: { classic: 'outfits/att/grandpa-maple-leaf-fatigue-long-classic.png', slim: 'outfits/att/grandpa-maple-leaf-fatigue-long-slim.png' },
+      },
+    ],
+  },
+  {
+    // AMONG THE TREES® (GOOD® CAPSULE Nº2). A knit shrug over a cropped tank; the new G on the tank.
+    id: 'shrug',
+    name: 'SHRUG®',
+    isNew: true, // AMONG THE TREES®: NEW tag on the card
+    line: 'baby',
+    cropped: true, // ends above the waist: no Tuck control
+    colors: [
+      {
+        id: 'shrug-cinnamon-toast-fern',
+        pants: 'knit-midi-cinnamon-toast-fern',
+        color: 'CINNAMON TOAST/FERN',
+        swatch: ['#a65a2e', '#4f6b45'],
+        long: { classic: 'outfits/att/shrug-cinnamon-toast-fern-long-classic.png', slim: 'outfits/att/shrug-cinnamon-toast-fern-long-slim.png' },
+      },
+      {
+        id: 'shrug-wash-day-trench',
+        pants: 'knit-midi-wash-day-trench',
+        color: 'WASH DAY/TRENCH',
+        swatch: ['#8eaee6', '#c4b38a'],
+        long: { classic: 'outfits/att/shrug-wash-day-trench-long-classic.png', slim: 'outfits/att/shrug-wash-day-trench-long-slim.png' },
+      },
+      {
+        id: 'shrug-maple-leaf-fatigue',
+        pants: 'knit-midi-maple-leaf-fatigue',
+        color: 'MAPLE LEAF/FATIGUE',
+        swatch: ['#c2452b', '#4a4f2f'],
+        long: { classic: 'outfits/att/shrug-maple-leaf-fatigue-long-classic.png', slim: 'outfits/att/shrug-maple-leaf-fatigue-long-slim.png' },
+      },
+    ],
+  },
+  {
+    // AMONG THE TREES® (GOOD® CAPSULE Nº2). Cropped varsity jacket, COTTON body, the new G on the chest.
+    id: 'varsity',
+    name: 'VARSITY®',
+    isNew: true, // AMONG THE TREES®: NEW tag on the card
+    line: 'baby',
+    cropped: true, // ends above the waist: no Tuck control
+    colors: [
+      {
+        id: 'varsity-cinnamon-toast-fern',
+        pants: 'kilt-cinnamon-toast-fern',
+        color: 'CINNAMON TOAST/FERN',
+        swatch: ['#a65a2e', '#4f6b45'],
+        long: { classic: 'outfits/att/varsity-cinnamon-toast-fern-long-classic.png', slim: 'outfits/att/varsity-cinnamon-toast-fern-long-slim.png' },
+      },
+      {
+        id: 'varsity-wash-day-trench',
+        pants: 'kilt-wash-day-trench',
+        color: 'WASH DAY/TRENCH',
+        swatch: ['#8eaee6', '#c4b38a'],
+        long: { classic: 'outfits/att/varsity-wash-day-trench-long-classic.png', slim: 'outfits/att/varsity-wash-day-trench-long-slim.png' },
+      },
+      {
+        id: 'varsity-maple-leaf-fatigue',
+        pants: 'kilt-maple-leaf-fatigue',
+        color: 'MAPLE LEAF/FATIGUE',
+        swatch: ['#c2452b', '#4a4f2f'],
+        long: { classic: 'outfits/att/varsity-maple-leaf-fatigue-long-classic.png', slim: 'outfits/att/varsity-maple-leaf-fatigue-long-slim.png' },
+      },
+    ],
+  },
+  {
+    // AMONG THE TREES® (GOOD® CAPSULE Nº2). Cropped wrap top crossing over the front; the new G small on the left.
+    id: 'wrap',
+    name: 'WRAP®',
+    isNew: true, // AMONG THE TREES®: NEW tag on the card
+    line: 'baby',
+    cropped: true, // ends above the waist: no Tuck control
+    colors: [
+      {
+        id: 'wrap-cinnamon-toast-fern',
+        pants: 'maxi-cinnamon-toast-fern',
+        color: 'CINNAMON TOAST/FERN',
+        swatch: ['#a65a2e', '#4f6b45'],
+        long: { classic: 'outfits/att/wrap-cinnamon-toast-fern-long-classic.png', slim: 'outfits/att/wrap-cinnamon-toast-fern-long-slim.png' },
+      },
+      {
+        id: 'wrap-wash-day-trench',
+        pants: 'maxi-wash-day-trench',
+        color: 'WASH DAY/TRENCH',
+        swatch: ['#8eaee6', '#c4b38a'],
+        long: { classic: 'outfits/att/wrap-wash-day-trench-long-classic.png', slim: 'outfits/att/wrap-wash-day-trench-long-slim.png' },
+      },
+      {
+        id: 'wrap-maple-leaf-fatigue',
+        pants: 'maxi-maple-leaf-fatigue',
+        color: 'MAPLE LEAF/FATIGUE',
+        swatch: ['#c2452b', '#4a4f2f'],
+        long: { classic: 'outfits/att/wrap-maple-leaf-fatigue-long-classic.png', slim: 'outfits/att/wrap-maple-leaf-fatigue-long-slim.png' },
+      },
+    ],
+  },
+  {
     id: 'shirt',
     name: 'SHIRT® I',
     colors: [
@@ -37,179 +236,6 @@ window.OUTFITS = [
         swatch: ['#2468ff', '#ffffff'],
         bodies: { classic: 'outfits/good-jean-blaue-powder-classic.png', slim: 'outfits/good-jean-blaue-powder-slim.png' },
         long: { classic: 'outfits/good-jean-blaue-powder-long-classic.png', slim: 'outfits/good-jean-blaue-powder-long-slim.png' },
-      },
-    ],
-  },
-  {
-    // AMONG THE TREES® (GOOD® CAPSULE Nº2): COTTON with the new G on the chest in MAPLE LEAF.
-    id: 'shirt-ii',
-    name: 'SHIRT® II',
-    colors: [
-      {
-        id: 'shirt-cotton-maple-leaf',
-        color: 'COTTON/MAPLE LEAF',
-        swatch: ['#ffffff', '#c2452b'],
-        bodies: { classic: 'outfits/good-shirt-cotton-maple-leaf-classic.png', slim: 'outfits/good-shirt-cotton-maple-leaf-slim.png' },
-        long: { classic: 'outfits/good-shirt-cotton-maple-leaf-long-classic.png', slim: 'outfits/good-shirt-cotton-maple-leaf-long-slim.png' },
-      },
-    ],
-  },
-  {
-    // AMONG THE TREES® (GOOD® CAPSULE Nº2). Zip at the neck, the new G under it, contrast cuffs and hem.
-    id: 'half-zip',
-    name: 'HALF-ZIP®',
-    line: 'good',
-    colors: [
-      {
-        id: 'half-zip-cinnamon-toast-fern',
-        color: 'CINNAMON TOAST/FERN',
-        swatch: ['#a65a2e', '#4f6b45'],
-        long: { classic: 'outfits/att/half-zip-cinnamon-toast-fern-long-classic.png', slim: 'outfits/att/half-zip-cinnamon-toast-fern-long-slim.png' },
-      },
-      {
-        id: 'half-zip-wash-day-trench',
-        color: 'WASH DAY/TRENCH',
-        swatch: ['#8eaee6', '#c4b38a'],
-        long: { classic: 'outfits/att/half-zip-wash-day-trench-long-classic.png', slim: 'outfits/att/half-zip-wash-day-trench-long-slim.png' },
-      },
-      {
-        id: 'half-zip-maple-leaf-fatigue',
-        color: 'MAPLE LEAF/FATIGUE',
-        swatch: ['#c2452b', '#4a4f2f'],
-        long: { classic: 'outfits/att/half-zip-maple-leaf-fatigue-long-classic.png', slim: 'outfits/att/half-zip-maple-leaf-fatigue-long-slim.png' },
-      },
-    ],
-  },
-  {
-    // AMONG THE TREES® (GOOD® CAPSULE Nº2). Hooped rugby shirt, COTTON collar and cuffs, the new G in COTTON.
-    id: 'rugby',
-    name: 'RUGBY®',
-    line: 'good',
-    colors: [
-      {
-        id: 'rugby-cinnamon-toast-fern',
-        color: 'CINNAMON TOAST/FERN',
-        swatch: ['#a65a2e', '#4f6b45'],
-        long: { classic: 'outfits/att/rugby-cinnamon-toast-fern-long-classic.png', slim: 'outfits/att/rugby-cinnamon-toast-fern-long-slim.png' },
-      },
-      {
-        id: 'rugby-wash-day-trench',
-        color: 'WASH DAY/TRENCH',
-        swatch: ['#8eaee6', '#c4b38a'],
-        long: { classic: 'outfits/att/rugby-wash-day-trench-long-classic.png', slim: 'outfits/att/rugby-wash-day-trench-long-slim.png' },
-      },
-      {
-        id: 'rugby-maple-leaf-fatigue',
-        color: 'MAPLE LEAF/FATIGUE',
-        swatch: ['#c2452b', '#4a4f2f'],
-        long: { classic: 'outfits/att/rugby-maple-leaf-fatigue-long-classic.png', slim: 'outfits/att/rugby-maple-leaf-fatigue-long-slim.png' },
-      },
-    ],
-  },
-  {
-    // AMONG THE TREES® (GOOD® CAPSULE Nº2). Cardigan over a tee in the other colour, the new G set off on the right front panel.
-    id: 'grandpa',
-    name: 'GRANDPA®',
-    line: 'good',
-    colors: [
-      {
-        id: 'grandpa-cinnamon-toast-fern',
-        color: 'CINNAMON TOAST/FERN',
-        swatch: ['#a65a2e', '#4f6b45'],
-        long: { classic: 'outfits/att/grandpa-cinnamon-toast-fern-long-classic.png', slim: 'outfits/att/grandpa-cinnamon-toast-fern-long-slim.png' },
-      },
-      {
-        id: 'grandpa-wash-day-trench',
-        color: 'WASH DAY/TRENCH',
-        swatch: ['#8eaee6', '#c4b38a'],
-        long: { classic: 'outfits/att/grandpa-wash-day-trench-long-classic.png', slim: 'outfits/att/grandpa-wash-day-trench-long-slim.png' },
-      },
-      {
-        id: 'grandpa-maple-leaf-fatigue',
-        color: 'MAPLE LEAF/FATIGUE',
-        swatch: ['#c2452b', '#4a4f2f'],
-        long: { classic: 'outfits/att/grandpa-maple-leaf-fatigue-long-classic.png', slim: 'outfits/att/grandpa-maple-leaf-fatigue-long-slim.png' },
-      },
-    ],
-  },
-  {
-    // AMONG THE TREES® (GOOD® CAPSULE Nº2). A knit shrug over a cropped tank; the new G on the tank.
-    id: 'shrug',
-    name: 'SHRUG®',
-    line: 'baby',
-    cropped: true, // ends above the waist: no Tuck control
-    colors: [
-      {
-        id: 'shrug-cinnamon-toast-fern',
-        color: 'CINNAMON TOAST/FERN',
-        swatch: ['#a65a2e', '#4f6b45'],
-        long: { classic: 'outfits/att/shrug-cinnamon-toast-fern-long-classic.png', slim: 'outfits/att/shrug-cinnamon-toast-fern-long-slim.png' },
-      },
-      {
-        id: 'shrug-wash-day-trench',
-        color: 'WASH DAY/TRENCH',
-        swatch: ['#8eaee6', '#c4b38a'],
-        long: { classic: 'outfits/att/shrug-wash-day-trench-long-classic.png', slim: 'outfits/att/shrug-wash-day-trench-long-slim.png' },
-      },
-      {
-        id: 'shrug-maple-leaf-fatigue',
-        color: 'MAPLE LEAF/FATIGUE',
-        swatch: ['#c2452b', '#4a4f2f'],
-        long: { classic: 'outfits/att/shrug-maple-leaf-fatigue-long-classic.png', slim: 'outfits/att/shrug-maple-leaf-fatigue-long-slim.png' },
-      },
-    ],
-  },
-  {
-    // AMONG THE TREES® (GOOD® CAPSULE Nº2). Cropped varsity jacket, COTTON body, the new G on the chest.
-    id: 'varsity',
-    name: 'VARSITY®',
-    line: 'baby',
-    cropped: true, // ends above the waist: no Tuck control
-    colors: [
-      {
-        id: 'varsity-cinnamon-toast-fern',
-        color: 'CINNAMON TOAST/FERN',
-        swatch: ['#a65a2e', '#4f6b45'],
-        long: { classic: 'outfits/att/varsity-cinnamon-toast-fern-long-classic.png', slim: 'outfits/att/varsity-cinnamon-toast-fern-long-slim.png' },
-      },
-      {
-        id: 'varsity-wash-day-trench',
-        color: 'WASH DAY/TRENCH',
-        swatch: ['#8eaee6', '#c4b38a'],
-        long: { classic: 'outfits/att/varsity-wash-day-trench-long-classic.png', slim: 'outfits/att/varsity-wash-day-trench-long-slim.png' },
-      },
-      {
-        id: 'varsity-maple-leaf-fatigue',
-        color: 'MAPLE LEAF/FATIGUE',
-        swatch: ['#c2452b', '#4a4f2f'],
-        long: { classic: 'outfits/att/varsity-maple-leaf-fatigue-long-classic.png', slim: 'outfits/att/varsity-maple-leaf-fatigue-long-slim.png' },
-      },
-    ],
-  },
-  {
-    // AMONG THE TREES® (GOOD® CAPSULE Nº2). Cropped wrap top crossing over the front; the new G small on the left.
-    id: 'wrap',
-    name: 'WRAP®',
-    line: 'baby',
-    cropped: true, // ends above the waist: no Tuck control
-    colors: [
-      {
-        id: 'wrap-cinnamon-toast-fern',
-        color: 'CINNAMON TOAST/FERN',
-        swatch: ['#a65a2e', '#4f6b45'],
-        long: { classic: 'outfits/att/wrap-cinnamon-toast-fern-long-classic.png', slim: 'outfits/att/wrap-cinnamon-toast-fern-long-slim.png' },
-      },
-      {
-        id: 'wrap-wash-day-trench',
-        color: 'WASH DAY/TRENCH',
-        swatch: ['#8eaee6', '#c4b38a'],
-        long: { classic: 'outfits/att/wrap-wash-day-trench-long-classic.png', slim: 'outfits/att/wrap-wash-day-trench-long-slim.png' },
-      },
-      {
-        id: 'wrap-maple-leaf-fatigue',
-        color: 'MAPLE LEAF/FATIGUE',
-        swatch: ['#c2452b', '#4a4f2f'],
-        long: { classic: 'outfits/att/wrap-maple-leaf-fatigue-long-classic.png', slim: 'outfits/att/wrap-maple-leaf-fatigue-long-slim.png' },
       },
     ],
   },
@@ -740,7 +766,7 @@ window.OUTFITS = [
 // TOBACCO shoe files are the black-shoe files with the shoes (and belt) recoloured;
 // SNEAK01 files are the black-shoe files with PLTSWT®'s sneaker (and sock) in place of the shoe;
 // on the outer layer the jeans win, the sneaker only fills where they leave gaps.
-// The first colour of the first kind is the default.
+// The first colour of the first kind is the default (AMONG THE TREES® first).
 const WASHES = [
   { id: 'springsteen', color: 'SPRINGSTEEN™', swatch: '#37baf7' },    // the files' own denim, not recoloured
   { id: 'roadworn', color: 'ROADWORN™', wash: '#6285b0' },            // slightly darker
@@ -753,20 +779,10 @@ const washes = (kind) => WASHES.map((w) => ({ swatch: w.wash, ...w, id: `${kind}
 
 window.PANTS = [
   {
-    id: 'springsteen',
-    name: 'JEAN®',
-    shoes: {
-      black: 'outfits/pants/good-jean-black.png',
-      brown: 'outfits/pants/good-jean-brown.png',
-      tobacco: 'outfits/pants/good-jean-tobacco.png',
-      sneak01: 'outfits/pants/good-jean-sneak01.png',
-    },
-    colors: washes('springsteen'),
-  },
-  {
     // AMONG THE TREES® (GOOD® CAPSULE Nº2). Cargo pocket on each outer leg, contrast waistband.
     id: 'cargo',
     name: 'CARGO®',
+    isNew: true, // AMONG THE TREES®: NEW tag on the card
     colors: [
       {
         id: 'cargo-cinnamon-toast-fern',
@@ -807,6 +823,7 @@ window.PANTS = [
     // AMONG THE TREES® (GOOD® CAPSULE Nº2). Pressed front pleat.
     id: 'pleat',
     name: 'PLEAT®',
+    isNew: true, // AMONG THE TREES®: NEW tag on the card
     colors: [
       {
         id: 'pleat-cinnamon-toast-fern',
@@ -847,6 +864,7 @@ window.PANTS = [
     // AMONG THE TREES® (GOOD® CAPSULE Nº2). Wide-wale corduroy.
     id: 'cord',
     name: 'CORD®',
+    isNew: true, // AMONG THE TREES®: NEW tag on the card
     colors: [
       {
         id: 'cord-cinnamon-toast-fern',
@@ -887,6 +905,7 @@ window.PANTS = [
     // AMONG THE TREES® (GOOD® CAPSULE Nº2). Ribbed knit midi skirt.
     id: 'knit-midi',
     name: 'KNIT MIDI®',
+    isNew: true, // AMONG THE TREES®: NEW tag on the card
     noTuck: true, // a skirt: tops always tuck in
     colors: [
       {
@@ -928,6 +947,7 @@ window.PANTS = [
     // AMONG THE TREES® (GOOD® CAPSULE Nº2). Tartan kilt with white knee socks.
     id: 'kilt',
     name: 'KILT®',
+    isNew: true, // AMONG THE TREES®: NEW tag on the card
     noTuck: true, // a skirt: tops always tuck in
     colors: [
       {
@@ -969,6 +989,7 @@ window.PANTS = [
     // AMONG THE TREES® (GOOD® CAPSULE Nº2). Long skirt with a side slit.
     id: 'maxi',
     name: 'MAXI®',
+    isNew: true, // AMONG THE TREES®: NEW tag on the card
     noTuck: true, // a skirt: tops always tuck in
     colors: [
       {
@@ -1005,6 +1026,17 @@ window.PANTS = [
         },
       },
     ],
+  },
+  {
+    id: 'springsteen',
+    name: 'JEAN®',
+    shoes: {
+      black: 'outfits/pants/good-jean-black.png',
+      brown: 'outfits/pants/good-jean-brown.png',
+      tobacco: 'outfits/pants/good-jean-tobacco.png',
+      sneak01: 'outfits/pants/good-jean-sneak01.png',
+    },
+    colors: washes('springsteen'),
   },
   {
     // Outer layer only at the hem, so the leg kicks out at the bottom.
