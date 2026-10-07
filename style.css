@@ -271,7 +271,13 @@ body {
 .outfit img.ghost-thumb, .outfit img.pants-thumb {
   box-sizing: border-box; padding: 6px; border-radius: 8px; background: rgba(11, 21, 38, 0.08);
 }
-#pantsSection[hidden], #sleeveSection[hidden], #shoeSection[hidden], #boxerSection[hidden] { display: none; }
+#pantsSection[hidden] { display: none; }
+/* Sleeve, tuck, shoe and boxer come and go with the piece: they keep their space
+   (invisible, not removed) so the panel doesn't jump between e.g. SHIRT® I and SMILEY®. */
+#sleeveSection[hidden], #tuckSection[hidden], #shoeSection[hidden], #boxerSection[hidden] { display: none; }
+@media (min-width: 1251px) {
+  #sleeveSection[hidden], #tuckSection[hidden], #shoeSection[hidden], #boxerSection[hidden] { display: block; visibility: hidden; }
+}
 #pantsSection > .section-tag:first-child, #sleeveSection > .section-tag:first-child,
 #shoeSection > .section-tag:first-child, #boxerSection > .section-tag:first-child,
 #tuckSection > .section-tag:first-child { margin-top: 22px; }
@@ -923,3 +929,68 @@ body.st {
   .gallery { padding: 8px 16px 40px; }
   .gallery-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; }
 }
+
+/* ---------- Fall banner (AMONG THE TREES®) ---------- */
+.fall-banner {
+  display: block; position: relative; z-index: 5; padding: 11px 16px; text-align: center; text-decoration: none;
+  background: linear-gradient(90deg, #7a5d86 0%, #b06e7a 22%, #c2452b 50%, #d0802c 76%, #e0a24a 100%);
+  color: #fff4e2; font-size: 0.72rem; letter-spacing: 0.24em; font-weight: 400;
+  text-shadow: 0 1px 2px rgba(80, 25, 0, 0.35);
+}
+.fall-banner span { margin-left: 14px; text-decoration: underline; text-underline-offset: 4px; text-decoration-thickness: 1px; }
+.fall-banner:hover span { text-underline-offset: 7px; }
+.intro .fall-banner { opacity: 0; }
+
+/* ---------- Calmer, roomier outfitter: lighter type, more space ---------- */
+.wordmark { font-weight: 700; }
+.site-nav .nav-link { font-weight: 500; }
+.download-btn { font-weight: 500; letter-spacing: 0.06em; }
+.download-hint strong { font-weight: 600; }
+.share-row .chip { font-weight: 400; }
+.segmented button { font-weight: 400; }
+.outfit { font-weight: 400; }
+.carousel-btn { font-weight: 300; }
+.upload-text strong { font-weight: 500; }
+@media (min-width: 901px) {
+  .stage { gap: clamp(28px, 3vw, 56px); padding: 24px clamp(28px, 3vw, 56px) 72px; }
+  .panel { padding: 32px 32px 34px; }
+  .section-tag { margin: 36px 0 16px; }
+  .section-tag:first-child { margin-top: 0; }
+  #pantsSection > .section-tag:first-child, #sleeveSection > .section-tag:first-child,
+  #shoeSection > .section-tag:first-child, #boxerSection > .section-tag:first-child,
+  #tuckSection > .section-tag:first-child { margin-top: 36px; }
+  .fit-col #pantsSection > .section-tag:first-child { margin-top: 0; }
+  .fit-cols { gap: clamp(36px, 4vw, 64px); }
+  .line-toggle { margin-bottom: 34px; }
+  /* arrows float over the grid's edges so the cards keep the full width */
+  .outfit-carousel { position: relative; display: block; }
+  .outfit-carousel .carousel-btn { position: absolute; top: 50%; transform: translateY(-50%); z-index: 2; width: 30px; height: 30px; box-shadow: 0 4px 14px rgba(11, 21, 38, 0.16); }
+  .outfit-carousel .carousel-btn:first-child { left: -15px; }
+  .outfit-carousel .carousel-btn:last-child { right: -15px; }
+  .outfit-carousel .carousel-btn:disabled { opacity: 0; pointer-events: none; }
+  .outfits { gap: 12px; grid-auto-columns: calc((100% - 24px) / 3); }
+  .outfits .outfit { padding: 10px 8px 12px; }
+  .outfit img.ghost-thumb, .outfit img.pants-thumb { padding: 5px; }
+  .outfits .outfit .outfit-name { font-size: 0.62rem; }
+  .panel.left { padding-left: 26px; padding-right: 26px; }
+  .outfit img { margin-bottom: 8px; }
+  .swatches { margin-top: 20px; }
+  .micro { margin-top: 12px; line-height: 1.6; }
+  .username { margin-top: 14px; }
+  .fine-tune { margin-top: 32px; padding-top: 22px; }
+  .right-col { gap: 22px; }
+  .share-row { gap: 12px; }
+}
+@media (min-width: 901px) and (max-width: 1250px) {
+  .outfits { grid-auto-columns: calc((100% - 36px) / 4); }
+  .fit-col #pantsSection > .section-tag:first-child { margin-top: 36px; }
+}
+@media (max-width: 900px) {
+  .panel { padding: 24px 22px 26px; }
+  .section-tag { margin: 28px 0 14px; }
+  .outfits { gap: 12px; }
+  .fall-banner { font-size: 0.62rem; letter-spacing: 0.16em; padding: 10px 12px; }
+  .fall-banner span { display: inline-block; margin-left: 8px; }
+}
+
+.tone .chip { white-space: nowrap; }
