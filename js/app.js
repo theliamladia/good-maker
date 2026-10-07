@@ -7,7 +7,7 @@
   // colour, files and swatch. kind.current = the colour last picked for it.
   function catalogue(kinds) {
     return kinds.map((k) => {
-      const kind = { id: k.id, name: k.name, line: k.line || 'good', isNew: !!k.isNew };
+      const kind = { id: k.id, name: k.name, line: k.line || 'good', season: k.season || 1 };
       kind.colors = (k.colors || [k]).map((c) => ({
         locked: k.locked, baseUnderHoles: k.baseUnderHoles, hat: k.hat, shoes: k.shoes, boxers: k.boxers, src: k.src, cropped: k.cropped, noTuck: k.noTuck, ...c, name: k.name, kind,
       }));
@@ -20,7 +20,11 @@
   const ALL_PANTS = PANTS.flatMap((k) => k.colors);
   // GOOD® / BABY®: kinds shown under the current line ('both' shows under either).
   const inLine = (k) => k.line === 'both' || k.line === state.line;
-  const lineShirts = () => SHIRTS.filter(inLine);
+  // CURRENT SEASON: when on, only the latest season's kinds are shown.
+  const LATEST = Math.max(...[...SHIRTS, ...PANTS].map((k) => k.season));
+  [...SHIRTS, ...PANTS].forEach((k) => { k.isNew = LATEST > 1 && k.season === LATEST; });
+  const inSeason = (k) => !state.seasonOnly || k.season === LATEST;
+  const lineShirts = () => SHIRTS.filter((k) => inLine(k) && inSeason(k));
 
   const state = {
     user: null,          // ImageData of the head source
@@ -30,6 +34,7 @@
     body: 'classic',     // 'classic' | 'slim'
     sleeve: 'short',     // 'short' | 'long'
     pants: ALL_PANTS.find((p) => p.id === SHIRTS[0].current.pants) || PANTS[0].current, // the default top's pairing
+    seasonOnly: false,   // CURRENT SEASON filter on the shirt and pants lists
     pantsPicked: false,  // once the user picks pants, shirts stop changing them
     noTop: false,        // the top was taken off (equipped squares by the model)
     noBottom: false,     // the bottom (pants) was taken off
@@ -336,9 +341,20 @@
     drawPants();
   }
 
+  // CURRENT SEASON buttons (by the shirt and pants labels): one filter for both lists.
+  function setSeasonOnly(on) {
+    state.seasonOnly = on;
+    document.querySelectorAll('[data-season]').forEach((b) => b.setAttribute('aria-pressed', on));
+    document.querySelectorAll('[data-season-off]').forEach((b) => { b.hidden = !on; });
+    $('outfits').scrollLeft = 0; $('pants').scrollLeft = 0;
+    drawOutfits();
+  }
+  document.querySelectorAll('[data-season]').forEach((b) => { b.onclick = () => setSeasonOnly(!state.seasonOnly); });
+  document.querySelectorAll('[data-season-off]').forEach((b) => { b.onclick = () => setSeasonOnly(false); });
+
   async function drawPants() {
     $('pantsSection').hidden = false;
-    const pants = PANTS; // every bottom shows under both lines
+    const pants = PANTS.filter(inSeason); // every bottom shows under both lines
     const thumbs = await Promise.all(pants.map((k) => pantsThumb(k.current)));
     fillPants(pants.map(({ current: p }, i) => card(
       !state.noBottom && p.kind === state.pants.kind,

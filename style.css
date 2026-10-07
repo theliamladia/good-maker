@@ -1018,3 +1018,17 @@ body.st {
   background: #a65a2e; color: #fff4e2; font-size: 0.5rem !important; font-weight: 700; letter-spacing: 0.14em; line-height: 1.3 !important;
   display: inline-block !important; pointer-events: none;
 }
+
+/* CURRENT SEASON filter, beside the SHIRT and PANTS labels */
+.tag-row { display: flex; align-items: center; justify-content: space-between; gap: 8px; }
+.season-filter { display: inline-flex; align-items: center; gap: 2px; }
+.season-btn, .season-x {
+  border: 1px solid rgba(11, 21, 38, 0.18); background: transparent; color: var(--ink); cursor: pointer;
+  font-size: 0.56rem; letter-spacing: 0.14em; padding: 3px 8px; border-radius: 999px; line-height: 1.4;
+  transition: background 0.15s, color 0.15s, border-color 0.15s;
+}
+.season-btn:hover { border-color: #a65a2e; color: #a65a2e; }
+.season-btn[aria-pressed="true"] { background: #a65a2e; border-color: #a65a2e; color: #fff4e2; }
+.season-x { padding: 2px 7px; font-size: 0.72rem; border-color: #a65a2e; background: #a65a2e; color: #fff4e2; }
+.season-x:hover { background: #7e3a1d; border-color: #7e3a1d; }
+.season-x[hidden] { display: none; }

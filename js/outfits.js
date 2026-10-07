@@ -12,6 +12,8 @@
 // Brand rules: GOOD is always written GOOD®, colourway names included;
 // colour names (e.g. the washes) are trademarked ™, not registered ®;
 // colourway names are written in ALL CAPS.
+// season = which GOOD® season a kind came out in (1 if left out). The latest
+// season's kinds get a NEW tag and are what the CURRENT SEASON filter keeps.
 // locked: true = preview only (served scrambled by /api/outfit, no download).
 // line = which side of the GOOD® / BABY® toggle a kind shows under: 'good' (the
 // default), 'baby' or 'both'. Shirts only: every pants kind shows under both,
@@ -24,7 +26,7 @@ window.OUTFITS = [
     // AMONG THE TREES® (GOOD® CAPSULE Nº2): COTTON with the new G on the chest in MAPLE LEAF.
     id: 'shirt-ii',
     name: 'SHIRT® II',
-    isNew: true, // AMONG THE TREES®: NEW tag on the card
+    season: 2, // AMONG THE TREES®: NEW tag, and kept by the CURRENT SEASON filter
     colors: [
       {
         id: 'shirt-cotton-maple-leaf',
@@ -40,7 +42,7 @@ window.OUTFITS = [
     // AMONG THE TREES® (GOOD® CAPSULE Nº2). Zip at the neck, the new G under it, contrast cuffs and hem.
     id: 'half-zip',
     name: 'HALF-ZIP®',
-    isNew: true, // AMONG THE TREES®: NEW tag on the card
+    season: 2, // AMONG THE TREES®: NEW tag, and kept by the CURRENT SEASON filter
     line: 'good',
     colors: [
       {
@@ -70,7 +72,7 @@ window.OUTFITS = [
     // AMONG THE TREES® (GOOD® CAPSULE Nº2). Hooped rugby shirt, COTTON collar and cuffs, the new G in COTTON.
     id: 'rugby',
     name: 'RUGBY®',
-    isNew: true, // AMONG THE TREES®: NEW tag on the card
+    season: 2, // AMONG THE TREES®: NEW tag, and kept by the CURRENT SEASON filter
     line: 'good',
     colors: [
       {
@@ -100,7 +102,7 @@ window.OUTFITS = [
     // AMONG THE TREES® (GOOD® CAPSULE Nº2). Cardigan over a tee in the other colour, the new G set off on the right front panel.
     id: 'grandpa',
     name: 'GRANDPA®',
-    isNew: true, // AMONG THE TREES®: NEW tag on the card
+    season: 2, // AMONG THE TREES®: NEW tag, and kept by the CURRENT SEASON filter
     line: 'good',
     colors: [
       {
@@ -130,7 +132,7 @@ window.OUTFITS = [
     // AMONG THE TREES® (GOOD® CAPSULE Nº2). A knit shrug over a cropped tank; the new G on the tank.
     id: 'shrug',
     name: 'SHRUG®',
-    isNew: true, // AMONG THE TREES®: NEW tag on the card
+    season: 2, // AMONG THE TREES®: NEW tag, and kept by the CURRENT SEASON filter
     line: 'baby',
     cropped: true, // ends above the waist: no Tuck control
     colors: [
@@ -161,7 +163,7 @@ window.OUTFITS = [
     // AMONG THE TREES® (GOOD® CAPSULE Nº2). Cropped varsity jacket, COTTON body, the new G on the chest.
     id: 'varsity',
     name: 'VARSITY®',
-    isNew: true, // AMONG THE TREES®: NEW tag on the card
+    season: 2, // AMONG THE TREES®: NEW tag, and kept by the CURRENT SEASON filter
     line: 'baby',
     cropped: true, // ends above the waist: no Tuck control
     colors: [
@@ -192,7 +194,7 @@ window.OUTFITS = [
     // AMONG THE TREES® (GOOD® CAPSULE Nº2). Cropped wrap top crossing over the front; the new G small on the left.
     id: 'wrap',
     name: 'WRAP®',
-    isNew: true, // AMONG THE TREES®: NEW tag on the card
+    season: 2, // AMONG THE TREES®: NEW tag, and kept by the CURRENT SEASON filter
     line: 'baby',
     cropped: true, // ends above the waist: no Tuck control
     colors: [
@@ -782,7 +784,7 @@ window.PANTS = [
     // AMONG THE TREES® (GOOD® CAPSULE Nº2). Cargo pocket on each outer leg, contrast waistband.
     id: 'cargo',
     name: 'CARGO®',
-    isNew: true, // AMONG THE TREES®: NEW tag on the card
+    season: 2, // AMONG THE TREES®: NEW tag, and kept by the CURRENT SEASON filter
     colors: [
       {
         id: 'cargo-cinnamon-toast-fern',
@@ -823,7 +825,7 @@ window.PANTS = [
     // AMONG THE TREES® (GOOD® CAPSULE Nº2). Pressed front pleat.
     id: 'pleat',
     name: 'PLEAT®',
-    isNew: true, // AMONG THE TREES®: NEW tag on the card
+    season: 2, // AMONG THE TREES®: NEW tag, and kept by the CURRENT SEASON filter
     colors: [
       {
         id: 'pleat-cinnamon-toast-fern',
@@ -864,7 +866,7 @@ window.PANTS = [
     // AMONG THE TREES® (GOOD® CAPSULE Nº2). Wide-wale corduroy.
     id: 'cord',
     name: 'CORD®',
-    isNew: true, // AMONG THE TREES®: NEW tag on the card
+    season: 2, // AMONG THE TREES®: NEW tag, and kept by the CURRENT SEASON filter
     colors: [
       {
         id: 'cord-cinnamon-toast-fern',
@@ -905,7 +907,7 @@ window.PANTS = [
     // AMONG THE TREES® (GOOD® CAPSULE Nº2). Ribbed knit midi skirt.
     id: 'knit-midi',
     name: 'KNIT MIDI®',
-    isNew: true, // AMONG THE TREES®: NEW tag on the card
+    season: 2, // AMONG THE TREES®: NEW tag, and kept by the CURRENT SEASON filter
     noTuck: true, // a skirt: tops always tuck in
     colors: [
       {
@@ -947,7 +949,7 @@ window.PANTS = [
     // AMONG THE TREES® (GOOD® CAPSULE Nº2). Tartan kilt with white knee socks.
     id: 'kilt',
     name: 'KILT®',
-    isNew: true, // AMONG THE TREES®: NEW tag on the card
+    season: 2, // AMONG THE TREES®: NEW tag, and kept by the CURRENT SEASON filter
     noTuck: true, // a skirt: tops always tuck in
     colors: [
       {
@@ -989,7 +991,7 @@ window.PANTS = [
     // AMONG THE TREES® (GOOD® CAPSULE Nº2). Long skirt with a side slit.
     id: 'maxi',
     name: 'MAXI®',
-    isNew: true, // AMONG THE TREES®: NEW tag on the card
+    season: 2, // AMONG THE TREES®: NEW tag, and kept by the CURRENT SEASON filter
     noTuck: true, // a skirt: tops always tuck in
     colors: [
       {
