@@ -797,16 +797,18 @@
       dl.disabled = true;
       dl.firstChild.textContent = 'PREVIEW ONLY ';
       dl.title = `${fullName(o)} can be previewed but not downloaded`;
-      showSkin(merged.data, slim);
+      showSkin(withLeaves(merged.data, slim), slim);
       return;
     }
     texture.hidden = false;
     flat.getContext('2d').putImageData(new ImageData(merged.data, 64, 64), 0, 0);
     state.resultUrl = flat.toDataURL('image/png');
-    dl.disabled = state.isDemo;
-    dl.firstChild.textContent = 'GOOD® ME ';
-    dl.title = state.isDemo ? 'Upload your skin first' : '';
-    showSkin(merged.data, slim);
+    const bare = state.noTop && state.noBottom;
+    dl.disabled = state.isDemo || bare;
+    dl.firstChild.textContent = bare ? 'PERVERT! ' : 'GOOD® ME ';
+    dl.title = bare ? 'Equip clothes first before downloading' : state.isDemo ? 'Upload your skin first' : '';
+    if (bare) $('downloadHint').textContent = 'EQUIP CLOTHES FIRST BEFORE DOWNLOADING.';
+    showSkin(withLeaves(merged.data, slim), slim);
   }
 
   // ---------- Eraser ----------
@@ -956,12 +958,54 @@
   }, { passive: true });
 
   $('download').onclick = () => {
-    if ((state.outfit.locked && !state.noTop) || !state.resultUrl) return;
+    if ((state.outfit.locked && !state.noTop) || !state.resultUrl || (state.noTop && state.noBottom)) return;
     const a = document.createElement('a');
     a.href = state.resultUrl;
     a.download = `${(state.userName || 'skin').replace(/[^A-Za-z0-9_-]/g, '')}GOOD.png`;
     a.click();
   };
+
+  // ---------- Fig leaves ----------
+  // With the bottom off, a fig leaf covers the groin; with the top off on the
+  // Slim body, two small leaves cover the chest. Painted on the outer layer of
+  // the 3D preview only; the downloaded PNG never has them.
+  const LEAF = { G: [79, 138, 58], D: [47, 90, 36], V: [124, 179, 90] };
+  const GROIN = [  // 8 wide: torso front rows 8-11, then the top two rows of the legs
+    '...GG...',
+    '.G.VV.G.',
+    '.GGVDGG.',
+    '..GVGG..',
+    '..GVGD..',
+    '...DD...',
+  ];
+  const CHEST = ['.G.', 'GVG', 'DG.'];   // one small leaf; mirrored for the other side
+  // Preview only: the leaves go on a copy for the 3D model, never into the PNG.
+  const withLeaves = (data, slim) => {
+    if (!state.noTop && !state.noBottom) return data;
+    const copy = new Uint8ClampedArray(data);
+    figLeaves(copy, slim);
+    return copy;
+  };
+  function figLeaves(px, slim) {
+    const put = (x, y, ch) => {
+      if (ch === '.') return;
+      const i = (y * 64 + x) * 4;
+      px.set([...LEAF[ch], 255], i);
+    };
+    if (state.noBottom) {
+      GROIN.forEach((row, r) => [...row].forEach((ch, c) => {
+        if (r < 4) put(20 + c, 44 + r, ch);                   // torso outer front, rows 8-11
+        else if (c < 4) put(4 + c, 36 + (r - 4), ch);           // right leg outer front, rows 0-1
+        else put(4 + (c - 4), 52 + (r - 4), ch);                // left leg outer front, rows 0-1
+      }));
+    }
+    if (state.noTop && slim) {
+      CHEST.forEach((row, r) => [...row].forEach((ch, c) => {
+        put(20 + c, 36 + 2 + r, ch);                            // left of the chest
+        put(20 + 7 - c, 36 + 2 + r, ch);                        // right, mirrored, a gap between
+      }));
+    }
+  }
 
   // ---------- Equipped ----------
   // Squares by the model: what's on right now (piece + colour). Hover shows an
