@@ -99,7 +99,7 @@
       const li = el('li', null, '<div class="att-ghost"><img alt="" draggable="false"></div><strong></strong><span></span>');
       li.querySelector('strong').textContent = n;
       li.querySelector('span').textContent = d;
-      li.querySelector('.att-ghost').style.animationDelay = `${-(ghosts.length * 0.7) % 6}s`;
+      li.querySelector('.att-ghost').style.setProperty('--d', `${-(ghosts.length * 0.7) % 6}s`);
       li.addEventListener('contextmenu', (e) => e.preventDefault());
       ghosts.push({ name: n, slug: slug(n), img: li.querySelector('img') });
       return li;
