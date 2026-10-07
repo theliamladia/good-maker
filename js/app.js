@@ -32,7 +32,8 @@
     pants: PANTS[0].current,
     pantsPicked: false,  // once the user picks pants, shirts stop changing them
     noTop: false,        // the top was taken off (equipped squares by the model)
-    noBottom: false,     // the bottom (pants and their shoes) was taken off
+    noBottom: false,     // the bottom (pants) was taken off
+    noShoes: false,      // the shoes were taken off (bare feet)
     shoe: 'black',       // pants with shoes: key of their shoes files
     boxer: 'blue',       // pants with boxers: 'blue' (POOLSIDE™, as drawn) | 'tartan' (HIGHLAND™)
     tucked: true,        // shirt tucked in (pants waistband shows) or hanging over it
@@ -348,9 +349,9 @@
     // Only the shoes these pants come in; a missing pick shows the first pair.
     const shoes = Object.keys(state.pants.shoes || {});
     const shoe = shoes.includes(state.shoe) ? state.shoe : shoes[0];
-    $('shoeSection').hidden = shoes.length < 2 || state.noBottom;
+    $('shoeSection').hidden = shoes.length < 2;
     showOnly($('shoe'), 'shoe', shoes);
-    $('shoe').querySelectorAll('button').forEach((b) => b.setAttribute('aria-checked', b.dataset.shoe === shoe));
+    $('shoe').querySelectorAll('button').forEach((b) => b.setAttribute('aria-checked', !state.noShoes && b.dataset.shoe === shoe));
     $('boxerSection').hidden = !state.pants.boxers || state.noBottom;
     $('tuckSection').hidden = !canTuck();
     $('boxer').querySelectorAll('button').forEach((b) => b.setAttribute('aria-checked', b.dataset.boxer === state.boxer));
@@ -371,7 +372,9 @@
   for (const key of ['shoe', 'boxer']) {
     $(key).onclick = (e) => {
       const btn = e.target.closest(`[data-${key}]`);
-      if (!btn || btn.dataset[key] === state[key]) return;
+      if (!btn) return;
+      if (key === 'shoe' && state.noShoes) state.noShoes = false;      // any shoe puts shoes back on
+      else if (btn.dataset[key] === state[key]) return;
       state[key] = btn.dataset[key];
       state.fadeNext = true;
       drawPants();
@@ -385,6 +388,7 @@
     state.pants = p;
     state.pantsPicked = true;
     state.noBottom = false;
+    state.noShoes = false;
     drawPants();
     render();
   }
@@ -748,7 +752,13 @@
     let outfit;
     try {
       outfit = noTop ? EMPTY_OUTFIT : await loadOutfit(o, state.body);
-      outfit = SkinLib.combineOutfit(outfit, state.noBottom ? null : await loadPants(state.pants), state.tucked || !canTuck());
+      let pants = null;
+      if (!state.noBottom || !state.noShoes) {
+        pants = await loadPants(state.pants);
+        if (state.noBottom) pants = shoePart(pants, true);         // just the shoes
+        else if (state.noShoes) pants = shoePart(pants, false);    // the pants, barefoot
+      }
+      outfit = SkinLib.combineOutfit(outfit, pants, state.tucked || !canTuck());
     } catch (err) {
       if (id !== renderId) return;
       // Couldn't load this colour (e.g. a locked one that isn't set up yet).
@@ -1007,6 +1017,35 @@
     }
   }
 
+  // ---------- Shoes ----------
+  // The shoes are drawn into the pants files: the bottom two rows of each leg
+  // (both layers) and the soles. keep=true keeps only those; false removes them.
+  const isShoe = (x, y) =>
+    (y >= 30 && y <= 31 && x < 16) || (y >= 16 && y <= 19 && x >= 8 && x < 12) ||          // right leg base
+    (y >= 46 && y <= 47 && x < 16) || (y >= 32 && y <= 35 && x >= 8 && x < 12) ||          // right leg outer
+    (y >= 62 && y <= 63 && x >= 16 && x < 32) || (y >= 48 && y <= 51 && x >= 24 && x < 28) || // left leg base
+    (y >= 62 && y <= 63 && x < 16) || (y >= 48 && y <= 51 && x >= 8 && x < 12);             // left leg outer
+  function shoePart(src, keep) {
+    const data = new Uint8ClampedArray(src.data);
+    for (let y = 0; y < 64; y++) for (let x = 0; x < 64; x++) {
+      if (isShoe(x, y) !== keep) data[(y * 64 + x) * 4 + 3] = 0;
+    }
+    return { width: 64, height: 64, data };
+  }
+  const SHOE_SWATCH = { black: '#1b1b1f', brown: '#5a1e14', tobacco: '#b57a36', sneak01: ['#f4f4f2', '#0000ff'] };
+  const shoeKey = () => { const s = Object.keys(state.pants.shoes || {}); return s.includes(state.shoe) ? state.shoe : s[0]; };
+  const shoeName = () => { const b = $('shoe').querySelector(`[data-shoe="${shoeKey()}"]`); return b ? b.textContent.trim() : 'SHOES'; };
+  async function shoeThumb() {
+    const d = await loadPants(state.pants);
+    const tex = document.createElement('canvas'); tex.width = tex.height = 64;
+    tex.getContext('2d').putImageData(new ImageData(new Uint8ClampedArray(d.data), 64, 64), 0, 0);
+    const c = document.createElement('canvas'); c.width = 8; c.height = 4;
+    const ctx = c.getContext('2d');
+    // fronts of both feet, base then outer: rows 10-11 of each leg
+    for (const [sx, sy, dx] of [[4, 30, 0], [4, 46, 0], [20, 62, 4], [4, 62, 4]]) ctx.drawImage(tex, sx, sy, 4, 2, dx, 1, 4, 2);
+    return c.toDataURL();
+  }
+
   // ---------- Equipped ----------
   // Squares by the model: what's on right now (piece + colour). Hover shows an
   // ×; clicking takes that piece off. Picking a card puts it back on.
@@ -1025,6 +1064,9 @@
       { label: 'BOTTOM', item: state.noBottom ? null : p,
         thumb: () => pantsThumb(p),
         off: () => { state.noBottom = true; } },
+      { label: 'SHOES', item: state.noShoes || !state.pants.shoes ? null : { name: shoeName(), swatch: SHOE_SWATCH[shoeKey()] || '#888' },
+        thumb: () => shoeThumb(),
+        off: () => { state.noShoes = true; } },
     ];
     const thumbs = await Promise.all(slots.map((s) => (s.item ? s.thumb() : null)));
     if (id !== slotsId) return;
@@ -1070,7 +1112,8 @@
     if (!state.noTop) L.top = o.id;
     if (!state.noBottom) L.bottom = p.id;
     const shoes = Object.keys(p.shoes || {});
-    if (!state.noBottom && shoes.length > 1) L.shoe = shoes.includes(state.shoe) ? state.shoe : shoes[0];
+    if (!state.noShoes && shoes.length > 1) L.shoe = shoes.includes(state.shoe) ? state.shoe : shoes[0];
+    if (state.noShoes) L.feet = 'bare';
     if (!state.noTop && sleevesOf(o).length > 1) L.sleeve = sleeveFor(o);
     if (bodiesOf(o).length > 1) L.body = state.body;
     if (canTuck() && !state.tucked) L.tuck = 'out';
@@ -1084,7 +1127,7 @@
   function lookFromUrl() {
     const q = new URLSearchParams(location.search);
     if (!q.get('top') && !q.get('bottom')) return null;
-    return Object.fromEntries(['u', 'top', 'bottom', 'shoe', 'sleeve', 'body', 'tuck', 'boxer'].filter((k) => q.get(k)).map((k) => [k, q.get(k)]));
+    return Object.fromEntries(['u', 'top', 'bottom', 'shoe', 'feet', 'sleeve', 'body', 'tuck', 'boxer'].filter((k) => q.get(k)).map((k) => [k, q.get(k)]));
   }
   // Put a look on. withSkin: also load the player named in it (shared links);
   // gallery picks keep your own skin.
@@ -1098,6 +1141,7 @@
     if (bottom) { bottom.kind.current = bottom; state.pants = bottom; state.pantsPicked = true; }
     state.noTop = !top;
     state.noBottom = !bottom;
+    state.noShoes = L.feet === 'bare';
     if (top) {
       if (top.kind.line !== 'both' && top.kind.line !== state.line) { state.line = top.kind.line; drawLine(); }
       top.kind.current = top;

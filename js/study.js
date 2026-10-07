@@ -30,7 +30,7 @@ const STUDY = [
       alt: 'BobaYeet in SHIRT® I looking off to the side; Chinny in CROPPIE® I DUST PINK pointing at the G, red tartan boxers showing; Austin1333 in DOUBBIE® I GOOD® BLUE adjusting the hood.',
       caption: 'The Gen 1 G, three ways. BobaYeet in SHIRT® I with JEAN® SAGGING PATENT™ and SNEAK01; Chinny in CROPPIE® I DUST PINK™ with HIGHLAND™ boxers, JEAN® SAGGING SPRINGSTEEN™ and TOBACCO™; Austin1333 in DOUBBIE® I GOOD® BLUE™ with JEAN® SAGGING PATENT™ and TUXEDO™.',
     },
-    og: '/assets/study/og-old-g-to-new-g.png',
+    og: '/assets/study/og-old-g-to-new-g.png?v=2',
     thumb: '/assets/study/g-lineup.png',
     body: [
       { p: 'The G started in Minecraft. Before it was ever on a shirt, it was on our builds: a huge, square G on the side of a GOOD® building. We were deep into brutalism at the time, and we wanted something monolithic, a mark that looked like it had been carved out of a single block.' },
