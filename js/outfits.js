@@ -38,14 +38,6 @@ window.OUTFITS = [
         bodies: { classic: 'outfits/good-jean-blaue-powder-classic.png', slim: 'outfits/good-jean-blaue-powder-slim.png' },
         long: { classic: 'outfits/good-jean-blaue-powder-long-classic.png', slim: 'outfits/good-jean-blaue-powder-long-slim.png' },
       },
-      {
-        // COTTON with the new rounded G on the chest in MAPLE LEAF.
-        id: 'shirt-cotton-maple-leaf',
-        color: 'COTTON/MAPLE LEAF',
-        swatch: ['#ffffff', '#c2452b'],
-        bodies: { classic: 'outfits/good-shirt-cotton-maple-leaf-classic.png', slim: 'outfits/good-shirt-cotton-maple-leaf-slim.png' },
-        long: { classic: 'outfits/good-shirt-cotton-maple-leaf-long-classic.png', slim: 'outfits/good-shirt-cotton-maple-leaf-long-slim.png' },
-      },
     ],
   },
   {
