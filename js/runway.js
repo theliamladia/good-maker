@@ -262,6 +262,7 @@
   }
 
   // Opened from the RUNWAY® link in the header.
-  document.getElementById('navRunway').onclick = open;
+  const navRunway = document.getElementById('navRunway'); // RUNWAY® is out of the nav for now
+  if (navRunway) navRunway.onclick = open;
   window.GoodRunway = { open };
 })();

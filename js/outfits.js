@@ -22,7 +22,7 @@
 window.OUTFITS = [
   {
     id: 'shirt',
-    name: 'SHIRT®',
+    name: 'SHIRT® I',
     colors: [
       {
         id: 'shirt-denim',
@@ -45,7 +45,7 @@ window.OUTFITS = [
     // round the face), the body is cropped at the chest. hat: true = this
     // outfit's hat layer replaces the player's.
     id: 'croppie',
-    name: 'CROPPIE®',
+    name: 'CROPPIE® I',
     hat: true,
     colors: [
       {
@@ -66,7 +66,7 @@ window.OUTFITS = [
     // A CROPPIE® worn over a long-sleeve tee: the CROPPIE® (hat layer + outer
     // chest) over the tee (base layer torso and full sleeves). Two logos.
     id: 'doubbie',
-    name: 'DOUBBIE®',
+    name: 'DOUBBIE® I',
     hat: true,
     colors: [
       {

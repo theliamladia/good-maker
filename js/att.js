@@ -127,6 +127,22 @@
 
   for (const img of document.querySelectorAll('#shirt img')) img.addEventListener('contextmenu', (e) => e.preventDefault());
 
+  // ---------- Countdown to the release ----------
+  const RELEASE = new Date('2026-10-15T00:00:00-04:00'); // midnight, New York
+  const units = {};
+  document.querySelectorAll('#count .att-n').forEach((n) => { units[n.dataset.u] = n; });
+  const pad = (n) => String(n).padStart(2, '0');
+  function count() {
+    let s = Math.max(0, Math.floor((RELEASE - Date.now()) / 1000));
+    if (!s) { $('soonLine').textContent = 'Arriving today.'; $('count').hidden = true; return; }
+    units.d.textContent = pad(Math.floor(s / 86400)); s %= 86400;
+    units.h.textContent = pad(Math.floor(s / 3600)); s %= 3600;
+    units.m.textContent = pad(Math.floor(s / 60));
+    units.s.textContent = pad(s % 60);
+    setTimeout(count, 1000 - (Date.now() % 1000));
+  }
+  count();
+
   // ---------- Treeline ----------
   // Three SVG layers, back to front: hazy far hills of trees, the fall canopy,
   // and dark near trunks that meet the page below.

@@ -42,8 +42,8 @@ html.att-falling, html.att-falling body { overflow: hidden; }
 .att-treeline svg { position: absolute; left: 0; bottom: 0; width: 100%; height: 100%; will-change: transform; }
 
 .att-header { position: relative; z-index: 5; }
-.att-page .site-nav .nav-link, .att-soon .nav-link { background: var(--att-cream); color: #7e3a1d; box-shadow: 0 6px 18px rgba(60, 20, 0, 0.25); }
-.att-page .site-nav .nav-link:hover, .att-soon .nav-link:hover { background: #fff; color: #a65a2e; }
+.att-page .site-nav .nav-link { color: var(--att-cream); }
+.att-page .site-nav .nav-link:hover { color: var(--att-cream); }
 .att-page .wordmark { color: var(--att-cream); text-shadow: 0 2px 0 rgba(60, 20, 0, 0.25); }
 
 .att-title {
@@ -74,8 +74,8 @@ html.att-falling, html.att-falling body { overflow: hidden; }
 /* ---------- Content: editorial, hairlines, no boxes ---------- */
 .att-page { --att-line: rgba(255, 236, 205, 0.28); }
 .att-serif { font-family: 'Libre Caslon Display', Georgia, serif; font-weight: 400; }
-.att-main { position: relative; z-index: 2; max-width: 1120px; margin: 0 auto; padding: clamp(96px, 13vw, 180px) clamp(24px, 6vw, 80px) 40px; }
-.att-section { padding: 0 0 clamp(140px, 18vw, 240px); }
+.att-main { position: relative; z-index: 2; max-width: 1180px; margin: 0 auto; padding: clamp(120px, 15vw, 220px) clamp(32px, 9vw, 150px) 60px; }
+.att-section { padding: 0 0 clamp(160px, 20vw, 280px); }
 .att-head { text-align: center; margin: 0 auto clamp(56px, 7vw, 96px); }
 .att-tag { font-size: 0.66rem; letter-spacing: 0.32em; margin: 0 0 22px; opacity: 0.75; }
 .att-section h2 { margin: 0; font: 400 clamp(2.4rem, 5.4vw, 4.4rem)/1.02 'Libre Caslon Display', Georgia, serif; letter-spacing: -0.005em; }
@@ -83,7 +83,7 @@ html.att-falling, html.att-falling body { overflow: hidden; }
 
 /* Colourways: three columns divided by hairlines */
 .att-colourways { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); }
-.att-cw { padding: 8px clamp(24px, 3.4vw, 52px) 12px; text-align: center; min-width: 0; display: flex; flex-direction: column; align-items: center; }
+.att-cw { padding: 8px clamp(28px, 4vw, 64px) 12px; text-align: center; min-width: 0; display: flex; flex-direction: column; align-items: center; }
 .att-cw + .att-cw { border-left: 1px solid var(--att-line); }
 .att-cw-dot { width: 112px; height: 112px; border-radius: 50%; box-shadow: 0 0 0 1px rgba(255, 244, 226, 0.7), 0 18px 40px rgba(40, 12, 0, 0.28); margin-bottom: 34px; }
 .att-cw h3 { margin: 0 0 30px; font: 400 1.65rem/1.15 'Libre Caslon Display', Georgia, serif; }
@@ -164,11 +164,19 @@ html.att-falling, html.att-falling body { overflow: hidden; }
 .att-feature-text h2 span { font-size: 0.32em; vertical-align: 1.5em; }
 .att-feature-cw { margin: 18px 0 0; font-size: 0.7rem; letter-spacing: 0.24em; }
 .att-feature-dek { max-width: 26rem; margin: 30px 0 0; font: italic 400 1.15rem/1.65 'Libre Caslon Text', Georgia, serif; opacity: 0.92; }
-.att-feature-ghost { margin: 48px 0 0; max-width: 260px; }
+.att-reg { font-size: 0.32em; vertical-align: 1.5em; margin-left: 0.04em; }
+.att-feature-shirt { width: 100%; max-width: 280px; aspect-ratio: 1; margin: 0 0 40px -14px; }
+.att-feature-shirt img { width: 100%; height: 100%; object-fit: contain; animation: att-hover 6s ease-in-out infinite;
+  filter: drop-shadow(0 22px 22px rgba(40, 12, 0, 0.32)); -webkit-user-drag: none; user-select: none; }
+/* Countdown */
+.att-count { display: flex; justify-content: center; gap: clamp(28px, 6vw, 80px); margin: 56px 0 0; }
+.att-count div { display: flex; flex-direction: column; align-items: center; min-width: 3.2ch; }
+.att-n { font: 400 clamp(3rem, 8vw, 6.4rem)/1 'Libre Caslon Display', Georgia, serif; font-variant-numeric: tabular-nums; }
+.att-count small { margin-top: 18px; font-size: 0.62rem; letter-spacing: 0.3em; opacity: 0.75; }
 @media (max-width: 800px) {
   .att-feature { grid-template-columns: minmax(0, 1fr); text-align: center; }
   .att-feature-fig .att-fig { max-height: 460px; }
-  .att-feature-dek, .att-feature-ghost { margin-left: auto; margin-right: auto; }
+  .att-feature-dek, .att-feature-shirt { margin-left: auto; margin-right: auto; }
 }
 
 /* Close */
@@ -187,8 +195,8 @@ html.att-falling, html.att-falling body { overflow: hidden; }
   .att-pieces { grid-template-columns: repeat(2, minmax(0, 1fr)); row-gap: 72px; }
 }
 @media (max-width: 700px) {
-  .att-main { padding: 96px 24px 24px; }
-  .att-section { padding-bottom: 140px; }
+  .att-main { padding: 112px 28px 32px; }
+  .att-section { padding-bottom: 160px; }
   .att-looks { grid-template-columns: minmax(0, 1fr); gap: 80px; }
   .att-look .att-fig { max-height: 400px; }
   .att-pieces { grid-template-columns: minmax(0, 1fr); row-gap: 64px; }
@@ -202,5 +210,5 @@ html.att-falling, html.att-falling body { overflow: hidden; }
 }
 @media (prefers-reduced-motion: reduce) {
   .att-title, .att-look img, .att-ghost img { transition: none; }
-  .att-ghost img, .att-ghost::after { animation: none; }
+  .att-ghost img, .att-ghost::after, .att-feature-shirt img { animation: none; }
 }

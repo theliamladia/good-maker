@@ -63,9 +63,17 @@ body {
   box-shadow: 0 6px 18px rgba(0, 0, 90, 0.28); transition: background 0.15s, color 0.15s, transform 0.15s;
 }
 .nav-link { text-decoration: none; display: inline-block; }
-.nav-att { background: #a65a2e; box-shadow: 0 6px 18px rgba(90, 30, 0, 0.3); }
-.nav-att:hover, .nav-att:focus-visible { color: #a65a2e; }
 .nav-link:hover, .nav-link:focus-visible { background: #fff; color: #0000ff; transform: translateY(-1px); }
+/* Header nav: plain underlined small caps, no pills */
+.site-nav { gap: clamp(20px, 2.6vw, 34px); align-items: center; }
+.site-nav .nav-link {
+  background: none; box-shadow: none; border-radius: 0; padding: 4px 0; color: #fff;
+  font-size: 1.2rem; font-weight: 700; letter-spacing: 0.12em; font-variant-caps: all-small-caps;
+  text-shadow: 0 1px 2px rgba(11, 21, 38, 0.35), 0 2px 12px rgba(11, 21, 38, 0.3);
+  text-decoration: underline; text-decoration-thickness: 1px; text-underline-offset: 6px;
+  transition: opacity 0.2s, text-underline-offset 0.2s;
+}
+.site-nav .nav-link:hover, .site-nav .nav-link:focus-visible { background: none; color: #fff; transform: none; opacity: 0.75; text-underline-offset: 9px; }
 .right-col { display: flex; flex-direction: column; gap: 14px; }
 .download-btn {
   display: inline-flex; align-items: center; justify-content: center; gap: 10px;
@@ -850,7 +858,7 @@ body.st {
   .nav-open .site-nav, .nav-open .st-nav { display: flex; }
   .site-nav .nav-link {
     background: none; box-shadow: none; color: #0000ff; border-radius: 12px; padding: 16px 14px;
-    font-size: 0.9rem; text-align: left; transform: none;
+    font-size: 1.05rem; text-align: left; transform: none; text-decoration: none; opacity: 1; text-shadow: none;
   }
   .site-nav .nav-link + .nav-link { border-top: 1px solid rgba(11, 21, 38, 0.08); border-radius: 0; }
   .site-nav .nav-link:hover, .site-nav .nav-link:focus-visible { background: rgba(0, 0, 255, 0.06); }
