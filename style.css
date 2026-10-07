@@ -994,3 +994,75 @@ body.st {
 }
 
 .tone .chip { white-space: nowrap; }
+
+/* ---------- One-screen layout (wide screens) ----------
+   Configurator pattern: the result on the left (model + GOOD® ME), the
+   controls on the right (your skin, then the fit). The whole app fits the
+   first screen; each panel scrolls inside itself if it ever runs long. */
+@media (min-width: 1251px) {
+  .site-header { padding: 10px 40px; }
+  .wordmark { font-size: 1.7rem; }
+  .stage {
+    --chrome: 128px;   /* banner + header + ticker, and a little air below */
+    height: calc(100svh - var(--chrome)); min-height: 600px;
+    grid-template-columns: minmax(260px, 25fr) minmax(250px, 19fr) minmax(0, 56fr);
+    grid-template-rows: minmax(0, 1fr) auto auto auto auto;
+    grid-template-areas: "view you fit" "dl you fit" "dlhint you fit" "share you fit" "sharehint you fit";
+    align-items: stretch; gap: 0 clamp(28px, 2.6vw, 48px);
+    padding: 6px clamp(28px, 2.6vw, 48px) 26px; max-width: 1800px;
+  }
+  .viewer-wrap { grid-area: view; min-height: 0; justify-content: center; }
+  #view3d { flex: 1; height: auto; min-height: 0; width: 100%; }
+  .viewer-wrap > .micro { margin-top: 8px; }
+  .right-col { display: contents; }
+  .panel.left { grid-area: you; }
+  .panel.right { grid-area: fit; }
+  .panel.left, .panel.right { min-height: 0; overflow-y: auto; overscroll-behavior: contain; scrollbar-width: thin; align-self: stretch; padding: 26px 28px 28px; }
+  #download { grid-area: dl; margin-top: 12px; padding: 13px 18px; font-size: 1.05rem; }
+  #downloadHint { grid-area: dlhint; margin: 8px 4px 0; }
+  .share-row { grid-area: share; margin-top: 12px; }
+  #shareHint { grid-area: sharehint; margin: 6px 4px 0; }
+
+  /* The fit: tighter tags, four cards a row, small options side by side */
+  .panel.right .line-toggle { margin-bottom: 22px; }
+  .panel.right .section-tag { margin: 22px 0 12px; }
+  .panel.right .section-tag:first-child { margin-top: 0; }
+  .outfits { grid-auto-columns: calc((100% - 20px) / 3); gap: 10px; }
+  .sw-dots { flex-wrap: nowrap; gap: 2px; }
+  .swatches { gap: 10px; }
+  .outfits .outfit { padding: 8px 6px 9px; }
+  .outfit img { margin-bottom: 6px; }
+  .outfits .outfit .outfit-name { font-size: 0.58rem; }
+  .swatches { margin-top: 14px; }
+  .fit-col { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); column-gap: 18px; align-content: start; }
+  .fit-col > *, #pantsSection > * { grid-column: 1 / -1; }
+  .fit-col > #sleeveSection, .fit-col > #tuckSection { grid-column: auto; }
+  #pantsSection { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); column-gap: 18px; align-content: start; }
+  #pantsSection > #shoeSection { grid-column: 1 / -1; }
+  #pantsSection > #boxerSection { grid-column: 1 / -1; }
+  #pantsSection > .section-tag:first-child, #sleeveSection > .section-tag:first-child,
+  #shoeSection > .section-tag:first-child, #boxerSection > .section-tag:first-child,
+  #tuckSection > .section-tag:first-child { margin-top: 22px; }
+  .fit-col #pantsSection > .section-tag:first-child { margin-top: 0; }
+  .texture { margin-top: 18px; }
+
+  /* Your skin: a little tighter so it fits the column height */
+  .panel.left .section-tag { margin: 24px 0 12px; }
+  .panel.left .section-tag:first-child { margin-top: 0; }
+  .panel.left .fine-tune { margin-top: 24px; padding-top: 18px; }
+}
+/* Shorter laptop screens: shrink a little more */
+@media (min-width: 1251px) and (max-height: 820px) {
+  .fall-banner { padding: 8px 16px; }
+  .stage { --chrome: 116px; }
+  .outfits { --rows: 2; grid-auto-columns: calc((100% - 30px) / 4); }
+}
+@media (min-width: 1251px) and (max-width: 1440px) {
+  .panel.right .segmented.small button { font-size: 0.7rem; padding: 6px 2px; letter-spacing: -0.01em; }
+  .outfits .outfit .outfit-name { font-size: 0.54rem; }
+  .share-row .chip { white-space: nowrap; font-size: 0.66rem; }
+  .panel.right { padding-left: 22px; padding-right: 22px; }
+  .fit-cols { gap: 26px; }
+  .stage { grid-template-columns: minmax(240px, 24fr) minmax(240px, 19fr) minmax(0, 57fr); }
+  .outfits { min-width: 0; }
+}
