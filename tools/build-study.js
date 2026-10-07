@@ -64,6 +64,8 @@ function block(b, first) {
   if (b.note) return `<p class="st-note">${b.note}</p>`;
   if (b.q) return `<p class="st-q">${b.q}</p>`;
   if (b.quote) return `<blockquote class="st-pull"><p>${b.quote}</p></blockquote>`;
+  // A shape the text wraps around (CSS shape-outside follows the image's outline).
+  if (b.wrap) return `<img class="st-wrap" src="${b.wrap}" alt="${esc(b.alt)}" style="shape-outside:url('${b.wrap}');width:${b.w || 200}px">`;
   if (b.head) return `<h2 class="st-h">${b.head}</h2>`;
   if (b.fig) return `<figure class="st-fig st-wide"><img src="${b.fig}" alt="${esc(b.alt)}" loading="lazy"><figcaption>${b.caption || ''}</figcaption></figure>`;
   if (b.pair) return `<figure class="st-fig st-wide st-pair st-n${b.pair.length}">${b.pair.map((i) => `<div class="st-tile"><img src="${i.img}" alt="${esc(i.alt)}" loading="lazy"></div>`).join('')}<figcaption>${b.caption || ''}</figcaption></figure>`;

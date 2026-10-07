@@ -1066,3 +1066,11 @@ body.st {
   .stage { grid-template-columns: minmax(240px, 24fr) minmax(240px, 19fr) minmax(0, 57fr); }
   .outfits { min-width: 0; }
 }
+
+/* STUDY®: shapes the text wraps around (e.g. the G in OLD G® TO NEW G®) */
+.st-wrap {
+  float: left; height: auto; max-width: 46%; margin: 6px 26px 14px 0;
+  shape-margin: 13px; shape-image-threshold: 0.5; -webkit-user-drag: none;
+}
+.st-body .st-h, .st-body .st-pull, .st-body figure, .st-body section { clear: both; }
+@media (max-width: 700px) { .st-wrap { max-width: 40%; margin-right: 14px; shape-margin: 8px; } }

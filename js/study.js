@@ -14,8 +14,55 @@
 //   { pair: [{ img, alt }], caption }   two or three images side by side
 //   { gallery: [{ img, label, sub }], title, caption }   a labelled grid
 //   { head }                 a section heading
+//   { wrap, alt, w }         a shape floated left; the following text wraps around its outline
 //   { end: true }            the end mark after the last paragraph
 const STUDY = [
+  {
+    slug: 'old-g-to-new-g',
+    rubric: 'STUDY® / DESIGN',
+    title: 'OLD G® TO NEW G®',
+    dek: 'Why the G changed, and what didn’t.',
+    byline: 'GOOD® DESIGN',
+    date: '2026-10-07',
+    description: 'Three generations of the GOOD® G: the narrow Gen 0, the square, brutalist Gen 1, and the open new G. Why it changed, and what never will.',
+    lead: {
+      img: '/assets/study/g-lineup.png',
+      alt: 'Chinny in the same COTTON shirt three times: with the narrow Gen 0 G, the square Gen 1 G, and the open new G.',
+      caption: 'The same shirt, three Gs. Left to right: Gen 0, Gen 1 and the new G, worn by Chinny.',
+    },
+    og: '/assets/study/og-old-g-to-new-g.png',
+    thumb: '/assets/study/g-lineup.png',
+    body: [
+      { p: 'The G started in Minecraft. Before it was ever on a shirt, it was on our builds: a huge, square G on the side of a GOOD® building. We were deep into brutalism at the time, and we wanted something monolithic, a mark that looked like it had been carved out of a single block.' },
+
+      { head: 'Gen 0' },
+      { wrap: '/assets/study/g-shape-0.png', alt: 'The Gen 0 G: three pixels wide and four tall.', w: 186 },
+      { p: 'The first G on the first shirt was a lot narrower. Three pixels wide and four tall, sitting a pixel left of centre on an eight-pixel chest. It said GOOD®, but it was a little off balance, and you could feel it every time you looked at the shirt.' },
+
+      { head: 'Gen 1' },
+      { wrap: '/assets/study/g-shape-1.png', alt: 'The Gen 1 G: four by four, square and closed.', w: 256 },
+      { p: 'So we turned it into Gen 1. A little more square, a little stronger, and centred. Closed off and very brutalist. When you put the whole shirt together it read as one solid block, which was exactly what we were after.' },
+      { p: 'Gen 1 is the G on SHIRT® I, CROPPIE® I and DOUBBIE® I, and on the BABY® pieces that were made in that generation.' },
+
+      { head: 'The new G' },
+      { wrap: '/assets/study/g-shape-2.png', alt: 'The new G: four by four, with the corners taken away.', w: 280 },
+      { p: 'The new G is open and minimal. We stripped away everything that wasn’t necessary. The corners are gone, and what is left is the cleanest G we can make without it looking ambiguous.' },
+      { p: 'Designing for a 64 by 64 skin shaped it, on Classic arms and on Slim. The old G felt too big. It was a neon sign. If GOOD® is going to be something you can just put on without worrying about looking like a billboard, it has to be normal. Timeless. A fixture in your life.' },
+      { p: 'A lot of what we chase when we make these things is the ubiquitous: something so common it folds into everyday life, timeless, and still unique enough to stand out. The new G is still a big logo, but it sits cleaner on the fabric. You will notice that on some pieces it goes quiet: off to the side, down in a corner, even blending into the fabric.' },
+      { quote: 'The cleanest G we can make without it looking ambiguous.' },
+      { p: 'It first showed up on the GOODIE®. We had been experimenting with a different G, and when we made the new GOODIE® we made the switch. The reception was mixed at first, but good overall. From there it went to the G-KNIT®, the BABY TEE®, the CARDIE®, all of AMONG THE TREES® and SHIRT® II.' },
+
+      { head: 'For the logo fans' },
+      { pair: [{ img: '/assets/study/g-doubbie.png', alt: 'DaJiggler in DOUBBIE® I, two Gen 1 Gs stacked on the chest and stomach.' }, { img: '/assets/study/g-grandpa.png', alt: 'mova_tv in GRANDPA® MAPLE LEAF, the new G set off to one side of the front.' }, { img: '/assets/study/g-wrap.png', alt: 'CoolB33s in WRAP® CINNAMON TOAST, the new G small on the left of the chest.' }],
+        caption: 'Loud and quiet. DOUBBIE® I stacks two Gs; GRANDPA® and WRAP® from AMONG THE TREES® keep the new G to the side.' },
+      { p: 'Some people love the G, and we love that. The idea of stacking logos came from a conversation on another designer’s Discord. He used to make Roblox items, and he told us some people really loved his asterisk logo; he was thinking about a piece with more than one. That is where the DOUBBIE® came from. The CROPPIE® and DOUBBIE® are for the people who want the logo front and centre, and as many of them as possible.' },
+
+      { head: 'What doesn’t change' },
+      { p: 'The design. We will never put something out that we haven’t given the most intimate thought to. We go through a lot of iterations and a lot of changes, and we will always take the utmost consideration before releasing anything.' },
+      { p: 'The originals stay, too. SHIRT® I, CROPPIE® I and DOUBBIE® I are some of our most unique pieces, and they keep the heritage of the OG G.' },
+      { p: 'If the new G could say one thing, it would be: put me on and let’s go, wherever you’ve got to go. Maybe someone on a server sees your skin, no armour on, and asks where you got it. Maybe someone who has been rocking GOOD® since Gen 1 spots the new G on another server. That would be amazing.', end: true },
+    ],
+  },
   {
     slug: 'a-study-in-jean',
     rubric: 'STUDY® / INTERVIEW',
