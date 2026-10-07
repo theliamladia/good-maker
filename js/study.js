@@ -14,7 +14,7 @@
 //   { pair: [{ img, alt }], caption }   two or three images side by side
 //   { gallery: [{ img, label, sub }], title, caption }   a labelled grid
 //   { head }                 a section heading
-//   { wrap, alt, w }         a shape floated left; the following text wraps around its outline
+//   { wrap, mask, cols, alt } a pixel shape floated left on the line grid; the following text wraps around its outline
 //   { end: true }            the end mark after the last paragraph
 const STUDY = [
   {
@@ -36,20 +36,20 @@ const STUDY = [
       { p: 'The G started in Minecraft. Before it was ever on a shirt, it was on our builds: a huge, square G on the side of a GOOD® building. We were deep into brutalism at the time, and we wanted something monolithic, a mark that looked like it had been carved out of a single block.' },
 
       { head: 'Gen 0' },
-      { wrap: '/assets/study/g-shape-0.png', alt: 'The Gen 0 G: three pixels wide and four tall.', w: 186 },
+      { wrap: '/assets/study/g-shape-0.png', mask: '/assets/study/g-mask-0.png', cols: 3, alt: 'The Gen 0 G: three pixels wide and four tall.' },
       { p: 'The first G on the first shirt was a lot narrower. Three pixels wide and four tall, sitting a pixel left of centre on an eight-pixel chest. It said GOOD®, but it was a little off balance, and you could feel it every time you looked at the shirt.' },
 
       { head: 'Gen 1' },
-      { wrap: '/assets/study/g-shape-1.png', alt: 'The Gen 1 G: four by four, square and closed.', w: 256 },
+      { wrap: '/assets/study/g-shape-1.png', mask: '/assets/study/g-mask-1.png', cols: 4, alt: 'The Gen 1 G: four by four, square and closed.' },
       { p: 'So we turned it into Gen 1. A little more square, a little stronger, and centred. Closed off and very brutalist. When you put the whole shirt together it read as one solid block, which was exactly what we were after.' },
       { p: 'Gen 1 is the G on SHIRT® I, CROPPIE® I and DOUBBIE® I, and on the BABY® pieces that were made in that generation.' },
 
       { head: 'The new G' },
-      { wrap: '/assets/study/g-shape-2.png', alt: 'The new G: four by four, with the corners taken away.', w: 280 },
+      { wrap: '/assets/study/g-shape-2.png', mask: '/assets/study/g-mask-2.png', cols: 4, alt: 'The new G: four by four, with the corners taken away.' },
       { p: 'The new G is open and minimal. We stripped away everything that wasn’t necessary. The corners are gone, and what is left is the cleanest G we can make without it looking ambiguous.' },
       { p: 'Designing for a 64 by 64 skin shaped it, on Classic arms and on Slim. The old G felt too big. It was a neon sign. If GOOD® is going to be something you can just put on without worrying about looking like a billboard, it has to be normal. Timeless. A fixture in your life.' },
       { p: 'A lot of what we chase when we make these things is the ubiquitous: something so common it folds into everyday life, timeless, and still unique enough to stand out. The new G is still a big logo, but it sits cleaner on the fabric. You will notice that on some pieces it goes quiet: off to the side, down in a corner, even blending into the fabric.' },
-      { quote: 'The cleanest G we can make without it looking ambiguous.' },
+      { quote: 'A lot of what we chase is the ubiquitous: something so common it folds into everyday life.' },
       { p: 'It first showed up on the GOODIE®. We had been experimenting with a different G, and when we made the new GOODIE® we made the switch. The reception was mixed at first, but good overall. From there it went to the G-KNIT®, the BABY TEE®, the CARDIE®, all of AMONG THE TREES® and SHIRT® II.' },
 
       { head: 'For the logo fans' },
