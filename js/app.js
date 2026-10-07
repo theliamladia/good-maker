@@ -352,6 +352,60 @@
   document.querySelectorAll('[data-season]').forEach((b) => { b.onclick = () => setSeasonOnly(!state.seasonOnly); });
   document.querySelectorAll('[data-season-off]').forEach((b) => { b.onclick = () => setSeasonOnly(false); });
 
+  // ---------- Shoe cards ----------
+  // Shoes are kinds with colourways, like tops and bottoms. Each colour's id is
+  // the key of its file in a bottom's shoes map (js/outfits.js).
+  const SHOE_KINDS = [
+    { id: 'loafer', name: 'LOAFER®', colors: [['black', 'TUXEDO™', '#1b1b1f'], ['brown', 'MAHOGANY™', '#5a1e14'], ['tobacco', 'TOBACCO™', '#b57a36']] },
+    { id: 'sneak01', name: 'SNEAK01', colors: [['sneak01', 'COTTON™/GOOD® BLUE', ['#f4f4f2', '#0000ff']]] },
+    { id: 'chelsea', name: 'CHELSEA®', colors: [['chelsea-tobacco', 'TOBACCO™', '#b57a36'], ['chelsea-tuxedo', 'TUXEDO™', '#1b1b1f'], ['chelsea-mahogany', 'MAHOGANY™', '#5a1e14']] },
+  ].map((k) => ({ ...k, colors: k.colors.map(([id, color, swatch]) => ({ id, color, swatch })) }));
+  const SHOE = Object.fromEntries(SHOE_KINDS.flatMap((k) => k.colors.map((c) => [c.id, { ...c, kindId: k.id, name: k.name }])));
+  // The kinds a bottom comes in, cut down to its colours (same objects each time, for drawColors).
+  const shoeKindsMemo = new Map();
+  function shoeKindsFor(keys) {
+    const memo = keys.join();
+    if (!shoeKindsMemo.has(memo)) {
+      shoeKindsMemo.set(memo, SHOE_KINDS.map((k) => {
+        const kind = { id: k.id, name: k.name };
+        kind.colors = k.colors.filter((c) => keys.includes(c.id)).map((c) => ({ ...c, name: k.name, kind }));
+        return kind;
+      }).filter((k) => k.colors.length));
+    }
+    return shoeKindsMemo.get(memo);
+  }
+  function pickShoe(key) {
+    if (!state.noShoes && key === shoeKey()) return;
+    state.noShoes = false; // any shoe puts shoes back on
+    state.shoe = key;
+    state.fadeNext = true;
+    drawPants();
+    render();
+  }
+  let shoesId = 0;
+  async function drawShoes(keys, shoe) {
+    const id = ++shoesId;
+    const kinds = shoeKindsFor(keys);
+    const thumbs = await Promise.all(kinds.map((k) => {
+      const c = k.colors.find((x) => x.id === shoe) || k.colors[0];
+      return shoeThumb(c.id);
+    }));
+    if (id !== shoesId) return;
+    const cur = SHOE[shoe];
+    $('shoeCards').replaceChildren(...kinds.map((k, i) => card(
+      !state.noShoes && cur && cur.kindId === k.id,
+      `<img class="shoe-thumb" src="${thumbs[i]}" alt="">${nameOnly(k)}`,
+      () => {
+        // Same colour in the new style if it has it (TOBACCO™ stays TOBACCO™), else its first.
+        const same = cur && k.colors.find((c) => c.color === cur.color);
+        pickShoe((same || k.colors[0]).id);
+      }
+    )));
+    const sel = kinds.flatMap((k) => k.colors).find((c) => c.id === shoe);
+    if (sel && !state.noShoes) drawColors($('shoeColors'), sel, (c) => pickShoe(c.id));
+    else $('shoeColors').hidden = true;
+  }
+
   async function drawPants() {
     $('pantsSection').hidden = false;
     const pants = PANTS.filter(inSeason); // every bottom shows under both lines
@@ -367,8 +421,7 @@
     const shoes = Object.keys(state.pants.shoes || {});
     const shoe = shoes.includes(state.shoe) ? state.shoe : shoes[0];
     $('shoeSection').hidden = shoes.length < 2;
-    showOnly($('shoe'), 'shoe', shoes);
-    $('shoe').querySelectorAll('button').forEach((b) => b.setAttribute('aria-checked', !state.noShoes && b.dataset.shoe === shoe));
+    drawShoes(shoes, shoe);
     $('boxerSection').hidden = !state.pants.boxers || state.noBottom;
     $('tuckSection').hidden = !canTuck();
     $('boxer').querySelectorAll('button').forEach((b) => b.setAttribute('aria-checked', b.dataset.boxer === state.boxer));
@@ -386,12 +439,11 @@
     drawTuck();
     render();
   };
-  for (const key of ['shoe', 'boxer']) {
+  for (const key of ['boxer']) {
     $(key).onclick = (e) => {
       const btn = e.target.closest(`[data-${key}]`);
       if (!btn) return;
-      if (key === 'shoe' && state.noShoes) state.noShoes = false;      // any shoe puts shoes back on
-      else if (btn.dataset[key] === state[key]) return;
+      if (btn.dataset[key] === state[key]) return;
       state[key] = btn.dataset[key];
       state.fadeNext = true;
       drawPants();
@@ -1042,24 +1094,36 @@
     (y >= 46 && y <= 47 && x < 16) || (y >= 32 && y <= 35 && x >= 8 && x < 12) ||          // right leg outer
     (y >= 62 && y <= 63 && x >= 16 && x < 32) || (y >= 48 && y <= 51 && x >= 24 && x < 28) || // left leg base
     (y >= 62 && y <= 63 && x < 16) || (y >= 48 && y <= 51 && x >= 8 && x < 12);             // left leg outer
+  // CHELSEA®: the boot is the base layer from row 7 down (and the sole); the
+  // outer layer over it is the bottom's hem draped on top, so it stays with the pants.
+  const isBoot = (x, y) =>
+    (y >= 27 && y <= 31 && x < 16) || (y >= 16 && y <= 19 && x >= 8 && x < 12) ||          // right leg base
+    (y >= 59 && y <= 63 && x >= 16 && x < 32) || (y >= 48 && y <= 51 && x >= 24 && x < 28);  // left leg base
+  const isChelsea = (shoe) => /^chelsea-/.test(shoe || '');
   function shoePart(src, keep) {
+    const test = isChelsea(shoeKey()) ? isBoot : isShoe;
     const data = new Uint8ClampedArray(src.data);
     for (let y = 0; y < 64; y++) for (let x = 0; x < 64; x++) {
-      if (isShoe(x, y) !== keep) data[(y * 64 + x) * 4 + 3] = 0;
+      if (test(x, y) !== keep) data[(y * 64 + x) * 4 + 3] = 0;
     }
     return { width: 64, height: 64, data };
   }
-  const SHOE_SWATCH = { black: '#1b1b1f', brown: '#5a1e14', tobacco: '#b57a36', sneak01: ['#f4f4f2', '#0000ff'] };
+  const SHOE_SWATCH = Object.fromEntries(Object.entries(SHOE).map(([k, c]) => [k, c.swatch]));
   const shoeKey = () => { const s = Object.keys(state.pants.shoes || {}); return s.includes(state.shoe) ? state.shoe : s[0]; };
-  const shoeName = () => { const b = $('shoe').querySelector(`[data-shoe="${shoeKey()}"]`); return b ? b.textContent.trim() : 'SHOES'; };
-  async function shoeThumb() {
-    const d = await loadPants(state.pants);
+  const shoeName = () => { const c = SHOE[shoeKey()]; return c ? `${c.name} ${c.color}` : 'SHOES'; };
+  async function shoeThumb(key = shoeKey()) {
+    const d = await loadPants(state.pants, key);
     const tex = document.createElement('canvas'); tex.width = tex.height = 64;
     tex.getContext('2d').putImageData(new ImageData(new Uint8ClampedArray(d.data), 64, 64), 0, 0);
-    const c = document.createElement('canvas'); c.width = 8; c.height = 4;
+    const c = document.createElement('canvas'); c.width = 8; c.height = 5;
     const ctx = c.getContext('2d');
+    if (isChelsea(key)) {
+      // the boots alone (base layer, rows 7-11), no hem over them
+      for (const [sx, sy, dx] of [[4, 27, 0], [20, 59, 4]]) ctx.drawImage(tex, sx, sy, 4, 5, dx, 0, 4, 5);
+      return c.toDataURL();
+    }
     // fronts of both feet, base then outer: rows 10-11 of each leg
-    for (const [sx, sy, dx] of [[4, 30, 0], [4, 46, 0], [20, 62, 4], [4, 62, 4]]) ctx.drawImage(tex, sx, sy, 4, 2, dx, 1, 4, 2);
+    for (const [sx, sy, dx] of [[4, 30, 0], [4, 46, 0], [20, 62, 4], [4, 62, 4]]) ctx.drawImage(tex, sx, sy, 4, 2, dx, 2, 4, 2);
     return c.toDataURL();
   }
 
@@ -1151,7 +1215,7 @@
   async function applyLook(L, withSkin) {
     const top = topById(L.top), bottom = pantsById(L.bottom);
     if (['short', 'long'].includes(L.sleeve)) state.sleeve = L.sleeve;
-    if (['black', 'brown', 'tobacco', 'sneak01'].includes(L.shoe)) state.shoe = L.shoe;
+    if (L.shoe in SHOE_SWATCH) state.shoe = L.shoe;
     state.boxer = L.boxer === 'tartan' ? 'tartan' : 'blue';
     state.tucked = L.tuck !== 'out';
     drawTuck();
