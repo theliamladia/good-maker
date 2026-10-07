@@ -125,6 +125,8 @@
   });
 
 
+  for (const img of document.querySelectorAll('#shirt img')) img.addEventListener('contextmenu', (e) => e.preventDefault());
+
   // ---------- Treeline ----------
   // Three SVG layers, back to front: hazy far hills of trees, the fall canopy,
   // and dark near trunks that meet the page below.
