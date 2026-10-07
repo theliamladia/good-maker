@@ -6,7 +6,7 @@
   <title>COLORS® · GOOD® DESIGN</title>
   <meta name="description" content="ALL ® OUR ® COLORS: every GOOD® colour in one place, from GOOD® BLUE to AFTER HOURS™.">
   <link rel="canonical" href="https://good-maker.vercel.app/colors.html">
-  <meta name="theme-color" content="#0000ff">
+  <meta name="theme-color" content="#ffffff">
   <link rel="icon" href="/favicon.svg" type="image/svg+xml">
   <link rel="icon" href="/favicon-32.png" sizes="32x32" type="image/png">
   <link rel="apple-touch-icon" href="/apple-touch-icon.png">
@@ -28,132 +28,75 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="colors.css">
 </head>
-<body class="cl-page">
+<body class="cx-page">
 
-<div class="crt-scanlines" aria-hidden="true"></div>
-<div class="crt-vignette" aria-hidden="true"></div>
-<div class="hero-sky" aria-hidden="true">
-  <div class="cloud cloud-1"></div>
-  <div class="cloud cloud-2"></div>
-  <div class="cloud cloud-3"></div>
-  <div class="cloud cloud-4"></div>
-</div>
-
-<header class="site-header">
+<header class="site-header cx-header">
   <a class="wordmark" href="./">GOOD® <span>DESIGN</span></a>
   <nav class="site-nav" aria-label="Main">
-    <a class="nav-link mono" href="./">← BACK</a>
+    <a class="nav-link mono" href="./">OUTFITTER</a>
+    <a class="nav-link mono" href="colors.html" aria-current="page">COLORS®</a>
     <a class="nav-link mono" href="study.html">STUDY®</a>
     <a class="nav-link mono" href="collaborations.html">COLLABORATIONS®</a>
   </nav>
 </header>
 
-<main class="cl-main">
-  <section class="cl-hero">
-    <div class="section-tag mono">COLORS®</div>
-    <h1 class="cl-title">ALL <span>®</span> OUR <span>®</span> COLORS</h1>
-    <p class="cl-copy">GOOD® uses proprietary techniques to source truly unique color algorithms for its creations. For your enjoyment, we have prepared all current existing colors here.</p>
-    <p class="cl-count mono" id="clCount"></p>
-    <p class="cl-hint mono">CLICK A COLOR TO LEARN MORE</p>
+<main class="cx-main">
+  <section class="cx-hero">
+    <p class="cx-tag mono">COLORS® · <span id="cxCount"></span></p>
+    <h1 class="cx-title">ALL <span>®</span> OUR <span>®</span> COLORS</h1>
+    <p class="cx-copy">GOOD® uses proprietary techniques to source truly unique color algorithms for its creations. For your enjoyment, we have prepared all current existing colors here.</p>
   </section>
-  <div class="cl-grid" id="clGrid"></div>
-  <p class="cl-credit mono">GOLDENROD (PANTONE® 14-0951 TCX GOLDEN ROD), ROSE QUARTZ (PANTONE® 13-1520 TCX) AND SERENITY (PANTONE® 15-3919 TCX) ARE PANTONE® COLORS. PANTONE® IS A REGISTERED TRADEMARK OF PANTONE LLC. COLOUR NAMES AND NUMBERS USED WITH ATTRIBUTION TO PANTONE.</p>
+
+  <!-- Every colour as one thin band; hover to read, click to open. -->
+  <div class="cx-strip" id="cxStrip" role="list" aria-label="Every GOOD® colour"></div>
+  <p class="cx-strip-read mono" id="cxRead" aria-hidden="true">&nbsp;</p>
+
+  <div class="cx-bar">
+    <p class="cx-tag mono">THE INDEX</p>
+    <div class="cx-order mono" role="radiogroup" aria-label="Order">
+      <button type="button" role="radio" aria-checked="true" data-order="released">AS RELEASED</button>
+      <button type="button" role="radio" aria-checked="false" data-order="hue">BY HUE</button>
+    </div>
+  </div>
+  <div class="cx-grid" id="cxGrid"></div>
+
+  <p class="cx-credit mono">GOLDENROD (PANTONE® 14-0951 TCX GOLDEN ROD), ROSE QUARTZ (PANTONE® 13-1520 TCX) AND SERENITY (PANTONE® 15-3919 TCX) ARE PANTONE® COLORS. PANTONE® IS A REGISTERED TRADEMARK OF PANTONE LLC. COLOUR NAMES AND NUMBERS USED WITH ATTRIBUTION TO PANTONE.</p>
 </main>
 
-<!-- One colour up close: half the colour, half its name and story. -->
-<div class="cl-modal" id="clModal" hidden>
-  <div class="cl-backdrop" data-close></div>
-  <div class="cl-sheet" role="dialog" aria-modal="true" aria-labelledby="clmName">
-    <div class="cl-m-color" id="clmColor"><span class="cl-m-num mono" id="clmNum"></span></div>
-    <div class="cl-m-info">
-      <button type="button" class="cl-m-close mono" data-close aria-label="Close">✕</button>
-      <div class="section-tag mono">COLORS®</div>
-      <h2 class="cl-m-name" id="clmName"></h2>
-      <div class="cl-m-hex mono" id="clmHex"></div>
-      <p class="cl-m-desc" id="clmDesc"></p>
-      <p class="cl-m-thanks" id="clmThanks" hidden>GOOD® Thanks PANTONE® for their collaboration in creating our GOOD® MASTERPIECE</p>
-      <div class="cl-m-where mono" id="clmWhere"></div>
-      <p class="cl-m-pantone mono" id="clmPantone" hidden></p>
-      <div class="cl-m-nav">
-        <button type="button" class="nav-link mono" id="clmPrev">← PREV</button>
-        <span class="cl-m-pos mono" id="clmPos"></span>
-        <button type="button" class="nav-link mono" id="clmNext">NEXT →</button>
+<!-- One colour, full screen: the page floods with it. -->
+<div class="cx-room" id="cxRoom" role="dialog" aria-modal="true" aria-labelledby="cxName" hidden>
+  <div class="cx-room-fill" id="cxFill"></div>
+  <div class="cx-room-in" id="cxIn">
+    <div class="cx-room-top mono">
+      <span id="cxNum"></span>
+      <button type="button" class="cx-close mono" id="cxClose">CLOSE ✕</button>
+    </div>
+    <div class="cx-room-body">
+      <div class="cx-room-head">
+        <h2 class="cx-name" id="cxName"></h2>
+        <p class="cx-hex mono" id="cxHex"></p>
       </div>
+      <div class="cx-room-text">
+        <p class="cx-desc" id="cxDesc"></p>
+        <p class="cx-thanks" id="cxThanks" hidden>GOOD® Thanks PANTONE® for their collaboration in creating our GOOD® MASTERPIECE</p>
+        <p class="cx-where mono"><span>FOUND IN</span><span id="cxWhere"></span></p>
+        <p class="cx-pantone mono" id="cxPantone" hidden></p>
+      </div>
+    </div>
+    <div class="cx-room-foot">
+      <button type="button" class="cx-step mono" id="cxPrev">← PREV</button>
+      <div class="cx-mini" id="cxMini" aria-hidden="true"></div>
+      <button type="button" class="cx-step mono" id="cxNext">NEXT →</button>
     </div>
   </div>
 </div>
 
-<footer class="site-foot mono">© 2026 GOOD® DESIGN. All rights reserved.</footer>
+<footer class="site-foot cx-foot mono">© 2026 GOOD® DESIGN. All rights reserved.</footer>
 
 <script src="js/colors.js"></script>
-<script>
-  // Colour cards from js/colors.js (the list to update when a colour ships).
-  (() => {
-    const grid = document.getElementById('clGrid');
-    const colors = window.GOOD_COLORS;
-    // GOOD® colour names are ™; PANTONE® colours keep Pantone's name as is.
-    const label = (c) => (c.pantone || c.name.includes('®') ? c.name : `${c.name}™`);
-    const PANTONE_NOTE = 'PANTONE® is a registered trademark of Pantone LLC. Colour names and numbers used with attribution to Pantone.';
-    document.getElementById('clCount').textContent = `${colors.length} COLORS`;
-    colors.forEach((c, i) => {
-      const hexes = Array.isArray(c.hex) ? c.hex : [c.hex];
-      const fill = hexes.length > 1 ? `linear-gradient(90deg, ${hexes[0]} 50%, ${hexes[1]} 50%)` : hexes[0];
-      const card = document.createElement('button');
-      card.type = 'button';
-      card.className = 'cl-card';
-      card.style.setProperty('--d', `${Math.min(i, 24) * 40}ms`);
-      card.setAttribute('aria-label', `${label(c)}, learn more`);
-      card.innerHTML = `
-        <div class="cl-swatch" style="background:${fill}"><span class="cl-num mono">Nº${String(i + 1).padStart(3, '0')}</span></div>
-        <div class="cl-name">${label(c)}</div>
-        <div class="cl-hex mono">${hexes.map((h) => h.toUpperCase()).join(' / ')}</div>
-        ${c.pantone ? `<div class="cl-pantone mono">${c.pantone}</div>` : ''}`;
-      card.onclick = () => show(i);
-      grid.appendChild(card);
-    });
-
-    // Modal with previous / next (buttons, arrow keys, swipe).
-    const $ = (id) => document.getElementById(id);
-    const modal = $('clModal');
-    let at = 0;
-    function show(i) {
-      at = (i + colors.length) % colors.length;
-      const c = colors[at];
-      const hexes = Array.isArray(c.hex) ? c.hex : [c.hex];
-      $('clmColor').style.background = hexes.length > 1 ? `linear-gradient(90deg, ${hexes[0]} 50%, ${hexes[1]} 50%)` : hexes[0];
-      $('clmNum').textContent = `Nº${String(at + 1).padStart(3, '0')}`;
-      $('clmName').textContent = label(c);
-      $('clmHex').textContent = hexes.map((h) => h.toUpperCase()).join(' / ');
-      $('clmDesc').textContent = c.desc || 'DESCRIPTION COMING SOON.';
-      $('clmDesc').classList.toggle('is-soon', !c.desc);
-      $('clmWhere').textContent = `FOUND IN: ${c.where.toUpperCase()}`;
-      $('clmPantone').hidden = !c.pantone;
-      $('clmThanks').hidden = !c.pantone;
-      $('clmPantone').textContent = c.pantone ? `${c.pantone}. ${PANTONE_NOTE}` : '';
-      $('clmPos').textContent = `${at + 1} / ${colors.length}`;
-      if (modal.hidden) { modal.hidden = false; document.body.style.overflow = 'hidden'; $('clmNext').focus(); }
-      else modal.querySelector('.cl-sheet').animate([{ opacity: 0.4 }, { opacity: 1 }], { duration: 220 });
-    }
-    function close() { modal.hidden = true; document.body.style.overflow = ''; grid.children[at].focus(); }
-    $('clmPrev').onclick = () => show(at - 1);
-    $('clmNext').onclick = () => show(at + 1);
-    modal.addEventListener('click', (e) => { if (e.target.closest('[data-close]')) close(); });
-    document.addEventListener('keydown', (e) => {
-      if (modal.hidden) return;
-      if (e.key === 'Escape') close();
-      if (e.key === 'ArrowLeft') show(at - 1);
-      if (e.key === 'ArrowRight') show(at + 1);
-    });
-    let x0 = null;
-    modal.addEventListener('touchstart', (e) => { x0 = e.touches[0].clientX; }, { passive: true });
-    modal.addEventListener('touchend', (e) => {
-      if (x0 === null) return;
-      const dx = e.changedTouches[0].clientX - x0; x0 = null;
-      if (Math.abs(dx) > 50) show(at + (dx < 0 ? 1 : -1));
-    });
-  })();
-</script>
+<script src="js/colors-page.js"></script>
 <script src="js/nav.js"></script>
 </body>
 </html>
