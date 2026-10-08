@@ -416,6 +416,8 @@ const TORSO_SIDES = [[16, 20, 24, 12], [16, 36, 24, 12]];
 // Underside of the torso's outer layer: seen from below, it's the underside
 // of the waistband, so it goes with the pants too.
 const JACKET_BOTTOM = [28, 32, 8, 4];
+// Underside of the torso's base layer (sits on the tops of the legs).
+const TORSO_BOTTOM = [28, 16, 8, 4];
 
 // Outfit texture = the shirt file with its pants (legs + waistband) removed,
 // then the pants file put in: its legs, plus anything it draws on the torso.
@@ -506,6 +508,23 @@ function combineOutfit(shirt, pants, tucked = true) {
           if (pants.data[i + 3] === 0 || (shirtWins && out.data[i + 3] > 0)) continue;
           put(xx, yy, pants);
         }
+      }
+    }
+  }
+  if (pants) {
+    // The torso's underside sits on the tops of the legs and shows between
+    // them when the legs swing: it's the inside of the pants' waist, never the
+    // shirt. Use the pants' own underside, else their waistband colour (base
+    // or outer front, bottom row) a shade darker.
+    const [bx, by, bw, bh] = TORSO_BOTTOM;
+    for (let yy = by; yy < by + bh; yy++) {
+      for (let xx = bx; xx < bx + bw; xx++) {
+        const i = idx(xx, yy), u = xx - bx;
+        if (pants.data[i + 3] > 0) { put(xx, yy, pants); continue; }
+        const src = [idx(20 + u, 31), idx(20 + u, 47)].find((j) => pants.data[j + 3] > 0);
+        if (src === undefined) continue;
+        for (let c = 0; c < 3; c++) out.data[i + c] = Math.round(pants.data[src + c] * 0.8);
+        out.data[i + 3] = 255;
       }
     }
   }
