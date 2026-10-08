@@ -178,16 +178,14 @@
       player.skin.rightArm.rotation.set(0, 0, 0.03 * Math.cos(t + Math.PI) - 0.02 * Math.PI);
       $('leanCloudBody').style.transform = `translateY(${-bob * 14}px)`;
     });
-    // SHYLY: turned a little away, head bowed and turned aside, arms down.
-    // Slight breath in the arms.
-    const Shyly = () => new skinview3d.FunctionAnimation((player, progress) => {
-      const breath = Math.sin(progress * 1.5) * 1.5;
+    // SHYLY: turned a little away, head bowed and turned aside, arms straight down.
+    const Shyly = () => new skinview3d.FunctionAnimation((player) => {
       player.rotation.set(0, -29 * DEG, 0);
       player.position.y = 0;
       player.skin.head.rotation.set(49 * DEG, -40 * DEG, 0);
       player.skin.body.rotation.set(0, 0, 0);
-      player.skin.rightArm.rotation.set(breath * DEG, 0, -0.02 * Math.PI);
-      player.skin.leftArm.rotation.set(-breath * DEG, 0, 0.02 * Math.PI);
+      player.skin.rightArm.rotation.set(0, 0, 0);
+      player.skin.leftArm.rotation.set(0, 0, 0);
       player.skin.leftLeg.rotation.set(0, 0, 0);
       player.skin.rightLeg.rotation.set(0, 0, 0);
     });
