@@ -97,3 +97,18 @@
 .co-tier-top ol, .co-tier-top li { border-color: rgba(0, 0, 255, 0.25); }
 @media (max-width: 860px) { .co-tiers { grid-template-columns: 1fr; } }
 .co-srv-lede { margin: 0 0 clamp(36px, 6vh, 56px); }
+
+/* Process: MOODBOARD®, COLOR STORY®, HARMONY BOARD® */
+.co-process { margin-bottom: clamp(64px, 10vh, 110px); }
+.co-step { margin-bottom: clamp(56px, 9vh, 96px); }
+.co-step > p:not(.co-tag) { max-width: 38em; line-height: 1.6; margin: 0 0 26px; opacity: 0.92; }
+.co-step h3 { margin: 0 0 12px; font-size: clamp(1.4rem, 2.6vw, 2.1rem); font-weight: 800; letter-spacing: -0.04em; }
+.co-step .co-wide img, .co-pair img { background: none; padding: 0; border: 1px solid rgba(255, 255, 255, 0.6); }
+.co-pair { display: grid; grid-template-columns: 1fr 1fr; gap: clamp(12px, 2vw, 24px); align-items: start; }
+.co-pair figure { margin: 0; }
+.co-pair img { display: block; width: 100%; height: auto; }
+.co-pair figcaption { font-size: 0.7rem; letter-spacing: 0.18em; padding-top: 12px; }
+@media (max-width: 700px) { .co-pair { grid-template-columns: 1fr; } }
+.co-step figure { margin: 0 0 clamp(12px, 2vw, 24px); }
+.co-step img { display: block; width: 100%; height: auto; user-select: none; -webkit-user-drag: none; }
+.co-step figcaption { font-size: 0.7rem; letter-spacing: 0.18em; padding-top: 12px; }
