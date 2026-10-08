@@ -418,6 +418,8 @@ const TORSO_SIDES = [[16, 20, 24, 12], [16, 36, 24, 12]];
 const JACKET_BOTTOM = [28, 32, 8, 4];
 // Underside of the torso's base layer (sits on the tops of the legs).
 const TORSO_BOTTOM = [28, 16, 8, 4];
+// Each leg's top face and front-face origin, base then outer: [top, front, outer top, outer front].
+const LEG_TOPS = [[[4, 16], [4, 20], [4, 32], [4, 36]], [[20, 48], [20, 52], [4, 48], [4, 52]]];
 
 // Outfit texture = the shirt file with its pants (legs + waistband) removed,
 // then the pants file put in: its legs, plus anything it draws on the torso.
@@ -525,6 +527,24 @@ function combineOutfit(shirt, pants, tucked = true) {
         if (src === undefined) continue;
         for (let c = 0; c < 3; c++) out.data[i + c] = Math.round(pants.data[src + c] * 0.8);
         out.data[i + 3] = 255;
+      }
+    }
+    // Tops of the legs: when the pants start at the hip on the outer layer
+    // (skirts, the KILT®), their open top would show bare skin as the legs
+    // swing. Close it with the inside of the fabric (top row of the front, a
+    // shade darker) on both layers wherever the pants leave it empty.
+    for (const [top, front, oTop, oFront] of LEG_TOPS) {
+      for (let v = 0; v < 4; v++) {
+        for (let u = 0; u < 4; u++) {
+          const f = idx(oFront[0] + u, oFront[1]);
+          if (pants.data[f + 3] === 0) continue;
+          for (const [x0, y0] of [oTop, top]) {
+            const i = idx(x0 + u, y0 + v);
+            if (out.data[i + 3] > 0) continue;
+            for (let c = 0; c < 3; c++) out.data[i + c] = Math.round(pants.data[f + c] * 0.72);
+            out.data[i + 3] = 255;
+          }
+        }
       }
     }
   }

@@ -178,21 +178,21 @@
       player.skin.rightArm.rotation.set(0, 0, 0.03 * Math.cos(t + Math.PI) - 0.02 * Math.PI);
       $('leanCloudBody').style.transform = `translateY(${-bob * 14}px)`;
     });
-    // JOJO: upside down and tilted, one arm overhead past the head, the other
-    // hanging toward the feet, head turned to show the face. Slight sway.
-    const Jojo = () => new skinview3d.FunctionAnimation((player, progress) => {
-      const sway = Math.sin(progress * 1.4) * 2;
-      player.rotation.order = 'YXZ';
-      player.rotation.set(0, -20 * DEG, (200 + sway) * DEG);
-      player.skin.head.rotation.set(-15 * DEG, -50 * DEG, 0);
+    // SHYLY: turned a little away, head bowed and turned aside, one hand raised
+    // up past the face. Slight breath in the raised arm.
+    const Shyly = () => new skinview3d.FunctionAnimation((player, progress) => {
+      const breath = Math.sin(progress * 1.5) * 1.5;
+      player.rotation.set(0, -29 * DEG, 0);
+      player.position.y = 0;
+      player.skin.head.rotation.set(49 * DEG, -40 * DEG, 0);
       player.skin.body.rotation.set(0, 0, 0);
-      player.skin.leftArm.rotation.set(-170 * DEG, 0, 0);
-      player.skin.rightArm.rotation.set(0, 0, 10 * DEG);
-      player.skin.leftLeg.rotation.set(-48 * DEG, 0, 0);
-      player.skin.rightLeg.rotation.set(-2 * DEG, 0, 0);
+      player.skin.rightArm.rotation.set((-110 + breath) * DEG, 0, -15 * DEG);
+      player.skin.leftArm.rotation.set(0, 0, 0.02 * Math.PI);
+      player.skin.leftLeg.rotation.set(0, 0, 0);
+      player.skin.rightLeg.rotation.set(0, 0, 0);
     });
     const ANIMS = {
-      idle: () => new skinview3d.IdleAnimation(), walk: () => new skinview3d.WalkingAnimation(), postup: PostUp, jojo: Jojo,
+      idle: () => new skinview3d.IdleAnimation(), walk: () => new skinview3d.WalkingAnimation(), postup: PostUp, shyly: Shyly,
     };
     $('anim').onclick = (e) => {
       const btn = e.target.closest('[data-anim]');
