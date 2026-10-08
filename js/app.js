@@ -131,16 +131,12 @@
     });
     viewer.autoRotate = false;
     viewer.autoRotateSpeed = 0.6;
-    viewer.animation = new skinview3d.WalkingAnimation();
+    viewer.animation = new skinview3d.IdleAnimation();
     viewer.zoom = 0.85;
     view.appendChild(viewer.canvas);
     viewer.canvas.addEventListener('contextmenu', (e) => { if (state.outfit.locked) e.preventDefault(); });
     new ResizeObserver(() => viewer.setSize(view.clientWidth, view.clientHeight)).observe(view);
 
-    $('rotate').onclick = (e) => {
-      viewer.autoRotate = !viewer.autoRotate;
-      e.currentTarget.setAttribute('aria-pressed', viewer.autoRotate);
-    };
     // POSTUP: leaning back against a wall, head turned to the side, left leg
     // forward. Held pose with a slight idle breath in the arms.
     const DEG = Math.PI / 180;
@@ -168,7 +164,7 @@
       player.skin.rightLeg.rotation.set(0, 0, 0);
     });
     const ANIMS = {
-      walk: () => new skinview3d.WalkingAnimation(), postup: PostUp, shyly: Shyly,
+      idle: () => new skinview3d.IdleAnimation(), walk: () => new skinview3d.WalkingAnimation(), postup: PostUp, shyly: Shyly,
     };
     $('anim').onclick = (e) => {
       const btn = e.target.closest('[data-anim]');
