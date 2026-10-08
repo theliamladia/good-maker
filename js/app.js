@@ -1099,7 +1099,7 @@
   // Boots (CHELSEA®, WORKBOOT®, DUCK BOOT®): the boot is the base layer from its
   // top row down (and the sole); the outer layer over it is the bottom's hem
   // draped on top, so it stays with the pants.
-  const BOOT_TOP = { chelsea: 7, workboot: 6, duck: 4 };
+  const BOOT_TOP = { chelsea: 7, workboot: 6, duck: 6 };
   const bootTop = (shoe) => BOOT_TOP[(shoe || '').split('-')[0]];
   const isBoot = (t) => (x, y) =>
     (y >= 20 + t && y <= 31 && x < 16) || (y >= 16 && y <= 19 && x >= 8 && x < 12) ||          // right leg base
