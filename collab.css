@@ -83,3 +83,17 @@
 .co-get { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 0 clamp(20px, 3vw, 40px); }
 .co-get li { border-bottom: 1px solid rgba(255, 255, 255, 0.4); padding: 16px 0; font-size: clamp(1rem, 1.4vw, 1.15rem); font-weight: 600; }
 @media (max-width: 760px) { .co-get { grid-template-columns: 1fr; } }
+
+/* Services: &Great®, GREAT®, GOOD® */
+.co-tiers { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: clamp(16px, 2.4vw, 28px); align-items: stretch; }
+.co-tier { border: 1px solid #fff; padding: clamp(22px, 3vw, 34px); display: flex; flex-direction: column; }
+.co-tier h3 { margin: 0 0 14px; font-size: clamp(1.8rem, 3.6vw, 2.8rem); font-weight: 800; letter-spacing: -0.05em; line-height: 1; }
+.co-tier h3 span { font-weight: 400; font-size: 0.45em; vertical-align: 0.9em; letter-spacing: 0; }
+.co-tier-sub { margin: 0 0 22px; line-height: 1.55; opacity: 0.92; }
+.co-tier ol { margin: 0; padding: 0; list-style: none; counter-reset: t; border-top: 1px solid rgba(255, 255, 255, 0.45); }
+.co-tier li { counter-increment: t; display: grid; grid-template-columns: 2.2em 1fr; padding: 12px 0; border-bottom: 1px solid rgba(255, 255, 255, 0.25); line-height: 1.45; }
+.co-tier li::before { content: counter(t, decimal-leading-zero); font: 700 0.68rem 'Space Mono', monospace; letter-spacing: 0.12em; padding-top: 3px; }
+.co-tier-top { background: #fff; color: #0000ff; }
+.co-tier-top ol, .co-tier-top li { border-color: rgba(0, 0, 255, 0.25); }
+@media (max-width: 860px) { .co-tiers { grid-template-columns: 1fr; } }
+.co-srv-lede { margin: 0 0 clamp(36px, 6vh, 56px); }
