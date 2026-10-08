@@ -1,0 +1,30 @@
+/* UBIQUITY: locked research page. GOOD® BLUE and white. */
+.ub-page { background: #0000ff; color: #fff; margin: 0; min-height: 100vh; }
+.ub-page ::selection { background: #fff; color: #0000ff; }
+.ub-main { max-width: 980px; margin: 0 auto; padding: 0 clamp(16px, 5vw, 48px) 80px; }
+.ub-tag { margin: 0 0 18px; font-size: 0.72rem; font-weight: 700; letter-spacing: 0.22em; }
+.ub-title { margin: 0; font-weight: 800; letter-spacing: -0.05em; line-height: 0.95; font-size: clamp(2.8rem, 9vw, 6.4rem); }
+.ub-lock { padding: clamp(80px, 16vh, 180px) 0; max-width: 28em; }
+.ub-field { display: grid; gap: 10px; margin-top: 44px; font-size: 0.72rem; letter-spacing: 0.22em; }
+.ub-field input { font: 600 1.2rem 'Space Mono', monospace; letter-spacing: 0.2em; padding: 14px 16px; border: 1px solid #fff; background: transparent; color: #fff; outline: none; }
+.ub-field input:focus { background: rgba(255, 255, 255, 0.08); }
+.ub-go { margin-top: 16px; padding: 12px 22px; border: 1px solid #fff; background: #fff; color: #0000ff; font-size: 0.75rem; font-weight: 700; letter-spacing: 0.2em; cursor: pointer; }
+.ub-go:hover { background: transparent; color: #fff; }
+.ub-go:disabled { opacity: 0.6; cursor: default; }
+.ub-msg { min-height: 1.2em; font-size: 0.72rem; letter-spacing: 0.2em; margin-top: 14px; }
+.ub-doc { padding: clamp(60px, 12vh, 140px) 0 0; }
+.ub-date { font-size: 0.68rem; letter-spacing: 0.2em; margin: 22px 0 0; opacity: 0.8; }
+.ub-sec { border-top: 1px solid #fff; margin-top: clamp(56px, 9vh, 96px); padding-top: 24px; }
+.ub-sec h2 { margin: 0 0 22px; font-size: clamp(1.4rem, 3vw, 2rem); font-weight: 800; letter-spacing: -0.03em; }
+.ub-p { line-height: 1.6; max-width: 40em; margin: 0 0 14px; }
+.ub-list { margin: 0 0 18px; padding-left: 1.1em; line-height: 1.6; max-width: 46em; }
+.ub-list li { margin-bottom: 8px; }
+.ub-fig { margin: 22px 0 0; }
+.ub-fig img { display: block; width: 100%; height: auto; background: rgba(255, 255, 255, 0.06); min-height: 80px; user-select: none; -webkit-user-drag: none; }
+.ub-fig figcaption, .ub-texbox figcaption { font-size: 0.62rem; letter-spacing: 0.14em; opacity: 0.8; padding-top: 8px; }
+.ub-tex { display: flex; flex-wrap: wrap; gap: 18px; margin-top: 18px; }
+.ub-texbox { margin: 0; }
+.ub-texbox img { display: block; width: 256px; height: 256px; image-rendering: pixelated; background: repeating-conic-gradient(rgba(255,255,255,0.12) 0 25%, transparent 0 50%) 0 0 / 16px 16px; }
+.ub-code { margin-top: 12px; border: 1px solid rgba(255, 255, 255, 0.5); }
+.ub-code summary { cursor: pointer; padding: 10px 14px; font-size: 0.72rem; letter-spacing: 0.14em; }
+.ub-code pre { margin: 0; padding: 14px; max-height: 420px; overflow: auto; font-size: 0.7rem; line-height: 1.5; background: rgba(0, 0, 0, 0.25); white-space: pre; }

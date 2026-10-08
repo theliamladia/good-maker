@@ -1,5 +1,5 @@
 // AMONG THE TREES® (GOOD® CAPSULE Nº2): the capsule page. Every piece is live in
-// the outfitter; the looks and pieces link straight to it.
+// THE MAKER; the looks and pieces link straight to it.
 // 1. The descent: on load the camera falls gently down a tall dusk sky (clouds
 //    passing) while three layers of fall treeline rise into view; it lands on
 //    the title. Skip button, scroll, keys or touch land it early; reduced
@@ -87,7 +87,7 @@
       const c0 = CW[c];
       l.cap.textContent = `${c0.a.name}™ and ${c0.b.name}™`;
       l.link.href = lookHref(l, c);
-      l.link.setAttribute('aria-label', `Try ${l.top} and ${l.bottom} in ${cwName(c0)} on in the outfitter`);
+      l.link.setAttribute('aria-label', `Try ${l.top} and ${l.bottom} in ${cwName(c0)} on in THE MAKER`);
       l.img.alt = `${l.who} in ${l.top} ${c0.a.name}™ and ${l.bottom} ${c0.b.name}™.`;
       if (!fade) { l.img.src = src(l, c); continue; }
       l.img.style.opacity = 0;
@@ -97,7 +97,7 @@
   // The twelve pieces as ghost mannequins (garment only, no body), floating
   // over their names. They follow the same colourway switch as the looks.
   const slug = (n) => n.replace(/®/g, '').trim().toLowerCase().replace(/\s+/g, '-');
-  // A look in the outfitter: ?top=<piece>-<colourway>&bottom=<piece>-<colourway>.
+  // A look in THE MAKER: ?top=<piece>-<colourway>&bottom=<piece>-<colourway>.
   const lookHref = (l, c) => `./?top=${slug(l.top)}-${CW[c].id}&bottom=${slug(l.bottom)}-${CW[c].id}&sleeve=long`;
   const ghosts = [];
   $('pieceList').append(...PIECES.map(([title, list]) => {

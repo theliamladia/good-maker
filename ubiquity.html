@@ -1,0 +1,111 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>UBIQUITY · GOOD® DESIGN</title>
+  <meta name="robots" content="noindex, nofollow">
+  <meta name="theme-color" content="#0000ff">
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+  <link rel="icon" href="/favicon-32.png" sizes="32x32" type="image/png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="ubiquity.css">
+</head>
+<body class="ub-page">
+
+<header class="site-header">
+  <a class="wordmark" href="./">GOOD® <span>DESIGN</span></a>
+  <nav class="site-nav" aria-label="Main">
+    <a class="nav-link mono" href="./">THE MAKER</a>
+    <a class="nav-link mono" href="colors.html">COLORS®</a>
+    <a class="nav-link mono" href="study.html">STUDY®</a>
+    <a class="nav-link mono" href="collaborations.html">COLLABORATIONS®</a>
+    <a class="nav-link mono" href="ubiquity.html" aria-current="page">UBIQUITY</a>
+  </nav>
+</header>
+
+<main class="ub-main">
+  <!-- Locked: nothing of the project is in this page; it arrives from /api/ubiquity after the password. -->
+  <form class="ub-lock" id="lock" autocomplete="off">
+    <p class="ub-tag mono">UBIQUITY</p>
+    <h1 class="ub-title">Locked.</h1>
+    <label class="ub-field">
+      <span class="mono">PASSWORD</span>
+      <input type="password" id="pw" autocomplete="off" spellcheck="false" autocapitalize="characters" required>
+    </label>
+    <button type="submit" class="ub-go mono" id="go">OPEN</button>
+    <p class="ub-msg mono" id="msg" aria-live="polite"></p>
+  </form>
+  <article class="ub-doc" id="doc" hidden></article>
+</main>
+
+<footer class="site-foot mono">© 2026 GOOD® DESIGN. All rights reserved.</footer>
+
+<script>
+(() => {
+  const $ = (id) => document.getElementById(id);
+  let pw = '';
+  const call = async (extra) => {
+    const r = await fetch('/api/ubiquity', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ password: pw, ...extra }) });
+    if (!r.ok) throw new Error(String(r.status));
+    return r.json();
+  };
+  const el = (tag, cls, text) => { const e = document.createElement(tag); if (cls) e.className = cls; if (text != null) e.textContent = text; return e; };
+  const blob = (f) => URL.createObjectURL(new Blob([Uint8Array.from(atob(f.data), (c) => c.charCodeAt(0))], { type: f.type }));
+
+  $('lock').onsubmit = async (e) => {
+    e.preventDefault();
+    pw = $('pw').value.trim();
+    $('go').disabled = true; $('msg').textContent = 'CHECKING…';
+    let m;
+    try { m = await call({}); } catch { $('msg').textContent = 'NOPE.'; $('go').disabled = false; pw = ''; return; }
+    $('lock').hidden = true;
+    render(m);
+  };
+
+  function render({ content, files }) {
+    const byName = Object.fromEntries(files.map((f) => [f.name, f]));
+    const doc = $('doc');
+    doc.hidden = false;
+    doc.append(el('p', 'ub-tag mono', content.kicker), el('h1', 'ub-title', content.title), el('p', 'ub-date mono', `UPDATED ${content.updated}`));
+    for (const s of content.sections) {
+      const sec = el('section', 'ub-sec');
+      sec.append(el('h2', null, s.h));
+      for (const p of s.p || []) sec.append(el('p', 'ub-p', p));
+      if (s.list) { const ul = el('ul', 'ub-list'); s.list.forEach((t) => ul.append(el('li', null, t))); sec.append(ul); }
+      for (const name of s.img || []) {
+        const fig = el('figure', 'ub-fig'); const img = el('img'); img.alt = name; img.draggable = false;
+        fig.append(img, el('figcaption', 'mono', name)); sec.append(fig);
+        load(byName[name], (u) => { img.src = u; });
+      }
+      if (s.files) {
+        const row = el('div', 'ub-tex');
+        for (const name of s.files) {
+          const box = el('figure', 'ub-texbox'); const img = el('img'); img.alt = name; box.append(img, el('figcaption', 'mono', name)); row.append(box);
+          load(byName[name], (u) => { img.src = u; });
+        }
+        sec.append(row);
+      }
+      for (const name of s.code || []) {
+        const d = el('details', 'ub-code'); d.append(el('summary', 'mono', name)); const pre = el('pre'); d.append(pre); sec.append(d);
+        d.addEventListener('toggle', () => { if (d.open && !pre.textContent) load(byName[name], null, (t) => { pre.textContent = t; }); }, { once: false });
+      }
+      doc.append(sec);
+    }
+  }
+  async function load(f, onUrl, onText) {
+    if (!f) return;
+    try {
+      const r = await call({ file: f.id });
+      if (onText) onText(new TextDecoder().decode(Uint8Array.from(atob(r.data), (c) => c.charCodeAt(0))));
+      else onUrl(blob(r));
+    } catch { /* leave it empty */ }
+  }
+})();
+</script>
+<script src="js/nav.js"></script>
+</body>
+</html>

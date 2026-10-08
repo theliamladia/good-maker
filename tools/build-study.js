@@ -55,8 +55,9 @@ const masthead = (back) => `
   <nav class="st-nav" aria-label="Main">
     ${back}
     <a href="/colors.html">COLORS®</a>
-    <a href="/">OUTFITTER</a>
+    <a href="/">THE MAKER</a>
     <a href="/collaborations.html">COLLABORATIONS®</a>
+    <a href="/ubiquity.html">UBIQUITY</a>
   </nav>
 </header>`;
 

@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>GOOD® DESIGN</title>
-  <meta name="description" content="Put your Minecraft skin in a GOOD® fit. Free Minecraft skin outfitter: GOODIE®, G-KNIT®, JEAN® and more, in Classic and Slim.">
+  <meta name="description" content="Put your Minecraft skin in a GOOD® fit. Free Minecraft skin maker: GOODIE®, G-KNIT®, JEAN® and more, in Classic and Slim.">
   <link rel="canonical" href="https://good-maker.vercel.app/">
   <meta name="theme-color" content="#0000ff">
   <link rel="icon" href="/favicon.svg" type="image/svg+xml">
@@ -14,14 +14,14 @@
   <meta property="og:type" content="website">
   <meta property="og:url" content="https://good-maker.vercel.app/">
   <meta property="og:title" content="GOOD® DESIGN">
-  <meta property="og:description" content="Put your Minecraft skin in a GOOD® fit. Free Minecraft skin outfitter: GOODIE®, G-KNIT®, JEAN® and more, in Classic and Slim.">
+  <meta property="og:description" content="Put your Minecraft skin in a GOOD® fit. Free Minecraft skin maker: GOODIE®, G-KNIT®, JEAN® and more, in Classic and Slim.">
   <meta property="og:image" content="https://good-maker.vercel.app/assets/og-site.png">
   <meta property="og:image:width" content="1200">
   <meta property="og:image:height" content="630">
   <meta property="og:image:alt" content="Seven Minecraft players posing in GOOD® outfits and jeans.">
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:title" content="GOOD® DESIGN">
-  <meta name="twitter:description" content="Put your Minecraft skin in a GOOD® fit. Free Minecraft skin outfitter: GOODIE®, G-KNIT®, JEAN® and more, in Classic and Slim.">
+  <meta name="twitter:description" content="Put your Minecraft skin in a GOOD® fit. Free Minecraft skin maker: GOODIE®, G-KNIT®, JEAN® and more, in Classic and Slim.">
   <meta name="twitter:image" content="https://good-maker.vercel.app/assets/og-site.png">
   <meta name="twitter:image:alt" content="Seven Minecraft players posing in GOOD® outfits and jeans.">
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -43,13 +43,6 @@
 <div class="crt-scanlines" aria-hidden="true"></div>
 <div class="crt-vignette" aria-hidden="true"></div>
 
-<!-- Sky -->
-<div class="hero-sky" aria-hidden="true">
-  <div class="cloud cloud-1"></div>
-  <div class="cloud cloud-2"></div>
-  <div class="cloud cloud-3"></div>
-  <div class="cloud cloud-4"></div>
-</div>
 
 <a class="fall-banner mono" href="among-the-trees.html">AMONG THE TREES® IS HERE <span>WEAR IT NOW →</span></a>
 
@@ -60,14 +53,10 @@
     <a class="nav-link mono" href="colors.html">COLORS®</a>
     <a class="nav-link mono" href="study.html">STUDY®</a>
     <a class="nav-link mono" href="collaborations.html">COLLABORATIONS®</a>
+    <a class="nav-link mono" href="ubiquity.html">UBIQUITY</a>
   </nav>
 </header>
 
-<div class="ticker ticker-top" aria-hidden="true">
-  <div class="ticker-track">
-    <span>GOOD® DESIGN&nbsp;&nbsp;●&nbsp;&nbsp;</span>
-  </div>
-</div>
 
 <main class="stage">
   <!-- Left: you -->
@@ -164,13 +153,12 @@
   <!-- Center: the model -->
   <section class="viewer-wrap">
     <div class="equipped" id="equipped" aria-label="What you're wearing"></div>
-    <div id="view3d"><div class="lean-cloud" id="leanCloud" aria-hidden="true"><div class="lean-cloud-body" id="leanCloudBody"><span class="lean-shadow"></span></div></div></div>
+    <div id="view3d"></div>
     <div class="viewer-bar mono">
       <button type="button" class="chip" id="rotate" aria-pressed="false">↻ SPIN</button>
       <span class="sep"></span>
       <div class="chips" id="anim">
-        <button type="button" class="chip" data-anim="idle" aria-pressed="true">IDLE</button>
-        <button type="button" class="chip" data-anim="walk">WALK</button>
+        <button type="button" class="chip" data-anim="walk" aria-pressed="true">WALK</button>
         <button type="button" class="chip" data-anim="postup">POSTUP</button>
         <button type="button" class="chip" data-anim="shyly">SHYLY</button>
       </div>
@@ -246,19 +234,10 @@
   </aside>
     <button type="button" class="download-btn" id="download">GOOD® ME <span class="dot-live"></span></button>
     <p class="micro mono download-hint" id="downloadHint"></p>
-    <div class="share-row">
-      <button type="button" class="chip" id="shareLook">SHARE LOOK</button>
-    </div>
-    <p class="micro mono center" id="shareHint" aria-live="polite"></p>
   </div>
 </main>
 
 
-<div class="ticker ticker-band" aria-hidden="true">
-  <div class="ticker-track slow">
-    <span>GOOD® DESIGN&nbsp;&nbsp;●&nbsp;&nbsp;</span>
-  </div>
-</div>
 
 <footer class="site-foot mono">© 2026 GOOD® DESIGN. All rights reserved.</footer>
 
@@ -267,10 +246,8 @@
 <script src="js/outfits.js"></script>
 <script src="js/app.js"></script>
 <script src="js/help.js"></script>
-<script src="js/ticker.js"></script>
 <script src="js/intro.js"></script>
 <script src="js/runway.js"></script>
-<script src="js/deep.js"></script>
 <script src="js/nav.js"></script>
 </body>
 </html>

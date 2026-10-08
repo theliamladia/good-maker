@@ -131,7 +131,7 @@
     });
     viewer.autoRotate = false;
     viewer.autoRotateSpeed = 0.6;
-    viewer.animation = new skinview3d.IdleAnimation();
+    viewer.animation = new skinview3d.WalkingAnimation();
     viewer.zoom = 0.85;
     view.appendChild(viewer.canvas);
     viewer.canvas.addEventListener('contextmenu', (e) => { if (state.outfit.locked) e.preventDefault(); });
@@ -141,33 +141,12 @@
       viewer.autoRotate = !viewer.autoRotate;
       e.currentTarget.setAttribute('aria-pressed', viewer.autoRotate);
     };
-    // The cloud POSTUP leans on: drops in from above the screen, and floats
-    // slowly back up and away when another animation is picked.
-    let cloudUp = false, cloudAnim = null;
-    function leanCloud(show) {
-      const el = $('leanCloud');
-      if (show === cloudUp) return;
-      cloudUp = show;
-      const off = `translateX(-50%) translateY(${-(el.getBoundingClientRect().bottom + 60)}px)`;
-      const rest = 'translateX(-50%)';
-      const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
-      if (cloudAnim) cloudAnim.cancel();
-      el.style.visibility = 'visible';
-      cloudAnim = el.animate(
-        show
-          ? [{ transform: off, opacity: 0.7 }, { transform: 'translateX(-50%) translateY(14px)', opacity: 1, offset: 0.78 }, { transform: rest, opacity: 1 }]
-          : [{ transform: rest, opacity: 1 }, { transform: 'translateX(-50%) translateY(10px)', opacity: 1, offset: 0.12 }, { transform: off, opacity: 0.5 }],
-        { duration: reduce ? 1 : show ? 1800 : 2600, easing: show ? 'cubic-bezier(0.22, 1, 0.36, 1)' : 'cubic-bezier(0.55, 0, 0.7, 0.2)', fill: 'forwards' }
-      );
-      cloudAnim.finished.then(() => { if (!cloudUp) el.style.visibility = 'hidden'; }).catch(() => {});
-    }
-
     // POSTUP: leaning back against a wall, head turned to the side, left leg
     // forward. Held pose with a slight idle breath in the arms.
     const DEG = Math.PI / 180;
     const PostUp = () => new skinview3d.FunctionAnimation((player, progress) => {
       const t = progress * 2;
-      const bob = Math.sin(progress * 1.6) * 0.35;   // gentle float, shared with the cloud
+      const bob = Math.sin(progress * 1.6) * 0.35;   // gentle float
       player.rotation.x = -20 * DEG;            // lean back into the cloud
       player.position.y = bob;
       player.skin.head.rotation.set(18 * DEG, 0, 0);  // head level, facing the viewer
@@ -176,7 +155,6 @@
       player.skin.rightLeg.rotation.set(0, 0, 0);
       player.skin.leftArm.rotation.set(0, 0, 0.03 * Math.cos(t) + 0.02 * Math.PI);
       player.skin.rightArm.rotation.set(0, 0, 0.03 * Math.cos(t + Math.PI) - 0.02 * Math.PI);
-      $('leanCloudBody').style.transform = `translateY(${-bob * 14}px)`;
     });
     // SHYLY: turned a little away, head bowed and turned aside, arms straight down.
     const Shyly = () => new skinview3d.FunctionAnimation((player) => {
@@ -190,7 +168,7 @@
       player.skin.rightLeg.rotation.set(0, 0, 0);
     });
     const ANIMS = {
-      idle: () => new skinview3d.IdleAnimation(), walk: () => new skinview3d.WalkingAnimation(), postup: PostUp, shyly: Shyly,
+      walk: () => new skinview3d.WalkingAnimation(), postup: PostUp, shyly: Shyly,
     };
     $('anim').onclick = (e) => {
       const btn = e.target.closest('[data-anim]');
@@ -199,7 +177,6 @@
       const make = ANIMS[btn.dataset.anim];
       viewer.animation = make ? make() : null;
       viewer.playerObject.rotation.order = 'XYZ';
-      leanCloud(btn.dataset.anim === 'postup');
     };
   } else {
     view.innerHTML = '<p class="micro mono center" style="padding-top:40%">3D PREVIEW UNAVAILABLE</p>';
@@ -1248,21 +1225,6 @@
     }
     setBody(['classic', 'slim'].includes(L.body) ? L.body : state.body);
   }
-
-  const shareHint = (msg) => { $('shareHint').textContent = msg; };
-  $('shareLook').onclick = async () => {
-    const url = lookUrl(currentLook());
-    const title = `${fullName(state.noTop ? state.pants : state.outfit)} · GOOD®`;
-    if (navigator.share && matchMedia('(pointer: coarse)').matches) {
-      try { await navigator.share({ title, url }); return; } catch (e) { if (e.name === 'AbortError') return; }
-    }
-    try {
-      await navigator.clipboard.writeText(url);
-      shareHint('LINK COPIED. PASTE IT ANYWHERE.');
-    } catch {
-      window.prompt('Copy this link:', url);
-    }
-  };
 
   // ---------- Boot with the demo head ----------
   updateSleeveButtons();

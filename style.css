@@ -19,7 +19,7 @@ body {
   margin: 0;
   font-family: 'Inter', system-ui, sans-serif;
   color: var(--ink);
-  background: var(--sky-mid);
+  background: #0000ff; /* GOOD® BLUE */
   overflow-x: hidden;
 }
 .mono { font-family: 'Space Mono', ui-monospace, monospace; }
@@ -1039,3 +1039,10 @@ body.st {
 .shoe-cards .shoe-thumb { width: 56%; max-width: 48px; aspect-ratio: 8 / 7; height: auto; margin: 0; image-rendering: pixelated; filter: drop-shadow(0 3px 3px rgba(11, 21, 38, 0.18)); }
 .shoe-cards .outfit-name { font-size: 0.64rem; letter-spacing: -0.01em; line-height: 1.2; }
 #shoeColors { margin-top: 8px; }
+
+/* GOOD® BLUE background: text and the download button that sit straight on the blue */
+.viewer-wrap > .micro, .download-hint, #shareHint { color: rgba(255, 255, 255, 0.85); }
+.download-hint strong { color: #fff; }
+.download-btn { background: #fff; color: #0000ff; border-color: #fff; }
+.download-btn:hover:not(:disabled) { background: #fff; box-shadow: 0 10px 30px rgba(0, 0, 40, 0.35); }
+.download-btn:disabled { background: rgba(255, 255, 255, 0.55); color: #0000ff; }

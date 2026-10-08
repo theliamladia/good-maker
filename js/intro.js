@@ -9,7 +9,7 @@
   const SKY_MS = 2400;
 
   // Sky: zoom in, and slow the clouds from fast to their normal speed.
-  document.querySelector('.hero-sky').animate(
+  document.querySelector('.hero-sky')?.animate(
     [{ transform: 'scale(1)' }, { transform: 'scale(1.12)' }],
     { duration: SKY_MS, easing: EASE, fill: 'forwards' }
   );
