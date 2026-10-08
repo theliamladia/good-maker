@@ -177,11 +177,18 @@ function mergeSkin(userSkin, outfit, tone, slim, hairRows = 0, erased = null, he
     out.data[i + 3] = Math.round(oa * 255);
   }
 
-  // 2b. Keeping their skin: the player's own outer layer shows wherever the
-  //     outfit leaves that spot bare on both layers (e.g. textured forearms).
+  // 2b. Keeping their skin: the player's own outer layer shows only on body
+  //     parts the outfit leaves completely bare. Anywhere the outfit touches a
+  //     part (a sleeve, a skirt, boots), that part's old overlay is dropped, so
+  //     clothes from a previous skin (old jeans under a new skirt) can't show through.
   if (own) {
     for (const part of bodyParts(slim)) {
       const [ox, oy] = part.ov;
+      const touched = Object.values(part.faces).some(([x0, y0, w, h]) => {
+        for (let y = y0; y < y0 + h; y++) for (let x = x0; x < x0 + w; x++) if (opaque(x, y) || opaque(x + ox, y + oy)) return true;
+        return false;
+      });
+      if (touched) continue;
       for (const [x0, y0, w, h] of Object.values(part.faces)) {
         for (let y = y0; y < y0 + h; y++) {
           for (let x = x0; x < x0 + w; x++) {
