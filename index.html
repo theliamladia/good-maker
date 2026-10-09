@@ -54,6 +54,7 @@
     <a class="nav-link mono" href="study.html">STUDY®</a>
     <a class="nav-link mono" href="collaborations.html">COLLABORATIONS®</a>
     <a class="nav-link mono" href="ubiquity.html">UBIQUITY</a>
+    <button type="button" class="nav-link mono acct-btn" id="acctBtn">SIGN IN</button>
   </nav>
 </header>
 
@@ -76,6 +77,10 @@
       <button type="submit" aria-label="Fetch skin">→</button>
     </form>
     <p class="error mono" id="error" hidden></p>
+    <div class="home-skin" id="homeSkin" hidden>
+      <button type="button" class="chip mono" id="homeSave">SAVE HOME SKIN</button>
+      <button type="button" class="chip mono" id="homeUse" hidden>USE HOME SKIN</button>
+    </div>
 
     <div class="section-tag mono">Nº002 / BODY</div>
     <div class="segmented" id="body" role="radiogroup" aria-label="Body type">
@@ -233,10 +238,47 @@
   </aside>
     <button type="button" class="download-btn" id="download">GOOD® ME <span class="dot-live"></span></button>
     <p class="micro mono download-hint" id="downloadHint"></p>
+    <button type="button" class="chip wardrobe-save mono" id="saveLook">SAVE TO WARDROBE <span>+10 GOOD® COINS</span></button>
   </div>
 </main>
 
 
+
+<!-- Account: sign in by email link; home skin, wardrobe, GOOD® COINS. -->
+<div class="acct" id="acct" hidden>
+  <div class="acct-backdrop" data-close></div>
+  <div class="acct-sheet" role="dialog" aria-modal="true" aria-labelledby="acctTitle">
+    <button type="button" class="acct-close mono" data-close aria-label="Close">CLOSE ✕</button>
+    <div id="acctOut">
+      <p class="acct-tag mono">GOOD® ACCOUNT</p>
+      <h2 id="acctTitle">Sign in</h2>
+      <p class="acct-p">Keep your home skin, save fits to your wardrobe and earn GOOD® COINS. We email you a link: no password.</p>
+      <form id="acctForm" class="acct-form" autocomplete="on">
+        <input type="email" id="acctEmail" placeholder="you@email.com" required aria-label="Email">
+        <button type="submit" class="acct-go mono">EMAIL ME A LINK</button>
+      </form>
+      <p class="acct-msg mono" id="acctMsg" aria-live="polite"></p>
+    </div>
+    <div id="acctIn" hidden>
+      <p class="acct-tag mono">GOOD® ACCOUNT</p>
+      <h2><span id="acctName"></span></h2>
+      <p class="acct-coins"><strong id="acctCoins">0</strong> <span class="mono">GOOD® COINS</span></p>
+      <div class="acct-row">
+        <button type="button" class="acct-go mono" id="acctHome">SAVE CURRENT SKIN AS HOME SKIN</button>
+        <button type="button" class="acct-link mono" id="acctRename">CHANGE NAME</button>
+      </div>
+      <p class="acct-msg mono" id="acctMsg2" aria-live="polite"></p>
+      <h3 class="acct-h mono">WARDROBE</h3>
+      <p class="acct-p" id="acctEmpty">Nothing here yet. Put on a fit and hit SAVE TO WARDROBE for +10 GOOD® COINS.</p>
+      <ul class="acct-wardrobe" id="acctWardrobe"></ul>
+      <div class="acct-foot">
+        <button type="button" class="acct-link mono" id="acctOutBtn">SIGN OUT</button>
+        <button type="button" class="acct-link mono acct-danger" id="acctDelete">DELETE ACCOUNT</button>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="acct-toast mono" id="acctToast" hidden></div>
 
 <footer class="site-foot mono">© 2026 GOOD® DESIGN. All rights reserved.</footer>
 
@@ -245,6 +287,7 @@
 <script src="js/outfits.js"></script>
 <script src="js/app.js"></script>
 <script src="js/help.js"></script>
+<script src="js/account.js"></script>
 <script src="js/intro.js"></script>
 <script src="js/runway.js"></script>
 <script src="js/nav.js"></script>

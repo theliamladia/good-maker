@@ -688,6 +688,12 @@
   window.GoodApp = {
     skinForName,
     current: () => ({ skin: state.user, name: state.userName, isDemo: state.isDemo }),
+    // For js/account.js: the look on screen, putting a saved one on, and the home skin.
+    currentLook: () => currentLook(false),
+    applyLook: (L) => applyLook(L, false).then(() => render()),
+    useHomeSkin: (data, name) => { useSkin(data, name, false); render(); },
+    loadSkinUrl: async (url) => checkSkin(imageData(await loadImage(url))),
+    whenBooted: () => bootDone,
     // Pop-ups freeze the page behind them (CSS animations + the 3D render loop).
     setModalOpen(open) {
       document.body.classList.toggle('modal-open', open);
@@ -1229,7 +1235,8 @@
   updateEraserButtons();
   setBody('classic');
   const linked = lookFromUrl();
-  loadData(DEMO_SKIN).then((d) => useSkin(d, 'Chinny', true)).catch(() => render())
+  const bootDone = loadData(DEMO_SKIN).then((d) => useSkin(d, 'Chinny', true)).catch(() => render())
     .then(() => linked && applyLook(linked, true))
     .finally(() => { booted = true; if (linked) syncUrl(); }); // a plain visit keeps a clean address until something changes
+  window.GoodApp.linked = !!(linked && linked.u);
 })();

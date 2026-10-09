@@ -12,6 +12,8 @@
     const head = document.createElement('p');
     head.className = 'st-c-head';
     const who = document.createElement('strong'); who.textContent = c.name || 'ANONYMOUS';
+    if (c.member) who.title = 'GOOD® member';
+    if (c.member) who.classList.add('st-member');
     const when = document.createElement('span'); when.textContent = fmt(c.at);
     head.append(who, when);
     const p = document.createElement('p'); p.textContent = c.text;
@@ -25,6 +27,15 @@
     comments.forEach((c) => draw(c));
     if (!comments.length) msg.textContent = 'Be the first.';
   }).catch(() => { msg.textContent = 'Comments couldn’t load.'; });
+
+  // Signed in: comments post under the account's GOOD® name.
+  fetch('/api/me').then((r) => (r.ok ? r.json() : null)).then((j) => {
+    if (!j || !j.user) return;
+    const n = form.elements.name;
+    n.hidden = true;
+    const as = document.createElement('p'); as.className = 'st-as'; as.textContent = `Posting as ${j.user.name}`;
+    n.after(as);
+  }).catch(() => {});
 
   form.onsubmit = async (e) => {
     e.preventDefault();
