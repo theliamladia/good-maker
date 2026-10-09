@@ -426,6 +426,18 @@ window.OUTFITS = [
         swatch: ['#ffffff', '#57b3ea'],
         long: { classic: 'outfits/collar-cotton-denim-long-classic.png', slim: 'outfits/collar-cotton-denim-long-slim.png' },
       },
+      {
+        id: 'collar-vanilla-bean-patent',
+        color: 'VANILLA BEAN/PATENT',
+        swatch: ['#ece4d2', '#283b62'],
+        long: { classic: 'outfits/collar-vanilla-bean-patent-long-classic.png', slim: 'outfits/collar-vanilla-bean-patent-long-slim.png' },
+      },
+      {
+        id: 'collar-sage-ecru-twill',
+        color: 'SAGE/ECRU TWILL',
+        swatch: ['#a7b59a', '#ddd2b8'],
+        long: { classic: 'outfits/collar-sage-ecru-twill-long-classic.png', slim: 'outfits/collar-sage-ecru-twill-long-slim.png' },
+      },
     ],
   },
   {
