@@ -61,6 +61,28 @@
     // Home skin and wardrobe (each fit drawn on their home skin)
     let skin;
     try { skin = p.hasSkin ? await GoodCompose.load(`api/profile?name=${encodeURIComponent(slug.toLowerCase())}&skin=1`) : await GoodCompose.load(DEMO); } catch { skin = await GoodCompose.load(DEMO); }
+    // COLOR STORY: every colour in their wardrobe, one bar each, as wide as how often it's worn.
+    const COLORS = new Map((window.GOOD_COLORS || []).map((cl) => [cl.name, cl]));
+    const fits = new Map();
+    const story = () => {
+      const tally = new Map();
+      for (const pcs of fits.values()) for (const piece of pcs) for (const n of (piece && piece.palette) || String((piece && piece.color) || '').split('/')) {
+        const cl = COLORS.get(n.replace(/™/g, '').trim()); if (cl) tally.set(cl, (tally.get(cl) || 0) + 1);
+      }
+      const rows = [...tally].sort((x, y) => y[1] - x[1]);
+      $('story').hidden = !rows.length;
+      const total = rows.reduce((t, [, n]) => t + n, 0);
+      const label = (cl) => (cl.mark ? `${cl.name}${cl.mark}` : cl.pantone || cl.name.includes('®') ? cl.name : `${cl.name}™`);
+      $('storyStrip').replaceChildren(...rows.map(([cl, n]) => {
+        const b = document.createElement('span'); const h = Array.isArray(cl.hex) ? cl.hex : [cl.hex];
+        b.className = 'ac-story-bar'; b.setAttribute('role', 'listitem'); b.style.setProperty('--n', n);
+        b.style.background = h.length > 1 ? `linear-gradient(to bottom, ${h[0]} 50%, ${h[1]} 50%)` : h[0];
+        const text = `${label(cl)} · ${Math.round((n / total) * 100)}%`;
+        b.setAttribute('aria-label', text); b.title = text; b.onmouseenter = () => { $('storyRead').textContent = text; };
+        return b;
+      }));
+      $('storyStrip').onmouseleave = () => { $('storyRead').innerHTML = '&nbsp;'; };
+    };
     $('wCount').textContent = `${p.wardrobe.length}`;
     $('wEmpty').hidden = p.wardrobe.length > 0;
     $('grid').replaceChildren(...p.wardrobe.map((w) => {
@@ -86,6 +108,7 @@
         a.querySelector('.ac-piece').textContent = [top && top.name, bottom && bottom.name].filter(Boolean).join(' + ');
         a.querySelector('.ac-cw').textContent = [top && top.color, bottom && bottom.color].filter(Boolean).join(' / ');
         a.hidden = false;
+        fits.set(w, [top, bottom]); story();
       }).catch(() => a.remove());
       return a;
     }));
