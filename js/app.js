@@ -255,6 +255,9 @@
   async function pantsThumb(p) {
     const key = pantsKey(p);
     if (pantsThumbs[key]) return pantsThumbs[key];
+    return (pantsThumbs[key] = (await pantsCanvas(p)).toDataURL());
+  }
+  async function pantsCanvas(p) {
     const d = await loadPants(p);
     const c = document.createElement('canvas');
     c.width = 8; c.height = 12;
@@ -263,8 +266,26 @@
     tmp.width = tmp.height = 64;
     tmp.getContext('2d').putImageData(d, 0, 0);
     for (const [sx, sy, dx] of [[4, 20, 0], [4, 36, 0], [20, 52, 4], [4, 52, 4]]) ctx.drawImage(tmp, sx, sy, 4, 12, dx, 0, 4, 12);
-    return (pantsThumbs[key] = c.toDataURL());
+    return c;
   }
+  // Preview-only pieces still get a thumbnail, but only as canvas pixels: never
+  // a data URL or an <img> that could be saved.
+  const lockedThumbs = {};
+  function lockedThumb(o, isPants) {
+    const key = isPants ? `p|${pantsSrc(o)}` : `s|${setFor(o)[bodiesOf(o).includes(state.body) ? state.body : bodiesOf(o)[0]]}`;
+    return (lockedThumbs[key] ||= (async () => {
+      if (isPants) return pantsCanvas(o);
+      const body = bodiesOf(o).includes(state.body) ? state.body : bodiesOf(o)[0];
+      return shirtCanvas(SkinLib.combineOutfit(await loadLocked(setFor(o)[body]), null), body === 'slim');
+    })().catch(() => null));
+  }
+  async function paintLocked(el, o, isPants) {
+    const src = await lockedThumb(o, isPants), cv = el.querySelector('canvas.lk');
+    if (!src || !cv) return;
+    cv.width = src.width; cv.height = src.height;
+    const x = cv.getContext('2d'); x.imageSmoothingEnabled = false; x.drawImage(src, 0, 0);
+  }
+  const LOCKED_THUMB = '<canvas class="lk" aria-hidden="true"></canvas>';
 
   // Top thumbnails: a "ghost mannequin" front view, like the pants cards.
   // Torso front with both sleeve fronts either side (outer layer over base),
@@ -273,7 +294,9 @@
   async function shirtThumb(src, slim) {
     const key = src + (slim ? '|slim' : '');
     if (shirtThumbs[key]) return shirtThumbs[key];
-    const d = SkinLib.combineOutfit(await loadData(src), null);
+    return (shirtThumbs[key] = shirtCanvas(SkinLib.combineOutfit(await loadData(src), null), slim).toDataURL());
+  }
+  function shirtCanvas(d, slim) {
     const tex = document.createElement('canvas');
     tex.width = tex.height = 64;
     tex.getContext('2d').putImageData(new ImageData(d.data, 64, 64), 0, 0);
@@ -287,7 +310,7 @@
       [20, 20, 8, a], [20, 36, 8, a],         // torso front
       [36, 52, a, a + 8], [52, 52, a, a + 8], // left arm front (viewer's right)
     ]) ctx.drawImage(tex, sx, sy, w, 12, dx, 0, w, 12);
-    return (shirtThumbs[key] = c.toDataURL());
+    return c;
   }
 
   let drawId = 0;
@@ -303,13 +326,13 @@
       return shirtThumb(setFor(o)[body], body === 'slim');
     }));
     if (id !== drawId) return; // a newer redraw started
-    fillShirts(shirts.map((k, i) => { const o = k.current, c = cover(k); return card(
+    fillShirts(shirts.map((k, i) => { const o = k.current, c = cover(k); const el = card(
       !state.noTop && o.kind === state.outfit.kind,
       c.locked
-        ? `<div class="locked-thumb" aria-hidden="true"></div>${nameOnly(c)}`
+        ? `${LOCKED_THUMB}${nameOnly(c)}`
         : `${k.isNew ? NEW_TAG : ''}<img class="ghost-thumb" src="${thumbs[i]}" alt="">${nameOnly(c)}`,
       () => selectOutfit(o)
-    ); }));
+    ); if (c.locked) paintLocked(el, c, false); return el; }));
     drawColors($('shirtColors'), state.outfit, (c) => selectOutfit(c));
     if (state.noTop) $('shirtColors').hidden = true;
     drawPants();
@@ -386,13 +409,13 @@
     $('pantsSection').hidden = false;
     const pants = PANTS.filter(inSeason); // every bottom shows under both lines
     const thumbs = await Promise.all(pants.map((k) => (k.current.locked ? null : pantsThumb(k.current))));
-    fillPants(pants.map(({ current: p }, i) => card(
+    fillPants(pants.map(({ current: p }, i) => { const el = card(
       !state.noBottom && p.kind === state.pants.kind,
       p.locked
-        ? `<div class="locked-thumb" aria-hidden="true"></div>${nameOnly(p)}`
+        ? `${LOCKED_THUMB}${nameOnly(p)}`
         : `${p.kind.isNew ? NEW_TAG : ''}<img class="pants-thumb" src="${thumbs[i]}" alt="">${nameOnly(p)}`,
       () => pickPants(p)
-    )));
+    ); if (p.locked) paintLocked(el, p, true); return el; }));
     drawColors($('pantsColors'), state.pants, pickPants);
     if (state.noBottom) $('pantsColors').hidden = true;
     // Only the shoes these pants come in; a missing pick shows the first pair.
@@ -1159,7 +1182,8 @@
       const name = fullName(s.item);
       b.title = `${name}. Click to take it off.`;
       b.setAttribute('aria-label', `${name}. Take it off`);
-      b.innerHTML = (thumbs[i] ? `<img src="${thumbs[i]}" alt="">` : '<span class="eq-locked"></span>') + '<span class="eq-dot"></span><span class="eq-x" aria-hidden="true">×</span>';
+      b.innerHTML = (thumbs[i] ? `<img src="${thumbs[i]}" alt="">` : s.item.locked ? LOCKED_THUMB : '<span class="eq-locked"></span>') + '<span class="eq-dot"></span><span class="eq-x" aria-hidden="true">×</span>';
+      if (!thumbs[i] && s.item.locked) paintLocked(b, s.item, s.label === 'BOTTOM');
       b.querySelector('.eq-dot').style.background = swatchBg(s.item);
       b.onclick = () => {
         s.off();

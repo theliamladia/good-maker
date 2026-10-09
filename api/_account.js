@@ -39,8 +39,10 @@ const saveUser = (u) => redis('SET', `user:${u.uid}`, JSON.stringify(u));
 
 // Preview-only (locked) pieces unlocked for particular accounts, keyed by the
 // sha256 of the account email (so no email sits in this public repo).
+const OWNER = '402fb6989f1b7e8cf49c604bd500e77fef3bc4fb340372fc7d5415ee09717511';
+const isOwner = (user) => !!user && sha(String(user.email).toLowerCase()) === OWNER;
 const UNLOCKS = {
-  '402fb6989f1b7e8cf49c604bd500e77fef3bc4fb340372fc7d5415ee09717511': ['goodie-im-sowwy', 'goodie-black-chrome', 'shirt-im-sowwy', 'shirt-ii-im-sowwy', 'shirt-og', 'runway-destroyed-longsleeve', 'runway-allover-g', 'jean-mosaic', 'runway-marshmallow-mosaic', 'runway-cross-jean'], // owner
+  '402fb6989f1b7e8cf49c604bd500e77fef3bc4fb340372fc7d5415ee09717511': ['goodie-im-sowwy', 'goodie-black-chrome'], // owner
 };
 // Plus anything the account owns a serialized copy of from the GOOD® CRATE.
 async function unlocksFor(user) {
@@ -51,4 +53,4 @@ async function unlocksFor(user) {
   return [...new Set([...(UNLOCKS[sha(String(user.email).toLowerCase())] || []), ...fromCrate])];
 }
 
-module.exports = { sha, currentUser, startSession, endSession, saveUser, unlocksFor };
+module.exports = { sha, currentUser, startSession, endSession, saveUser, unlocksFor, isOwner };

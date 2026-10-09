@@ -1,13 +1,14 @@
 // Vercel serverless function: the GOOD® CRATE.
 //   GET  /api/crate                     -> { price, refund, goldOdds, items: [{ id, name, color, tier, pct }] }
 //   POST /api/crate { action: 'open' }  -> { roll: { id, item, serial, gold, dup }, coins }
+//   POST /api/crate { action: 'reset' } -> owner only: clears the owner's pulls and every serial counter (testing)
 // Signed in only. Opening costs 5 GOOD® COINS; the roll happens here, never on
 // the page. Every roll is serialized per item (GD-001, GD-002, ...) and added to
 // the account's inventory (user:<uid>:inv). A piece you already had refunds 2.
 // Owning at least one serialized copy unlocks that piece in THE MAKER.
 const crypto = require('crypto');
 const { redis, configured, overLimit, parseBody } = require('./_redis');
-const { currentUser, saveUser } = require('./_account');
+const { currentUser, saveUser, isOwner } = require('./_account');
 const { ITEMS, ODDS, GOLD_ODDS, PRICE, REFUND, table } = require('./_crate');
 
 // Weighted pick in hundredths of a percent, from a cryptographic RNG.
@@ -27,7 +28,12 @@ module.exports = async function handler(req, res) {
   try {
     const me = await currentUser(req);
     if (!me) { res.status(401).json({ error: 'signed_out' }); return; }
-    if (parseBody(req).action !== 'open') { res.status(400).json({ error: 'action' }); return; }
+    const action = parseBody(req).action;
+    if (action === 'reset' && isOwner(me)) {
+      await redis('DEL', `user:${me.uid}:inv`, `user:${me.uid}:owned`, ...Object.keys(ITEMS).map((id) => `crate:serial:${id}`));
+      res.status(200).json({ ok: true }); return;
+    }
+    if (action !== 'open') { res.status(400).json({ error: 'action' }); return; }
     if (await overLimit(req, `crate:${me.uid}`, 20)) { res.status(429).json({ error: 'slow_down' }); return; }
     // One open at a time per account, so coins can't be spent twice.
     const lock = `crate:lock:${me.uid}`;
