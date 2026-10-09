@@ -169,6 +169,48 @@
     const ANIMS = {
       idle: () => new skinview3d.IdleAnimation(), walk: () => new skinview3d.WalkingAnimation(), postup: PostUp, shyly: Shyly,
     };
+    // POSTUP's tree: a voxel tree in fall foliage that drops in behind the player to
+    // lean on. Built from the viewer's own three.js classes (skinview3d bundles them).
+    let tree = null, treeT = 0;
+    function makeTree() {
+      const ref = viewer.playerObject.skin.body.innerLayer;
+      const Mesh = ref.constructor, Box = ref.geometry.constructor, Mat = ref.material.constructor;
+      const root = new Mesh();
+      const mats = {};
+      const cube = (x, y, z, w, h, d, c) => {
+        const m = new Mesh(new Box(w, h, d), mats[c] ||= new Mat({ color: c, roughness: 1, metalness: 0 }));
+        m.position.set(x, y, z); root.add(m);
+      };
+      let seed = 11; const rnd = () => ((seed = (seed * 16807) % 2147483647) / 2147483647);
+      // Trunk: bark columns with a darker seam, a root flare at the base.
+      for (let y = -16; y < 20; y += 2) for (const [x, z] of [[-2, 0], [0, 0], [2, 0], [-2, -2], [0, -2], [2, -2], [-2, 2], [0, 2], [2, 2]]) {
+        if (Math.abs(x) < 2 && Math.abs(z) < 2) continue;
+        cube(x, y, z, 2, 2, 2, rnd() < 0.25 ? '#4a2f1c' : rnd() < 0.5 ? '#6b4428' : '#5a3a22');
+      }
+      for (const [x, z] of [[-4, 0], [4, 0], [0, -4], [0, 4]]) cube(x, -16, z, 2, 2, 2, '#4a2f1c');
+      // Canopy: a lumpy blob of fall leaves.
+      const LEAF = ['#c2452b', '#d0802c', '#e0a24a', '#a65a2e', '#c9562a', '#8a3a20', '#d9a03a'];
+      for (let x = -18; x <= 18; x += 2) for (let y = 18; y <= 30; y += 2) for (let z = -12; z <= 12; z += 2) {
+        const d = Math.hypot(x / 19, (y - 24) / 7, z / 13);
+        if (d < 1 && rnd() > 0.12 * d * 3) cube(x, y, z, 2, 2, 2, LEAF[Math.floor(rnd() * LEAF.length)]);
+      }
+      // A few leaves on the ground.
+      for (let i = 0; i < 14; i++) cube(-12 + rnd() * 24, -16.9, -10 + rnd() * 18, 2, 0.2, 2, LEAF[Math.floor(rnd() * LEAF.length)]);
+      root.position.set(5, 0, -11);   // behind the player, a little to one side, who leans back into it
+      return root;
+    }
+    function showTree(on) {
+      if (on && !tree) { tree = makeTree(); viewer.scene.add(tree); treeT = performance.now(); dropTree(); viewer.zoom = 0.52; }
+      if (!on && tree) { viewer.scene.remove(tree); tree = null; viewer.zoom = 0.85; }
+    }
+    // It falls in from above and settles with a small bounce.
+    function dropTree() {
+      if (!tree) return;
+      const p = Math.min(1, (performance.now() - treeT) / 700);
+      const bounce = p < 0.75 ? 1 - (p / 0.75) ** 2 : -Math.sin(((p - 0.75) / 0.25) * Math.PI) * 0.06;
+      tree.position.y = bounce * 70;
+      if (p < 1) requestAnimationFrame(dropTree); else tree.position.y = 0;
+    }
     $('anim').onclick = (e) => {
       const btn = e.target.closest('[data-anim]');
       if (!btn) return;
@@ -176,6 +218,7 @@
       const make = ANIMS[btn.dataset.anim];
       viewer.animation = make ? make() : null;
       viewer.playerObject.rotation.order = 'XYZ';
+      showTree(btn.dataset.anim === 'postup');
     };
   } else {
     view.innerHTML = '<p class="micro mono center" style="padding-top:40%">3D PREVIEW UNAVAILABLE</p>';
