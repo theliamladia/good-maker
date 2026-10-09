@@ -502,15 +502,13 @@ function combineOutfit(shirt, pants, tucked = true) {
   if (pants && tucked) {
     // Base layer: pants win (e.g. boxers peeking out). Outer layer: the shirt
     // wins, so hoodies and jackets hang over the waistband.
+    // Tuck on the base layer: the waistband sits flush with the body. Pants
+    // pixels drawn on the outer layer drop to the base layer underneath.
     const [base, outer] = TORSO_SIDES;
-    for (const [[x0, y0, tw, th], shirtWins] of [[base, false], [outer, true], [JACKET_BOTTOM, true]]) {
-      for (let yy = y0; yy < y0 + th; yy++) {
-        for (let xx = x0; xx < x0 + tw; xx++) {
-          const i = idx(xx, yy);
-          if (pants.data[i + 3] === 0 || (shirtWins && out.data[i + 3] > 0)) continue;
-          put(xx, yy, pants);
-        }
-      }
+    for (let yy = base[1]; yy < base[1] + base[3]; yy++) for (let xx = base[0]; xx < base[0] + base[2]; xx++) {
+      const i = idx(xx, yy), o = idx(xx, yy + 16);
+      if (pants.data[o + 3] > 0 && out.data[o + 3] === 0) { for (let c = 0; c < 4; c++) out.data[i + c] = pants.data[o + c]; continue; }
+      if (pants.data[i + 3] > 0) put(xx, yy, pants);
     }
   }
   if (pants) {
