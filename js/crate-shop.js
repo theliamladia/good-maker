@@ -63,21 +63,24 @@
     }
     const roll = j.roll, item = table.find((t) => t.id === roll.item) || roll;
     window.GoodCrate && GoodCrate.open();
-    await wait(1400);
-    const drop = $('drop'); drop.hidden = false; drop.className = `cr-drop cr-t-${roll.tier}`;
+    await wait(900);
+    const drop = $('drop'); drop.hidden = false; drop.className = 'cr-drop';
     $('got').hidden = true; $('gold').hidden = true;
+    $('dropTag').textContent = 'OPENING…';
     drop.scrollIntoView({ behavior: reduce ? 'auto' : 'smooth', block: 'center' });
+    // The reel, like a Counter-Strike case: the I'M SOWWY pieces hide behind one ★ GOLD card.
+    const main = table.filter((t) => t.tier !== 'gold');
+    const goldPct = table.filter((t) => t.tier === 'gold').reduce((a, t) => a + t.pct, 0);
+    await spin([...main, { id: 'GOLD', name: '★ GOLD ROLL', color: "I'M SOWWY", tier: 'gold', pct: goldPct }], roll.gold ? 'GOLD' : roll.item);
     if (roll.gold) {
-      // Gold roll: spin between the three I'M SOWWY pieces, slowing down, then land.
-      $('dropTag').textContent = 'GOLD!';
-      $('gold').hidden = false;
-      const names = table.filter((t) => t.tier === 'gold').map((t) => `${t.name} ${t.color}`);
-      const final = `${item.name} ${item.color}`;
-      let delay = 60;
-      for (let i = 0; i < (reduce ? 0 : 16); i++) { $('goldName').textContent = names[i % names.length]; await wait(delay); delay *= 1.16; }
-      $('goldName').textContent = final;
-      await wait(700);
+      $('dropTag').textContent = '★ GOLD ROLL ★';
+      drop.className = 'cr-drop cr-t-gold';
+      await wait(600);
+      await spin(table.filter((t) => t.tier === 'gold'), roll.item);
     }
+    await wait(500);
+    $('reel').hidden = true;
+    drop.className = `cr-drop cr-t-${roll.tier}`;
     $('dropTag').textContent = roll.tier === 'ticket' ? 'YOU FOUND' : 'YOU UNBOXED';
     const fig = $('gotFig'); fig.className = `cr-got-fig${item.bottom ? ' cr-fig-b' : ''}${roll.item === 'golden-ticket' ? ' cr-fig-t' : ''}`;
     GoodItems.draw(item, fig).catch(() => {});
@@ -89,6 +92,53 @@
     state = 'idle'; drawButton();
     btn.textContent = `OPEN ANOTHER · ${price} GOOD® COINS`;
     setTimeout(() => window.GoodCrate && GoodCrate.reset(), 2500);
+  }
+
+  // One reel: a strip of ~60 cards, filler weighted by the odds, the winner at
+  // card 50; it scrolls, slows like a case opening and stops under the marker.
+  function reelCard(it) {
+    const c = document.createElement('div');
+    c.className = `cr-reel-card cr-t-${it.tier}`;
+    if (it.id === 'GOLD') c.innerHTML = '<span class="cr-reel-star">★</span>';
+    else { const cv = document.createElement('canvas'); c.append(cv); GoodItems.draw(it, cv).catch(() => {}); }
+    const n = document.createElement('span'); n.className = 'cr-reel-n'; n.textContent = it.id === 'GOLD' ? '★ GOLD ROLL' : `${it.name} ${it.color}`;
+    c.append(n);
+    return c;
+  }
+  function weighted(pool) {
+    const total = pool.reduce((a, t) => a + t.pct, 0);
+    let r = Math.random() * total;
+    for (const t of pool) { r -= t.pct; if (r < 0) return t; }
+    return pool[pool.length - 1];
+  }
+  async function spin(pool, winnerId) {
+    const reel = $('reel'), strip = $('strip');
+    reel.hidden = false;
+    const N = 60, WIN = 50;
+    const cards = Array.from({ length: N }, (_, i) => (i === WIN ? pool.find((t) => t.id === winnerId) : weighted(pool)));
+    strip.replaceChildren(...cards.map(reelCard));
+    strip.getAnimations().forEach((a) => a.cancel());
+    strip.style.transform = 'translateX(0)';
+    await new Promise(requestAnimationFrame);
+    const card = strip.children[WIN], step = strip.children[1].offsetLeft - strip.children[0].offsetLeft;
+    const jitter = (Math.random() - 0.5) * card.offsetWidth * 0.7;
+    const x = -(card.offsetLeft + card.offsetWidth / 2 - reel.clientWidth / 2 + jitter);
+    const anim = strip.animate([{ transform: 'translateX(0)' }, { transform: `translateX(${x}px)` }],
+      { duration: reduce ? 1 : 6200, easing: 'cubic-bezier(0.1, 0.55, 0.08, 1)', fill: 'forwards' });
+    // Tick: light up whichever card is under the marker as it passes.
+    let lastIdx = -1;
+    const tick = () => {
+      if (anim.playState !== 'running') return;
+      const m = new DOMMatrix(getComputedStyle(strip).transform).m41;
+      const idx = Math.round((reel.clientWidth / 2 - m - card.offsetWidth / 2) / step);
+      if (idx !== lastIdx && strip.children[idx]) { strip.children[lastIdx]?.classList.remove('cr-under'); strip.children[idx].classList.add('cr-under'); lastIdx = idx; }
+      requestAnimationFrame(tick);
+    };
+    requestAnimationFrame(tick);
+    await anim.finished;
+    strip.children[lastIdx]?.classList.remove('cr-under');
+    card.classList.add('cr-won');
+    await wait(900);
   }
 
   btn.onclick = () => {
