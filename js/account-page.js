@@ -38,7 +38,7 @@
 
   async function render() {
     $('out').hidden = !!me; $('in').hidden = !me;
-    document.querySelectorAll('[data-acct]').forEach((a) => { a.textContent = me ? `${me.name} · ${me.coins} GOOD® COINS` : 'SIGN IN'; });
+    document.querySelectorAll('[data-acct]').forEach((a) => { a.textContent = me ? `${me.name} · ` : 'SIGN IN'; if (me) { const c = document.createElement('span'); c.className = 'coin'; c.setAttribute('aria-hidden', 'true'); a.append(c, String(me.coins)); a.setAttribute('aria-label', `${me.name}, ${me.coins} GOOD® COINS`); } });
     if (!me) return;
     $('name').textContent = me.name;
     $('coins').textContent = me.coins;

@@ -1059,3 +1059,8 @@ body.st {
 
 .st-member::after { content: ' ●'; color: #0000ff; }
 .st-as { margin: 0; font-family: var(--st-sans); font-size: 0.8rem; color: var(--st-grey); }
+
+/* GOOD® COIN: metallic GOOD® BLUE fading into chrome, the new G stamped in */
+.coin { display: inline-block; width: 1.15em; height: 1.15em; background: url(assets/coin.svg) center / contain no-repeat; vertical-align: -0.22em; margin-right: 0.3em; }
+.wardrobe-save { flex-wrap: wrap; align-items: center; white-space: nowrap; }
+.wardrobe-save > span { display: inline-flex; align-items: center; }

@@ -6,6 +6,7 @@
   const $ = (id) => document.getElementById(id);
   const app = () => window.GoodApp;
   let me = null;
+  const esc = (s) => String(s).replace(/[&<>"]/g, (ch) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[ch]));
 
   const post = async (url, body) => {
     const r = await fetch(url, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(body) });
@@ -16,10 +17,12 @@
   let toastT;
   function toast(msg) {
     const t = $('acctToast'); t.textContent = msg; t.hidden = false;
+    if (/GOOD® COINS/.test(msg)) { const c = document.createElement('span'); c.className = 'coin'; c.setAttribute('aria-hidden', 'true'); t.prepend(c); }
     clearTimeout(toastT); toastT = setTimeout(() => { t.hidden = true; }, 2600);
   }
   function draw() {
-    $('acctBtn').textContent = me ? `${me.name} · ${me.coins} GOOD® COINS` : 'SIGN IN';
+    $('acctBtn').innerHTML = me ? `${esc(me.name)} · <span class="coin" aria-hidden="true"></span>${me.coins}` : 'SIGN IN';
+    $('acctBtn').setAttribute('aria-label', me ? `${me.name}, ${me.coins} GOOD® COINS` : 'Sign in');
     $('homeSkin').hidden = !me;
     if (me) $('homeUse').hidden = !me.hasSkin;
   }
