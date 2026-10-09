@@ -64,8 +64,9 @@
     $('wCount').textContent = `${p.wardrobe.length}`;
     $('wEmpty').hidden = p.wardrobe.length > 0;
     $('grid').replaceChildren(...p.wardrobe.map((w) => {
-      const a = document.createElement('a');
-      a.className = 'ac-card'; a.href = `./?${new URLSearchParams(w.look)}`; a.hidden = true;
+      // Only your own fits open in THE MAKER; on someone else's profile they're just to look at.
+      const a = document.createElement(mine ? 'a' : 'div');
+      a.className = `ac-card${mine ? '' : ' ac-static'}`; if (mine) a.href = `./?${new URLSearchParams(w.look)}`; a.hidden = true;
       a.innerHTML = '<span class="ac-fig"></span><span class="ac-fit-title"></span><span class="ac-piece"></span><span class="ac-cw mono"></span>';
       a.querySelector('.ac-fit-title').textContent = w.title || '';
       if (mine) {

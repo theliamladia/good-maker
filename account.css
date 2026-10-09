@@ -120,3 +120,5 @@
 .ac-avatar { flex: 0 0 auto; width: clamp(64px, 9vw, 104px); height: clamp(64px, 9vw, 104px); border-radius: 50%; image-rendering: pixelated; background: #0000ff; box-shadow: 0 0 0 3px #fff, 0 10px 30px rgba(0, 0, 60, 0.35); }
 .ac-profile { margin: 18px 0 0; }
 .ac-profile .ac-link { font-size: 0.62rem; letter-spacing: 0.16em; }
+.ac-card.ac-static { cursor: default; }
+.ac-card.ac-static:hover { transform: none; }
