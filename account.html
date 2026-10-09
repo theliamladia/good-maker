@@ -73,6 +73,10 @@
       <header class="ac-bar"><h2 class="mono" id="iTitle">MY INVENTORY®</h2><span class="mono" id="iCount"></span></header>
       <p class="ac-lede" id="iEmpty" hidden>Nothing yet. Open a <a class="foot-link" href="crate">GOOD® CRATE</a>: every piece you pull is serialized and lands here, and owning one lets you wear it in THE MAKER.</p>
       <div class="ac-grid ac-inv" id="inv"></div>
+      <div class="ac-ledger" id="ledger" hidden>
+        <header class="ac-bar"><h2 class="mono">OWNER · WHO OWNS WHAT</h2><span class="mono" id="ledgerCount"></span></header>
+        <table class="ac-ledger-t mono"><thead><tr><th>SERIAL</th><th>PIECE</th><th>OWNER</th><th>PULLED</th></tr></thead><tbody id="ledgerRows"></tbody></table>
+      </div>
       <button type="button" class="ac-link mono" id="invReset" hidden>OWNER: RESET MY CRATE TEST (CLEARS MY PULLS AND ALL SERIALS)</button>
     </section>
 

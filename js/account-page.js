@@ -101,9 +101,25 @@
     }));
   }
 
+  // Owner: the ledger of every serialized pull (not the GD-999 set).
+  function drawLedger() {
+    if (!(me && me.owner)) { $('ledger').hidden = true; return; }
+    fetch('api/crate?ledger=1').then((r) => (r.ok ? r.json() : null)).then((j) => {
+      if (!j) return;
+      $('ledger').hidden = false;
+      $('ledgerCount').textContent = `${j.rows.length} PULLS`;
+      $('ledgerRows').replaceChildren(...j.rows.map((r) => {
+        const it = crateItems[r.item] || { name: r.item, color: '' };
+        const tr = document.createElement('tr');
+        for (const t of [r.serial, `${it.name} ${it.color}`, r.name, (r.at || '').slice(0, 10)]) { const td = document.createElement('td'); td.textContent = t; tr.append(td); }
+        return tr;
+      }));
+    }).catch(() => {});
+  }
+
   $('invReset').onclick = async () => {
     if (!confirm('Clear your GOOD® CRATE pulls and reset every serial back to GD-001?')) return;
-    try { await post('api/crate', { action: 'reset' }); inventory = inventory.filter((e) => e.serial === 'GD-999'); drawInventory(); toast('CRATE TEST RESET. SERIALS START AT GD-001 AGAIN.'); } catch { toast('COULDN’T RESET. TRY AGAIN.'); }
+    try { await post('api/crate', { action: 'reset' }); inventory = inventory.filter((e) => e.serial === 'GD-999'); drawInventory(); drawLedger(); toast('CRATE TEST RESET. SERIALS START AT GD-001 AGAIN.'); } catch { toast('COULDN’T RESET. TRY AGAIN.'); }
   };
 
   $('form').onsubmit = async (e) => {
@@ -130,7 +146,7 @@
   fetch('api/me').then((r) => (r.ok ? r.json() : { user: null })).catch(() => ({ user: null })).then((j) => {
     me = j.user; wardrobe = j.wardrobe || []; inventory = j.inventory || [];
     render();
-    fetch('api/crate').then((r) => r.json()).then((c) => { crateItems = Object.fromEntries((c.items || []).map((i) => [i.id, i])); if (me) drawInventory(); }).catch(() => {});
+    fetch('api/crate').then((r) => r.json()).then((c) => { crateItems = Object.fromEntries((c.items || []).map((i) => [i.id, i])); if (me) { drawInventory(); drawLedger(); } }).catch(() => {});
     if (signin === 'ok' && me) toast(`SIGNED IN AS ${me.name}.`);
     if (signin === 'expired') toast('THAT LINK EXPIRED. ASK FOR A NEW ONE.');
   });

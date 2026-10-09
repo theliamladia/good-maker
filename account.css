@@ -66,3 +66,10 @@
 .ac-inv-fig { display: block; width: 100%; aspect-ratio: 4 / 3; height: auto; margin: 4px 0 14px; padding: 10px; box-sizing: border-box; background: #e9ecf7; image-rendering: pixelated; object-fit: contain; }
 .ac-serial { margin-top: 8px; font-size: 0.8rem; font-weight: 700; letter-spacing: 0.18em; }
 .ac-inv .ac-gold { background: linear-gradient(180deg, #fff6c4, #ffffff 60%); box-shadow: inset 0 -4px 0 #f2c14e; }
+
+/* Owner ledger */
+.ac-ledger { margin-top: 34px; }
+.ac-ledger[hidden] { display: none; }
+.ac-ledger-t { width: 100%; border-collapse: collapse; font-size: 0.66rem; letter-spacing: 0.08em; }
+.ac-ledger-t th, .ac-ledger-t td { text-align: left; padding: 9px 8px; border-bottom: 1px solid rgba(255, 255, 255, 0.25); }
+.ac-ledger-t th { font-weight: 700; letter-spacing: 0.18em; }

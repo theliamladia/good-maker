@@ -22,6 +22,25 @@ const serialOf = (n) => `GD-${String(n).padStart(3, '0')}`;
 
 module.exports = async function handler(req, res) {
   res.setHeader('Cache-Control', 'no-store');
+  // Owner only: who owns which serials (account names, never emails).
+  if (req.method === 'GET' && req.query && req.query.ledger) {
+    try {
+      const me = configured() && await currentUser(req);
+      if (!isOwner(me)) { res.status(403).json({ error: 'owner_only' }); return; }
+      const keys = [];
+      let cursor = '0';
+      do { const [next, batch] = await redis('SCAN', cursor, 'MATCH', 'user:*:inv', 'COUNT', 200); cursor = String(next); keys.push(...batch); } while (cursor !== '0');
+      const rows = [];
+      for (const k of keys) {
+        const uid = k.split(':')[1];
+        const u = JSON.parse((await redis('GET', `user:${uid}`)) || '{}');
+        const inv = ((await redis('LRANGE', k, 0, -1)) || []).map((r) => JSON.parse(r)).filter((e) => e.serial !== 'GD-999');
+        for (const e of inv) rows.push({ name: u.name || '(deleted)', item: e.item, serial: e.serial, at: e.at });
+      }
+      rows.sort((a, b) => a.item.localeCompare(b.item) || a.serial.localeCompare(b.serial));
+      res.status(200).json({ rows }); return;
+    } catch { res.status(502).json({ error: 'storage' }); return; }
+  }
   if (req.method === 'GET') {
     // pulled = how many serialized copies of each piece exist (the serial counters; the owner's GD-999 set isn't counted).
     let pulled = {};
