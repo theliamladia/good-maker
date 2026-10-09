@@ -1,7 +1,7 @@
 // GOOD® ACCOUNT in THE MAKER: the nav shows your name and GOOD® COINS; signed
 // in, SAVE HOME SKIN / USE HOME SKIN sit under YOUR SKIN and your home skin
-// loads on every visit; SAVE TO WARDROBE stores the fit (+10 GOOD® COINS when
-// it's new). Signing in and the wardrobe itself live on account.html.
+// loads on every visit; SAVE TO WARDROBE stores the fit (+10 GOOD® COINS a
+// day, for the first new fit). Signing in and the wardrobe itself live on account.html.
 (() => {
   const $ = (id) => document.getElementById(id);
   const app = () => window.GoodApp;
@@ -53,7 +53,7 @@
       const j = await post('api/me', { action: 'save', look: app().currentLook() });
       if (j.duplicate) { toast('ALREADY IN YOUR WARDROBE.'); return; }
       me.coins = j.coins; draw();
-      toast(j.earned ? `SAVED TO YOUR WARDROBE. +${j.earned} GOOD® COINS` : 'SAVED TO YOUR WARDROBE.');
+      toast(j.earned ? `SAVED TO YOUR WARDROBE. +${j.earned} GOOD® COINS` : j.capped ? 'SAVED. YOU’VE EARNED TODAY’S GOOD® COINS. BACK TOMORROW FOR 10 MORE.' : 'SAVED TO YOUR WARDROBE.');
     } catch (e) {
       toast(e.code === 'full' ? 'WARDROBE FULL (60). REMOVE ONE ON YOUR ACCOUNT PAGE.' : e.code === 'look' ? 'PUT ON A TOP OR BOTTOM FIRST.' : 'COULDN’T SAVE. TRY AGAIN.');
     }

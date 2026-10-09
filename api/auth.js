@@ -17,9 +17,10 @@ async function sendLink(email, link) {
     method: 'POST',
     headers: { Authorization: `Bearer ${process.env.RESEND_API_KEY}`, 'Content-Type': 'application/json' },
     body: JSON.stringify({
-      from: process.env.AUTH_FROM || 'GOOD® DESIGN <onboarding@resend.dev>',
+      from: process.env.AUTH_FROM || 'GOOD DESIGN <onboarding@resend.dev>',
+      ...(process.env.AUTH_REPLY_TO ? { reply_to: process.env.AUTH_REPLY_TO } : {}),
       to: [email],
-      subject: 'Sign in to GOOD® DESIGN',
+      subject: 'Your GOOD DESIGN sign-in link',
       text: `Tap to sign in to GOOD® DESIGN:\n\n${link}\n\nThe link works once and expires in 15 minutes. If you didn't ask for it, ignore this email.`,
       html: `<div style="font-family:Helvetica,Arial,sans-serif;background:#0000ff;color:#fff;padding:40px"><p style="font-size:28px;font-weight:800;margin:0 0 24px">GOOD® DESIGN</p><p style="font-size:16px;margin:0 0 28px">Tap below to sign in. The link works once and expires in 15 minutes.</p><p><a href="${link}" style="background:#fff;color:#0000ff;padding:14px 22px;text-decoration:none;font-weight:700;letter-spacing:2px">SIGN IN</a></p><p style="font-size:12px;opacity:.8;margin-top:32px">If you didn't ask for this, ignore this email.</p></div>`,
     }),

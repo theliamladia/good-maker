@@ -3,7 +3,7 @@
 //   GET  /api/me?skin=1                           -> the home skin (image/png)
 //   POST /api/me { action: 'name', name }
 //   POST /api/me { action: 'skin', png }          -> png = base64 of a 64x64 / 64x32 PNG
-//   POST /api/me { action: 'save', look }         -> adds a look to the wardrobe, +10 GOOD® COINS when it's new
+//   POST /api/me { action: 'save', look }         -> adds a look to the wardrobe; the first new fit each day earns +10 GOOD® COINS
 //   POST /api/me { action: 'remove', id }
 //   POST /api/me { action: 'delete' }             -> deletes the account and everything in it
 // Looks are recipes of catalogue ids (like the address bar), never pictures.
@@ -85,9 +85,12 @@ module.exports = async function handler(req, res) {
       const item = { id: crypto.randomBytes(6).toString('base64url'), look, at: new Date().toISOString() };
       await redis('LPUSH', key, JSON.stringify(item));
       // Coins are earned once per distinct look ever saved, so delete-and-resave can't farm them.
-      const earned = await redis('SADD', `user:${user.uid}:earned`, sha(lookKey(look)));
+      // Up to 10 GOOD® COINS a day (UTC): the first new fit saved each day earns them.
+      const fresh = await redis('SADD', `user:${user.uid}:earned`, sha(lookKey(look)));
+      const today = new Date().toISOString().slice(0, 10);
+      const earned = fresh ? await redis('SET', `user:${user.uid}:coins:${today}`, 1, 'EX', 172800, 'NX') : null;
       if (earned) { user.coins = (user.coins || 0) + COINS_PER_SAVE; await saveUser(user); }
-      res.status(200).json({ ok: true, item, coins: user.coins || 0, earned: earned ? COINS_PER_SAVE : 0 }); return;
+      res.status(200).json({ ok: true, item, coins: user.coins || 0, earned: earned ? COINS_PER_SAVE : 0, capped: !!(fresh && !earned) }); return;
     }
     if (body.action === 'remove') {
       const key = `user:${user.uid}:wardrobe`;
