@@ -73,6 +73,7 @@
     if (!me) return;
     $('name').textContent = me.name;
     $('coins').textContent = me.coins;
+    if (me.profile) { $('profileLink').hidden = false; $('profileLink').href = `/profiles/${me.profile}`; $('profileLink').textContent = `PUBLIC PROFILE: GOOD.LEEMS.ME/PROFILES/${me.profile.toUpperCase()} →`; } else $('profileLink').hidden = true;
     try { skin = me.hasSkin ? await GoodCompose.load(`api/me?skin=1&t=${Date.now()}`) : await GoodCompose.load(DEMO); } catch { skin = await GoodCompose.load(DEMO); }
     $('homeCap').textContent = me.hasSkin ? 'HOME SKIN' : 'NO HOME SKIN YET · SAVE ONE IN THE MAKER';
     const fig = $('homeFig'); fig.replaceChildren();
@@ -148,9 +149,9 @@
   };
   $('signout').onclick = async () => { await post('api/auth', { action: 'logout' }).catch(() => {}); me = null; render(); };
   $('rename').onclick = async () => {
-    const n = prompt('Your GOOD® name (shown on your comments):', me.name);
+    const n = prompt('Your GOOD® name. It\'s on your comments and it\'s your profile link (good.leems.me/profiles/your-name):', me.name);
     if (!n) return;
-    try { const j = await post('api/me', { action: 'name', name: n }); me.name = j.name; render(); } catch { toast('2 TO 16 LETTERS OR NUMBERS.'); }
+    try { const j = await post('api/me', { action: 'name', name: n }); me.name = j.name; me.profile = j.profile; render(); } catch (e) { toast(e.code === 'taken' ? 'THAT NAME IS TAKEN. TRY ANOTHER.' : '2 TO 16 LETTERS OR NUMBERS.'); }
   };
   $('delete').onclick = async () => {
     if (!confirm('Delete your GOOD® account, home skin, wardrobe and GOOD® COINS? This can’t be undone.')) return;

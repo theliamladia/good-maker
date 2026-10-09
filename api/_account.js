@@ -5,6 +5,7 @@
 //   user:<uid>:wardrobe     -> list of JSON looks (newest first)
 //   user:<uid>:inv          -> list of JSON crate rolls { id, item, serial, at } (newest first)
 //   user:<uid>:owned        -> set of crate item ids rolled at least once
+//   profile:<slug>          -> uid: the public profile at /profiles/<slug> (slug = the GOOD® name)
 //   sess:<sha(sid)>         -> uid, 30 days
 // The session id lives only in an HttpOnly cookie; Redis stores its hash.
 const crypto = require('crypto');
@@ -53,4 +54,14 @@ async function unlocksFor(user) {
   return [...new Set([...(UNLOCKS[sha(String(user.email).toLowerCase())] || []), ...fromCrate])];
 }
 
-module.exports = { sha, currentUser, startSession, endSession, saveUser, unlocksFor, isOwner };
+// Profile URL from a GOOD® name: LEEEEEMS -> leeeeems, BIG G. -> big-g
+const slugOf = (name) => String(name || '').toLowerCase().replace(/[^a-z0-9_]+/g, '-').replace(/^-+|-+$/g, '');
+// Claim the profile URL for this name if it's free; returns the slug if it's the account's.
+async function claimProfile(user) {
+  const slug = slugOf(user.name);
+  if (slug.length < 2) return null;
+  await redis('SET', `profile:${slug}`, user.uid, 'NX');
+  return (await redis('GET', `profile:${slug}`)) === user.uid ? slug : null;
+}
+
+module.exports = { sha, currentUser, startSession, endSession, saveUser, unlocksFor, isOwner, slugOf, claimProfile };

@@ -1,0 +1,89 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <base href="/">
+  <title>GOOD® PROFILE · GOOD® DESIGN</title>
+  <meta name="description" content="A GOOD® profile: achievements, serialized GOOD® CRATE pulls and saved fits.">
+  <meta name="theme-color" content="#0000ff">
+  <meta property="og:site_name" content="GOOD® DESIGN">
+  <meta property="og:type" content="profile">
+  <meta property="og:title" content="GOOD® PROFILE">
+  <meta property="og:description" content="Achievements, serialized GOOD® CRATE pulls and saved fits.">
+  <meta property="og:image" content="https://good.leems.me/assets/og-crate.png">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:image" content="https://good.leems.me/assets/og-crate.png">
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+  <link rel="icon" href="/favicon-32.png" sizes="32x32" type="image/png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="account.css">
+</head>
+<body class="ac-page">
+
+<header class="site-header">
+  <a class="wordmark" href="./">GOOD® <span>DESIGN</span></a>
+  <nav class="site-nav" aria-label="Main">
+    <a class="nav-link mono" href="./">THE MAKER</a>
+    <a class="nav-link mono" href="colors">COLORS®</a>
+    <a class="nav-link mono" href="study">STUDY®</a>
+    <a class="nav-link mono" href="collaborations">COLLABORATIONS®</a>
+    <a class="nav-link mono" href="crate">GOOD® CRATE</a>
+    <a class="nav-link mono" href="account" data-acct>ACCOUNT</a>
+  </nav>
+</header>
+
+<main class="ac-main">
+  <section class="ac-out" id="missing" hidden>
+    <p class="ac-tag mono">GOOD® PROFILE</p>
+    <h1 class="ac-title">Nobody here.</h1>
+    <p class="ac-lede">There's no GOOD® profile with that name. Names are set on the <a class="foot-link" href="account">account page</a>.</p>
+  </section>
+
+  <section class="ac-in" id="found" hidden>
+    <div class="ac-head">
+      <div class="ac-who">
+        <p class="ac-tag mono">GOOD® PROFILE</p>
+        <h1 class="ac-title" id="name"></h1>
+        <p class="ac-coins"><span class="mono" id="since"></span></p>
+        <div class="ac-actions"><button type="button" class="ac-link mono" id="share">COPY PROFILE LINK</button></div>
+      </div>
+      <figure class="ac-home">
+        <div class="ac-home-fig" id="homeFig"></div>
+        <figcaption class="mono">HOME SKIN</figcaption>
+      </figure>
+    </div>
+
+    <section class="ac-block ac-ach" aria-labelledby="aTitle">
+      <header class="ac-bar"><h2 class="mono" id="aTitle">ACHIEVEMENTS</h2><span class="mono" id="aCount"></span></header>
+      <div class="ac-ach-grid" id="ach"></div>
+    </section>
+
+    <section class="ac-block" aria-labelledby="iTitle">
+      <header class="ac-bar"><h2 class="mono" id="iTitle">INVENTORY®</h2><span class="mono" id="iCount"></span></header>
+      <p class="ac-lede" id="iEmpty" hidden>No GOOD® CRATE pulls yet.</p>
+      <div class="ac-grid ac-inv" id="inv"></div>
+    </section>
+
+    <section class="ac-block" aria-labelledby="wTitle">
+      <header class="ac-bar"><h2 class="mono" id="wTitle">WARDROBE</h2><span class="mono" id="wCount"></span></header>
+      <p class="ac-lede" id="wEmpty" hidden>No saved fits yet.</p>
+      <div class="ac-grid" id="grid"></div>
+    </section>
+  </section>
+</main>
+
+<div class="ac-toast mono" id="toast" hidden></div>
+<footer class="site-foot mono">© 2026 GOOD® DESIGN. All rights reserved. · <a class="foot-link" href="/privacy">PRIVACY</a></footer>
+
+<script src="js/skin.js"></script>
+<script src="js/outfits.js"></script>
+<script src="js/compose.js"></script>
+<script src="js/gooditems.js"></script>
+<script src="js/profile.js"></script>
+<script src="js/nav.js"></script>
+</body>
+</html>

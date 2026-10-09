@@ -50,6 +50,7 @@
         <div class="ac-actions">
           <button type="button" class="ac-link mono" id="rename">CHANGE NAME</button>
           <button type="button" class="ac-link mono" id="signout">SIGN OUT</button>
+          <a class="ac-link mono" id="profileLink" hidden>VIEW MY PUBLIC PROFILE →</a>
         </div>
       </div>
       <section class="ac-story" id="story" aria-labelledby="storyTitle" hidden>
@@ -63,6 +64,11 @@
       </figure>
     </div>
 
+    <section class="ac-block ac-ach" aria-labelledby="aTitle">
+      <header class="ac-bar"><h2 class="mono" id="aTitle">ACHIEVEMENTS</h2><span class="mono" id="aCount"></span></header>
+      <div class="ac-ach-grid" id="ach"></div>
+    </section>
+
     <section class="ac-block" aria-labelledby="wTitle">
       <header class="ac-bar"><h2 class="mono" id="wTitle">WARDROBE</h2><span class="mono" id="wCount"></span></header>
       <p class="ac-lede" id="wEmpty" hidden>Nothing here yet. In THE MAKER, put on a fit and hit SAVE TO WARDROBE. Your first 2 new fits each day earn +10 GOOD® COINS each.</p>
@@ -73,10 +79,6 @@
       <header class="ac-bar"><h2 class="mono" id="iTitle">MY INVENTORY®</h2><span class="mono" id="iCount"></span></header>
       <p class="ac-lede" id="iEmpty" hidden>Nothing yet. Open a <a class="foot-link" href="crate">GOOD® CRATE</a>: every piece you pull is serialized and lands here, and owning one lets you wear it in THE MAKER.</p>
       <div class="ac-grid ac-inv" id="inv"></div>
-      <div class="ac-ach" aria-labelledby="aTitle">
-        <header class="ac-bar"><h2 class="mono" id="aTitle">ACHIEVEMENTS</h2><span class="mono" id="aCount"></span></header>
-        <div class="ac-ach-grid" id="ach"></div>
-      </div>
       <div class="ac-ledger" id="ledger" hidden>
         <header class="ac-bar"><h2 class="mono">OWNER · WHO OWNS WHAT</h2><span class="mono" id="ledgerCount"></span></header>
         <table class="ac-ledger-t mono"><thead><tr><th>SERIAL</th><th>PIECE</th><th>OWNER</th><th>PULLED</th></tr></thead><tbody id="ledgerRows"></tbody></table>

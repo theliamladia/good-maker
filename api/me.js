@@ -12,7 +12,7 @@ const path = require('path');
 const vm = require('vm');
 const crypto = require('crypto');
 const { redis, configured, overLimit, parseBody } = require('./_redis');
-const { sha, currentUser, endSession, saveUser, unlocksFor, isOwner } = require('./_account');
+const { sha, currentUser, endSession, saveUser, unlocksFor, isOwner, slugOf, claimProfile } = require('./_account');
 const ACH = require('./_achievements');
 
 const COINS_PER_SAVE = 10;
@@ -73,7 +73,8 @@ module.exports = async function handler(req, res) {
       const inv = ((await redis('LRANGE', `user:${user.uid}:inv`, 0, -1)) || []).map((r) => JSON.parse(r));
       await ACH.touch(user.uid);
       const achievements = await ACH.list(user.uid);
-      res.status(200).json({ user: { name: user.name, coins: user.coins || 0, hasSkin, unlocks: await unlocksFor(user), owner: isOwner(user) || undefined }, wardrobe: rows.map((r) => JSON.parse(r)), inventory: inv, achievements });
+      const profile = await claimProfile(user);
+      res.status(200).json({ user: { name: user.name, coins: user.coins || 0, hasSkin, unlocks: await unlocksFor(user), owner: isOwner(user) || undefined, profile }, wardrobe: rows.map((r) => JSON.parse(r)), inventory: inv, achievements });
       return;
     }
     if (req.method !== 'POST') { res.status(405).json({ error: 'method' }); return; }
@@ -83,9 +84,15 @@ module.exports = async function handler(req, res) {
 
     if (body.action === 'name') {
       const name = String(body.name || '').replace(/[^A-Za-z0-9_ .-]/g, '').trim().slice(0, 16).toUpperCase();
-      if (name.length < 2) { res.status(400).json({ error: 'name' }); return; }
+      if (name.length < 2 || slugOf(name).length < 2) { res.status(400).json({ error: 'name' }); return; }
+      // Names are unique: each one is a profile URL (/profiles/<slug>).
+      const holder = await redis('GET', `profile:${slugOf(name)}`);
+      if (holder && holder !== user.uid) { res.status(409).json({ error: 'taken' }); return; }
+      const old = slugOf(user.name);
+      if (old !== slugOf(name) && (await redis('GET', `profile:${old}`)) === user.uid) await redis('DEL', `profile:${old}`);
       user.name = name; await saveUser(user);
-      res.status(200).json({ ok: true, name }); return;
+      const profile = await claimProfile(user);
+      res.status(200).json({ ok: true, name, profile }); return;
     }
     if (body.action === 'skin') {
       const buf = Buffer.from(String(body.png || ''), 'base64');
@@ -125,6 +132,7 @@ module.exports = async function handler(req, res) {
     }
     if (body.action === 'delete') {
       await redis('DEL', `user:${user.uid}`, `user:${user.uid}:skin`, `user:${user.uid}:wardrobe`, `user:${user.uid}:earned`, `user:${user.uid}:inv`, `user:${user.uid}:owned`, `user:${user.uid}:ach`, `user:email:${sha(user.email)}`);
+      if ((await redis('GET', `profile:${slugOf(user.name)}`)) === user.uid) await redis('DEL', `profile:${slugOf(user.name)}`);
       await redis('SREM', 'users:all', user.uid);
       for (const d of ACH.DEFS) await redis('SREM', `ach:${d.id}`, user.uid);
       await endSession(req, res);
