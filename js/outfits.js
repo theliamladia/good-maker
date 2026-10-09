@@ -817,7 +817,7 @@ window.OUTFITS = [
   },
   {
     id: 'runway-allover-g',
-    name: 'RUNWAY® ILLUSTRATIVE PRINT ALLOVER G',
+    name: 'RUNWAY® ALLOVER',
     locked: true,
     colors: [{
       id: 'runway-allover-g-cotton-glacier', color: 'COTTON/GLACIER', swatch: ['#ffffff', '#bcd9e6'],

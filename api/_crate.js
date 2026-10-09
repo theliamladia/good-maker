@@ -12,7 +12,7 @@ const ITEMS = {
   'runway-cross-jean': { name: 'RUNWAY® CROSS JEAN', color: 'UNIQUEⓤ', tier: 'rare', unlock: 'runway-cross-jean', tex: 'runway-cross-jean', bottom: true },
   'runway-destroyed-longsleeve': { name: 'RUNWAY® DESTROYED LONGSLEEVE', color: 'BLAUE/COTTON', tier: 'runway', unlock: 'runway-destroyed-longsleeve', tex: 'runway-destroyed-longsleeve-classic' },
   'shirt-og':          { name: 'SHIRT® OG', color: 'VINTAGE COTTON/DENIM', tier: 'runway', unlock: 'shirt-og', tex: 'shirt-og-classic' },
-  'runway-allover-g':  { name: 'RUNWAY® ILLUSTRATIVE PRINT ALLOVER G', color: 'COTTON/GLACIER', tier: 'runway', unlock: 'runway-allover-g', tex: 'runway-allover-g-classic' },
+  'runway-allover-g':  { name: 'RUNWAY® ALLOVER', color: 'COTTON/GLACIER', tier: 'runway', unlock: 'runway-allover-g', tex: 'runway-allover-g-classic' },
   'jean-mosaic':       { name: 'JEAN® MOSAIC', color: 'SPRINGSTEEN/GOOD® BLUE', tier: 'runway', unlock: 'jean-mosaic', tex: 'jean-mosaic', bottom: true },
   'runway-marshmallow-mosaic': { name: 'RUNWAY® MARSHMALLOW MOSAIC', color: 'MARSHMALLOW/BLAUE', tier: 'runway', unlock: 'runway-marshmallow-mosaic', tex: 'runway-marshmallow-mosaic', bottom: true },
 };
