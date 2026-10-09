@@ -31,10 +31,41 @@
       a.querySelector('.ac-cw').textContent = [top && top.color, bottom && bottom.color].filter(Boolean).join(' / ');
       a.setAttribute('aria-label', `${[GoodCompose.label(top), GoodCompose.label(bottom)].filter(Boolean).join(' and ')}. Open in THE MAKER.`);
       a.hidden = false;
+      fits.set(w, [top, bottom]); story();
     }).catch(() => a.remove());   // a retired piece
     return a;
   }
-  const count = () => { $('wCount').textContent = `${wardrobe.length} / 60`; $('wEmpty').hidden = wardrobe.length > 0; };
+  const count = () => { $('wCount').textContent = `${wardrobe.length} / 60`; $('wEmpty').hidden = wardrobe.length > 0; story(); };
+
+  // YOUR COLOR STORY: every colour in the wardrobe's colourways (from COLORS®),
+  // one bar each, as wide as how often it's worn. Most worn first.
+  const COLORS = new Map((window.GOOD_COLORS || []).map((c) => [c.name, c]));
+  const fits = new Map();   // wardrobe entry -> [top, bottom] once drawn
+  function story() {
+    const tally = new Map();
+    for (const w of wardrobe) for (const piece of fits.get(w) || []) {
+      for (const n of String((piece && piece.color) || '').split('/')) {
+        const c = COLORS.get(n.replace(/™/g, '').trim());
+        if (c) tally.set(c, (tally.get(c) || 0) + 1);
+      }
+    }
+    const rows = [...tally].sort((a, b) => b[1] - a[1]);
+    $('story').hidden = !rows.length;
+    const total = rows.reduce((a, [, n]) => a + n, 0);
+    const label = (c) => (c.pantone || c.name.includes('®') ? c.name : `${c.name}™`);
+    $('storyStrip').replaceChildren(...rows.map(([c, n]) => {
+      const b = document.createElement('span');
+      const h = Array.isArray(c.hex) ? c.hex : [c.hex];
+      b.className = 'ac-story-bar'; b.setAttribute('role', 'listitem');
+      b.style.setProperty('--n', n);
+      b.style.background = h.length > 1 ? `linear-gradient(to bottom, ${h[0]} 50%, ${h[1]} 50%)` : h[0];
+      const text = `${label(c)} · ${Math.round((n / total) * 100)}%`;
+      b.setAttribute('aria-label', text); b.title = text;
+      b.onmouseenter = () => { $('storyRead').textContent = text; };
+      return b;
+    }));
+    $('storyStrip').onmouseleave = () => { $('storyRead').innerHTML = '&nbsp;'; };
+  }
 
   async function render() {
     $('out').hidden = !!me; $('in').hidden = !me;
