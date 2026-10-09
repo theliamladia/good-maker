@@ -41,7 +41,7 @@
 .ac-card:hover, .ac-card:focus-visible { transform: translateY(-4px); outline: none; }
 .ac-fig { display: flex; justify-content: center; padding: 6px 0 14px; }
 .ac-fig canvas { width: 80px; height: 160px; image-rendering: pixelated; }
-.ac-piece { font-weight: 800; font-size: 0.92rem; letter-spacing: -0.02em; line-height: 1.2; }
+.ac-piece { font-weight: 700; font-size: 0.72rem; letter-spacing: -0.01em; line-height: 1.25; }
 .ac-cw { font-size: 0.5rem; letter-spacing: 0.04em; margin-top: 4px; opacity: 0.8; line-height: 1.45; }
 .ac-x { position: absolute; top: 6px; right: 8px; border: 0; background: none; color: #0000ff; font-size: 1.1rem; cursor: pointer; opacity: 0; transition: opacity 0.15s; }
 .ac-card:hover .ac-x, .ac-x:focus-visible { opacity: 1; }
