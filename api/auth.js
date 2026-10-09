@@ -10,7 +10,7 @@ const { redis, configured, overLimit, parseBody } = require('./_redis');
 const { sha, startSession, endSession, saveUser } = require('./_account');
 
 const EMAIL = /^[^\s@]{1,64}@[^\s@]{1,190}\.[^\s@]{2,24}$/;
-const SITE = process.env.SITE_URL || 'https://good-maker.vercel.app';
+const SITE = process.env.SITE_URL || 'https://good.leems.me';
 
 async function sendLink(email, link) {
   const r = await fetch('https://api.resend.com/emails', {
