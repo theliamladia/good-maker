@@ -18,14 +18,16 @@ const COINS_PER_SAVE = 10;
 const MAX_LOOKS = 60;
 const win = {};
 vm.runInNewContext(fs.readFileSync(path.join(__dirname, '../js/outfits.js'), 'utf8'), { window: win });
-const TOPS = new Set(); const BOTTOMS = new Map();
-for (const k of win.OUTFITS) for (const c of k.colors || [k]) if (!(k.locked || c.locked)) TOPS.add(c.id);
+const TOPS = new Set(); const LOCKED = new Map(); const BOTTOMS = new Map();
+for (const k of win.OUTFITS) for (const c of k.colors || [k]) if (k.locked || c.locked) LOCKED.set(c.id, k.id); else TOPS.add(c.id);
 for (const k of win.PANTS) for (const c of k.colors || [k]) BOTTOMS.set(c.id, Object.keys(c.shoes || k.shoes || {}));
 
-function cleanLook(L) {
+// Locked tops only for accounts that own them (by colour id or kind id).
+function cleanLook(L, unlocks = []) {
   L = L || {};
   const out = {};
-  if (L.top) { if (!TOPS.has(String(L.top))) return null; out.top = String(L.top); }
+  const owns = (id) => LOCKED.has(id) && (unlocks.includes(id) || unlocks.includes(LOCKED.get(id)));
+  if (L.top) { if (!TOPS.has(String(L.top)) && !owns(String(L.top))) return null; out.top = String(L.top); }
   if (L.bottom) { if (!BOTTOMS.has(String(L.bottom))) return null; out.bottom = String(L.bottom); }
   if (!out.top && !out.bottom) return null;
   if (out.bottom && BOTTOMS.get(out.bottom).includes(L.shoe)) out.shoe = L.shoe;
@@ -76,7 +78,7 @@ module.exports = async function handler(req, res) {
       res.status(200).json({ ok: true }); return;
     }
     if (body.action === 'save') {
-      const look = cleanLook(body.look);
+      const look = cleanLook(body.look, unlocksFor(user));
       if (!look) { res.status(400).json({ error: 'look' }); return; }
       const key = `user:${user.uid}:wardrobe`;
       const rows = ((await redis('LRANGE', key, 0, MAX_LOOKS - 1)) || []).map((r) => JSON.parse(r));

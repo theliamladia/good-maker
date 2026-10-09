@@ -1,7 +1,8 @@
 // A saved look, drawn flat: the look (catalogue ids, like the address bar) put
 // on a skin and shown as a 16×32 front view (head, torso, arms, legs; outer
 // layer over base). Used by the account page's WARDROBE. Needs js/skin.js and
-// js/outfits.js. Preview-only (locked) pieces are never composed here.
+// js/outfits.js. Locked pieces (only saved by accounts that own them) are
+// decoded from /api/outfit's scrambled data straight to pixels.
 window.GoodCompose = (() => {
   const catalogue = (kinds) => kinds.flatMap((k) => (k.colors || [k]).map((c) => ({
     baseUnderHoles: k.baseUnderHoles, hat: k.hat, shoes: k.shoes, boxers: k.boxers, src: k.src, cropped: k.cropped, noTuck: k.noTuck, locked: k.locked, ...c, name: k.name,
@@ -11,11 +12,22 @@ window.GoodCompose = (() => {
   const loadImage = (src) => new Promise((ok, no) => { const i = new Image(); i.crossOrigin = 'anonymous'; i.onload = () => ok(i); i.onerror = () => no(new Error(src)); i.src = src; });
   const pixels = (img) => { const c = document.createElement('canvas'); c.width = img.width; c.height = img.height; const x = c.getContext('2d'); x.drawImage(img, 0, 0); return x.getImageData(0, 0, img.width, img.height); };
   const load = async (src) => (cache[src] ||= pixels(await loadImage(src)));
+  const loadLocked = async (src) => {
+    if (cache[src]) return cache[src];
+    const res = await fetch(src, { cache: 'no-store' });
+    if (!res.ok) throw new Error('unavailable');
+    const { k, d } = await res.json();
+    const key = Uint8Array.from(atob(k), (c) => c.charCodeAt(0));
+    const bytes = Uint8Array.from(atob(d), (c, i) => c.charCodeAt(0) ^ key[i % key.length]);
+    const bmp = await createImageBitmap(new Blob([bytes]));
+    const data = pixels(bmp); bmp.close();
+    return (cache[src] = data);
+  };
   const sleeves = (o) => ['short', 'long'].filter((k) => (k === 'long' ? o.long : o.bodies));
   const EMPTY = { width: 64, height: 64, data: new Uint8ClampedArray(64 * 64 * 4) };
 
   async function compose(user, L) {
-    const o = TOPS.find((t) => t.id === L.top && !t.locked) || null;
+    const o = TOPS.find((t) => t.id === L.top) || null;
     const p = BOTTOMS.find((b) => b.id === L.bottom) || null;
     if (!o && !p) throw new Error('unavailable');
     const detected = SkinLib.detectSlim(user) ? 'slim' : 'classic';
@@ -25,7 +37,7 @@ window.GoodCompose = (() => {
       const set = sleeve === 'long' ? o.long : o.bodies;
       const body = set[L.body] ? L.body : set[detected] ? detected : Object.keys(set)[0];
       slim = body === 'slim';
-      outfit = await load(set[body]);
+      outfit = await (o.locked ? loadLocked(set[body]) : load(set[body]));
       if (o.baseUnderHoles) outfit = SkinLib.baseUnderHoles(outfit);
     }
     if (p) {
