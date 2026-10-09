@@ -1064,3 +1064,4 @@ body.st {
 .coin { display: inline-block; width: 1.15em; height: 1.15em; background: url(assets/coin.svg) center / contain no-repeat; vertical-align: -0.22em; margin-right: 0.3em; }
 .wardrobe-save { flex-wrap: wrap; align-items: center; white-space: nowrap; }
 .wardrobe-save > span { display: inline-flex; align-items: center; }
+.foot-link { color: inherit; text-decoration: underline; text-underline-offset: 4px; }
