@@ -17,7 +17,7 @@ async function sendLink(email, link) {
     method: 'POST',
     headers: { Authorization: `Bearer ${process.env.RESEND_API_KEY}`, 'Content-Type': 'application/json' },
     body: JSON.stringify({
-      from: process.env.AUTH_FROM || 'GOOD DESIGN <onboarding@resend.dev>',
+      from: process.env.AUTH_FROM || 'GOOD DESIGN <login@leems.me>',
       ...(process.env.AUTH_REPLY_TO ? { reply_to: process.env.AUTH_REPLY_TO } : {}),
       to: [email],
       subject: 'Your GOOD DESIGN sign-in link',
