@@ -21,6 +21,15 @@
     a.className = 'ac-card'; a.href = lookHref(w.look); a.hidden = true;
     a.innerHTML = '<span class="ac-fig"></span><span class="ac-fit-title"></span><span class="ac-piece"></span><span class="ac-cw mono"></span><button type="button" class="ac-x mono" aria-label="Remove from wardrobe">×</button>';
     a.querySelector('.ac-fit-title').textContent = w.title || '';
+    const rn = document.createElement('button');
+    rn.type = 'button'; rn.className = 'ac-rename mono'; rn.textContent = 'RENAME';
+    rn.onclick = async (e) => {
+      e.preventDefault(); e.stopPropagation();
+      const t = prompt('Name this fit (up to 32 characters, empty to clear):', w.title || '');
+      if (t === null) return;
+      try { const j = await post('api/me', { action: 'title', id: w.id, title: t }); w.title = j.title; a.querySelector('.ac-fit-title').textContent = j.title; toast(j.title ? 'FIT RENAMED.' : 'NAME CLEARED.'); } catch { toast('COULDN’T RENAME. TRY AGAIN.'); }
+    };
+    a.append(rn);
     a.querySelector('.ac-x').onclick = async (e) => {
       e.preventDefault(); e.stopPropagation();
       await post('api/me', { action: 'remove', id: w.id }).catch(() => {});
