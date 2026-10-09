@@ -142,7 +142,7 @@
   }
 
   btn.onclick = () => {
-    if (!me) { location.href = 'account.html'; return; }
+    if (!me) { location.href = 'account'; return; }
     if (state === 'idle') { state = 'sure'; drawButton(); return; }
     if (state === 'sure') openCrate();
   };

@@ -36,7 +36,7 @@ module.exports = async function handler(req, res) {
       const token = String((req.query && req.query.token) || '');
       const key = `auth:tok:${sha(token)}`;
       const email = /^[A-Za-z0-9_-]{30,80}$/.test(token) ? await redis('GET', key) : null;
-      if (!email) { res.writeHead(302, { Location: '/account.html?signin=expired' }); res.end(); return; }
+      if (!email) { res.writeHead(302, { Location: '/account?signin=expired' }); res.end(); return; }
       await redis('DEL', key);
       let uid = await redis('GET', `user:email:${sha(email)}`);
       if (!uid) {
@@ -45,7 +45,7 @@ module.exports = async function handler(req, res) {
         await redis('SET', `user:email:${sha(email)}`, uid);
       }
       await startSession(res, uid);
-      res.writeHead(302, { Location: '/account.html?signin=ok' }); res.end();
+      res.writeHead(302, { Location: '/account?signin=ok' }); res.end();
       return;
     }
     if (req.method !== 'POST') { res.status(405).json({ error: 'method' }); return; }

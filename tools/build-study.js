@@ -54,11 +54,11 @@ const masthead = (back) => `
   <a class="st-wordmark" href="/">GOOD® <span>DESIGN</span></a>
   <nav class="st-nav" aria-label="Main">
     ${back}
-    <a href="/colors.html">COLORS®</a>
+    <a href="/colors">COLORS®</a>
     <a href="/">THE MAKER</a>
-    <a href="/collaborations.html">COLLABORATIONS®</a>
-    <a href="/ubiquity.html">UBIQUITY</a>
-    <a href="/account.html">ACCOUNT</a>
+    <a href="/collaborations">COLLABORATIONS®</a>
+    <a href="/ubiquity">UBIQUITY</a>
+    <a href="/account">ACCOUNT</a>
   </nav>
 </header>`;
 
@@ -78,7 +78,7 @@ function block(b, first) {
 }
 
 function postPage(post) {
-  const url = `/study/${post.slug}.html`;
+  const url = `/study/${post.slug}`;
   const full = `${post.title}: ${post.dek.replace(/\.$/, '')}`;
   const ld = {
     '@context': 'https://schema.org', '@type': 'Article',
@@ -95,7 +95,7 @@ function postPage(post) {
   const body = post.body.map((b) => { const f = firstP && !!b.p; if (b.p) firstP = false; return block(b, f); }).join('\n      ');
   return `${head({ title: `${full} · STUDY® · GOOD® DESIGN`, description: post.description, url, image: post.og, imageAlt: post.lead.alt, type: 'article', extra })}
 <body class="st">
-${masthead('<a href="/study.html">← STUDY®</a>')}
+${masthead('<a href="/study">← STUDY®</a>')}
 <main>
   <article class="st-article" data-slug="${post.slug}">
     <header class="st-head">
@@ -123,7 +123,7 @@ ${masthead('<a href="/study.html">← STUDY®</a>')}
     </section>
   </article>
 </main>
-<footer class="st-foot">© 2026 GOOD® DESIGN. All rights reserved. <a href="/study.html">More from STUDY®</a> · <a href="/privacy.html">Privacy</a></footer>
+<footer class="st-foot">© 2026 GOOD® DESIGN. All rights reserved. <a href="/study">More from STUDY®</a> · <a href="/privacy">Privacy</a></footer>
 <script src="/js/study-comments.js"></script>
 <script src="/js/nav.js"></script>
 </body>
@@ -134,20 +134,20 @@ ${masthead('<a href="/study.html">← STUDY®</a>')}
 function archivePage() {
   const items = POSTS.map((p, i) => `
     <article class="st-item${i === 0 ? ' st-feature' : ''}">
-      <a class="st-item-img" href="/study/${p.slug}.html" tabindex="-1" aria-hidden="true"><img src="${p.thumb}" alt=""></a>
+      <a class="st-item-img" href="/study/${p.slug}" tabindex="-1" aria-hidden="true"><img src="${p.thumb}" alt=""></a>
       <div class="st-item-text">
         <p class="st-rubric">${p.rubric}</p>
-        <h2><a href="/study/${p.slug}.html">${p.title}</a></h2>
+        <h2><a href="/study/${p.slug}">${p.title}</a></h2>
         <p class="st-dek">${p.dek}</p>
         <p class="st-byline">By <strong>${p.byline}</strong> <time datetime="${p.date}">${date(p.date)}</time></p>
       </div>
     </article>`).join('');
   const latest = POSTS[0];
-  return `${head({ title: 'STUDY® · GOOD® DESIGN', description: 'STUDY®: notes, experiments and conversations from the GOOD® DESIGN studio. Every idea, including the ones that didn’t make it.', url: '/study.html', image: latest.og, imageAlt: latest.lead.alt })}
+  return `${head({ title: 'STUDY® · GOOD® DESIGN', description: 'STUDY®: notes, experiments and conversations from the GOOD® DESIGN studio. Every idea, including the ones that didn’t make it.', url: '/study', image: latest.og, imageAlt: latest.lead.alt })}
 <body class="st">
 <script>
   // Old links (study.html?p=<slug>) go to the post's own page.
-  (() => { const p = new URLSearchParams(location.search).get('p'); if (p && /^[a-z0-9-]+$/.test(p)) location.replace('/study/' + p + '.html'); })();
+  (() => { const p = new URLSearchParams(location.search).get('p'); if (p && /^[a-z0-9-]+$/.test(p)) location.replace('/study/' + p); })();
 </script>
 ${masthead('<a href="/">← BACK</a>')}
 <main class="st-archive">
@@ -157,7 +157,7 @@ ${masthead('<a href="/">← BACK</a>')}
   </header>
   ${items}
 </main>
-<footer class="st-foot">© 2026 GOOD® DESIGN. All rights reserved. <a href="/privacy.html">Privacy</a></footer>
+<footer class="st-foot">© 2026 GOOD® DESIGN. All rights reserved. <a href="/privacy">Privacy</a></footer>
 <script src="/js/nav.js"></script>
 </body>
 </html>
@@ -168,7 +168,7 @@ fs.mkdirSync(path.join(ROOT, 'study'), { recursive: true });
 fs.writeFileSync(path.join(ROOT, 'study.html'), archivePage());
 for (const p of POSTS) fs.writeFileSync(path.join(ROOT, 'study', `${p.slug}.html`), postPage(p));
 // Sitemap: the fixed pages plus every post.
-const urls = ['/', '/colors.html', '/study.html', '/among-the-trees.html', '/collaborations.html', '/privacy.html'].map((u) => `  <url><loc>${SITE}${u}</loc></url>`)
-  .concat(POSTS.map((p) => `  <url><loc>${SITE}/study/${p.slug}.html</loc><lastmod>${p.date}</lastmod></url>`));
+const urls = ['/', '/colors', '/crate', '/good-crate', '/study', '/among-the-trees', '/collaborations', '/privacy'].map((u) => `  <url><loc>${SITE}${u}</loc></url>`)
+  .concat(POSTS.map((p) => `  <url><loc>${SITE}/study/${p.slug}</loc><lastmod>${p.date}</lastmod></url>`));
 fs.writeFileSync(path.join(ROOT, 'sitemap.xml'), `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n${urls.join('\n')}\n</urlset>\n`);
 console.log(`STUDY®: archive + ${POSTS.length} post(s) + sitemap written.`);

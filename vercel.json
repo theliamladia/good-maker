@@ -1,6 +1,11 @@
 {
   "functions": {
-    "api/ubiquity.js": { "includeFiles": "api/_ubiquity/**" },
-    "api/outfit.js": { "includeFiles": "api/_locked/**" }
-  }
+    "api/ubiquity.js": {
+      "includeFiles": "api/_ubiquity/**"
+    },
+    "api/outfit.js": {
+      "includeFiles": "api/_locked/**"
+    }
+  },
+  "cleanUrls": true
 }

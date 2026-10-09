@@ -5,7 +5,7 @@
   const remember = () => { try { localStorage.setItem('goodCrateIntro', '1'); } catch {} };
 
   const btn = document.createElement('a');
-  btn.className = 'cp-crate'; btn.href = 'crate.html';
+  btn.className = 'cp-crate'; btn.href = 'crate';
   btn.setAttribute('aria-label', 'GOOD® CRATE: open the intro');
   btn.innerHTML = '<img src="assets/crate.svg" alt="" draggable="false"><span class="cp-tag mono">GOOD® CRATE</span>';
   document.body.append(btn);
@@ -28,8 +28,8 @@
         <li><b>???</b> one GOLDEN TICKET is hiding in there</li>
       </ul>
       <div class="cp-actions">
-        <a class="cp-go mono" href="crate.html">GO TO THE CRATE →</a>
-        <a class="cp-later mono" href="good-crate.html">HOW IT WORKS</a>
+        <a class="cp-go mono" href="crate">GO TO THE CRATE →</a>
+        <a class="cp-later mono" href="good-crate">HOW IT WORKS</a>
         <button type="button" class="cp-later mono" data-close>NOT NOW</button>
       </div>
       <p class="cp-fine mono">GOOD® COINS: +10 A DAY WHEN YOU SAVE A NEW FIT TO YOUR WARDROBE.</p>

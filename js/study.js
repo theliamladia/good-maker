@@ -115,7 +115,7 @@ const STUDY = [
       { p: 'We’ve broken that rule a couple of times already. But so far, that’s the main story.' },
 
       { q: 'Why six washes, and how did you name them? ROADWORN™ and FAVORITE JEANS™ feel personal.' },
-      { p: 'Indigo straight off the bolt is where it starts, and you can see every one of them on our <a href="/colors.html">COLORS®</a> page. ROADWORN™ and FAVORITE JEANS™ are about making something that shouldn’t be personal, personal to you.' },
+      { p: 'Indigo straight off the bolt is where it starts, and you can see every one of them on our <a href="/colors">COLORS®</a> page. ROADWORN™ and FAVORITE JEANS™ are about making something that shouldn’t be personal, personal to you.' },
       { p: 'Think of the pair you wore three or four weeks straight. Or the pair that’s been in and out of your closet forever, that you can’t put down. It fits, you know it’s going to rip, and you’re willing to chance it because you love it so much.' },
       { quote: 'You know it’s going to rip, and you’re willing to chance it because you love it so much.' },
       { pair: [
