@@ -3,7 +3,7 @@
 //   GET  /api/me?skin=1                           -> the home skin (image/png)
 //   POST /api/me { action: 'name', name }
 //   POST /api/me { action: 'skin', png }          -> png = base64 of a 64x64 / 64x32 PNG
-//   POST /api/me { action: 'save', look }         -> adds a look to the wardrobe; the first new fit each day earns +10 GOOD® COINS
+//   POST /api/me { action: 'save', look }         -> adds a look to the wardrobe; the first 2 new fits each day earn +10 GOOD® COINS each
 //   POST /api/me { action: 'remove', id }
 //   POST /api/me { action: 'delete' }             -> deletes the account and everything in it
 // Looks are recipes of catalogue ids (like the address bar), never pictures.
@@ -15,6 +15,7 @@ const { redis, configured, overLimit, parseBody } = require('./_redis');
 const { sha, currentUser, endSession, saveUser, unlocksFor, isOwner } = require('./_account');
 
 const COINS_PER_SAVE = 10;
+const SAVES_PER_DAY = 2;
 const MAX_LOOKS = 60;
 const win = {};
 vm.runInNewContext(fs.readFileSync(path.join(__dirname, '../js/outfits.js'), 'utf8'), { window: win });
@@ -99,10 +100,16 @@ module.exports = async function handler(req, res) {
       const item = { id: crypto.randomBytes(6).toString('base64url'), look, at: new Date().toISOString() };
       await redis('LPUSH', key, JSON.stringify(item));
       // Coins are earned once per distinct look ever saved, so delete-and-resave can't farm them.
-      // Up to 10 GOOD® COINS a day (UTC): the first new fit saved each day earns them.
+      // +10 GOOD® COINS for each of the first 2 new fits saved each day (UTC). The day's
+      // counter is created with its expiry first (NX), then counted up.
       const fresh = await redis('SADD', `user:${user.uid}:earned`, sha(lookKey(look)));
       const today = new Date().toISOString().slice(0, 10);
-      const earned = fresh ? await redis('SET', `user:${user.uid}:coins:${today}`, 1, 'EX', 172800, 'NX') : null;
+      let earned = false;
+      if (fresh) {
+        const dayKey = `user:${user.uid}:coins2:${today}`;
+        await redis('SET', dayKey, 0, 'EX', 172800, 'NX');
+        earned = (await redis('INCR', dayKey)) <= SAVES_PER_DAY;
+      }
       if (earned) { user.coins = (user.coins || 0) + COINS_PER_SAVE; await saveUser(user); }
       res.status(200).json({ ok: true, item, coins: user.coins || 0, earned: earned ? COINS_PER_SAVE : 0, capped: !!(fresh && !earned) }); return;
     }

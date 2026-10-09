@@ -22,7 +22,7 @@
     if (!me) { btn.disabled = false; btn.textContent = 'SIGN IN TO OPEN'; wallet.innerHTML = 'SIGN IN WITH YOUR EMAIL TO GET GOOD® COINS.'; return; }
     wallet.innerHTML = `YOU HAVE ${coin}${me.coins} GOOD® COINS`;
     if (state === 'busy') { btn.disabled = true; btn.textContent = 'OPENING…'; return; }
-    if (me.coins < price) { btn.disabled = true; btn.textContent = `NEED ${price} GOOD® COINS`; wallet.innerHTML += ' · SAVE A NEW FIT IN THE MAKER FOR +10 A DAY'; return; }
+    if (me.coins < price) { btn.disabled = true; btn.textContent = `NEED ${price} GOOD® COINS`; wallet.innerHTML += ' · SAVE NEW FITS IN THE MAKER: +10 EACH, 2 A DAY'; return; }
     btn.disabled = false;
     if (state === 'sure') {
       btn.textContent = 'ARE YOU SURE?';

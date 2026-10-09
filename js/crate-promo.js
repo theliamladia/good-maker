@@ -32,7 +32,7 @@
         <a class="cp-later mono" href="good-crate">HOW IT WORKS</a>
         <button type="button" class="cp-later mono" data-close>NOT NOW</button>
       </div>
-      <p class="cp-fine mono">GOOD® COINS: +10 A DAY WHEN YOU SAVE A NEW FIT TO YOUR WARDROBE.</p>
+      <p class="cp-fine mono">GOOD® COINS: +10 FOR EACH NEW FIT YOU SAVE TO YOUR WARDROBE, UP TO 2 A DAY.</p>
     </section>`;
   document.body.append(modal);
 
