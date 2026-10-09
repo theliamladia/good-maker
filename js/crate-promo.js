@@ -29,6 +29,7 @@
       </ul>
       <div class="cp-actions">
         <a class="cp-go mono" href="crate.html">GO TO THE CRATE →</a>
+        <a class="cp-later mono" href="good-crate.html">HOW IT WORKS</a>
         <button type="button" class="cp-later mono" data-close>NOT NOW</button>
       </div>
       <p class="cp-fine mono">GOOD® COINS: +10 A DAY WHEN YOU SAVE A NEW FIT TO YOUR WARDROBE.</p>

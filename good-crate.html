@@ -1,0 +1,97 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>INTRODUCING THE GOOD® CRATE · GOOD® DESIGN</title>
+  <meta name="description" content="The GOOD® CRATE: archived GOODIE®s, the I'M SOWWY shirts and every RUNWAY® piece, in one GOOD® BLUE crate. 5 GOOD® COINS to open, every pull serialized.">
+  <meta name="theme-color" content="#0000ff">
+  <link rel="canonical" href="https://good.leems.me/good-crate.html">
+  <meta property="og:title" content="Introducing the GOOD® CRATE">
+  <meta property="og:description" content="Something soft is trying to get out. 5 GOOD® COINS to open, every pull serialized.">
+  <meta property="og:url" content="https://good.leems.me/good-crate.html">
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+  <link rel="icon" href="/favicon-32.png" sizes="32x32" type="image/png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="crate.css">
+  <link rel="stylesheet" href="good-crate.css">
+</head>
+<body class="cr-page gc-page">
+
+<div class="crt-scanlines" aria-hidden="true"></div>
+<div class="crt-vignette" aria-hidden="true"></div>
+
+<header class="site-header">
+  <a class="wordmark" href="./">GOOD® <span>DESIGN</span></a>
+  <nav class="site-nav" aria-label="Main">
+    <a class="nav-link mono" href="./">THE MAKER</a>
+    <a class="nav-link mono" href="colors.html">COLORS®</a>
+    <a class="nav-link mono" href="study.html">STUDY®</a>
+    <a class="nav-link mono" href="collaborations.html">COLLABORATIONS®</a>
+    <a class="nav-link mono" href="ubiquity.html">UBIQUITY</a>
+    <a class="nav-link mono" href="account.html" data-acct>SIGN IN</a>
+  </nav>
+</header>
+
+<main class="gc-main">
+  <section class="gc-hero">
+    <div class="gc-rays" aria-hidden="true"></div>
+    <img class="gc-art" src="assets/crate.svg" alt="The GOOD® CRATE: a GOOD® BLUE pixel crate with chrome corners and the G, a pink I'M SOWWY GOODIE® peeking out under the lid." draggable="false">
+    <p class="gc-kicker mono">INTRODUCING · GOOD® CRATE Nº001</p>
+    <h1 class="gc-title">Something soft is<br>trying to get out.</h1>
+    <p class="gc-lede">One crate, solid GOOD® BLUE, nailed shut with chrome corners. Inside: the archived GOODIE®s, the I'M SOWWY shirts and every RUNWAY® piece, most of them never released. Open it for 5 GOOD® COINS, watch the reel, keep what you pull.</p>
+    <a class="gc-cta mono" href="crate.html">GO TO THE CRATE →</a>
+  </section>
+
+  <section class="gc-block" aria-labelledby="howTitle">
+    <header class="cr-bar"><h2 class="mono" id="howTitle">HOW IT WORKS</h2><span class="mono">5 STEPS</span></header>
+    <ol class="gc-steps">
+      <li><span class="gc-n mono">01</span><b>Earn GOOD® COINS.</b> Sign in and save a new fit to your wardrobe in THE MAKER: +10 a day.</li>
+      <li><span class="gc-n mono">02</span><b>Open a crate.</b> 5 GOOD® COINS. We ask once: ARE YOU SURE?</li>
+      <li><span class="gc-n mono">03</span><b>Watch the reel.</b> Every piece flies past the marker, slows down and stops on yours.</li>
+      <li><span class="gc-n mono">04</span><b>Keep it, numbered.</b> Every pull is serialized, GD-001 and up, and lands in MY INVENTORY® on your account page.</li>
+      <li><span class="gc-n mono">05</span><b>Wear it.</b> Own one serialized copy and the piece unlocks in THE MAKER. Pull one you already have and 2 GOOD® COINS come back.</li>
+    </ol>
+  </section>
+
+  <section class="gc-block gc-chase" aria-labelledby="chaseTitle">
+    <div class="gc-chase-copy">
+      <p class="gc-kicker mono">THE CHASE</p>
+      <h2 class="gc-h" id="chaseTitle">GOODIE® I'M SOWWY</h2>
+      <p>The most coveted colourway we've made: PANTONE® ROSE QUARTZ and SERENITY, archived and never sold. It only comes from a <b>★ GOLD ROLL</b>. 4% of crates roll gold, then roll again between the GOODIE® and the two I'M SOWWY shirts.</p>
+      <p class="gc-odds mono"><span>GOODIE® <b id="oddGoodie">0.8%</b></span><span>SHIRT® II <b id="oddS2">1.6%</b></span><span>SHIRT® I <b id="oddS1">1.6%</b></span></p>
+    </div>
+    <canvas class="gc-chase-fig" id="chaseFig" aria-hidden="true"></canvas>
+  </section>
+
+  <section class="gc-block" aria-labelledby="insideTitle">
+    <header class="cr-bar"><h2 class="mono" id="insideTitle">WHAT'S INSIDE</h2><span class="mono" id="insideCount">ODDS PER CRATE</span></header>
+    <div class="cr-row" id="inside"></div>
+  </section>
+
+  <section class="gc-block gc-ticket" aria-labelledby="ticketTitle">
+    <canvas class="gc-ticket-fig" id="ticketFig" aria-hidden="true"></canvas>
+    <div>
+      <p class="gc-kicker mono">AND ONE MORE THING</p>
+      <h2 class="gc-h" id="ticketTitle">A GOLDEN TICKET is hiding in there.</h2>
+      <p>Rarer than anything I'M SOWWY. We're not saying what it does yet.</p>
+    </div>
+  </section>
+
+  <section class="gc-end">
+    <h2 class="gc-title gc-title-sm">Open it.</h2>
+    <a class="gc-cta mono" href="crate.html">GO TO THE CRATE →</a>
+    <p class="gc-fine mono">NO GOOD® COINS YET? <a class="foot-link" href="account.html">SIGN IN</a>, THEN SAVE A NEW FIT IN <a class="foot-link" href="./">THE MAKER</a>.</p>
+  </section>
+</main>
+
+<footer class="site-foot mono">© 2026 GOOD® DESIGN. All rights reserved. · <a class="foot-link" href="/privacy.html">PRIVACY</a></footer>
+
+<script src="js/gooditems.js"></script>
+<script src="js/good-crate.js"></script>
+<script src="js/nav.js"></script>
+</body>
+</html>
