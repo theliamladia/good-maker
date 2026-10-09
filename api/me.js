@@ -123,6 +123,18 @@ module.exports = async function handler(req, res) {
       if (earned) { user.coins = (user.coins || 0) + COINS_PER_SAVE; await saveUser(user); }
       res.status(200).json({ ok: true, item, coins: user.coins || 0, earned: earned ? COINS_PER_SAVE : 0, capped: !!(fresh && !earned) }); return;
     }
+    if (body.action === 'title') {
+      // Name a saved fit (shown on the account page and the public profile). Empty clears it.
+      const title = String(body.title || '').replace(/[<>]/g, '').replace(/\s+/g, ' ').trim().slice(0, 32).toUpperCase();
+      const key = `user:${user.uid}:wardrobe`;
+      const rows = (await redis('LRANGE', key, 0, MAX_LOOKS - 1)) || [];
+      const i = rows.findIndex((r) => JSON.parse(r).id === body.id);
+      if (i < 0) { res.status(404).json({ error: 'not_found' }); return; }
+      const item = JSON.parse(rows[i]);
+      if (title) item.title = title; else delete item.title;
+      await redis('LSET', key, i, JSON.stringify(item));
+      res.status(200).json({ ok: true, title }); return;
+    }
     if (body.action === 'remove') {
       const key = `user:${user.uid}:wardrobe`;
       const rows = (await redis('LRANGE', key, 0, MAX_LOOKS - 1)) || [];

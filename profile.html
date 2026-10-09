@@ -30,6 +30,7 @@
     <a class="nav-link mono" href="./">THE MAKER</a>
     <a class="nav-link mono" href="colors">COLORS®</a>
     <a class="nav-link mono" href="study">STUDY®</a>
+    <a class="nav-link mono" href="members">MEMBERS®</a>
     <a class="nav-link mono" href="collaborations">COLLABORATIONS®</a>
     <a class="nav-link mono" href="crate">GOOD® CRATE</a>
     <a class="nav-link mono" href="account" data-acct>ACCOUNT</a>
@@ -47,14 +48,11 @@
     <div class="ac-head">
       <div class="ac-who">
         <p class="ac-tag mono">GOOD® PROFILE</p>
-        <h1 class="ac-title" id="name"></h1>
-        <p class="ac-coins"><span class="mono" id="since"></span></p>
+        <div class="ac-name-row"><canvas class="ac-avatar" id="head" aria-hidden="true"></canvas><h1 class="ac-title" id="name"></h1></div>
+        <p class="ac-coins"><span class="coin ac-coin" aria-hidden="true"></span><strong id="coins">0</strong> <span class="mono">GOOD® COINS</span></p>
+        <p class="ac-since mono" id="since"></p>
         <div class="ac-actions"><button type="button" class="ac-link mono" id="share">COPY PROFILE LINK</button></div>
       </div>
-      <figure class="ac-home">
-        <div class="ac-home-fig" id="homeFig"></div>
-        <figcaption class="mono">HOME SKIN</figcaption>
-      </figure>
     </div>
 
     <section class="ac-block ac-ach" aria-labelledby="aTitle">
@@ -73,6 +71,16 @@
       <p class="ac-lede" id="wEmpty" hidden>No saved fits yet.</p>
       <div class="ac-grid" id="grid"></div>
     </section>
+
+    <section class="ac-block" aria-labelledby="cTitle">
+      <header class="ac-bar"><h2 class="mono" id="cTitle">COMMENTS</h2><span class="mono" id="cCount"></span></header>
+      <form class="pf-form" id="cForm" hidden>
+        <textarea id="cText" maxlength="500" rows="3" placeholder="Say something nice." required></textarea>
+        <button type="submit" class="ac-go mono">POST</button>
+      </form>
+      <p class="ac-lede" id="cSignin" hidden><a class="foot-link" href="account">Sign in</a> to leave a comment.</p>
+      <ol class="pf-comments" id="comments"></ol>
+    </section>
   </section>
 </main>
 
@@ -83,6 +91,7 @@
 <script src="js/outfits.js"></script>
 <script src="js/compose.js"></script>
 <script src="js/gooditems.js"></script>
+<script src="js/heads.js"></script>
 <script src="js/profile.js"></script>
 <script src="js/nav.js"></script>
 </body>

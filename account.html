@@ -22,6 +22,7 @@
     <a class="nav-link mono" href="./">THE MAKER</a>
     <a class="nav-link mono" href="colors">COLORS®</a>
     <a class="nav-link mono" href="study">STUDY®</a>
+    <a class="nav-link mono" href="members">MEMBERS®</a>
     <a class="nav-link mono" href="collaborations">COLLABORATIONS®</a>
     <a class="nav-link mono" href="ubiquity">UBIQUITY</a>
     <a class="nav-link mono" href="account" aria-current="page" data-acct>ACCOUNT</a>
@@ -45,23 +46,19 @@
     <div class="ac-head">
       <div class="ac-who">
         <p class="ac-tag mono">GOOD® ACCOUNT</p>
-        <h1 class="ac-title" id="name"></h1>
+        <div class="ac-name-row"><canvas class="ac-avatar" id="avatar" aria-hidden="true"></canvas><h1 class="ac-title" id="name"></h1></div>
         <p class="ac-coins"><span class="coin ac-coin" aria-hidden="true"></span><strong id="coins">0</strong> <span class="mono">GOOD® COINS</span></p>
         <div class="ac-actions">
           <button type="button" class="ac-link mono" id="rename">CHANGE NAME</button>
           <button type="button" class="ac-link mono" id="signout">SIGN OUT</button>
-          <a class="ac-link mono" id="profileLink" hidden>VIEW MY PUBLIC PROFILE →</a>
         </div>
+        <p class="ac-profile mono"><a class="ac-link" id="profileLink" hidden>VIEW MY PUBLIC PROFILE →</a></p>
       </div>
       <section class="ac-story" id="story" aria-labelledby="storyTitle" hidden>
         <h2 class="ac-story-t mono" id="storyTitle">YOUR COLOR STORY</h2>
         <div class="ac-story-strip" id="storyStrip" role="list"></div>
         <p class="ac-story-read mono" id="storyRead" aria-live="polite">&nbsp;</p>
       </section>
-      <figure class="ac-home">
-        <div class="ac-home-fig" id="homeFig"></div>
-        <figcaption class="mono" id="homeCap">HOME SKIN</figcaption>
-      </figure>
     </div>
 
     <section class="ac-block ac-ach" aria-labelledby="aTitle">
@@ -100,6 +97,7 @@
 <script src="js/colors.js"></script>
 <script src="js/compose.js"></script>
 <script src="js/gooditems.js"></script>
+<script src="js/heads.js"></script>
 <script src="js/account-page.js"></script>
 <script src="js/nav.js"></script>
 </body>

@@ -19,7 +19,8 @@
   function card(w) {
     const a = document.createElement('a');
     a.className = 'ac-card'; a.href = lookHref(w.look); a.hidden = true;
-    a.innerHTML = '<span class="ac-fig"></span><span class="ac-piece"></span><span class="ac-cw mono"></span><button type="button" class="ac-x mono" aria-label="Remove from wardrobe">×</button>';
+    a.innerHTML = '<span class="ac-fig"></span><span class="ac-fit-title"></span><span class="ac-piece"></span><span class="ac-cw mono"></span><button type="button" class="ac-x mono" aria-label="Remove from wardrobe">×</button>';
+    a.querySelector('.ac-fit-title').textContent = w.title || '';
     a.querySelector('.ac-x').onclick = async (e) => {
       e.preventDefault(); e.stopPropagation();
       await post('api/me', { action: 'remove', id: w.id }).catch(() => {});
@@ -72,12 +73,11 @@
     document.querySelectorAll('[data-acct]').forEach((a) => { a.textContent = me ? `${me.name} · ` : 'SIGN IN'; if (me) { const c = document.createElement('span'); c.className = 'coin'; c.setAttribute('aria-hidden', 'true'); a.append(c, String(me.coins)); a.setAttribute('aria-label', `${me.name}, ${me.coins} GOOD® COINS`); } });
     if (!me) return;
     $('name').textContent = me.name;
+    if (me.owner) { const b = document.createElement('span'); b.className = 'mb-admin mono'; b.textContent = 'ADMIN'; $('name').append(b); }
     $('coins').textContent = me.coins;
     if (me.profile) { $('profileLink').hidden = false; $('profileLink').href = `/profiles/${me.profile}`; $('profileLink').textContent = `PUBLIC PROFILE: GOOD.LEEMS.ME/PROFILES/${me.profile.toUpperCase()} →`; } else $('profileLink').hidden = true;
     try { skin = me.hasSkin ? await GoodCompose.load(`api/me?skin=1&t=${Date.now()}`) : await GoodCompose.load(DEMO); } catch { skin = await GoodCompose.load(DEMO); }
-    $('homeCap').textContent = me.hasSkin ? 'HOME SKIN' : 'NO HOME SKIN YET · SAVE ONE IN THE MAKER';
-    const fig = $('homeFig'); fig.replaceChildren();
-    if (me.hasSkin) fig.append(GoodCompose.front({ data: skin.data }, SkinLib.detectSlim(skin)));
+    GoodHeads.draw($('avatar'), me.hasSkin ? `api/me?skin=1&t=${Date.now()}` : null);
     $('grid').replaceChildren(...wardrobe.map(card));
     count();
     drawInventory();

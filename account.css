@@ -84,3 +84,39 @@
 .ac-ach-p { display: block; margin-top: 8px; font-size: 0.58rem; letter-spacing: 0.16em; }
 .ac-ach-card.locked { background: rgba(255, 255, 255, 0.12); color: #fff; }
 .ac-ach-card.locked img { filter: grayscale(1) brightness(0.55); opacity: 0.6; }
+
+/* MEMBERS® and profile heads */
+.mb-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 14px; }
+.mb-card { display: flex; align-items: center; gap: 14px; padding: 12px; background: #fff; color: #0000ff; text-decoration: none; transition: transform 0.15s; }
+.mb-card:hover, .mb-card:focus-visible { transform: translateY(-3px); outline: none; }
+.mb-head { width: 64px; height: 64px; flex: 0 0 64px; image-rendering: pixelated; box-shadow: 0 0 0 1px rgba(0, 0, 60, 0.15); }
+.mb-meta { min-width: 0; }
+.mb-name { display: flex; align-items: center; flex-wrap: wrap; gap: 8px; font-weight: 800; font-size: 1.05rem; letter-spacing: -0.02em; overflow-wrap: anywhere; }
+.mb-stats { display: block; margin-top: 6px; font-size: 0.6rem; letter-spacing: 0.14em; }
+.mb-admin { display: inline-block; padding: 3px 7px; background: #0000ff; color: #fff; font-size: 0.56rem; font-weight: 700; letter-spacing: 0.18em; }
+.ac-title .mb-admin { vertical-align: middle; font-size: 0.8rem; padding: 6px 10px; margin-left: 14px; background: #fff; color: #0000ff; letter-spacing: 0.2em; }
+.pf-head { width: 96px; height: 96px; image-rendering: pixelated; display: block; margin-bottom: 18px; box-shadow: 0 0 0 2px #fff; }
+.ac-fit-title { display: block; font-weight: 800; font-size: 0.92rem; letter-spacing: -0.02em; margin-bottom: 2px; }
+.ac-rename { position: absolute; top: 6px; left: 8px; border: 0; background: #0000ff; color: #fff; font-size: 0.52rem; letter-spacing: 0.14em; padding: 4px 6px; cursor: pointer; opacity: 0; transition: opacity 0.15s; }
+.ac-card:hover .ac-rename, .ac-rename:focus-visible { opacity: 1; }
+@media (hover: none) { .ac-rename { opacity: 0.85; } }
+.ac-since { margin: 10px 0 0; font-size: 0.66rem; letter-spacing: 0.18em; opacity: 0.85; }
+.pf-form { display: flex; flex-direction: column; gap: 10px; max-width: 640px; margin-bottom: 22px; }
+.pf-form[hidden] { display: none; }
+.pf-form textarea { padding: 12px 14px; border: 1px solid #fff; background: transparent; color: #fff; font: 1rem/1.5 'Inter', sans-serif; resize: vertical; outline: none; }
+.pf-form textarea::placeholder { color: rgba(255, 255, 255, 0.6); }
+.pf-form .ac-go { align-self: flex-start; }
+.pf-comments { list-style: none; margin: 0; padding: 0; max-width: 760px; }
+.pf-comments li { position: relative; padding: 14px 0; border-top: 1px solid rgba(255, 255, 255, 0.3); }
+.pf-c-who { display: flex; align-items: center; gap: 10px; font-size: 0.66rem; letter-spacing: 0.16em; }
+.pf-c-who canvas { width: 24px; height: 24px; image-rendering: pixelated; }
+.pf-c-who a { color: #fff; font-weight: 700; text-decoration: none; }
+.pf-c-who a:hover { text-decoration: underline; }
+.pf-c-text { margin: 8px 0 0; line-height: 1.55; white-space: pre-wrap; overflow-wrap: anywhere; }
+.pf-c-del { position: absolute; top: 12px; right: 0; border: 0; background: none; color: #fff; font-size: 0.58rem; letter-spacing: 0.16em; text-decoration: underline; text-underline-offset: 4px; cursor: pointer; opacity: 0.75; }
+
+/* Name with the player's head in a circle */
+.ac-name-row { display: flex; align-items: center; gap: clamp(14px, 2.5vw, 26px); }
+.ac-avatar { flex: 0 0 auto; width: clamp(64px, 9vw, 104px); height: clamp(64px, 9vw, 104px); border-radius: 50%; image-rendering: pixelated; background: #0000ff; box-shadow: 0 0 0 3px #fff, 0 10px 30px rgba(0, 0, 60, 0.35); }
+.ac-profile { margin: 18px 0 0; }
+.ac-profile .ac-link { font-size: 0.62rem; letter-spacing: 0.16em; }

@@ -1,10 +1,11 @@
 // Vercel serverless function: public GOOD® profiles (/profiles/<slug>, see vercel.json).
-//   GET /api/profile?name=<slug>          -> { name, since, achievements, inventory, wardrobe, hasSkin }
+//   GET /api/profile?name=<slug>          -> { name, admin, coins, since, achievements, inventory, wardrobe, hasSkin }
 //   GET /api/profile?name=<slug>&skin=1   -> the home skin (image/png), to draw the wardrobe on
-// Public: the GOOD® name, member since, earned achievements, serialized pulls
-// and saved fits. Never the email or the coin balance.
+// Public: the GOOD® name, GOOD® COINS, member since, earned achievements,
+// serialized pulls and saved fits (with their names). Never the email.
 const { redis, configured } = require('./_redis');
 const ACH = require('./_achievements');
+const { isOwner } = require('./_account');
 
 module.exports = async function handler(req, res) {
   res.setHeader('Cache-Control', 'no-store');
@@ -23,9 +24,9 @@ module.exports = async function handler(req, res) {
     }
     const achievements = (await ACH.list(uid)).filter((a) => a.earned).map(({ id, name, desc, icon, pct, at }) => ({ id, name, desc, icon, pct, at }));
     const inventory = ((await redis('LRANGE', `user:${uid}:inv`, 0, -1)) || []).map((r) => { const { item, serial, at } = JSON.parse(r); return { item, serial, at }; });
-    const wardrobe = ((await redis('LRANGE', `user:${uid}:wardrobe`, 0, 59)) || []).map((r) => { const { look } = JSON.parse(r); return { look }; });
+    const wardrobe = ((await redis('LRANGE', `user:${uid}:wardrobe`, 0, 59)) || []).map((r) => { const { id, look, title } = JSON.parse(r); return { id, look, title }; });
     const hasSkin = !!(await redis('EXISTS', `user:${uid}:skin`));
-    res.status(200).json({ name: user.name, since: (user.created || '').slice(0, 10), achievements, inventory, wardrobe, hasSkin });
+    res.status(200).json({ name: user.name, admin: isOwner(user), coins: user.coins || 0, since: (user.created || '').slice(0, 10), achievements, inventory, wardrobe, hasSkin });
   } catch {
     res.status(502).json({ error: 'storage' });
   }
