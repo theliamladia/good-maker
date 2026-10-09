@@ -115,7 +115,7 @@
       el.querySelector('img').src = a.icon;
       el.querySelector('.ac-ach-n').textContent = a.name;
       el.querySelector('.ac-ach-d').textContent = a.desc;
-      el.querySelector('.ac-ach-p').textContent = `${a.pct}% OF PLAYERS HAVE THIS${a.earned && a.at ? ` · EARNED ${a.at.slice(0, 10)}` : a.earned ? '' : ' · LOCKED'}`;
+      el.querySelector('.ac-ach-p').innerHTML = `<span>${a.pct}% OF PLAYERS HAVE THIS</span><span>${a.earned ? (a.at ? `EARNED ${a.at.slice(0, 10)}` : 'EARNED') : 'LOCKED'}</span>`;
       return el;
     }));
   }

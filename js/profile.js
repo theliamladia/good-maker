@@ -38,7 +38,7 @@
       el.querySelector('img').src = a.icon;
       el.querySelector('.ac-ach-n').textContent = a.name;
       el.querySelector('.ac-ach-d').textContent = a.desc;
-      el.querySelector('.ac-ach-p').textContent = `${a.pct}% OF PLAYERS HAVE THIS${a.at ? ` · EARNED ${a.at.slice(0, 10)}` : ''}`;
+      el.querySelector('.ac-ach-p').innerHTML = `<span>${a.pct}% OF PLAYERS HAVE THIS</span>${a.at ? `<span>EARNED ${a.at.slice(0, 10)}</span>` : ''}`;
       return el;
     }));
 

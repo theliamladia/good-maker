@@ -81,7 +81,8 @@
 .ac-ach-card img { width: 72px; height: 72px; object-fit: contain; image-rendering: pixelated; }
 .ac-ach-n { display: block; font-weight: 800; font-size: 1rem; letter-spacing: -0.02em; }
 .ac-ach-d { display: block; margin-top: 3px; font-size: 0.8rem; line-height: 1.35; opacity: 0.85; }
-.ac-ach-p { display: block; margin-top: 8px; font-size: 0.58rem; letter-spacing: 0.16em; }
+.ac-ach-p { display: block; margin-top: 8px; font-size: 0.56rem; letter-spacing: 0.1em; line-height: 1.6; }
+.ac-ach-p span { display: block; white-space: nowrap; }
 .ac-ach-card.locked { background: rgba(255, 255, 255, 0.12); color: #fff; }
 .ac-ach-card.locked img { filter: grayscale(1) brightness(0.55); opacity: 0.6; }
 
