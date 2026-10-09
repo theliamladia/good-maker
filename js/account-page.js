@@ -14,7 +14,7 @@
   const toast = (m) => { const t = $('toast'); t.textContent = m; t.hidden = false; clearTimeout(toastT); toastT = setTimeout(() => { t.hidden = true; }, 2800); };
   const lookHref = (L) => `./?${new URLSearchParams(L)}`;
 
-  let me = null, wardrobe = [], skin = null;
+  let me = null, wardrobe = [], skin = null, inventory = [], crateItems = {};
 
   function card(w) {
     const a = document.createElement('a');
@@ -79,6 +79,25 @@
     if (me.hasSkin) fig.append(GoodCompose.front({ data: skin.data }, SkinLib.detectSlim(skin)));
     $('grid').replaceChildren(...wardrobe.map(card));
     count();
+    drawInventory();
+  }
+
+  // MY INVENTORY®: every GOOD® CRATE pull, newest first, the piece alone with its serial.
+  function drawInventory() {
+    $('iCount').textContent = `${inventory.length} ${inventory.length === 1 ? 'PIECE' : 'PIECES'}`;
+    $('iEmpty').hidden = inventory.length > 0;
+    $('inv').replaceChildren(...inventory.map((e) => {
+      const it = crateItems[e.item] || { id: e.item, name: e.item.toUpperCase(), color: '' };
+      const el = document.createElement('div');
+      el.className = `ac-card${it.tier === 'gold' || it.tier === 'ticket' ? ' ac-gold' : ''}`;
+      el.innerHTML = '<canvas class="ac-inv-fig" aria-hidden="true"></canvas><span class="ac-piece"></span><span class="ac-cw mono"></span><span class="ac-serial mono"></span>';
+      el.querySelector('.ac-piece').textContent = it.name;
+      el.querySelector('.ac-cw').textContent = it.color;
+      el.querySelector('.ac-serial').textContent = e.serial;
+      el.setAttribute('aria-label', `${it.name} ${it.color}, serial ${e.serial}`);
+      if (window.GoodItems && crateItems[e.item]) GoodItems.draw(it, el.querySelector('canvas')).catch(() => {});
+      return el;
+    }));
   }
 
   $('form').onsubmit = async (e) => {
@@ -103,8 +122,9 @@
   const signin = q.get('signin');
   if (signin) history.replaceState(null, '', location.pathname);
   fetch('api/me').then((r) => (r.ok ? r.json() : { user: null })).catch(() => ({ user: null })).then((j) => {
-    me = j.user; wardrobe = j.wardrobe || [];
+    me = j.user; wardrobe = j.wardrobe || []; inventory = j.inventory || [];
     render();
+    fetch('api/crate').then((r) => r.json()).then((c) => { crateItems = Object.fromEntries((c.items || []).map((i) => [i.id, i])); if (me) drawInventory(); }).catch(() => {});
     if (signin === 'ok' && me) toast(`SIGNED IN AS ${me.name}.`);
     if (signin === 'expired') toast('THAT LINK EXPIRED. ASK FOR A NEW ONE.');
   });

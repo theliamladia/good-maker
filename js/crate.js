@@ -142,24 +142,6 @@
     }).catch(() => null);
   }
 
-  // CONTAINS: each piece laid flat, front view, drawn from pixels.
-  // Tops: torso with both sleeves (16×12). Bottoms: both legs (8×12).
-  function flat(img, cv, bottom) {
-    const src = document.createElement('canvas'); src.width = src.height = 64; src.getContext('2d').putImageData(new ImageData(new Uint8ClampedArray(img.data), 64, 64), 0, 0);
-    const x = cv.getContext('2d');
-    if (bottom) {
-      cv.width = 8; cv.height = 12; x.imageSmoothingEnabled = false;
-      for (const [sx, sy, dx] of [[4, 20, 0], [4, 36, 0], [20, 52, 4], [4, 52, 4]]) x.drawImage(src, sx, sy, 4, 12, dx, 0, 4, 12);
-      return;
-    }
-    cv.width = 16; cv.height = 12; x.imageSmoothingEnabled = false;
-    for (const [sx, sy, dx] of [[44, 20, 0], [44, 36, 0], [20, 20, 4], [20, 36, 4], [36, 52, 12], [52, 52, 12]]) x.drawImage(src, sx, sy, sx === 20 ? 8 : 4, 12, dx, 0, sx === 20 ? 8 : 4, 12);
-  }
-  document.querySelectorAll('[data-item]').forEach((card) => {
-    const it = ITEMS.find((i) => i.id === card.dataset.item);
-    if (it) it.ready.then((img) => { if (img) flat(img, card.querySelector('canvas'), it.bottom); });
-  });
-
   // ---------- Size, drag to turn, open ----------
   function size() {
     const w = canvas.clientWidth, h = canvas.clientHeight;
@@ -175,16 +157,12 @@
   const end = () => { drag = null; };
   canvas.addEventListener('pointerup', end); canvas.addEventListener('pointercancel', end);
 
-  let opening = 0, rise = 0;
-  const btn = document.getElementById('open');
-  btn.onclick = () => {
-    if (opening) return;
-    opening = performance.now(); btn.disabled = true; btn.textContent = 'OPENING…';
-    setTimeout(() => {
-      btn.textContent = 'OPENED';
-      document.getElementById('drop').hidden = false;
-      document.getElementById('drop').scrollIntoView({ behavior: reduce ? 'auto' : 'smooth', block: 'center' });
-    }, reduce ? 0 : 1400);
+  // The open animation (shake, lid back, everything rises), driven by js/crate-shop.js.
+  let opening = 0, rise = 0, closing = 0;
+  window.GoodCrate = {
+    open() { opening = performance.now(); closing = 0; },
+    reset() { if (opening) { closing = performance.now(); opening = 0; } },
+    duration: reduce ? 0 : 1400,
   };
 
   let last = performance.now();
@@ -200,6 +178,10 @@
       crate.rotation.z = shake;
       hinge.rotation.x = -(lidOpen + e * 0.75);
       rise = e * 7;
+    } else if (closing) {
+      const p = reduce ? 1 : Math.min(1, (now - closing) / 600);
+      hinge.rotation.x = -(lidOpen + (1 - p) * 0.75); rise = (1 - p) * 7; crate.rotation.z = 0;
+      if (p >= 1) closing = 0;
     } else if (!reduce) {
       hinge.rotation.x = -(lidOpen + Math.sin(t * 2.2) * 0.04);   // the lid breathes
     }

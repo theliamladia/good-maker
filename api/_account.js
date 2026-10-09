@@ -3,6 +3,8 @@
 //   user:email:<sha(email)> -> uid
 //   user:<uid>:skin         -> base64 PNG (the home skin)
 //   user:<uid>:wardrobe     -> list of JSON looks (newest first)
+//   user:<uid>:inv          -> list of JSON crate rolls { id, item, serial, at } (newest first)
+//   user:<uid>:owned        -> set of crate item ids rolled at least once
 //   sess:<sha(sid)>         -> uid, 30 days
 // The session id lives only in an HttpOnly cookie; Redis stores its hash.
 const crypto = require('crypto');
@@ -40,6 +42,13 @@ const saveUser = (u) => redis('SET', `user:${u.uid}`, JSON.stringify(u));
 const UNLOCKS = {
   '402fb6989f1b7e8cf49c604bd500e77fef3bc4fb340372fc7d5415ee09717511': ['goodie-im-sowwy', 'goodie-black-chrome', 'shirt-im-sowwy', 'shirt-ii-im-sowwy', 'shirt-og', 'runway-destroyed-longsleeve', 'runway-allover-g', 'jean-mosaic', 'runway-marshmallow-mosaic', 'runway-cross-jean'], // owner
 };
-const unlocksFor = (user) => (user && UNLOCKS[sha(String(user.email).toLowerCase())]) || [];
+// Plus anything the account owns a serialized copy of from the GOOD® CRATE.
+async function unlocksFor(user) {
+  if (!user) return [];
+  const { ITEMS } = require('./_crate');
+  const owned = (await redis('SMEMBERS', `user:${user.uid}:owned`)) || [];
+  const fromCrate = owned.map((id) => ITEMS[id] && ITEMS[id].unlock).filter(Boolean);
+  return [...new Set([...(UNLOCKS[sha(String(user.email).toLowerCase())] || []), ...fromCrate])];
+}
 
 module.exports = { sha, currentUser, startSession, endSession, saveUser, unlocksFor };

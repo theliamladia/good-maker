@@ -1,5 +1,5 @@
 // Vercel serverless function: the signed-in account.
-//   GET  /api/me                                  -> { user: { name, coins, hasSkin }, wardrobe: [...] } or { user: null }
+//   GET  /api/me                                  -> { user: { name, coins, hasSkin, unlocks }, wardrobe: [...], inventory: [...] } or { user: null }
 //   GET  /api/me?skin=1                           -> the home skin (image/png)
 //   POST /api/me { action: 'name', name }
 //   POST /api/me { action: 'skin', png }          -> png = base64 of a 64x64 / 64x32 PNG
@@ -57,7 +57,8 @@ module.exports = async function handler(req, res) {
       if (!user) { res.status(200).json({ user: null }); return; }
       const rows = (await redis('LRANGE', `user:${user.uid}:wardrobe`, 0, MAX_LOOKS - 1)) || [];
       const hasSkin = !!(await redis('EXISTS', `user:${user.uid}:skin`));
-      res.status(200).json({ user: { name: user.name, coins: user.coins || 0, hasSkin, unlocks: unlocksFor(user) }, wardrobe: rows.map((r) => JSON.parse(r)) });
+      const inv = ((await redis('LRANGE', `user:${user.uid}:inv`, 0, -1)) || []).map((r) => JSON.parse(r));
+      res.status(200).json({ user: { name: user.name, coins: user.coins || 0, hasSkin, unlocks: await unlocksFor(user) }, wardrobe: rows.map((r) => JSON.parse(r)), inventory: inv });
       return;
     }
     if (req.method !== 'POST') { res.status(405).json({ error: 'method' }); return; }
@@ -78,7 +79,7 @@ module.exports = async function handler(req, res) {
       res.status(200).json({ ok: true }); return;
     }
     if (body.action === 'save') {
-      const look = cleanLook(body.look, unlocksFor(user));
+      const look = cleanLook(body.look, await unlocksFor(user));
       if (!look) { res.status(400).json({ error: 'look' }); return; }
       const key = `user:${user.uid}:wardrobe`;
       const rows = ((await redis('LRANGE', key, 0, MAX_LOOKS - 1)) || []).map((r) => JSON.parse(r));
@@ -102,7 +103,7 @@ module.exports = async function handler(req, res) {
       res.status(200).json({ ok: true }); return;
     }
     if (body.action === 'delete') {
-      await redis('DEL', `user:${user.uid}`, `user:${user.uid}:skin`, `user:${user.uid}:wardrobe`, `user:${user.uid}:earned`, `user:email:${sha(user.email)}`);
+      await redis('DEL', `user:${user.uid}`, `user:${user.uid}:skin`, `user:${user.uid}:wardrobe`, `user:${user.uid}:earned`, `user:${user.uid}:inv`, `user:${user.uid}:owned`, `user:email:${sha(user.email)}`);
       await endSession(req, res);
       res.status(200).json({ ok: true }); return;
     }

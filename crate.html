@@ -41,11 +41,12 @@
     <div class="cr-copy">
       <p class="cr-tag mono">GOOD® CRATE · Nº001</p>
       <h1 class="cr-title">GOOD®<br>CRATE</h1>
-      <p class="cr-lede">One crate, solid GOOD® BLUE, nailed shut with chrome corners. Something soft is already trying to get out.</p>
+      <p class="cr-lede">One crate, solid GOOD® BLUE, nailed shut with chrome corners. Something soft is already trying to get out. 5 GOOD® COINS to open it.</p>
       <div class="cr-actions">
-        <button type="button" class="cr-open mono" id="open">OPEN THE CRATE</button>
-        <a class="cr-link mono" href="./?top=goodie-im-sowwy">TRY IT IN THE MAKER →</a>
+        <button type="button" class="cr-open mono" id="open" disabled>OPEN THE CRATE</button>
+        <a class="cr-link mono" href="account.html" id="inv">MY INVENTORY® →</a>
       </div>
+      <p class="cr-wallet mono" id="wallet" aria-live="polite">&nbsp;</p>
     </div>
     <div class="cr-stage">
       <canvas id="crate" aria-label="The GOOD® CRATE in 3D, lid ajar, with the GOODIE® I'M SOWWY, the GOODIE® AFTER HOURS, the SHIRT® II I'M SOWWY and the six RUNWAY® pieces inside. Drag to turn."></canvas>
@@ -54,77 +55,30 @@
   </section>
 
   <section class="cr-drop" id="drop" aria-live="polite" hidden>
-    <p class="cr-tag mono">YOU UNBOXED</p>
-    <p class="cr-item">GOODIE® <span>I'M SOWWY</span></p>
-    <div class="cr-rarity"><span></span></div>
-    <p class="cr-meta mono">ARCHIVED · PREVIEW ONLY · ROSE QUARTZ / SERENITY</p>
+    <p class="cr-tag mono" id="dropTag">YOU UNBOXED</p>
+    <div class="cr-gold" id="gold" hidden><span class="mono">GOLD ROLL</span><b id="goldName">&nbsp;</b></div>
+    <div class="cr-got" id="got" hidden>
+      <canvas class="cr-got-fig" id="gotFig" aria-hidden="true"></canvas>
+      <p class="cr-item" id="gotName"></p>
+      <p class="cr-serial mono" id="gotSerial"></p>
+      <div class="cr-rarity"><span></span></div>
+      <p class="cr-meta mono" id="gotMeta"></p>
+    </div>
   </section>
 
   <section class="cr-contents">
-    <header class="cr-bar"><h2 class="mono">CONTAINS</h2><span class="mono">9 ITEMS</span></header>
-    <div class="cr-row">
-      <div class="cr-card" data-item="sowwy">
-        <canvas class="cr-card-fig" aria-hidden="true"></canvas>
-        <span class="cr-card-n">GOODIE®</span>
-        <span class="cr-card-c mono">I'M SOWWY</span>
-        <span class="cr-card-r mono">ARCHIVED</span>
-      </div>
-      <div class="cr-card cr-card-ah" data-item="after-hours">
-        <canvas class="cr-card-fig" aria-hidden="true"></canvas>
-        <span class="cr-card-n">GOODIE®</span>
-        <span class="cr-card-c mono">AFTER HOURS/CHROME</span>
-        <span class="cr-card-r mono">ARCHIVED</span>
-      </div>
-      <div class="cr-card cr-card-tee" data-item="tee">
-        <canvas class="cr-card-fig" aria-hidden="true"></canvas>
-        <span class="cr-card-n">SHIRT® II</span>
-        <span class="cr-card-c mono">I'M SOWWY</span>
-        <span class="cr-card-r mono">NEW</span>
-      </div>
-      <div class="cr-card cr-card-rw" data-item="shirt-og">
-        <canvas class="cr-card-fig" aria-hidden="true"></canvas>
-        <span class="cr-card-n">SHIRT® OG</span>
-        <span class="cr-card-c mono">VINTAGE COTTON/DENIM</span>
-        <span class="cr-card-r mono">RUNWAY®</span>
-      </div>
-      <div class="cr-card cr-card-rw" data-item="destroyed">
-        <canvas class="cr-card-fig" aria-hidden="true"></canvas>
-        <span class="cr-card-n">RUNWAY® DESTROYED LONGSLEEVE</span>
-        <span class="cr-card-c mono">BLAUE/COTTON</span>
-        <span class="cr-card-r mono">RUNWAY®</span>
-      </div>
-      <div class="cr-card cr-card-rw" data-item="allover">
-        <canvas class="cr-card-fig" aria-hidden="true"></canvas>
-        <span class="cr-card-n">RUNWAY® ILLUSTRATIVE PRINT ALLOVER G</span>
-        <span class="cr-card-c mono">COTTON/GLACIER</span>
-        <span class="cr-card-r mono">RUNWAY®</span>
-      </div>
-      <div class="cr-card cr-card-rw cr-card-b" data-item="jean-mosaic">
-        <canvas class="cr-card-fig" aria-hidden="true"></canvas>
-        <span class="cr-card-n">JEAN® MOSAIC</span>
-        <span class="cr-card-c mono">SPRINGSTEEN/GOOD® BLUE</span>
-        <span class="cr-card-r mono">RUNWAY®</span>
-      </div>
-      <div class="cr-card cr-card-rw cr-card-b" data-item="marshmallow">
-        <canvas class="cr-card-fig" aria-hidden="true"></canvas>
-        <span class="cr-card-n">RUNWAY® MARSHMALLOW MOSAIC</span>
-        <span class="cr-card-c mono">MARSHMALLOW/BLAUE</span>
-        <span class="cr-card-r mono">RUNWAY®</span>
-      </div>
-      <div class="cr-card cr-card-rw cr-card-b" data-item="cross-jean">
-        <canvas class="cr-card-fig" aria-hidden="true"></canvas>
-        <span class="cr-card-n">RUNWAY® CROSS JEAN</span>
-        <span class="cr-card-c mono">UNIQUEⓤ</span>
-        <span class="cr-card-r mono">RUNWAY®</span>
-      </div>
-    </div>
+    <header class="cr-bar"><h2 class="mono">CONTAINS</h2><span class="mono" id="odds">ODDS PER CRATE</span></header>
+    <div class="cr-row" id="contents"></div>
+    <p class="cr-fine mono">5 GOOD® COINS A CRATE. A PIECE YOU ALREADY HAVE REFUNDS 2. EVERY ROLL IS SERIALIZED AND GOES TO MY INVENTORY® ON YOUR ACCOUNT PAGE. OWN ONE TO WEAR IT IN THE MAKER. THE I'M SOWWY PIECES COME FROM A GOLD ROLL: 4% OF CRATES ROLL GOLD, THEN ROLL AGAIN BETWEEN THE GOODIE® (20%) AND THE TWO SHIRTS (40% EACH).</p>
   </section>
 </main>
 
 <footer class="site-foot mono">© 2026 GOOD® DESIGN. All rights reserved. · <a class="foot-link" href="/privacy.html">PRIVACY</a></footer>
 
 <script src="https://cdn.jsdelivr.net/npm/three@0.156.1/build/three.min.js"></script>
+<script src="js/gooditems.js"></script>
 <script src="js/crate.js"></script>
+<script src="js/crate-shop.js"></script>
 <script src="js/nav.js"></script>
 </body>
 </html>

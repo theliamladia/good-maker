@@ -59,3 +59,10 @@
 .pv-sec ul { padding-left: 1.1em; margin: 0; }
 .pv-sec li { margin-bottom: 8px; }
 .pv-sec a, .foot-link { color: inherit; text-decoration: underline; text-underline-offset: 4px; }
+
+/* MY INVENTORY®: crate pulls, each piece on its own with its serial */
+.ac-inv .ac-card { cursor: default; }
+.ac-inv .ac-card:hover { transform: none; }
+.ac-inv-fig { display: block; width: 100%; aspect-ratio: 4 / 3; height: auto; margin: 4px 0 14px; padding: 10px; box-sizing: border-box; background: #e9ecf7; image-rendering: pixelated; object-fit: contain; }
+.ac-serial { margin-top: 8px; font-size: 0.8rem; font-weight: 700; letter-spacing: 0.18em; }
+.ac-inv .ac-gold { background: linear-gradient(180deg, #fff6c4, #ffffff 60%); box-shadow: inset 0 -4px 0 #f2c14e; }

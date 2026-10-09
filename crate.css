@@ -45,10 +45,6 @@
 .cr-row { display: grid; grid-template-columns: repeat(auto-fill, minmax(170px, 1fr)); gap: 16px; }
 .cr-card { position: relative; display: flex; flex-direction: column; gap: 4px; padding: 16px 14px 14px; min-height: 170px; background: rgba(255, 255, 255, 0.06); border: 1px solid rgba(255, 255, 255, 0.25); border-bottom: 4px solid #f7cac9; }
 .cr-card-fig { width: 100%; aspect-ratio: 16 / 12; height: auto; margin-bottom: 12px; image-rendering: pixelated; }
-.cr-card-ah { border-bottom-color: #c9ced6; }
-.cr-card-tee { border-bottom-color: #92a8d1; }
-.cr-card-rw { border-bottom-color: #2468ff; }
-.cr-card-b .cr-card-fig { aspect-ratio: 16 / 12; object-fit: contain; }
 .cr-card-n { font-weight: 800; letter-spacing: -0.02em; }
 .cr-card-c, .cr-card-r { font-size: 0.62rem; letter-spacing: 0.16em; opacity: 0.8; }
 
@@ -59,3 +55,30 @@
   .cr-page { background-position: center; }
 }
 @media (prefers-reduced-motion: reduce) { .cr-rays { animation: none; } }
+
+/* Odds, tiers, the button's ARE YOU SURE?, the gold roll and the reveal */
+.cr-wallet { min-height: 1.2em; margin: 16px 0 0; font-size: 0.66rem; letter-spacing: 0.16em; opacity: 0.85; }
+.cr-wallet .coin, .cr-meta .coin, .cr-card-r .coin { vertical-align: -0.2em; }
+.cr-open.cr-sure { background: linear-gradient(180deg, #ffe58a, #f2b630); color: #3a2400; box-shadow: 0 0 0 1px #ffe58a, 0 12px 44px rgba(255, 200, 60, 0.6); animation: cr-pulse 0.9s ease-in-out infinite alternate; }
+@keyframes cr-pulse { to { transform: translateY(-2px) scale(1.03); } }
+.cr-card-fig { object-fit: contain; }
+.cr-fig-t { aspect-ratio: 16 / 12; }
+.cr-card-r b { font-weight: 700; opacity: 1; }
+.cr-t-runway { border-bottom-color: #2468ff; }
+.cr-t-rare { border-bottom-color: #c9ced6; }
+.cr-t-gold { border-bottom-color: #f2c14e; background: linear-gradient(180deg, rgba(242, 193, 78, 0.16), rgba(255, 255, 255, 0.04)); }
+.cr-t-ticket { border-bottom-color: #ffd23f; background: linear-gradient(180deg, rgba(255, 210, 63, 0.22), rgba(255, 255, 255, 0.04)); }
+.cr-fine { margin: 22px 0 0; font-size: 0.6rem; letter-spacing: 0.14em; line-height: 1.8; opacity: 0.65; max-width: 70em; }
+.cr-gold { margin: 6px auto 14px; padding: 16px; max-width: 420px; color: #3a2400; background: linear-gradient(135deg, #fff3a8, #f2c14e 45%, #c8901a); box-shadow: 0 0 40px rgba(255, 200, 60, 0.55); }
+.cr-gold[hidden] { display: none; }
+.cr-gold span { display: block; font-size: 0.66rem; letter-spacing: 0.3em; font-weight: 700; }
+.cr-gold b { display: block; margin-top: 6px; font-size: 1.2rem; letter-spacing: -0.02em; }
+.cr-got[hidden] { display: none; }
+.cr-got-fig { display: block; width: 160px; height: 120px; margin: 4px auto 14px; image-rendering: pixelated; object-fit: contain; }
+.cr-serial { margin: 10px 0 0; font-size: 1.3rem; font-weight: 700; letter-spacing: 0.2em; }
+.cr-drop.cr-t-gold, .cr-drop.cr-t-ticket { border-color: #f2c14e; box-shadow: 0 0 60px rgba(242, 193, 78, 0.35); }
+.cr-drop.cr-t-gold .cr-rarity span, .cr-drop.cr-t-ticket .cr-rarity span { background: linear-gradient(90deg, #fff3a8, #f2c14e, #c8901a); }
+.cr-drop.cr-t-runway .cr-rarity span { background: linear-gradient(90deg, #2468ff, #9db8ff); }
+.cr-drop.cr-t-rare .cr-rarity span { background: linear-gradient(90deg, #c9ced6, #ffffff); }
+.cr-drop.cr-t-runway .cr-item span, .cr-drop.cr-t-rare .cr-item span { color: #b9c2ff; }
+.cr-drop.cr-t-ticket .cr-item span { color: #ffd23f; }
