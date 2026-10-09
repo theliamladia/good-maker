@@ -1,7 +1,7 @@
 // The GOOD® CRATE landing page: the odds and every piece, from /api/crate.
 (() => {
   const $ = (id) => document.getElementById(id);
-  const TIER = { gold: 'GOLD ROLL', ticket: '???', rare: 'RARE', runway: 'RUNWAY®' };
+  const TIER = { gold: 'GOLD ROLL', ticket: 'SECRET', rare: 'RARE', runway: 'RUNWAY®' };
   const pct = (p) => `${p < 1 ? p.toFixed(1) : String(p).replace(/\.0$/, '')}%`;
   GoodItems.ticket($('ticketFig'));
   fetch('api/crate').then((r) => r.json()).then(({ items = [] }) => {

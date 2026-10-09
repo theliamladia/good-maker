@@ -7,7 +7,7 @@
   const wait = (ms) => new Promise((r) => setTimeout(r, reduce ? 0 : ms));
   let me = null, table = [], price = 5, refund = 2, state = 'idle', sureT;
 
-  const TIER = { gold: 'GOLD ROLL', ticket: '???', rare: 'RARE', runway: 'RUNWAY®' };
+  const TIER = { gold: 'GOLD ROLL', ticket: 'SECRET', rare: 'RARE', runway: 'RUNWAY®' };
   const pct = (p) => `${p < 1 ? p.toFixed(1) : String(p).replace(/\.0$/, '')}%`;
   const coin = '<span class="coin" aria-hidden="true"></span>';
 

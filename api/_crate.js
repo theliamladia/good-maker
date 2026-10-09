@@ -7,7 +7,7 @@ const ITEMS = {
   'goodie-im-sowwy':   { name: 'GOODIE®', color: "I'M SOWWY", tier: 'gold', chase: true, unlock: 'goodie-im-sowwy', tex: 'goodie-im-sowwy-classic' },
   'shirt-ii-im-sowwy': { name: 'SHIRT® II', color: "I'M SOWWY", tier: 'gold', unlock: 'shirt-ii-im-sowwy', tex: 'shirt-ii-im-sowwy-classic', hem: true },
   'shirt-im-sowwy':    { name: 'SHIRT® I', color: "I'M SOWWY", tier: 'gold', unlock: 'shirt-im-sowwy', tex: 'shirt-im-sowwy-classic', hem: true },
-  'golden-ticket':     { name: 'GOLDEN TICKET', color: '???', tier: 'ticket' },
+  'golden-ticket':     { name: 'GOLDEN TICKET', color: '(?) SECRET', tier: 'ticket' },
   'goodie-after-hours': { name: 'GOODIE®', color: 'AFTER HOURS/CHROME', tier: 'rare', unlock: 'goodie-black-chrome', tex: 'goodie-black-chrome-classic' },
   'runway-cross-jean': { name: 'RUNWAY® CROSS JEAN', color: 'UNIQUEⓤ', tier: 'rare', unlock: 'runway-cross-jean', tex: 'runway-cross-jean', bottom: true },
   'runway-destroyed-longsleeve': { name: 'RUNWAY® DESTROYED LONGSLEEVE', color: 'BLAUE/COTTON', tier: 'runway', unlock: 'runway-destroyed-longsleeve', tex: 'runway-destroyed-longsleeve-classic' },

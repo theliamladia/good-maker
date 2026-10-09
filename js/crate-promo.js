@@ -25,7 +25,7 @@
         <li><b>THE CHASE</b> GOODIE® I'M SOWWY, from a ★ GOLD ROLL</li>
         <li><b>SERIALIZED</b> every pull gets a number, GD-001 and up</li>
         <li><b>YOURS TO WEAR</b> own one and it unlocks here in THE MAKER</li>
-        <li><b>???</b> one GOLDEN TICKET is hiding in there</li>
+        <li><b>(?) SECRET</b> one GOLDEN TICKET is hiding in there</li>
       </ul>
       <div class="cp-actions">
         <a class="cp-go mono" href="crate">GO TO THE CRATE →</a>
