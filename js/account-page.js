@@ -44,7 +44,7 @@
   function story() {
     const tally = new Map();
     for (const w of wardrobe) for (const piece of fits.get(w) || []) {
-      for (const n of String((piece && piece.color) || '').split('/')) {
+      for (const n of (piece && piece.palette) || String((piece && piece.color) || '').split('/')) {
         const c = COLORS.get(n.replace(/™/g, '').trim());
         if (c) tally.set(c, (tally.get(c) || 0) + 1);
       }

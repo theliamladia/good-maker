@@ -96,6 +96,14 @@ window.OUTFITS = [
         swatch: ['#c2452b', '#4a4f2f'],
         long: { classic: 'outfits/att/rugby-maple-leaf-fatigue-long-classic.png', slim: 'outfits/att/rugby-maple-leaf-fatigue-long-slim.png' },
       },
+      {
+        // Shown as THE AJ; the colours it's made of are in palette (TUXEDO hoops, SIDEWALK hoops, OATMILK trim).
+        id: 'rugby-the-aj',
+        color: 'THE AJ',
+        palette: ['TUXEDO', 'SIDEWALK', 'OATMILK'],
+        swatch: ['#1b1b1f', '#56565a'],
+        long: { classic: 'outfits/rugby-the-aj-long-classic.png', slim: 'outfits/rugby-the-aj-long-slim.png' },
+      },
     ],
   },
   {
