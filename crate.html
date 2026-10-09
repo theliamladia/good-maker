@@ -1,0 +1,84 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>GOOD® CRATE · GOOD® DESIGN</title>
+  <meta name="description" content="The GOOD® CRATE. Something soft is peeking out.">
+  <meta name="theme-color" content="#0000ff">
+  <link rel="canonical" href="https://good.leems.me/crate.html">
+  <meta property="og:title" content="GOOD® CRATE">
+  <meta property="og:description" content="Something soft is peeking out.">
+  <meta property="og:url" content="https://good.leems.me/crate.html">
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+  <link rel="icon" href="/favicon-32.png" sizes="32x32" type="image/png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="crate.css">
+</head>
+<body class="cr-page">
+
+<div class="crt-scanlines" aria-hidden="true"></div>
+<div class="crt-vignette" aria-hidden="true"></div>
+
+<header class="site-header">
+  <a class="wordmark" href="./">GOOD® <span>DESIGN</span></a>
+  <nav class="site-nav" aria-label="Main">
+    <a class="nav-link mono" href="./">THE MAKER</a>
+    <a class="nav-link mono" href="colors.html">COLORS®</a>
+    <a class="nav-link mono" href="study.html">STUDY®</a>
+    <a class="nav-link mono" href="collaborations.html">COLLABORATIONS®</a>
+    <a class="nav-link mono" href="ubiquity.html">UBIQUITY</a>
+    <a class="nav-link mono" href="account.html" data-acct>SIGN IN</a>
+  </nav>
+</header>
+
+<main class="cr-main">
+  <div class="cr-rays" aria-hidden="true"></div>
+  <section class="cr-hero">
+    <div class="cr-copy">
+      <p class="cr-tag mono">GOOD® CRATE · Nº001</p>
+      <h1 class="cr-title">GOOD®<br>CRATE</h1>
+      <p class="cr-lede">One crate, solid GOOD® BLUE, nailed shut with chrome corners. Something soft is already trying to get out.</p>
+      <div class="cr-actions">
+        <button type="button" class="cr-open mono" id="open">OPEN THE CRATE</button>
+        <a class="cr-link mono" href="./?top=goodie-im-sowwy">TRY IT IN THE MAKER →</a>
+      </div>
+    </div>
+    <div class="cr-stage">
+      <canvas id="crate" aria-label="The GOOD® CRATE in 3D, lid ajar, with the GOODIE® I'M SOWWY peeking out. Drag to turn."></canvas>
+      <p class="cr-hint mono" id="hint">DRAG TO TURN</p>
+    </div>
+  </section>
+
+  <section class="cr-drop" id="drop" aria-live="polite" hidden>
+    <p class="cr-tag mono">YOU UNBOXED</p>
+    <p class="cr-item">GOODIE® <span>I'M SOWWY</span></p>
+    <div class="cr-rarity"><span></span></div>
+    <p class="cr-meta mono">ARCHIVED · PREVIEW ONLY · ROSE QUARTZ / SERENITY</p>
+  </section>
+
+  <section class="cr-contents">
+    <header class="cr-bar"><h2 class="mono">CONTAINS</h2><span class="mono">1 ITEM</span></header>
+    <div class="cr-row">
+      <div class="cr-card">
+        <span class="cr-card-sw" aria-hidden="true"></span>
+        <span class="cr-card-n">GOODIE®</span>
+        <span class="cr-card-c mono">I'M SOWWY</span>
+        <span class="cr-card-r mono">ARCHIVED</span>
+      </div>
+      <div class="cr-card cr-card-q" aria-hidden="true"><span>?</span></div>
+      <div class="cr-card cr-card-q" aria-hidden="true"><span>?</span></div>
+    </div>
+  </section>
+</main>
+
+<footer class="site-foot mono">© 2026 GOOD® DESIGN. All rights reserved. · <a class="foot-link" href="/privacy.html">PRIVACY</a></footer>
+
+<script src="https://cdn.jsdelivr.net/npm/three@0.156.1/build/three.min.js"></script>
+<script src="js/crate.js"></script>
+<script src="js/nav.js"></script>
+</body>
+</html>
