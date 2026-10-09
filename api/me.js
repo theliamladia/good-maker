@@ -55,8 +55,17 @@ module.exports = async function handler(req, res) {
         return;
       }
       if (!user) { res.status(200).json({ user: null }); return; }
-      // One-time owner grant: 1000 GOOD® COINS (applies once, on the owner's next visit).
-      if (isOwner(user) && await redis('SET', 'grant:owner:1000:a', 1, 'NX')) { user.coins = (user.coins || 0) + 1000; await saveUser(user); }
+      // One-time owner set-up, on the owner's next visit: take back the 1000-coin grant
+      // if it was applied, and add every GOOD® CRATE piece at serial GD-999 (outside
+      // the normal serial counters, so GD-001 onwards stay attainable).
+      if (isOwner(user) && await redis('SET', 'grant:owner:gd999', 1, 'NX')) {
+        if (await redis('GET', 'grant:owner:1000:a')) { user.coins = Math.max(0, (user.coins || 0) - 1000); await saveUser(user); }
+        const { ITEMS } = require('./_crate');
+        for (const item of Object.keys(ITEMS)) {
+          await redis('LPUSH', `user:${user.uid}:inv`, JSON.stringify({ id: crypto.randomBytes(6).toString('base64url'), item, serial: 'GD-999', at: new Date().toISOString() }));
+          await redis('SADD', `user:${user.uid}:owned`, item);
+        }
+      }
       const rows = (await redis('LRANGE', `user:${user.uid}:wardrobe`, 0, MAX_LOOKS - 1)) || [];
       const hasSkin = !!(await redis('EXISTS', `user:${user.uid}:skin`));
       const inv = ((await redis('LRANGE', `user:${user.uid}:inv`, 0, -1)) || []).map((r) => JSON.parse(r));
