@@ -103,3 +103,4 @@
 .cr-reel-card.cr-under { background: rgba(255, 255, 255, 0.2); }
 .cr-reel-card.cr-won { background: rgba(255, 255, 255, 0.28); box-shadow: inset 0 0 0 2px #ffd23f, 0 0 26px rgba(255, 210, 63, 0.6); }
 @media (max-width: 600px) { .cr-reel-card { flex-basis: 104px; height: 128px; } .cr-reel-card canvas { height: 72px; } }
+.cr-ach { display: inline-block; margin-top: 10px; color: #ffd23f; letter-spacing: 0.2em; }

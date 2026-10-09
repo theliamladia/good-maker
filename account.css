@@ -73,3 +73,14 @@
 .ac-ledger-t { width: 100%; border-collapse: collapse; font-size: 0.66rem; letter-spacing: 0.08em; }
 .ac-ledger-t th, .ac-ledger-t td { text-align: left; padding: 9px 8px; border-bottom: 1px solid rgba(255, 255, 255, 0.25); }
 .ac-ledger-t th { font-weight: 700; letter-spacing: 0.18em; }
+
+/* ACHIEVEMENTS */
+.ac-ach { margin-top: clamp(56px, 9vh, 96px); border-top: 1px solid #fff; padding-top: 22px; }
+.ac-ach-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 14px; }
+.ac-ach-card { display: grid; grid-template-columns: 72px 1fr; gap: 14px; align-items: center; padding: 14px; background: #fff; color: #0000ff; }
+.ac-ach-card img { width: 72px; height: 72px; object-fit: contain; image-rendering: pixelated; }
+.ac-ach-n { display: block; font-weight: 800; font-size: 1rem; letter-spacing: -0.02em; }
+.ac-ach-d { display: block; margin-top: 3px; font-size: 0.8rem; line-height: 1.35; opacity: 0.85; }
+.ac-ach-p { display: block; margin-top: 8px; font-size: 0.58rem; letter-spacing: 0.16em; }
+.ac-ach-card.locked { background: rgba(255, 255, 255, 0.12); color: #fff; }
+.ac-ach-card.locked img { filter: grayscale(1) brightness(0.55); opacity: 0.6; }

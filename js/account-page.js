@@ -14,7 +14,7 @@
   const toast = (m) => { const t = $('toast'); t.textContent = m; t.hidden = false; clearTimeout(toastT); toastT = setTimeout(() => { t.hidden = true; }, 2800); };
   const lookHref = (L) => `./?${new URLSearchParams(L)}`;
 
-  let me = null, wardrobe = [], skin = null, inventory = [], crateItems = {};
+  let me = null, wardrobe = [], skin = null, inventory = [], crateItems = {}, achievements = [];
 
   function card(w) {
     const a = document.createElement('a');
@@ -80,6 +80,7 @@
     $('grid').replaceChildren(...wardrobe.map(card));
     count();
     drawInventory();
+    drawAchievements();
   }
 
   // MY INVENTORY®: every GOOD® CRATE pull, newest first, the piece alone with its serial.
@@ -97,6 +98,23 @@
       el.querySelector('.ac-serial').textContent = e.serial;
       el.setAttribute('aria-label', `${it.name} ${it.color}, serial ${e.serial}`);
       if (window.GoodItems && crateItems[e.item]) GoodItems.draw(it, el.querySelector('canvas')).catch(() => {});
+      return el;
+    }));
+  }
+
+  // ACHIEVEMENTS: earned ones first, each with the % of players who have it.
+  function drawAchievements() {
+    const got = achievements.filter((a) => a.earned).length;
+    $('aCount').textContent = `${got} / ${achievements.length}`;
+    const sorted = [...achievements].sort((a, b) => b.earned - a.earned);
+    $('ach').replaceChildren(...sorted.map((a) => {
+      const el = document.createElement('div');
+      el.className = `ac-ach-card${a.earned ? '' : ' locked'}`;
+      el.innerHTML = '<img alt="" draggable="false"><div><span class="ac-ach-n"></span><span class="ac-ach-d"></span><span class="ac-ach-p mono"></span></div>';
+      el.querySelector('img').src = a.icon;
+      el.querySelector('.ac-ach-n').textContent = a.name;
+      el.querySelector('.ac-ach-d').textContent = a.desc;
+      el.querySelector('.ac-ach-p').textContent = `${a.pct}% OF PLAYERS HAVE THIS${a.earned && a.at ? ` · EARNED ${a.at.slice(0, 10)}` : a.earned ? '' : ' · LOCKED'}`;
       return el;
     }));
   }
@@ -144,7 +162,7 @@
   const signin = q.get('signin');
   if (signin) history.replaceState(null, '', location.pathname);
   fetch('api/me').then((r) => (r.ok ? r.json() : { user: null })).catch(() => ({ user: null })).then((j) => {
-    me = j.user; wardrobe = j.wardrobe || []; inventory = j.inventory || [];
+    me = j.user; wardrobe = j.wardrobe || []; inventory = j.inventory || []; achievements = j.achievements || [];
     render();
     fetch('api/crate').then((r) => r.json()).then((c) => { crateItems = Object.fromEntries((c.items || []).map((i) => [i.id, i])); if (me) { drawInventory(); drawLedger(); } }).catch(() => {});
     if (signin === 'ok' && me) toast(`SIGNED IN AS ${me.name}.`);

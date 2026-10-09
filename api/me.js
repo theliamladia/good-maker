@@ -13,6 +13,7 @@ const vm = require('vm');
 const crypto = require('crypto');
 const { redis, configured, overLimit, parseBody } = require('./_redis');
 const { sha, currentUser, endSession, saveUser, unlocksFor, isOwner } = require('./_account');
+const ACH = require('./_achievements');
 
 const COINS_PER_SAVE = 10;
 const SAVES_PER_DAY = 2;
@@ -70,7 +71,9 @@ module.exports = async function handler(req, res) {
       const rows = (await redis('LRANGE', `user:${user.uid}:wardrobe`, 0, MAX_LOOKS - 1)) || [];
       const hasSkin = !!(await redis('EXISTS', `user:${user.uid}:skin`));
       const inv = ((await redis('LRANGE', `user:${user.uid}:inv`, 0, -1)) || []).map((r) => JSON.parse(r));
-      res.status(200).json({ user: { name: user.name, coins: user.coins || 0, hasSkin, unlocks: await unlocksFor(user), owner: isOwner(user) || undefined }, wardrobe: rows.map((r) => JSON.parse(r)), inventory: inv });
+      await ACH.touch(user.uid);
+      const achievements = await ACH.list(user.uid);
+      res.status(200).json({ user: { name: user.name, coins: user.coins || 0, hasSkin, unlocks: await unlocksFor(user), owner: isOwner(user) || undefined }, wardrobe: rows.map((r) => JSON.parse(r)), inventory: inv, achievements });
       return;
     }
     if (req.method !== 'POST') { res.status(405).json({ error: 'method' }); return; }
@@ -121,7 +124,9 @@ module.exports = async function handler(req, res) {
       res.status(200).json({ ok: true }); return;
     }
     if (body.action === 'delete') {
-      await redis('DEL', `user:${user.uid}`, `user:${user.uid}:skin`, `user:${user.uid}:wardrobe`, `user:${user.uid}:earned`, `user:${user.uid}:inv`, `user:${user.uid}:owned`, `user:email:${sha(user.email)}`);
+      await redis('DEL', `user:${user.uid}`, `user:${user.uid}:skin`, `user:${user.uid}:wardrobe`, `user:${user.uid}:earned`, `user:${user.uid}:inv`, `user:${user.uid}:owned`, `user:${user.uid}:ach`, `user:email:${sha(user.email)}`);
+      await redis('SREM', 'users:all', user.uid);
+      for (const d of ACH.DEFS) await redis('SREM', `ach:${d.id}`, user.uid);
       await endSession(req, res);
       res.status(200).json({ ok: true }); return;
     }
