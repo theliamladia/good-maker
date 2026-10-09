@@ -1,5 +1,6 @@
 {
   "functions": {
-    "api/ubiquity.js": { "includeFiles": "api/_ubiquity/**" }
+    "api/ubiquity.js": { "includeFiles": "api/_ubiquity/**" },
+    "api/outfit.js": { "includeFiles": "api/_locked/**" }
   }
 }

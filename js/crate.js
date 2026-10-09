@@ -103,7 +103,6 @@
     const bytes = Uint8Array.from(atob(d), (c, i) => c.charCodeAt(0) ^ kb[i % kb.length]);
     const bmp = await createImageBitmap(new Blob([bytes])); const img = pixels(bmp); bmp.close(); return img;
   }
-  async function open(src) { const r = await fetch(src); const bmp = await createImageBitmap(await r.blob()); const img = pixels(bmp); bmp.close(); return img; }
 
   // The SHIRT® files carry the jean's waistband on the torso's last rows: hem the tee instead (copy row 9 down).
   function hemOnly(img) {
@@ -116,7 +115,7 @@
   const ITEMS = [
     { id: 'sowwy', load: () => locked('goodie-im-sowwy-classic'), hood: true, pos: [0.5, 7.4, 0.8], rot: [-0.12, 0.15, -0.14] },
     { id: 'after-hours', load: () => locked('goodie-black-chrome-classic'), hood: true, pos: [-3.6, 5.2, -2.8], rot: [-0.25, -0.35, 0.32] },
-    { id: 'tee', load: () => open('outfits/good-shirt-im-sowwy-classic.png').then(hemOnly), pos: [3.8, 4.2, 3.2], rot: [0.32, 0.4, -0.42] },
+    { id: 'tee', load: () => locked('shirt-ii-im-sowwy-classic').then(hemOnly), pos: [3.8, 4.2, 3.2], rot: [0.32, 0.4, -0.42] },
   ];
   for (const it of ITEMS) {
     it.ready = it.load().then((img) => {

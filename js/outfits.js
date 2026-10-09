@@ -41,8 +41,9 @@ window.OUTFITS = [
         color: "I'M SOWWY",
         palette: ['ROSE QUARTZ', 'SERENITY'],
         swatch: ['#f7cac9', '#92a8d1'],
-        bodies: { classic: 'outfits/good-shirt-im-sowwy-classic.png', slim: 'outfits/good-shirt-im-sowwy-slim.png' },
-        long: { classic: 'outfits/good-shirt-im-sowwy-long-classic.png', slim: 'outfits/good-shirt-im-sowwy-long-slim.png' },
+        locked: true, // preview only: sealed in api/_locked, served scrambled by /api/outfit
+        bodies: { classic: 'api/outfit?id=shirt-ii-im-sowwy-classic', slim: 'api/outfit?id=shirt-ii-im-sowwy-slim' },
+        long: { classic: 'api/outfit?id=shirt-ii-im-sowwy-long-classic', slim: 'api/outfit?id=shirt-ii-im-sowwy-long-slim' },
       },
     ],
   },
@@ -260,8 +261,9 @@ window.OUTFITS = [
         color: "I'M SOWWY",
         palette: ['ROSE QUARTZ', 'SERENITY'],
         swatch: ['#f7cac9', '#92a8d1'],
-        bodies: { classic: 'outfits/good-jean-im-sowwy-classic.png', slim: 'outfits/good-jean-im-sowwy-slim.png' },
-        long: { classic: 'outfits/good-jean-im-sowwy-long-classic.png', slim: 'outfits/good-jean-im-sowwy-long-slim.png' },
+        locked: true, // preview only: sealed in api/_locked, served scrambled by /api/outfit
+        bodies: { classic: 'api/outfit?id=shirt-im-sowwy-classic', slim: 'api/outfit?id=shirt-im-sowwy-slim' },
+        long: { classic: 'api/outfit?id=shirt-im-sowwy-long-classic', slim: 'api/outfit?id=shirt-im-sowwy-long-slim' },
       },
     ],
   },
