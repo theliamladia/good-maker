@@ -86,7 +86,7 @@
   function drawInventory() {
     $('iCount').textContent = `${inventory.length} ${inventory.length === 1 ? 'PIECE' : 'PIECES'}`;
     $('iEmpty').hidden = inventory.length > 0;
-    $('invReset').hidden = !(me && me.owner && inventory.length);
+    $('invReset').hidden = !(me && me.owner && inventory.some((e) => e.serial !== 'GD-999'));
     $('inv').replaceChildren(...inventory.map((e) => {
       const it = crateItems[e.item] || { id: e.item, name: e.item.toUpperCase(), color: '' };
       const el = document.createElement('div');
@@ -103,7 +103,7 @@
 
   $('invReset').onclick = async () => {
     if (!confirm('Clear your GOOD® CRATE pulls and reset every serial back to GD-001?')) return;
-    try { await post('api/crate', { action: 'reset' }); inventory = []; drawInventory(); toast('CRATE TEST RESET. SERIALS START AT GD-001 AGAIN.'); } catch { toast('COULDN’T RESET. TRY AGAIN.'); }
+    try { await post('api/crate', { action: 'reset' }); inventory = inventory.filter((e) => e.serial === 'GD-999'); drawInventory(); toast('CRATE TEST RESET. SERIALS START AT GD-001 AGAIN.'); } catch { toast('COULDN’T RESET. TRY AGAIN.'); }
   };
 
   $('form').onsubmit = async (e) => {

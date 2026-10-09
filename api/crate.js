@@ -30,7 +30,10 @@ module.exports = async function handler(req, res) {
     if (!me) { res.status(401).json({ error: 'signed_out' }); return; }
     const action = parseBody(req).action;
     if (action === 'reset' && isOwner(me)) {
+      // Keeps the owner's GD-999 set; clears every other pull and resets all serial counters.
+      const keep = ((await redis('LRANGE', `user:${me.uid}:inv`, 0, -1)) || []).filter((r) => JSON.parse(r).serial === 'GD-999');
       await redis('DEL', `user:${me.uid}:inv`, `user:${me.uid}:owned`, ...Object.keys(ITEMS).map((id) => `crate:serial:${id}`));
+      for (const r of keep.reverse()) { await redis('LPUSH', `user:${me.uid}:inv`, r); await redis('SADD', `user:${me.uid}:owned`, JSON.parse(r).item); }
       res.status(200).json({ ok: true }); return;
     }
     if (action !== 'open') { res.status(400).json({ error: 'action' }); return; }
