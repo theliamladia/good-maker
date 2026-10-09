@@ -48,7 +48,7 @@
       </div>
     </div>
     <div class="cr-stage">
-      <canvas id="crate" aria-label="The GOOD® CRATE in 3D, lid ajar, with the GOODIE® I'M SOWWY peeking out. Drag to turn."></canvas>
+      <canvas id="crate" aria-label="The GOOD® CRATE in 3D, lid ajar, with the GOODIE® I'M SOWWY, the GOODIE® AFTER HOURS and the SHIRT® II I'M SOWWY inside. Drag to turn."></canvas>
       <p class="cr-hint mono" id="hint">DRAG TO TURN</p>
     </div>
   </section>
@@ -61,16 +61,26 @@
   </section>
 
   <section class="cr-contents">
-    <header class="cr-bar"><h2 class="mono">CONTAINS</h2><span class="mono">1 ITEM</span></header>
+    <header class="cr-bar"><h2 class="mono">CONTAINS</h2><span class="mono">3 ITEMS</span></header>
     <div class="cr-row">
-      <div class="cr-card">
-        <span class="cr-card-sw" aria-hidden="true"></span>
+      <div class="cr-card" data-item="sowwy">
+        <canvas class="cr-card-fig" aria-hidden="true"></canvas>
         <span class="cr-card-n">GOODIE®</span>
         <span class="cr-card-c mono">I'M SOWWY</span>
         <span class="cr-card-r mono">ARCHIVED</span>
       </div>
-      <div class="cr-card cr-card-q" aria-hidden="true"><span>?</span></div>
-      <div class="cr-card cr-card-q" aria-hidden="true"><span>?</span></div>
+      <div class="cr-card cr-card-ah" data-item="after-hours">
+        <canvas class="cr-card-fig" aria-hidden="true"></canvas>
+        <span class="cr-card-n">GOODIE®</span>
+        <span class="cr-card-c mono">AFTER HOURS/CHROME</span>
+        <span class="cr-card-r mono">ARCHIVED</span>
+      </div>
+      <div class="cr-card cr-card-tee" data-item="tee">
+        <canvas class="cr-card-fig" aria-hidden="true"></canvas>
+        <span class="cr-card-n">SHIRT® II</span>
+        <span class="cr-card-c mono">I'M SOWWY</span>
+        <span class="cr-card-r mono">NEW</span>
+      </div>
     </div>
   </section>
 </main>

@@ -93,29 +93,53 @@
     return new T.Mesh(new T.BoxGeometry(w, h, d), [f('left'), f('right'), f('top'), f('bottom'), f('front'), f('back')]);
   }
   const goodie = new T.Group(); crate.add(goodie);
-  async function loadGoodie() {
-    const r = await fetch('api/outfit?id=goodie-im-sowwy-classic', { cache: 'no-store' });
+  const pixels = (bmp) => { const c = document.createElement('canvas'); c.width = c.height = 64; const x = c.getContext('2d'); x.drawImage(bmp, 0, 0); return x.getImageData(0, 0, 64, 64); };
+  // Preview-only pieces: scrambled by /api/outfit, decoded straight to pixels.
+  async function locked(id) {
+    const r = await fetch(`api/outfit?id=${id}`, { cache: 'no-store' });
     if (!r.ok) throw new Error('unavailable');
     const { k, d } = await r.json();
     const kb = Uint8Array.from(atob(k), (c) => c.charCodeAt(0));
     const bytes = Uint8Array.from(atob(d), (c, i) => c.charCodeAt(0) ^ kb[i % kb.length]);
-    const bmp = await createImageBitmap(new Blob([bytes]));
-    const c = document.createElement('canvas'); c.width = c.height = 64;
-    const x = c.getContext('2d'); x.drawImage(bmp, 0, 0); bmp.close();
-    const img = x.getImageData(0, 0, 64, 64);
-    // Torso (base 16,16; outer +16 rows), arms (right 40,16 / left 32,48), hood (hat layer 32,0).
-    const torso = part(img, 16, 16, 8, 4, 12, [0, 16]);
-    const armR = part(img, 40, 16, 4, 4, 12, [0, 16]);
-    const armL = part(img, 32, 48, 4, 4, 12, [16, 0]);
-    const hood = part(img, 32, 0, 8, 8, 8);
-    // Torso rising out at a tilt, the hood slumped behind it, one sleeve over the front rim.
-    torso.position.set(0.5, 7.2, 0.5); torso.rotation.set(-0.12, 0.15, -0.16); goodie.add(torso);
-    hood.scale.set(0.95, 0.55, 0.95); hood.position.set(1.8, 12.4, -2.6); hood.rotation.set(-0.55, 0.2, -0.2); goodie.add(hood);
-    armL.position.set(-4.6, 5.4, 9.4); armL.rotation.set(-0.18, 0, 0.06); goodie.add(armL);   // sleeve over the front rim
-    armR.position.set(9.6, 4.2, -1.5); armR.rotation.set(0, 0, 0.12); goodie.add(armR);      // sleeve down the right side
-    goodie.userData.ready = true;
+    const bmp = await createImageBitmap(new Blob([bytes])); const img = pixels(bmp); bmp.close(); return img;
   }
-  loadGoodie().catch(() => {});
+  async function open(src) { const r = await fetch(src); const bmp = await createImageBitmap(await r.blob()); const img = pixels(bmp); bmp.close(); return img; }
+
+  // The SHIRT® files carry the jean's waistband on the torso's last rows: hem the tee instead (copy row 9 down).
+  function hemOnly(img) {
+    const d = img.data, at = (x, y) => (y * 64 + x) * 4;
+    for (const [y0, from] of [[30, 29], [31, 29], [45, 44], [46, 44], [47, 44]]) for (let x = 16; x < 40; x++) d.copyWithin(at(x, y0), at(x, from), at(x, from) + 4);
+    return img;
+  }
+  // Torso (base 16,16; outer +16 rows) and hood (hat layer 32,0). No arms: just the bodies, folded into the crate.
+  const torsoOf = (img) => part(img, 16, 16, 8, 4, 12, [0, 16]);
+  const ITEMS = [
+    { id: 'sowwy', load: () => locked('goodie-im-sowwy-classic'), hood: true, pos: [0.5, 7.4, 0.8], rot: [-0.12, 0.15, -0.14] },
+    { id: 'after-hours', load: () => locked('goodie-black-chrome-classic'), hood: true, pos: [-3.6, 5.2, -2.8], rot: [-0.25, -0.35, 0.32] },
+    { id: 'tee', load: () => open('outfits/good-shirt-im-sowwy-classic.png').then(hemOnly), pos: [3.8, 4.2, 3.2], rot: [0.32, 0.4, -0.42] },
+  ];
+  for (const it of ITEMS) {
+    it.ready = it.load().then((img) => {
+      it.img = img;
+      const t = torsoOf(img); t.position.set(...it.pos); t.rotation.set(...it.rot); goodie.add(t);
+      if (it.hood) {
+        const h = part(img, 32, 0, 8, 8, 8);
+        h.scale.set(0.95, 0.55, 0.95); h.position.set(it.pos[0] + 1.2, it.pos[1] + 5.2, it.pos[2] - 3); h.rotation.set(-0.55, it.rot[1], it.rot[2]); goodie.add(h);
+      }
+      return img;
+    }).catch(() => null);
+  }
+
+  // CONTAINS: each piece laid flat, front view (torso with both sleeves), drawn from pixels.
+  function flat(img, cv) {
+    const src = document.createElement('canvas'); src.width = src.height = 64; src.getContext('2d').putImageData(new ImageData(new Uint8ClampedArray(img.data), 64, 64), 0, 0);
+    cv.width = 16; cv.height = 12; const x = cv.getContext('2d'); x.imageSmoothingEnabled = false;
+    for (const [sx, sy, dx] of [[44, 20, 0], [44, 36, 0], [20, 20, 4], [20, 36, 4], [36, 52, 12], [52, 52, 12]]) x.drawImage(src, sx, sy, sx === 20 ? 8 : 4, 12, dx, 0, sx === 20 ? 8 : 4, 12);
+  }
+  document.querySelectorAll('[data-item]').forEach((card) => {
+    const it = ITEMS.find((i) => i.id === card.dataset.item);
+    if (it) it.ready.then((img) => { if (img) flat(img, card.querySelector('canvas')); });
+  });
 
   // ---------- Size, drag to turn, open ----------
   function size() {

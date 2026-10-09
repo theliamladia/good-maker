@@ -44,11 +44,11 @@
 .cr-bar h2, .cr-bar span { margin: 0; font-size: 0.72rem; letter-spacing: 0.22em; font-weight: 700; }
 .cr-row { display: grid; grid-template-columns: repeat(auto-fill, minmax(170px, 1fr)); gap: 16px; }
 .cr-card { position: relative; display: flex; flex-direction: column; gap: 4px; padding: 16px 14px 14px; min-height: 170px; background: rgba(255, 255, 255, 0.06); border: 1px solid rgba(255, 255, 255, 0.25); border-bottom: 4px solid #f7cac9; }
-.cr-card-sw { flex: 1; min-height: 80px; margin-bottom: 10px; background: linear-gradient(135deg, #f7cac9 50%, #92a8d1 50%); }
+.cr-card-fig { width: 100%; aspect-ratio: 16 / 12; height: auto; margin-bottom: 12px; image-rendering: pixelated; }
+.cr-card-ah { border-bottom-color: #c9ced6; }
+.cr-card-tee { border-bottom-color: #92a8d1; }
 .cr-card-n { font-weight: 800; letter-spacing: -0.02em; }
 .cr-card-c, .cr-card-r { font-size: 0.62rem; letter-spacing: 0.16em; opacity: 0.8; }
-.cr-card-q { align-items: center; justify-content: center; border-bottom-color: rgba(255, 255, 255, 0.25); }
-.cr-card-q span { font-weight: 800; font-size: 3rem; opacity: 0.25; }
 
 @media (max-width: 820px) {
   .cr-hero { grid-template-columns: 1fr; min-height: 0; }
