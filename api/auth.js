@@ -1,6 +1,6 @@
 // Vercel serverless function: email sign-in links.
 //   POST /api/auth { action: 'request', email }  -> emails a one-time link (15 min)
-//   GET  /api/auth?token=...                     -> signs in, redirects to THE MAKER
+//   GET  /api/auth?token=...                     -> signs in, redirects to the account page
 //   POST /api/auth { action: 'logout' }
 // Email goes out through Resend (RESEND_API_KEY; sender AUTH_FROM, a verified
 // domain). Without a key: 503 email_not_configured. Accounts are created on
@@ -35,7 +35,7 @@ module.exports = async function handler(req, res) {
       const token = String((req.query && req.query.token) || '');
       const key = `auth:tok:${sha(token)}`;
       const email = /^[A-Za-z0-9_-]{30,80}$/.test(token) ? await redis('GET', key) : null;
-      if (!email) { res.writeHead(302, { Location: '/?signin=expired' }); res.end(); return; }
+      if (!email) { res.writeHead(302, { Location: '/account.html?signin=expired' }); res.end(); return; }
       await redis('DEL', key);
       let uid = await redis('GET', `user:email:${sha(email)}`);
       if (!uid) {
@@ -44,7 +44,7 @@ module.exports = async function handler(req, res) {
         await redis('SET', `user:email:${sha(email)}`, uid);
       }
       await startSession(res, uid);
-      res.writeHead(302, { Location: '/?signin=ok' }); res.end();
+      res.writeHead(302, { Location: '/account.html?signin=ok' }); res.end();
       return;
     }
     if (req.method !== 'POST') { res.status(405).json({ error: 'method' }); return; }

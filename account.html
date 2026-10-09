@@ -1,0 +1,81 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>ACCOUNT · GOOD® DESIGN</title>
+  <meta name="robots" content="noindex">
+  <meta name="theme-color" content="#0000ff">
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+  <link rel="icon" href="/favicon-32.png" sizes="32x32" type="image/png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="account.css">
+</head>
+<body class="ac-page">
+
+<header class="site-header">
+  <a class="wordmark" href="./">GOOD® <span>DESIGN</span></a>
+  <nav class="site-nav" aria-label="Main">
+    <a class="nav-link mono" href="./">THE MAKER</a>
+    <a class="nav-link mono" href="colors.html">COLORS®</a>
+    <a class="nav-link mono" href="study.html">STUDY®</a>
+    <a class="nav-link mono" href="collaborations.html">COLLABORATIONS®</a>
+    <a class="nav-link mono" href="ubiquity.html">UBIQUITY</a>
+    <a class="nav-link mono" href="account.html" aria-current="page" data-acct>ACCOUNT</a>
+  </nav>
+</header>
+
+<main class="ac-main">
+  <section class="ac-out" id="out" hidden>
+    <p class="ac-tag mono">GOOD® ACCOUNT</p>
+    <h1 class="ac-title">Sign in.</h1>
+    <p class="ac-lede">Keep your home skin, build a wardrobe of fits and earn GOOD® COINS: +10 for every new fit you save. We email you a link, no password.</p>
+    <form class="ac-form" id="form" autocomplete="on">
+      <input type="email" id="email" placeholder="you@email.com" required aria-label="Email">
+      <button type="submit" class="ac-go mono">EMAIL ME A LINK</button>
+    </form>
+    <p class="ac-msg mono" id="msg" aria-live="polite"></p>
+  </section>
+
+  <section class="ac-in" id="in" hidden>
+    <div class="ac-head">
+      <div class="ac-who">
+        <p class="ac-tag mono">GOOD® ACCOUNT</p>
+        <h1 class="ac-title" id="name"></h1>
+        <p class="ac-coins"><strong id="coins">0</strong> <span class="mono">GOOD® COINS</span></p>
+        <div class="ac-actions">
+          <button type="button" class="ac-link mono" id="rename">CHANGE NAME</button>
+          <button type="button" class="ac-link mono" id="signout">SIGN OUT</button>
+        </div>
+      </div>
+      <figure class="ac-home">
+        <div class="ac-home-fig" id="homeFig"></div>
+        <figcaption class="mono" id="homeCap">HOME SKIN</figcaption>
+      </figure>
+    </div>
+
+    <section class="ac-block" aria-labelledby="wTitle">
+      <header class="ac-bar"><h2 class="mono" id="wTitle">WARDROBE</h2><span class="mono" id="wCount"></span></header>
+      <p class="ac-lede" id="wEmpty" hidden>Nothing here yet. In THE MAKER, put on a fit and hit SAVE TO WARDROBE for +10 GOOD® COINS.</p>
+      <div class="ac-grid" id="grid"></div>
+    </section>
+
+    <footer class="ac-danger">
+      <button type="button" class="ac-link mono" id="delete">DELETE ACCOUNT</button>
+    </footer>
+  </section>
+</main>
+
+<div class="ac-toast mono" id="toast" hidden></div>
+<footer class="site-foot mono">© 2026 GOOD® DESIGN. All rights reserved.</footer>
+
+<script src="js/skin.js"></script>
+<script src="js/outfits.js"></script>
+<script src="js/compose.js"></script>
+<script src="js/account-page.js"></script>
+<script src="js/nav.js"></script>
+</body>
+</html>

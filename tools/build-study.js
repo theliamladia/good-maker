@@ -58,6 +58,7 @@ const masthead = (back) => `
     <a href="/">THE MAKER</a>
     <a href="/collaborations.html">COLLABORATIONS®</a>
     <a href="/ubiquity.html">UBIQUITY</a>
+    <a href="/account.html">ACCOUNT</a>
   </nav>
 </header>`;
 
