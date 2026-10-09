@@ -35,4 +35,11 @@ async function endSession(req, res) {
 }
 const saveUser = (u) => redis('SET', `user:${u.uid}`, JSON.stringify(u));
 
-module.exports = { sha, currentUser, startSession, endSession, saveUser };
+// Preview-only (locked) pieces unlocked for particular accounts, keyed by the
+// sha256 of the account email (so no email sits in this public repo).
+const UNLOCKS = {
+  '402fb6989f1b7e8cf49c604bd500e77fef3bc4fb340372fc7d5415ee09717511': ['goodie-im-sowwy', 'goodie-black-chrome'], // owner
+};
+const unlocksFor = (user) => (user && UNLOCKS[sha(String(user.email).toLowerCase())]) || [];
+
+module.exports = { sha, currentUser, startSession, endSession, saveUser, unlocksFor };

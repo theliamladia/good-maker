@@ -12,7 +12,7 @@ const path = require('path');
 const vm = require('vm');
 const crypto = require('crypto');
 const { redis, configured, overLimit, parseBody } = require('./_redis');
-const { sha, currentUser, endSession, saveUser } = require('./_account');
+const { sha, currentUser, endSession, saveUser, unlocksFor } = require('./_account');
 
 const COINS_PER_SAVE = 10;
 const MAX_LOOKS = 60;
@@ -55,7 +55,7 @@ module.exports = async function handler(req, res) {
       if (!user) { res.status(200).json({ user: null }); return; }
       const rows = (await redis('LRANGE', `user:${user.uid}:wardrobe`, 0, MAX_LOOKS - 1)) || [];
       const hasSkin = !!(await redis('EXISTS', `user:${user.uid}:skin`));
-      res.status(200).json({ user: { name: user.name, coins: user.coins || 0, hasSkin }, wardrobe: rows.map((r) => JSON.parse(r)) });
+      res.status(200).json({ user: { name: user.name, coins: user.coins || 0, hasSkin, unlocks: unlocksFor(user) }, wardrobe: rows.map((r) => JSON.parse(r)) });
       return;
     }
     if (req.method !== 'POST') { res.status(405).json({ error: 'method' }); return; }

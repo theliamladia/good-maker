@@ -16,6 +16,9 @@
     });
   }
   const SHIRTS = catalogue(window.OUTFITS);
+  // Preview-only pieces stay locked (no download) unless the signed-in account
+  // owns them (see api/_account.js UNLOCKS, sent by api/me and applied by js/account.js).
+  const isLocked = (o) => !!o.locked && !o.owned;
   const PANTS = catalogue(window.PANTS);
   const ALL_PANTS = PANTS.flatMap((k) => k.colors);
   // GOOD® / BABY®: kinds shown under the current line ('both' shows under either).
@@ -134,7 +137,7 @@
     viewer.animation = new skinview3d.IdleAnimation();
     viewer.zoom = 0.85;
     view.appendChild(viewer.canvas);
-    viewer.canvas.addEventListener('contextmenu', (e) => { if (state.outfit.locked) e.preventDefault(); });
+    viewer.canvas.addEventListener('contextmenu', (e) => { if (isLocked(state.outfit)) e.preventDefault(); });
     new ResizeObserver(() => viewer.setSize(view.clientWidth, view.clientHeight)).observe(view);
 
     // POSTUP: leaning back against a wall, head turned to the side, left leg
@@ -694,6 +697,11 @@
     useHomeSkin: (data, name) => { useSkin(data, name, false); render(); },
     loadSkinUrl: async (url) => checkSkin(imageData(await loadImage(url))),
     whenBooted: () => bootDone,
+    unlock: (ids) => {
+      let any = false;
+      for (const k of SHIRTS) for (const c of k.colors) if (c.locked && ids.includes(k.id) || ids.includes(c.id)) { c.owned = true; any = true; }
+      if (any) render();
+    },
     // Pop-ups freeze the page behind them (CSS animations + the 3D render loop).
     setModalOpen(open) {
       document.body.classList.toggle('modal-open', open);
@@ -796,7 +804,7 @@
     const id = ++renderId;
     const o = state.outfit;
     const noTop = state.noTop;
-    const locked = !noTop && o.locked;
+    const locked = !noTop && isLocked(o);
     let outfit;
     try {
       outfit = noTop ? EMPTY_OUTFIT : await loadOutfit(o, state.body);
@@ -1016,7 +1024,7 @@
   }, { passive: true });
 
   $('download').onclick = () => {
-    if ((state.outfit.locked && !state.noTop) || !state.resultUrl || (state.noTop && state.noBottom)) return;
+    if ((isLocked(state.outfit) && !state.noTop) || !state.resultUrl || (state.noTop && state.noBottom)) return;
     const a = document.createElement('a');
     a.href = state.resultUrl;
     a.download = `${(state.userName || 'skin').replace(/[^A-Za-z0-9_-]/g, '')}GOOD.png`;

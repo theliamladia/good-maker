@@ -62,6 +62,7 @@
   // ---------- Boot ----------
   fetch('api/me').then((r) => (r.ok ? r.json() : { user: null })).catch(() => ({ user: null })).then(async (j) => {
     me = j.user; draw();
+    if (me && me.unlocks && me.unlocks.length && app()) app().unlock(me.unlocks);
     // Signed in with a home skin: it loads automatically (unless a shared look named a player).
     if (me && me.hasSkin && app() && !app().linked) { await app().whenBooted(); useHome(); }
   });
