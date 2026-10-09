@@ -46,7 +46,7 @@ window.GoodCompose = (() => {
       let pants = await load(p.shoes ? p.shoes[shoe] : p.src);
       if (p.boxers && L.boxer === 'tartan') pants = SkinLib.tartanBoxers(pants);
       pants = SkinLib.washPants(pants, p.wash);
-      outfit = SkinLib.combineOutfit(outfit, pants, L.tuck !== 'out' || (o && o.cropped) || p.noTuck);
+      outfit = SkinLib.combineOutfit(outfit, pants, !!(L.tuck !== 'out' || (o && o.cropped) || p.noTuck));
     }
     const tone = SkinLib.sampleSkinTone(user);
     const merged = SkinLib.mergeSkin(user, outfit, tone, slim, slim ? SkinLib.estimateHairRows(user, tone) : 0, null, 'keep', false);
