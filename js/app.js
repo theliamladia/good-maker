@@ -137,7 +137,7 @@
     viewer.animation = new skinview3d.IdleAnimation();
     viewer.zoom = 0.85;
     view.appendChild(viewer.canvas);
-    viewer.canvas.addEventListener('contextmenu', (e) => { if (isLocked(state.outfit)) e.preventDefault(); });
+    viewer.canvas.addEventListener('contextmenu', (e) => { if (isLocked(state.outfit) || isLocked(state.pants)) e.preventDefault(); });
     new ResizeObserver(() => viewer.setSize(view.clientWidth, view.clientHeight)).observe(view);
 
     // POSTUP: leaning back against a wall, head turned to the side, left leg
@@ -245,7 +245,7 @@
     const key = pantsKey(p, shoe, boxer);
     if (washed[key]) return washed[key];
     // Tartan first: once washed, darker denim falls in the boxers' blue range.
-    let d = await loadData(pantsSrc(p, shoe));
+    let d = await (p.locked ? loadLocked(pantsSrc(p, shoe)) : loadData(pantsSrc(p, shoe)));
     if (tartan(p, boxer)) d = SkinLib.tartanBoxers(d);
     return (washed[key] = SkinLib.washPants(d, p.wash));
   };
@@ -385,10 +385,12 @@
   async function drawPants() {
     $('pantsSection').hidden = false;
     const pants = PANTS.filter(inSeason); // every bottom shows under both lines
-    const thumbs = await Promise.all(pants.map((k) => pantsThumb(k.current)));
+    const thumbs = await Promise.all(pants.map((k) => (k.current.locked ? null : pantsThumb(k.current))));
     fillPants(pants.map(({ current: p }, i) => card(
       !state.noBottom && p.kind === state.pants.kind,
-      `${p.kind.isNew ? NEW_TAG : ''}<img class="pants-thumb" src="${thumbs[i]}" alt="">${nameOnly(p)}`,
+      p.locked
+        ? `<div class="locked-thumb" aria-hidden="true"></div>${nameOnly(p)}`
+        : `${p.kind.isNew ? NEW_TAG : ''}<img class="pants-thumb" src="${thumbs[i]}" alt="">${nameOnly(p)}`,
       () => pickPants(p)
     )));
     drawColors($('pantsColors'), state.pants, pickPants);
@@ -699,7 +701,7 @@
     whenBooted: () => bootDone,
     unlock: (ids) => {
       let any = false;
-      for (const k of SHIRTS) for (const c of k.colors) if (c.locked && ids.includes(k.id) || ids.includes(c.id)) { c.owned = true; any = true; }
+      for (const k of [...SHIRTS, ...PANTS]) for (const c of k.colors) if (c.locked && (ids.includes(k.id) || ids.includes(c.id))) { c.owned = true; any = true; }
       if (any) render();
     },
     // Pop-ups freeze the page behind them (CSS animations + the 3D render loop).
@@ -804,7 +806,7 @@
     const id = ++renderId;
     const o = state.outfit;
     const noTop = state.noTop;
-    const locked = !noTop && isLocked(o);
+    const locked = (!noTop && isLocked(o)) || (!state.noBottom && isLocked(state.pants));
     let outfit;
     try {
       outfit = noTop ? EMPTY_OUTFIT : await loadOutfit(o, state.body);
@@ -862,7 +864,7 @@
       state.resultUrl = null;
       dl.disabled = true;
       dl.firstChild.textContent = 'PREVIEW ONLY ';
-      dl.title = `${fullName(o)} can be previewed but not downloaded`;
+      dl.title = `${fullName(!noTop && isLocked(o) ? o : state.pants)} can be previewed but not downloaded`;
       showSkin(withLeaves(merged.data, slim), slim);
       return;
     }
@@ -1024,7 +1026,7 @@
   }, { passive: true });
 
   $('download').onclick = () => {
-    if ((isLocked(state.outfit) && !state.noTop) || !state.resultUrl || (state.noTop && state.noBottom)) return;
+    if ((isLocked(state.outfit) && !state.noTop) || (isLocked(state.pants) && !state.noBottom) || !state.resultUrl || (state.noTop && state.noBottom)) return;
     const a = document.createElement('a');
     a.href = state.resultUrl;
     a.download = `${(state.userName || 'skin').replace(/[^A-Za-z0-9_-]/g, '')}GOOD.png`;
@@ -1135,7 +1137,7 @@
         thumb: () => (o.locked ? null : shirtThumb(setFor(o)[topBody], topBody === 'slim')),
         off: () => { state.noTop = true; } },
       { label: 'BOTTOM', item: state.noBottom ? null : p,
-        thumb: () => pantsThumb(p),
+        thumb: () => (p.locked ? null : pantsThumb(p)),
         off: () => { state.noBottom = true; } },
       { label: 'SHOES', item: state.noShoes || !state.pants.shoes ? null : { name: shoeName(), swatch: SHOE_SWATCH[shoeKey()] || '#888' },
         thumb: () => shoeThumb(),

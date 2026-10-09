@@ -795,6 +795,35 @@ window.OUTFITS = [
       },
     ],
   },
+  // RUNWAY®: the pieces from the RUNWAY® looks, each on its own. Preview only:
+  // sealed in api/_locked and served scrambled by /api/outfit.
+  {
+    id: 'shirt-og',
+    name: 'SHIRT® OG',
+    locked: true,
+    colors: [{
+      id: 'shirt-og-vintage-cotton-denim', color: 'VINTAGE COTTON/DENIM', swatch: ['#d6d5cf', '#57b3ea'],
+      bodies: { classic: 'api/outfit?id=shirt-og-classic', slim: 'api/outfit?id=shirt-og-slim' },
+    }],
+  },
+  {
+    id: 'runway-destroyed-longsleeve',
+    name: 'RUNWAY® DESTROYED LONGSLEEVE',
+    locked: true,
+    colors: [{
+      id: 'runway-destroyed-longsleeve-blaue-cotton', color: 'BLAUE/COTTON', swatch: ['#2468ff', '#ffffff'],
+      long: { classic: 'api/outfit?id=runway-destroyed-longsleeve-classic', slim: 'api/outfit?id=runway-destroyed-longsleeve-slim' },
+    }],
+  },
+  {
+    id: 'runway-allover-g',
+    name: 'RUNWAY® ILLUSTRATIVE PRINT ALLOVER G',
+    locked: true,
+    colors: [{
+      id: 'runway-allover-g-cotton-glacier', color: 'COTTON/GLACIER', swatch: ['#ffffff', '#bcd9e6'],
+      bodies: { classic: 'api/outfit?id=runway-allover-g-classic', slim: 'api/outfit?id=runway-allover-g-slim' },
+    }],
+  },
 ];
 
 // Pants: legs (both layers) plus anything on the torso that belongs to the
@@ -1346,5 +1375,24 @@ window.PANTS = [
       'duck-chocolate-cacao': 'outfits/pants/watermelons-tomato-vine-duck-chocolate-cacao.png',
     },
     colors: [{ id: 'watermelons-tomato-vine', color: 'TOMATO VINE', swatch: '#3f7a55' }],
+  },
+  // RUNWAY® bottoms (preview only, sealed like the tops). Shoes are drawn in.
+  {
+    id: 'jean-mosaic',
+    name: 'JEAN® MOSAIC',
+    locked: true,
+    colors: [{ id: 'jean-mosaic-springsteen-good-blue', color: 'SPRINGSTEEN/GOOD® BLUE', swatch: ['#37baf7', '#0000ff'], src: 'api/outfit?id=jean-mosaic' }],
+  },
+  {
+    id: 'runway-marshmallow-mosaic',
+    name: 'RUNWAY® MARSHMALLOW MOSAIC',
+    locked: true,
+    colors: [{ id: 'runway-marshmallow-mosaic-marshmallow-blaue', color: 'MARSHMALLOW/BLAUE', swatch: ['#f7f2ea', '#2468ff'], src: 'api/outfit?id=runway-marshmallow-mosaic' }],
+  },
+  {
+    id: 'runway-cross-jean',
+    name: 'RUNWAY® CROSS JEAN',
+    locked: true,
+    colors: [{ id: 'runway-cross-jean-unique', color: 'UNIQUE', swatch: ['#0093d7', '#ffffff'], src: 'api/outfit?id=runway-cross-jean' }],
   },
 ];

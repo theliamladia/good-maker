@@ -20,7 +20,7 @@ const win = {};
 vm.runInNewContext(fs.readFileSync(path.join(__dirname, '../js/outfits.js'), 'utf8'), { window: win });
 const TOPS = new Set(); const LOCKED = new Map(); const BOTTOMS = new Map();
 for (const k of win.OUTFITS) for (const c of k.colors || [k]) if (k.locked || c.locked) LOCKED.set(c.id, k.id); else TOPS.add(c.id);
-for (const k of win.PANTS) for (const c of k.colors || [k]) BOTTOMS.set(c.id, Object.keys(c.shoes || k.shoes || {}));
+for (const k of win.PANTS) for (const c of k.colors || [k]) { if (k.locked || c.locked) LOCKED.set(c.id, k.id); BOTTOMS.set(c.id, Object.keys(c.shoes || k.shoes || {})); }
 
 // Locked tops only for accounts that own them (by colour id or kind id).
 function cleanLook(L, unlocks = []) {
@@ -28,7 +28,7 @@ function cleanLook(L, unlocks = []) {
   const out = {};
   const owns = (id) => LOCKED.has(id) && (unlocks.includes(id) || unlocks.includes(LOCKED.get(id)));
   if (L.top) { if (!TOPS.has(String(L.top)) && !owns(String(L.top))) return null; out.top = String(L.top); }
-  if (L.bottom) { if (!BOTTOMS.has(String(L.bottom))) return null; out.bottom = String(L.bottom); }
+  if (L.bottom) { if (!BOTTOMS.has(String(L.bottom)) || (LOCKED.has(String(L.bottom)) && !owns(String(L.bottom)))) return null; out.bottom = String(L.bottom); }
   if (!out.top && !out.bottom) return null;
   if (out.bottom && BOTTOMS.get(out.bottom).includes(L.shoe)) out.shoe = L.shoe;
   if (L.feet === 'bare') out.feet = 'bare';

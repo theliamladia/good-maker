@@ -52,7 +52,7 @@
     const rows = [...tally].sort((a, b) => b[1] - a[1]);
     $('story').hidden = !rows.length;
     const total = rows.reduce((a, [, n]) => a + n, 0);
-    const label = (c) => (c.pantone || c.name.includes('®') ? c.name : `${c.name}™`);
+    const label = (c) => (c.mark ? `${c.name}${c.mark}` : c.pantone || c.name.includes('®') ? c.name : `${c.name}™`);
     $('storyStrip').replaceChildren(...rows.map(([c, n]) => {
       const b = document.createElement('span');
       const h = Array.isArray(c.hex) ? c.hex : [c.hex];

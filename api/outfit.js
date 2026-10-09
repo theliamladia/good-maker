@@ -19,10 +19,8 @@ const LOCKED = {
 
 // Newer locked pieces ship as AES-256-GCM ciphertext in api/_locked/<id>.enc
 // (sealed by tools/lock-seal.js); the key is the GOOD_LOCK_KEY env variable.
-const SEALED = new Set([
-  'shirt-im-sowwy-classic', 'shirt-im-sowwy-slim', 'shirt-im-sowwy-long-classic', 'shirt-im-sowwy-long-slim',
-  'shirt-ii-im-sowwy-classic', 'shirt-ii-im-sowwy-slim', 'shirt-ii-im-sowwy-long-classic', 'shirt-ii-im-sowwy-long-slim',
-]);
+// Any id with a sealed file in api/_locked is served from it.
+const SEALED = { has: (id) => /^[a-z0-9-]+$/.test(id) && fs.existsSync(path.join(__dirname, '_locked', `${id}.enc`)) };
 function unseal(id) {
   const key = Buffer.from(process.env.GOOD_LOCK_KEY || '', 'base64');
   if (key.length !== 32) return null;

@@ -43,7 +43,8 @@ window.GoodCompose = (() => {
     if (p) {
       const shoes = Object.keys(p.shoes || {});
       const shoe = shoes.includes(L.shoe) ? L.shoe : shoes[0];
-      let pants = await load(p.shoes ? p.shoes[shoe] : p.src);
+      const psrc = p.shoes ? p.shoes[shoe] : p.src;
+      let pants = await (p.locked ? loadLocked(psrc) : load(psrc));
       if (p.boxers && L.boxer === 'tartan') pants = SkinLib.tartanBoxers(pants);
       pants = SkinLib.washPants(pants, p.wash);
       outfit = SkinLib.combineOutfit(outfit, pants, !!(L.tuck !== 'out' || (o && o.cropped) || p.noTuck));

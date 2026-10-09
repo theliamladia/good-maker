@@ -4,7 +4,7 @@
   const $ = (id) => document.getElementById(id);
   const colors = window.GOOD_COLORS;
   // GOOD® colour names are ™; PANTONE® colours keep Pantone's name as is.
-  const label = (c) => (c.pantone || c.name.includes('®') ? c.name : `${c.name}™`);
+  const label = (c) => (c.mark ? `${c.name}${c.mark}` : c.pantone || c.name.includes('®') ? c.name : `${c.name}™`);
   const PANTONE_NOTE = 'PANTONE® is a registered trademark of Pantone LLC. Colour names and numbers used with attribution to Pantone.';
   const hexesOf = (c) => (Array.isArray(c.hex) ? c.hex : [c.hex]);
   const fillOf = (c) => { const h = hexesOf(c); return h.length > 1 ? `linear-gradient(90deg, ${h[0]} 50%, ${h[1]} 50%)` : h[0]; };
