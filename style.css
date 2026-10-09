@@ -22,6 +22,9 @@ body {
   background: #0000ff; /* GOOD® BLUE */
   overflow-x: hidden;
 }
+/* THE MAKER: the AMONG THE TREES® fall gradient, leaves drifting behind the panels */
+body.fall { background: linear-gradient(to bottom, #2b1d12 0, #4a2716 22%, #7e3a1d 48%, #b35a26 74%, #d98a3a 100%) fixed; }
+.fall-leaves { position: fixed; inset: 0; width: 100%; height: 100%; pointer-events: none; z-index: -1; }
 .mono { font-family: 'Space Mono', ui-monospace, monospace; }
 
 /* ---------- Sky ---------- */
