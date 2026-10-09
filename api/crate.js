@@ -30,6 +30,22 @@ module.exports = async function handler(req, res) {
       const keys = [];
       let cursor = '0';
       do { const [next, batch] = await redis('SCAN', cursor, 'MATCH', 'user:*:inv', 'COUNT', 200); cursor = String(next); keys.push(...batch); } while (cursor !== '0');
+      // One-time fix (owner request): CHINNY's JEAN® MOSAIC is GD-001, not GD-002.
+      if (await redis('SET', 'fix:jean-mosaic-chinny-gd001', 1, 'NX')) {
+        const taken = [];
+        for (const k of keys) for (const r of (await redis('LRANGE', k, 0, -1)) || []) { const e = JSON.parse(r); if (e.item === 'jean-mosaic' && e.serial !== 'GD-999') taken.push(e.serial); }
+        for (const k of keys) {
+          const u = JSON.parse((await redis('GET', `user:${k.split(':')[1]}`)) || '{}');
+          if (String(u.name || '').toUpperCase() !== 'CHINNY' || taken.includes('GD-001')) continue;
+          for (const r of (await redis('LRANGE', k, 0, -1)) || []) {
+            const e = JSON.parse(r);
+            if (e.item === 'jean-mosaic' && e.serial === 'GD-002') { await redis('LSET', k, ((await redis('LRANGE', k, 0, -1)) || []).indexOf(r), JSON.stringify({ ...e, serial: 'GD-001' })); taken.splice(taken.indexOf('GD-002'), 1, 'GD-001'); }
+          }
+        }
+        // The next JEAN® MOSAIC continues after the highest serial still held.
+        const top = Math.max(0, ...taken.map((t) => +t.slice(3)));
+        await redis('SET', 'crate:serial:jean-mosaic', top);
+      }
       const rows = [];
       for (const k of keys) {
         const uid = k.split(':')[1];
