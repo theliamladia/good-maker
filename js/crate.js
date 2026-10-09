@@ -112,15 +112,28 @@
   }
   // Torso (base 16,16; outer +16 rows) and hood (hat layer 32,0). No arms: just the bodies, folded into the crate.
   const torsoOf = (img) => part(img, 16, 16, 8, 4, 12, [0, 16]);
+  // Bottoms: both legs (right leg base 0,16 / outer 0,32; left leg base 16,48 / outer 0,48), side by side.
+  function pantsOf(img) {
+    const g = new T.Group();
+    const r = part(img, 0, 16, 4, 4, 12, [0, 16]); r.position.x = -2; g.add(r);
+    const l = part(img, 16, 48, 4, 4, 12, [-16, 0]); l.position.x = 2; g.add(l);
+    return g;
+  }
   const ITEMS = [
     { id: 'sowwy', load: () => locked('goodie-im-sowwy-classic'), hood: true, pos: [0.5, 7.4, 0.8], rot: [-0.12, 0.15, -0.14] },
     { id: 'after-hours', load: () => locked('goodie-black-chrome-classic'), hood: true, pos: [-3.6, 5.2, -2.8], rot: [-0.25, -0.35, 0.32] },
     { id: 'tee', load: () => locked('shirt-ii-im-sowwy-classic').then(hemOnly), pos: [3.8, 4.2, 3.2], rot: [0.32, 0.4, -0.42] },
+    { id: 'shirt-og', load: () => locked('shirt-og-classic'), pos: [-4.2, 4.4, 3.6], rot: [0.38, -0.5, 0.42] },
+    { id: 'destroyed', load: () => locked('runway-destroyed-longsleeve-classic'), pos: [4.4, 5.6, -3.2], rot: [-0.3, 0.6, -0.38] },
+    { id: 'allover', load: () => locked('runway-allover-g-classic'), pos: [-0.6, 4.2, -4.8], rot: [-0.42, 0.1, 0.12] },
+    { id: 'jean-mosaic', bottom: true, load: () => locked('jean-mosaic'), pos: [-9.7, 3.2, 0.5], rot: [0, -Math.PI / 2, 0.06] },        // over the left wall
+    { id: 'marshmallow', bottom: true, load: () => locked('runway-marshmallow-mosaic'), pos: [9.7, 3.6, -0.5], rot: [0, Math.PI / 2, -0.06] }, // over the right wall
+    { id: 'cross-jean', bottom: true, load: () => locked('runway-cross-jean'), pos: [3.2, 8.6, -3.6], rot: [-0.5, 0.45, -0.45] },        // poking out the back
   ];
   for (const it of ITEMS) {
     it.ready = it.load().then((img) => {
       it.img = img;
-      const t = torsoOf(img); t.position.set(...it.pos); t.rotation.set(...it.rot); goodie.add(t);
+      const t = it.bottom ? pantsOf(img) : torsoOf(img); t.position.set(...it.pos); t.rotation.set(...it.rot); goodie.add(t);
       if (it.hood) {
         const h = part(img, 32, 0, 8, 8, 8);
         h.scale.set(0.95, 0.55, 0.95); h.position.set(it.pos[0] + 1.2, it.pos[1] + 5.2, it.pos[2] - 3); h.rotation.set(-0.55, it.rot[1], it.rot[2]); goodie.add(h);
@@ -129,15 +142,22 @@
     }).catch(() => null);
   }
 
-  // CONTAINS: each piece laid flat, front view (torso with both sleeves), drawn from pixels.
-  function flat(img, cv) {
+  // CONTAINS: each piece laid flat, front view, drawn from pixels.
+  // Tops: torso with both sleeves (16×12). Bottoms: both legs (8×12).
+  function flat(img, cv, bottom) {
     const src = document.createElement('canvas'); src.width = src.height = 64; src.getContext('2d').putImageData(new ImageData(new Uint8ClampedArray(img.data), 64, 64), 0, 0);
-    cv.width = 16; cv.height = 12; const x = cv.getContext('2d'); x.imageSmoothingEnabled = false;
+    const x = cv.getContext('2d');
+    if (bottom) {
+      cv.width = 8; cv.height = 12; x.imageSmoothingEnabled = false;
+      for (const [sx, sy, dx] of [[4, 20, 0], [4, 36, 0], [20, 52, 4], [4, 52, 4]]) x.drawImage(src, sx, sy, 4, 12, dx, 0, 4, 12);
+      return;
+    }
+    cv.width = 16; cv.height = 12; x.imageSmoothingEnabled = false;
     for (const [sx, sy, dx] of [[44, 20, 0], [44, 36, 0], [20, 20, 4], [20, 36, 4], [36, 52, 12], [52, 52, 12]]) x.drawImage(src, sx, sy, sx === 20 ? 8 : 4, 12, dx, 0, sx === 20 ? 8 : 4, 12);
   }
   document.querySelectorAll('[data-item]').forEach((card) => {
     const it = ITEMS.find((i) => i.id === card.dataset.item);
-    if (it) it.ready.then((img) => { if (img) flat(img, card.querySelector('canvas')); });
+    if (it) it.ready.then((img) => { if (img) flat(img, card.querySelector('canvas'), it.bottom); });
   });
 
   // ---------- Size, drag to turn, open ----------

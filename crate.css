@@ -47,6 +47,8 @@
 .cr-card-fig { width: 100%; aspect-ratio: 16 / 12; height: auto; margin-bottom: 12px; image-rendering: pixelated; }
 .cr-card-ah { border-bottom-color: #c9ced6; }
 .cr-card-tee { border-bottom-color: #92a8d1; }
+.cr-card-rw { border-bottom-color: #2468ff; }
+.cr-card-b .cr-card-fig { aspect-ratio: 16 / 12; object-fit: contain; }
 .cr-card-n { font-weight: 800; letter-spacing: -0.02em; }
 .cr-card-c, .cr-card-r { font-size: 0.62rem; letter-spacing: 0.16em; opacity: 0.8; }
 
