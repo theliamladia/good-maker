@@ -53,7 +53,7 @@
   $('form').onsubmit = async (e) => {
     e.preventDefault();
     $('msg').textContent = 'SENDING…';
-    try { await post('api/auth', { action: 'request', email: $('email').value }); $('msg').textContent = 'CHECK YOUR EMAIL. THE LINK WORKS FOR 15 MINUTES.'; }
+    try { await post('api/auth', { action: 'request', email: $('email').value }); $('msg').textContent = 'CHECK YOUR EMAIL. NOT THERE? PLEASE CHECK YOUR SPAM FOLDER. THE LINK WORKS FOR 15 MINUTES.'; }
     catch (err) { $('msg').textContent = err.code === 'email_not_configured' ? 'SIGN-IN OPENS SOON.' : err.code === 'email' ? 'THAT EMAIL DOESN’T LOOK RIGHT.' : err.code === 'slow_down' ? 'SLOW DOWN. TRY AGAIN IN A MINUTE.' : 'COULDN’T SEND. TRY AGAIN.'; }
   };
   $('signout').onclick = async () => { await post('api/auth', { action: 'logout' }).catch(() => {}); me = null; render(); };
