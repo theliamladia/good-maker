@@ -1,5 +1,5 @@
 // Vercel serverless function: the GOOD® CRATE.
-//   GET  /api/crate                     -> { price, refund, goldOdds, items: [{ id, name, color, tier, pct }] }
+//   GET  /api/crate                     -> { price, refund, goldOdds, items: [{ id, name, color, tier, pct, pulled }] }
 //   POST /api/crate { action: 'open' }  -> { roll: { id, item, serial, gold, dup }, coins }
 //   POST /api/crate { action: 'reset' } -> owner only: clears the owner's pulls and every serial counter (testing)
 // Signed in only. Opening costs 5 GOOD® COINS; the roll happens here, never on
@@ -22,7 +22,15 @@ const serialOf = (n) => `GD-${String(n).padStart(3, '0')}`;
 
 module.exports = async function handler(req, res) {
   res.setHeader('Cache-Control', 'no-store');
-  if (req.method === 'GET') { res.status(200).json({ price: PRICE, refund: REFUND, goldOdds: GOLD_ODDS, items: table() }); return; }
+  if (req.method === 'GET') {
+    // pulled = how many serialized copies of each piece exist (the serial counters; the owner's GD-999 set isn't counted).
+    let pulled = {};
+    try {
+      if (configured()) { const ids = Object.keys(ITEMS); const n = await redis('MGET', ...ids.map((id) => `crate:serial:${id}`)); pulled = Object.fromEntries(ids.map((id, i) => [id, +(n && n[i]) || 0])); }
+    } catch { pulled = {}; }
+    res.status(200).json({ price: PRICE, refund: REFUND, goldOdds: GOLD_ODDS, items: table().map((it) => ({ ...it, pulled: pulled[it.id] })) });
+    return;
+  }
   if (req.method !== 'POST') { res.status(405).json({ error: 'method' }); return; }
   if (!configured()) { res.status(503).json({ error: 'not_configured' }); return; }
   try {
