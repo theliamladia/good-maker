@@ -756,7 +756,16 @@
   };
 
   function mannequinPng({ outfit, hat, slim }) {
-    const m = SkinLib.mergeSkin(null, outfit, [0, 0, 255], slim, 0, null, 'auto', false);
+    const white = [244, 244, 244];
+    const m = SkinLib.mergeSkin(null, outfit, white, slim, 0, null, 'auto', false);
+    // A blank white head: mergeSkin leaves the head to the player's skin, and there isn't one.
+    for (const [x0, y0, step] of [[8, 0, 1], [16, 0, -3], [0, 8, -1], [8, 8, 0], [16, 8, -1], [24, 8, -1.5]]) {
+      const c = SkinLib.shadeTone(white, step);
+      for (let y = y0; y < y0 + 8; y++) for (let x = x0; x < x0 + 8; x++) {
+        const i = (y * 64 + x) * 4;
+        if (m.data[i + 3] === 0) { m.data[i] = c[0]; m.data[i + 1] = c[1]; m.data[i + 2] = c[2]; m.data[i + 3] = 255; }
+      }
+    }
     if (hat) for (let y = 0; y < 16; y++) { const i = (y * 64 + 32) * 4; m.data.set(outfit.data.subarray(i, i + 32 * 4), i); }
     const c = document.createElement('canvas'); c.width = c.height = 64;
     c.getContext('2d').putImageData(new ImageData(new Uint8ClampedArray(m.data), 64, 64), 0, 0);
@@ -770,7 +779,7 @@
     // For js/account.js: the look on screen, putting a saved one on, and the home skin.
     currentLook: () => currentLook(false),
     // For the MINECRAFT STAND button: the finished PNG, only when it could be downloaded.
-    // Just the clothes, on a plain GOOD® BLUE mannequin (no face, no hair, no player skin).
+    // Just the clothes, on a plain white mannequin (no face, no hair, no player skin).
     standSkin: () => ($('download').disabled || !state.resultUrl || !state.stand ? null : {
       png: mannequinPng(state.stand), slim: state.stand.slim,
       name: [!state.noTop && fullName(state.outfit), !state.noBottom && fullName(state.pants)].filter(Boolean).join(' + '),
