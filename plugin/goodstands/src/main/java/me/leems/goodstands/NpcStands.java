@@ -41,8 +41,9 @@ final class NpcStands {
             if (res.statusCode() != 200) { p.sendMessage(ChatColor.RED + "The site said " + res.statusCode() + ". Try again."); return; }
             JsonObject j = JsonParser.parseString(res.body()).getAsJsonObject();
             String name = j.has("name") ? j.get("name").getAsString() : "GOOD®";
-            NPC npc = CitizensAPI.getNPCRegistry().createNPC(EntityType.PLAYER, ChatColor.BLUE + "GOOD® " + ChatColor.WHITE + name);
+            NPC npc = CitizensAPI.getNPCRegistry().createNPC(EntityType.PLAYER, "GOOD" + code);
             npc.data().setPersistent(KEY, code);
+            npc.data().setPersistent(NPC.Metadata.NAMEPLATE_VISIBLE, false);
             npc.setProtected(true);
             npc.getOrAddTrait(SkinTrait.class).setSkinPersistent("good-" + code, j.get("signature").getAsString(), j.get("value").getAsString());
             npc.getOrAddTrait(LookClose.class).lookClose(true);

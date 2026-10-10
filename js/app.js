@@ -755,6 +755,14 @@
     }
   };
 
+  function mannequinPng({ outfit, hat, slim }) {
+    const m = SkinLib.mergeSkin(null, outfit, [0, 0, 255], slim, 0, null, 'auto', false);
+    if (hat) for (let y = 0; y < 16; y++) { const i = (y * 64 + 32) * 4; m.data.set(outfit.data.subarray(i, i + 32 * 4), i); }
+    const c = document.createElement('canvas'); c.width = c.height = 64;
+    c.getContext('2d').putImageData(new ImageData(new Uint8ClampedArray(m.data), 64, 64), 0, 0);
+    return c.toDataURL('image/png');
+  }
+
   // For js/runway.js: fetch a player's skin and read the current skin.
   window.GoodApp = {
     skinForName,
@@ -762,8 +770,9 @@
     // For js/account.js: the look on screen, putting a saved one on, and the home skin.
     currentLook: () => currentLook(false),
     // For the MINECRAFT STAND button: the finished PNG, only when it could be downloaded.
-    standSkin: () => ($('download').disabled || !state.resultUrl ? null : {
-      png: state.resultUrl, slim: state.body === 'slim',
+    // Just the clothes, on a plain GOOD® BLUE mannequin (no face, no hair, no player skin).
+    standSkin: () => ($('download').disabled || !state.resultUrl || !state.stand ? null : {
+      png: mannequinPng(state.stand), slim: state.stand.slim,
       name: [!state.noTop && fullName(state.outfit), !state.noBottom && fullName(state.pants)].filter(Boolean).join(' + '),
     }),
     applyLook: (L) => applyLook(L, false).then(() => render()),
@@ -908,6 +917,7 @@
     const slim = state.body === 'slim';
     const args = [state.tone, slim, state.hair, state.erased, state.headwear, state.keepSkin];
     const merged = SkinLib.mergeSkin(state.user, outfit, ...args);
+    state.stand = { outfit, hat: !noTop && !!o.hat, slim };
     // Outfits that go over the head (CROPPIE®) replace the hat layer.
     if (!noTop && o.hat) {
       for (let y = 0; y < 16; y++) {
