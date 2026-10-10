@@ -1,14 +1,15 @@
 name: GoodStands
-version: '1.0.0'
+version: '1.1.0'
 main: me.leems.goodstands.GoodStands
 api-version: '1.20'
+softdepend: [Citizens]
 description: Armor stands dressed in GOOD® DESIGN outfits from good.leems.me
 author: GOOD DESIGN
 website: https://good.leems.me
 commands:
   goodstand:
-    description: Spawn, list and remove GOOD® armor stands
-    usage: /goodstand <spawn|look|list|remove|reload>
+    description: GOOD® stands: NPCs in the real skin, or dressed armor stands
+    usage: /goodstand <npc|spawn|look|list|remove|reload>
     aliases: [gstand]
     permission: goodstands.use
 permissions:

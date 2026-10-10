@@ -761,6 +761,11 @@
     current: () => ({ skin: state.user, name: state.userName, isDemo: state.isDemo }),
     // For js/account.js: the look on screen, putting a saved one on, and the home skin.
     currentLook: () => currentLook(false),
+    // For the MINECRAFT STAND button: the finished PNG, only when it could be downloaded.
+    standSkin: () => ($('download').disabled || !state.resultUrl ? null : {
+      png: state.resultUrl, slim: state.body === 'slim',
+      name: [!state.noTop && fullName(state.outfit), !state.noBottom && fullName(state.pants)].filter(Boolean).join(' + '),
+    }),
     applyLook: (L) => applyLook(L, false).then(() => render()),
     useHomeSkin: (data, name) => { useSkin(data, name, false); render(); },
     loadSkinUrl: async (url) => checkSkin(imageData(await loadImage(url))),

@@ -52,6 +52,7 @@ public final class GoodStands extends JavaPlugin implements TabCompleter {
 
     @Override public void onEnable() {
         tag = new NamespacedKey(this, "goodstand");
+        saveDefaultConfig();
         load();
         Objects.requireNonNull(getCommand("goodstand")).setTabCompleter(this);
         getLogger().info("Loaded " + tops.size() + " tops, " + bottoms.size() + " bottoms, " + shoes.size() + " shoes.");
@@ -86,6 +87,13 @@ public final class GoodStands extends JavaPlugin implements TabCompleter {
     @Override public boolean onCommand(CommandSender sender, Command cmd, String label, String[] a) {
         if (a.length == 0) { help(sender, label); return true; }
         switch (a[0].toLowerCase(Locale.ROOT)) {
+            case "npc" -> {
+                // The real skin: a code from MINECRAFT STAND in THE MAKER.
+                if (!(sender instanceof Player p)) { sender.sendMessage("Players only."); return true; }
+                if (a.length < 2) { sender.sendMessage(ChatColor.RED + "/" + label + " npc <code from MINECRAFT STAND in THE MAKER>"); return true; }
+                if (!citizens()) { sender.sendMessage(ChatColor.RED + "/" + label + " npc needs the Citizens plugin on the server."); return true; }
+                NpcStands.spawn(this, p, a[1]);
+            }
             case "spawn" -> {
                 if (!(sender instanceof Player p)) { sender.sendMessage("Players only."); return true; }
                 if (a.length < 2) { sender.sendMessage(ChatColor.RED + "/" + label + " spawn <top|none> [bottom|none] [shoe] [skin player]"); return true; }
@@ -121,6 +129,7 @@ public final class GoodStands extends JavaPlugin implements TabCompleter {
                     double d = e.getLocation().distanceSquared(p.getLocation());
                     if (d < bd) { bd = d; best = e; }
                 }
+                if (best == null && citizens() && NpcStands.removeNearest(p)) { sender.sendMessage(ChatColor.BLUE + "Removed the nearest GOOD® stand."); return true; }
                 if (best == null) sender.sendMessage(ChatColor.RED + "No GOOD® stand within 5 blocks.");
                 else { best.remove(); sender.sendMessage(ChatColor.BLUE + "Removed the nearest GOOD® stand."); }
             }
@@ -132,6 +141,7 @@ public final class GoodStands extends JavaPlugin implements TabCompleter {
 
     private void help(CommandSender s, String l) {
         s.sendMessage(ChatColor.BLUE + "" + ChatColor.BOLD + "GOOD® STANDS");
+        s.sendMessage(ChatColor.WHITE + "/" + l + " npc <code>" + ChatColor.GRAY + " – the real skin (MINECRAFT STAND in THE MAKER, needs Citizens)");
         s.sendMessage(ChatColor.WHITE + "/" + l + " spawn <top|none> [bottom|none] [shoe] [skin]" + ChatColor.GRAY + " – dress a stand");
         s.sendMessage(ChatColor.WHITE + "/" + l + " look <link from THE MAKER> [skin]" + ChatColor.GRAY + " – a stand from a good.leems.me link");
         s.sendMessage(ChatColor.WHITE + "/" + l + " list [tops|bottoms|shoes]" + ChatColor.GRAY + " – what's available");
@@ -158,10 +168,18 @@ public final class GoodStands extends JavaPlugin implements TabCompleter {
         return q;
     }
 
-    // ---------- The stand ----------
-    private void spawn(Player p, Piece top, Piece bottom, Piece shoe, String skin) {
+    // Two blocks in front of the player, facing them.
+    static Location inFront(Player p) {
         Location at = p.getLocation().add(p.getLocation().getDirection().setY(0).normalize().multiply(2));
         at.setYaw(p.getLocation().getYaw() + 180); at.setPitch(0);
+        return at;
+    }
+    String site() { return getConfig().getString("site", "https://good.leems.me").replaceAll("/+$", ""); }
+    private boolean citizens() { return Bukkit.getPluginManager().isPluginEnabled("Citizens"); }
+
+    // ---------- The stand ----------
+    private void spawn(Player p, Piece top, Piece bottom, Piece shoe, String skin) {
+        Location at = inFront(p);
         ArmorStand s = p.getWorld().spawn(at, ArmorStand.class, st -> {
             st.setArms(true); st.setBasePlate(false); st.setGravity(false); st.setPersistent(true);
             st.setLeftArmPose(new EulerAngle(Math.toRadians(-8), 0, Math.toRadians(-6)));
@@ -226,7 +244,7 @@ public final class GoodStands extends JavaPlugin implements TabCompleter {
     // ---------- Tab completion ----------
     @Override public List<String> onTabComplete(CommandSender s, Command c, String l, String[] a) {
         List<String> opts;
-        if (a.length == 1) opts = List.of("spawn", "look", "list", "remove", "reload");
+        if (a.length == 1) opts = List.of("npc", "spawn", "look", "list", "remove", "reload");
         else if (a[0].equalsIgnoreCase("list") && a.length == 2) opts = List.of("tops", "bottoms", "shoes");
         else if (a[0].equalsIgnoreCase("spawn") && a.length == 2) opts = with("none", tops.keySet());
         else if (a[0].equalsIgnoreCase("spawn") && a.length == 3) opts = with("none", bottoms.keySet());

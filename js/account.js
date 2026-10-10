@@ -59,6 +59,25 @@
     }
   };
 
+  // ---------- Minecraft stand ----------
+  // Signs the finished skin (via /api/stand) and hands back a code for the
+  // GoodStands plugin: /goodstand npc <code>.
+  $('mcStand').onclick = async () => {
+    if (!me) { location.href = 'account'; return; }
+    const s = app().standSkin();
+    if (!s) { toast('PUT ON A FIT YOU CAN DOWNLOAD FIRST.'); return; }
+    const b = $('mcStand'), label = b.firstChild.textContent;
+    b.disabled = true; b.firstChild.textContent = 'SIGNING THE SKIN… ';
+    try {
+      const { code } = await post('api/stand', s);
+      try { await navigator.clipboard.writeText(`/goodstand npc ${code}`); } catch { /* no clipboard */ }
+      b.querySelector('span').textContent = `/goodstand npc ${code}`;
+      toast(`STAND CODE ${code} · COPIED: /goodstand npc ${code}`);
+    } catch (e) {
+      toast(e.code === 'slow_down' || e.code === 'mineskin' ? 'THE SKIN SIGNER IS BUSY. TRY AGAIN IN A MINUTE.' : e.code === 'signed_out' ? 'SIGN IN FIRST.' : 'COULDN’T MAKE A STAND CODE. TRY AGAIN.');
+    } finally { b.disabled = false; b.firstChild.textContent = label; }
+  };
+
   // ---------- Boot ----------
   fetch('api/me').then((r) => (r.ok ? r.json() : { user: null })).catch(() => ({ user: null })).then(async (j) => {
     me = j.user; draw();
