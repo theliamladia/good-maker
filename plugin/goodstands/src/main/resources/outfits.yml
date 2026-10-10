@@ -1,0 +1,153 @@
+# GOOD® outfits for GoodStands. Generated from good.leems.me (gen-outfits.js): do not edit by hand.
+tops:
+  shirt-cotton-maple-leaf: { name: "SHIRT® II", color: "COTTON/MAPLE LEAF", swatch: ["#ffffff", "#c2452b"] }
+  shirt-ii-im-sowwy: { name: "SHIRT® II", color: "I'M SOWWY", swatch: ["#f7cac9", "#92a8d1"] }
+  half-zip-cinnamon-toast-fern: { name: "HALF-ZIP®", color: "CINNAMON TOAST/FERN", swatch: ["#a65a2e", "#4f6b45"] }
+  half-zip-wash-day-trench: { name: "HALF-ZIP®", color: "WASH DAY/TRENCH", swatch: ["#8eaee6", "#c4b38a"] }
+  half-zip-maple-leaf-fatigue: { name: "HALF-ZIP®", color: "MAPLE LEAF/FATIGUE", swatch: ["#c2452b", "#4a4f2f"] }
+  rugby-cinnamon-toast-fern: { name: "RUGBY®", color: "CINNAMON TOAST/FERN", swatch: ["#a65a2e", "#4f6b45"] }
+  rugby-wash-day-trench: { name: "RUGBY®", color: "WASH DAY/TRENCH", swatch: ["#8eaee6", "#c4b38a"] }
+  rugby-maple-leaf-fatigue: { name: "RUGBY®", color: "MAPLE LEAF/FATIGUE", swatch: ["#c2452b", "#4a4f2f"] }
+  rugby-the-aj: { name: "RUGBY®", color: "THE AJ", swatch: ["#1b1b1f", "#56565a"] }
+  grandpa-cinnamon-toast-fern: { name: "GRANDPA®", color: "CINNAMON TOAST/FERN", swatch: ["#a65a2e", "#4f6b45"] }
+  grandpa-wash-day-trench: { name: "GRANDPA®", color: "WASH DAY/TRENCH", swatch: ["#8eaee6", "#c4b38a"] }
+  grandpa-maple-leaf-fatigue: { name: "GRANDPA®", color: "MAPLE LEAF/FATIGUE", swatch: ["#c2452b", "#4a4f2f"] }
+  shrug-cinnamon-toast-fern: { name: "SHRUG®", color: "CINNAMON TOAST/FERN", swatch: ["#a65a2e", "#4f6b45"] }
+  shrug-wash-day-trench: { name: "SHRUG®", color: "WASH DAY/TRENCH", swatch: ["#8eaee6", "#c4b38a"] }
+  shrug-maple-leaf-fatigue: { name: "SHRUG®", color: "MAPLE LEAF/FATIGUE", swatch: ["#c2452b", "#4a4f2f"] }
+  varsity-cinnamon-toast-fern: { name: "VARSITY®", color: "CINNAMON TOAST/FERN", swatch: ["#a65a2e", "#4f6b45"] }
+  varsity-wash-day-trench: { name: "VARSITY®", color: "WASH DAY/TRENCH", swatch: ["#8eaee6", "#c4b38a"] }
+  varsity-maple-leaf-fatigue: { name: "VARSITY®", color: "MAPLE LEAF/FATIGUE", swatch: ["#c2452b", "#4a4f2f"] }
+  wrap-cinnamon-toast-fern: { name: "WRAP®", color: "CINNAMON TOAST/FERN", swatch: ["#a65a2e", "#4f6b45"] }
+  wrap-wash-day-trench: { name: "WRAP®", color: "WASH DAY/TRENCH", swatch: ["#8eaee6", "#c4b38a"] }
+  wrap-maple-leaf-fatigue: { name: "WRAP®", color: "MAPLE LEAF/FATIGUE", swatch: ["#c2452b", "#4a4f2f"] }
+  shirt-denim: { name: "SHIRT® I", color: "COTTON/DENIM", swatch: ["#ffffff", "#57b3ea"] }
+  shirt-blaue: { name: "SHIRT® I", color: "COTTON/BLAUE", swatch: ["#ffffff", "#2468ff"] }
+  shirt-im-sowwy: { name: "SHIRT® I", color: "I'M SOWWY", swatch: ["#f7cac9", "#92a8d1"] }
+  croppie-dust-pink: { name: "CROPPIE® I", color: "DUST PINK/TOMATO VINE", swatch: ["#c98aa0", "#3f7a55"] }
+  croppie-good-blue: { name: "CROPPIE® I", color: "GOOD® BLUE/COTTON", swatch: ["#0000ff", "#ffffff"] }
+  doubbie-good-blue: { name: "DOUBBIE® I", color: "GOOD® BLUE/COTTON", swatch: ["#0000ff", "#ffffff"] }
+  doubbie-dust-pink: { name: "DOUBBIE® I", color: "DUST PINK/TOMATO VINE", swatch: ["#c98aa0", "#3f7a55"] }
+  doubbie-double-blue: { name: "DOUBBIE® I", color: "GOOD® BLUE/GOOD® BLUE", swatch: ["#0000ff", "#0000ff"] }
+  smiley-pumpkin-neon: { name: "SMILEY®", color: "PUMPKIN/NEON", swatch: ["#fda327", "#b5ff61"] }
+  smiley-good-blue: { name: "SMILEY®", color: "GOOD® BLUE/COTTON", swatch: ["#0000ff", "#ffffff"] }
+  smiley-safety-good-blue: { name: "SMILEY®", color: "SAFETY/GOOD® BLUE", swatch: ["#ff5a1f", "#0000ff"] }
+  goodie-pepsi: { name: "GOODIE®", color: "PEPSI", swatch: ["#3730fe", "#ff141d"] }
+  goodie-good-blue: { name: "GOODIE®", color: "GOOD® BLUE/COTTON", swatch: ["#0000ff", "#ffffff"] }
+  goodie-oxblood-goldenrod: { name: "GOODIE®", color: "OXBLOOD/GOLDENROD", swatch: ["#713a40", "#e3a828"] }
+  goodie-sky-cotton: { name: "GOODIE®", color: "SKY/COTTON", swatch: ["#8fd0ff", "#ffffff"] }
+  goodie-black-chrome: { name: "GOODIE®", color: "AFTER HOURS/CHROME", swatch: ["#14141b", "#c9ced6"] }
+  goodie-im-sowwy: { name: "GOODIE®", color: "I'M SOWWY", swatch: ["#f7cac9", "#92a8d1"] }
+  gknit-vanilla-bean-good-blue: { name: "G-KNIT®", color: "VANILLA BEAN/GOOD® BLUE", swatch: ["#ece4d2", "#0000ff"] }
+  gknit-good-blue-cotton: { name: "G-KNIT®", color: "GOOD® BLUE/COTTON", swatch: ["#0000ff", "#ffffff"] }
+  gknit-oxblood-goldenrod: { name: "G-KNIT®", color: "OXBLOOD/GOLDENROD", swatch: ["#713a40", "#e3a828"] }
+  gknit-dust-pink-tomato-vine: { name: "G-KNIT®", color: "DUST PINK/TOMATO VINE", swatch: ["#c98aa0", "#3f7a55"] }
+  collar-good-blue: { name: "COLLAR®", color: "GOOD® BLUE/COTTON", swatch: ["#0000ff", "#ffffff"] }
+  collar-cotton-denim: { name: "COLLAR®", color: "COTTON/DENIM", swatch: ["#ffffff", "#57b3ea"] }
+  collar-vanilla-bean-patent: { name: "COLLAR®", color: "VANILLA BEAN/PATENT", swatch: ["#ece4d2", "#283b62"] }
+  collar-sage-ecru-twill: { name: "COLLAR®", color: "SAGE/ECRU TWILL", swatch: ["#a7b59a", "#ddd2b8"] }
+  chore-duck-canvas: { name: "CHORE COAT®", color: "DUCK CANVAS/COCOA", swatch: ["#b98f55", "#5a3a2a"] }
+  chore-black-rinse: { name: "CHORE COAT®", color: "INKWELL/GOLDENROD", swatch: ["#26272d", "#e3a828"] }
+  chore-ecru-twill: { name: "CHORE COAT®", color: "ECRU TWILL/COCOA", swatch: ["#ddd2b8", "#5a3a2a"] }
+  chore-fern: { name: "CHORE COAT®", color: "FERN/GOLDENROD", swatch: ["#4f6b45", "#e3a828"] }
+  slicker-volt: { name: "SLICKER®", color: "VOLT/AFTER HOURS", swatch: ["#c8ff2e", "#14141b"] }
+  slicker-hot-flamingo: { name: "SLICKER®", color: "HOT FLAMINGO/AFTER HOURS", swatch: ["#ff4fb3", "#14141b"] }
+  slicker-electric-tangerine: { name: "SLICKER®", color: "ELECTRIC TANGERINE/AFTER HOURS", swatch: ["#ff7a1a", "#14141b"] }
+  slicker-ultraviolet: { name: "SLICKER®", color: "ULTRAVIOLET/COTTON", swatch: ["#8a3dff", "#ffffff"] }
+  fleece-oatmilk-cocoa: { name: "FLEECE®", color: "OATMILK/COCOA", swatch: ["#e7dcc8", "#5a3a2a"] }
+  fleece-pebble-terracotta: { name: "FLEECE®", color: "PEBBLE/TERRACOTTA", swatch: ["#a9a59c", "#c7623f"] }
+  fleece-sage-forest: { name: "FLEECE®", color: "SAGE/FOREST", swatch: ["#a7b59a", "#2f4a33"] }
+  fleece-berry-peony: { name: "FLEECE®", color: "BERRY/PEONY", swatch: ["#8a2a4b", "#f2a7c0"] }
+  croppie-baby-strawberry-milk-tomato-vine: { name: "BABY CROPPIE®", color: "STRAWBERRY MILK/TOMATO VINE", swatch: ["#f6c6d4", "#3f7a55"] }
+  croppie-baby-creamsicle-good-blue: { name: "BABY CROPPIE®", color: "CREAMSICLE/GOOD® BLUE", swatch: ["#fcc9a2", "#0000ff"] }
+  croppie-baby-lilac-haze-cotton: { name: "BABY CROPPIE®", color: "LILAC HAZE/COTTON", swatch: ["#b9a3d9", "#ffffff"] }
+  croppie-baby-glacier-good-blue: { name: "BABY CROPPIE®", color: "GLACIER/GOOD® BLUE", swatch: ["#bcd9e6", "#0000ff"] }
+  doubbie-baby-strawberry-milk-marshmallow: { name: "BABY DOUBBIE®", color: "STRAWBERRY MILK/MARSHMALLOW", swatch: ["#f6c6d4", "#f7f2ea"] }
+  doubbie-baby-sky-strawberry-milk: { name: "BABY DOUBBIE®", color: "SKY/STRAWBERRY MILK", swatch: ["#8fd0ff", "#f6c6d4"] }
+  doubbie-baby-lilac-haze-glacier: { name: "BABY DOUBBIE®", color: "LILAC HAZE/GLACIER", swatch: ["#b9a3d9", "#bcd9e6"] }
+  puffer-cropped-matcha: { name: "CROPPED PUFFER®", color: "MATCHA/GOOD® BLUE", swatch: ["#9bb77a", "#0000ff"] }
+  puffer-cropped-lilac-haze: { name: "CROPPED PUFFER®", color: "LILAC HAZE/GOOD® BLUE", swatch: ["#b9a3d9", "#0000ff"] }
+  puffer-cropped-butterscotch: { name: "CROPPED PUFFER®", color: "BUTTERSCOTCH/GOOD® BLUE", swatch: ["#e0a24a", "#0000ff"] }
+  puffer-cropped-glacier: { name: "CROPPED PUFFER®", color: "GLACIER/GOOD® BLUE", swatch: ["#bcd9e6", "#0000ff"] }
+  cardie-strawberry-milk: { name: "CARDIE®", color: "STRAWBERRY MILK/TOMATO VINE", swatch: ["#f6c6d4", "#3f7a55"] }
+  cardie-creamsicle: { name: "CARDIE®", color: "CREAMSICLE/TOMATO VINE", swatch: ["#fcc9a2", "#3f7a55"] }
+  cardie-marshmallow: { name: "CARDIE®", color: "MARSHMALLOW/TOMATO VINE", swatch: ["#f7f2ea", "#3f7a55"] }
+  cardie-tweetie: { name: "CARDIE®", color: "TWEETIE/TOMATO VINE", swatch: ["#ffd92e", "#3f7a55"] }
+  cardie-sky: { name: "CARDIE®", color: "SKY/TOMATO VINE", swatch: ["#8fd0ff", "#3f7a55"] }
+  baby-tee-good-blue-cotton: { name: "BABY TEE®", color: "GOOD® BLUE/COTTON", swatch: ["#0000ff", "#ffffff"] }
+  baby-tee-cotton-good-blue: { name: "BABY TEE®", color: "COTTON/GOOD® BLUE", swatch: ["#ffffff", "#0000ff"] }
+  baby-tee-sky-cotton: { name: "BABY TEE®", color: "SKY/COTTON", swatch: ["#8fd0ff", "#ffffff"] }
+  baby-tee-dust-pink-tomato-vine: { name: "BABY TEE®", color: "DUST PINK/TOMATO VINE", swatch: ["#c98aa0", "#3f7a55"] }
+  halter-sky-cotton: { name: "HALTER®", color: "SKY/COTTON", swatch: ["#8fd0ff", "#ffffff"] }
+  halter-good-blue-cotton: { name: "HALTER®", color: "GOOD® BLUE/COTTON", swatch: ["#0000ff", "#ffffff"] }
+  halter-neon-good-blue: { name: "HALTER®", color: "NEON/GOOD® BLUE", swatch: ["#b5ff61", "#0000ff"] }
+  halter-black-chrome: { name: "HALTER®", color: "AFTER HOURS/CHROME", swatch: ["#14141b", "#c9ced6"] }
+  corset-good-blue-cotton: { name: "CORSET®", color: "GOOD® BLUE/COTTON", swatch: ["#0000ff", "#ffffff"] }
+  corset-black-chrome: { name: "CORSET®", color: "AFTER HOURS/CHROME", swatch: ["#14141b", "#c9ced6"] }
+  corset-oxblood-goldenrod: { name: "CORSET®", color: "OXBLOOD/GOLDENROD", swatch: ["#713a40", "#e3a828"] }
+  shirt-og-vintage-cotton-denim: { name: "SHIRT® OG", color: "VINTAGE COTTON/DENIM", swatch: ["#d6d5cf", "#57b3ea"] }
+  runway-destroyed-longsleeve-blaue-cotton: { name: "RUNWAY® DESTROYED LONGSLEEVE", color: "BLAUE/COTTON", swatch: ["#2468ff", "#ffffff"] }
+  runway-allover-g-cotton-glacier: { name: "RUNWAY® ALLOVER", color: "COTTON/GLACIER", swatch: ["#ffffff", "#bcd9e6"] }
+bottoms:
+  cargo-cinnamon-toast-fern: { name: "CARGO®", color: "CINNAMON TOAST/FERN", swatch: ["#a65a2e", "#4f6b45"], shoes: ["black", "brown", "tobacco", "sneak01", "chelsea-tobacco", "chelsea-tuxedo", "chelsea-mahogany", "workboot-wheat", "workboot-oxblood", "workboot-tuxedo", "duck-peyote", "duck-inkwell-after-hours", "duck-chocolate-cacao"] }
+  cargo-wash-day-trench: { name: "CARGO®", color: "WASH DAY/TRENCH", swatch: ["#8eaee6", "#c4b38a"], shoes: ["black", "brown", "tobacco", "sneak01", "chelsea-tobacco", "chelsea-tuxedo", "chelsea-mahogany", "workboot-wheat", "workboot-oxblood", "workboot-tuxedo", "duck-peyote", "duck-inkwell-after-hours", "duck-chocolate-cacao"] }
+  cargo-maple-leaf-fatigue: { name: "CARGO®", color: "MAPLE LEAF/FATIGUE", swatch: ["#c2452b", "#4a4f2f"], shoes: ["black", "brown", "tobacco", "sneak01", "chelsea-tobacco", "chelsea-tuxedo", "chelsea-mahogany", "workboot-wheat", "workboot-oxblood", "workboot-tuxedo", "duck-peyote", "duck-inkwell-after-hours", "duck-chocolate-cacao"] }
+  pleat-cinnamon-toast-fern: { name: "PLEAT®", color: "CINNAMON TOAST/FERN", swatch: ["#a65a2e", "#4f6b45"], shoes: ["black", "brown", "tobacco", "sneak01", "chelsea-tobacco", "chelsea-tuxedo", "chelsea-mahogany", "workboot-wheat", "workboot-oxblood", "workboot-tuxedo", "duck-peyote", "duck-inkwell-after-hours", "duck-chocolate-cacao"] }
+  pleat-wash-day-trench: { name: "PLEAT®", color: "WASH DAY/TRENCH", swatch: ["#8eaee6", "#c4b38a"], shoes: ["black", "brown", "tobacco", "sneak01", "chelsea-tobacco", "chelsea-tuxedo", "chelsea-mahogany", "workboot-wheat", "workboot-oxblood", "workboot-tuxedo", "duck-peyote", "duck-inkwell-after-hours", "duck-chocolate-cacao"] }
+  pleat-maple-leaf-fatigue: { name: "PLEAT®", color: "MAPLE LEAF/FATIGUE", swatch: ["#c2452b", "#4a4f2f"], shoes: ["black", "brown", "tobacco", "sneak01", "chelsea-tobacco", "chelsea-tuxedo", "chelsea-mahogany", "workboot-wheat", "workboot-oxblood", "workboot-tuxedo", "duck-peyote", "duck-inkwell-after-hours", "duck-chocolate-cacao"] }
+  cord-cinnamon-toast-fern: { name: "CORD®", color: "CINNAMON TOAST/FERN", swatch: ["#a65a2e", "#4f6b45"], shoes: ["black", "brown", "tobacco", "sneak01", "chelsea-tobacco", "chelsea-tuxedo", "chelsea-mahogany", "workboot-wheat", "workboot-oxblood", "workboot-tuxedo", "duck-peyote", "duck-inkwell-after-hours", "duck-chocolate-cacao"] }
+  cord-wash-day-trench: { name: "CORD®", color: "WASH DAY/TRENCH", swatch: ["#8eaee6", "#c4b38a"], shoes: ["black", "brown", "tobacco", "sneak01", "chelsea-tobacco", "chelsea-tuxedo", "chelsea-mahogany", "workboot-wheat", "workboot-oxblood", "workboot-tuxedo", "duck-peyote", "duck-inkwell-after-hours", "duck-chocolate-cacao"] }
+  cord-maple-leaf-fatigue: { name: "CORD®", color: "MAPLE LEAF/FATIGUE", swatch: ["#c2452b", "#4a4f2f"], shoes: ["black", "brown", "tobacco", "sneak01", "chelsea-tobacco", "chelsea-tuxedo", "chelsea-mahogany", "workboot-wheat", "workboot-oxblood", "workboot-tuxedo", "duck-peyote", "duck-inkwell-after-hours", "duck-chocolate-cacao"] }
+  knit-midi-cinnamon-toast-fern: { name: "KNIT MIDI®", color: "CINNAMON TOAST/FERN", swatch: ["#a65a2e", "#4f6b45"], shoes: ["black", "brown", "tobacco", "sneak01", "chelsea-tobacco", "chelsea-tuxedo", "chelsea-mahogany", "workboot-wheat", "workboot-oxblood", "workboot-tuxedo", "duck-peyote", "duck-inkwell-after-hours", "duck-chocolate-cacao"] }
+  knit-midi-wash-day-trench: { name: "KNIT MIDI®", color: "WASH DAY/TRENCH", swatch: ["#8eaee6", "#c4b38a"], shoes: ["black", "brown", "tobacco", "sneak01", "chelsea-tobacco", "chelsea-tuxedo", "chelsea-mahogany", "workboot-wheat", "workboot-oxblood", "workboot-tuxedo", "duck-peyote", "duck-inkwell-after-hours", "duck-chocolate-cacao"] }
+  knit-midi-maple-leaf-fatigue: { name: "KNIT MIDI®", color: "MAPLE LEAF/FATIGUE", swatch: ["#c2452b", "#4a4f2f"], shoes: ["black", "brown", "tobacco", "sneak01", "chelsea-tobacco", "chelsea-tuxedo", "chelsea-mahogany", "workboot-wheat", "workboot-oxblood", "workboot-tuxedo", "duck-peyote", "duck-inkwell-after-hours", "duck-chocolate-cacao"] }
+  kilt-cinnamon-toast-fern: { name: "KILT®", color: "CINNAMON TOAST/FERN", swatch: ["#a65a2e", "#4f6b45"], shoes: ["black", "brown", "tobacco", "sneak01", "chelsea-tobacco", "chelsea-tuxedo", "chelsea-mahogany", "workboot-wheat", "workboot-oxblood", "workboot-tuxedo", "duck-peyote", "duck-inkwell-after-hours", "duck-chocolate-cacao"] }
+  kilt-wash-day-trench: { name: "KILT®", color: "WASH DAY/TRENCH", swatch: ["#8eaee6", "#c4b38a"], shoes: ["black", "brown", "tobacco", "sneak01", "chelsea-tobacco", "chelsea-tuxedo", "chelsea-mahogany", "workboot-wheat", "workboot-oxblood", "workboot-tuxedo", "duck-peyote", "duck-inkwell-after-hours", "duck-chocolate-cacao"] }
+  kilt-maple-leaf-fatigue: { name: "KILT®", color: "MAPLE LEAF/FATIGUE", swatch: ["#c2452b", "#4a4f2f"], shoes: ["black", "brown", "tobacco", "sneak01", "chelsea-tobacco", "chelsea-tuxedo", "chelsea-mahogany", "workboot-wheat", "workboot-oxblood", "workboot-tuxedo", "duck-peyote", "duck-inkwell-after-hours", "duck-chocolate-cacao"] }
+  maxi-cinnamon-toast-fern: { name: "MAXI®", color: "CINNAMON TOAST/FERN", swatch: ["#a65a2e", "#4f6b45"], shoes: ["black", "brown", "tobacco", "sneak01", "chelsea-tobacco", "chelsea-tuxedo", "chelsea-mahogany", "workboot-wheat", "workboot-oxblood", "workboot-tuxedo", "duck-peyote", "duck-inkwell-after-hours", "duck-chocolate-cacao"] }
+  maxi-wash-day-trench: { name: "MAXI®", color: "WASH DAY/TRENCH", swatch: ["#8eaee6", "#c4b38a"], shoes: ["black", "brown", "tobacco", "sneak01", "chelsea-tobacco", "chelsea-tuxedo", "chelsea-mahogany", "workboot-wheat", "workboot-oxblood", "workboot-tuxedo", "duck-peyote", "duck-inkwell-after-hours", "duck-chocolate-cacao"] }
+  maxi-maple-leaf-fatigue: { name: "MAXI®", color: "MAPLE LEAF/FATIGUE", swatch: ["#c2452b", "#4a4f2f"], shoes: ["black", "brown", "tobacco", "sneak01", "chelsea-tobacco", "chelsea-tuxedo", "chelsea-mahogany", "workboot-wheat", "workboot-oxblood", "workboot-tuxedo", "duck-peyote", "duck-inkwell-after-hours", "duck-chocolate-cacao"] }
+  springsteen-springsteen: { name: "JEAN®", color: "SPRINGSTEEN™", swatch: ["#37baf7"], shoes: ["black", "brown", "tobacco", "sneak01", "chelsea-tobacco", "chelsea-tuxedo", "chelsea-mahogany", "workboot-wheat", "workboot-oxblood", "workboot-tuxedo", "duck-peyote", "duck-inkwell-after-hours", "duck-chocolate-cacao"] }
+  springsteen-roadworn: { name: "JEAN®", color: "ROADWORN™", swatch: ["#6285b0"], shoes: ["black", "brown", "tobacco", "sneak01", "chelsea-tobacco", "chelsea-tuxedo", "chelsea-mahogany", "workboot-wheat", "workboot-oxblood", "workboot-tuxedo", "duck-peyote", "duck-inkwell-after-hours", "duck-chocolate-cacao"] }
+  springsteen-favorite-jeans: { name: "JEAN®", color: "FAVORITE JEANS™", swatch: ["#86a6c4"], shoes: ["black", "brown", "tobacco", "sneak01", "chelsea-tobacco", "chelsea-tuxedo", "chelsea-mahogany", "workboot-wheat", "workboot-oxblood", "workboot-tuxedo", "duck-peyote", "duck-inkwell-after-hours", "duck-chocolate-cacao"] }
+  springsteen-the-jean: { name: "JEAN®", color: "THE JEAN™", swatch: ["#3d5886"], shoes: ["black", "brown", "tobacco", "sneak01", "chelsea-tobacco", "chelsea-tuxedo", "chelsea-mahogany", "workboot-wheat", "workboot-oxblood", "workboot-tuxedo", "duck-peyote", "duck-inkwell-after-hours", "duck-chocolate-cacao"] }
+  springsteen-patent: { name: "JEAN®", color: "PATENT™", swatch: ["#283b62"], shoes: ["black", "brown", "tobacco", "sneak01", "chelsea-tobacco", "chelsea-tuxedo", "chelsea-mahogany", "workboot-wheat", "workboot-oxblood", "workboot-tuxedo", "duck-peyote", "duck-inkwell-after-hours", "duck-chocolate-cacao"] }
+  springsteen-selvedge: { name: "JEAN®", color: "SELVEDGE™", swatch: ["#161d3a"], shoes: ["black", "brown", "tobacco", "sneak01", "chelsea-tobacco", "chelsea-tuxedo", "chelsea-mahogany", "workboot-wheat", "workboot-oxblood", "workboot-tuxedo", "duck-peyote", "duck-inkwell-after-hours", "duck-chocolate-cacao"] }
+  jean-bootcut-springsteen: { name: "JEAN® BOOTCUT", color: "SPRINGSTEEN™", swatch: ["#37baf7"], shoes: ["black", "brown", "tobacco", "sneak01", "chelsea-tobacco", "chelsea-tuxedo", "chelsea-mahogany", "workboot-wheat", "workboot-oxblood", "workboot-tuxedo", "duck-peyote", "duck-inkwell-after-hours", "duck-chocolate-cacao"] }
+  jean-bootcut-roadworn: { name: "JEAN® BOOTCUT", color: "ROADWORN™", swatch: ["#6285b0"], shoes: ["black", "brown", "tobacco", "sneak01", "chelsea-tobacco", "chelsea-tuxedo", "chelsea-mahogany", "workboot-wheat", "workboot-oxblood", "workboot-tuxedo", "duck-peyote", "duck-inkwell-after-hours", "duck-chocolate-cacao"] }
+  jean-bootcut-favorite-jeans: { name: "JEAN® BOOTCUT", color: "FAVORITE JEANS™", swatch: ["#86a6c4"], shoes: ["black", "brown", "tobacco", "sneak01", "chelsea-tobacco", "chelsea-tuxedo", "chelsea-mahogany", "workboot-wheat", "workboot-oxblood", "workboot-tuxedo", "duck-peyote", "duck-inkwell-after-hours", "duck-chocolate-cacao"] }
+  jean-bootcut-the-jean: { name: "JEAN® BOOTCUT", color: "THE JEAN™", swatch: ["#3d5886"], shoes: ["black", "brown", "tobacco", "sneak01", "chelsea-tobacco", "chelsea-tuxedo", "chelsea-mahogany", "workboot-wheat", "workboot-oxblood", "workboot-tuxedo", "duck-peyote", "duck-inkwell-after-hours", "duck-chocolate-cacao"] }
+  jean-bootcut-patent: { name: "JEAN® BOOTCUT", color: "PATENT™", swatch: ["#283b62"], shoes: ["black", "brown", "tobacco", "sneak01", "chelsea-tobacco", "chelsea-tuxedo", "chelsea-mahogany", "workboot-wheat", "workboot-oxblood", "workboot-tuxedo", "duck-peyote", "duck-inkwell-after-hours", "duck-chocolate-cacao"] }
+  jean-bootcut-selvedge: { name: "JEAN® BOOTCUT", color: "SELVEDGE™", swatch: ["#161d3a"], shoes: ["black", "brown", "tobacco", "sneak01", "chelsea-tobacco", "chelsea-tuxedo", "chelsea-mahogany", "workboot-wheat", "workboot-oxblood", "workboot-tuxedo", "duck-peyote", "duck-inkwell-after-hours", "duck-chocolate-cacao"] }
+  jort-springsteen: { name: "JORT®", color: "SPRINGSTEEN™", swatch: ["#37baf7"], shoes: ["black", "brown", "tobacco", "sneak01", "chelsea-tobacco", "chelsea-tuxedo", "chelsea-mahogany", "workboot-wheat", "workboot-oxblood", "workboot-tuxedo", "duck-peyote", "duck-inkwell-after-hours", "duck-chocolate-cacao"] }
+  jort-roadworn: { name: "JORT®", color: "ROADWORN™", swatch: ["#6285b0"], shoes: ["black", "brown", "tobacco", "sneak01", "chelsea-tobacco", "chelsea-tuxedo", "chelsea-mahogany", "workboot-wheat", "workboot-oxblood", "workboot-tuxedo", "duck-peyote", "duck-inkwell-after-hours", "duck-chocolate-cacao"] }
+  jort-favorite-jeans: { name: "JORT®", color: "FAVORITE JEANS™", swatch: ["#86a6c4"], shoes: ["black", "brown", "tobacco", "sneak01", "chelsea-tobacco", "chelsea-tuxedo", "chelsea-mahogany", "workboot-wheat", "workboot-oxblood", "workboot-tuxedo", "duck-peyote", "duck-inkwell-after-hours", "duck-chocolate-cacao"] }
+  jort-the-jean: { name: "JORT®", color: "THE JEAN™", swatch: ["#3d5886"], shoes: ["black", "brown", "tobacco", "sneak01", "chelsea-tobacco", "chelsea-tuxedo", "chelsea-mahogany", "workboot-wheat", "workboot-oxblood", "workboot-tuxedo", "duck-peyote", "duck-inkwell-after-hours", "duck-chocolate-cacao"] }
+  jort-patent: { name: "JORT®", color: "PATENT™", swatch: ["#283b62"], shoes: ["black", "brown", "tobacco", "sneak01", "chelsea-tobacco", "chelsea-tuxedo", "chelsea-mahogany", "workboot-wheat", "workboot-oxblood", "workboot-tuxedo", "duck-peyote", "duck-inkwell-after-hours", "duck-chocolate-cacao"] }
+  jort-selvedge: { name: "JORT®", color: "SELVEDGE™", swatch: ["#161d3a"], shoes: ["black", "brown", "tobacco", "sneak01", "chelsea-tobacco", "chelsea-tuxedo", "chelsea-mahogany", "workboot-wheat", "workboot-oxblood", "workboot-tuxedo", "duck-peyote", "duck-inkwell-after-hours", "duck-chocolate-cacao"] }
+  pltswt-heather-grey: { name: "PLTSWT®", color: "FLECK", swatch: ["#9a9ca3"], shoes: ["sneak01"] }
+  mosaic-gray-chrome: { name: "MOSAIC®", color: "SIDEWALK/CHROME", swatch: ["#56565a", "#c9ced6"], shoes: [] }
+  springsteen-sagging-springsteen: { name: "JEAN® SAGGING", color: "SPRINGSTEEN™", swatch: ["#37baf7"], shoes: ["black", "tobacco", "sneak01", "chelsea-tobacco", "chelsea-tuxedo", "chelsea-mahogany", "workboot-wheat", "workboot-oxblood", "workboot-tuxedo", "duck-peyote", "duck-inkwell-after-hours", "duck-chocolate-cacao"] }
+  springsteen-sagging-roadworn: { name: "JEAN® SAGGING", color: "ROADWORN™", swatch: ["#6285b0"], shoes: ["black", "tobacco", "sneak01", "chelsea-tobacco", "chelsea-tuxedo", "chelsea-mahogany", "workboot-wheat", "workboot-oxblood", "workboot-tuxedo", "duck-peyote", "duck-inkwell-after-hours", "duck-chocolate-cacao"] }
+  springsteen-sagging-favorite-jeans: { name: "JEAN® SAGGING", color: "FAVORITE JEANS™", swatch: ["#86a6c4"], shoes: ["black", "tobacco", "sneak01", "chelsea-tobacco", "chelsea-tuxedo", "chelsea-mahogany", "workboot-wheat", "workboot-oxblood", "workboot-tuxedo", "duck-peyote", "duck-inkwell-after-hours", "duck-chocolate-cacao"] }
+  springsteen-sagging-the-jean: { name: "JEAN® SAGGING", color: "THE JEAN™", swatch: ["#3d5886"], shoes: ["black", "tobacco", "sneak01", "chelsea-tobacco", "chelsea-tuxedo", "chelsea-mahogany", "workboot-wheat", "workboot-oxblood", "workboot-tuxedo", "duck-peyote", "duck-inkwell-after-hours", "duck-chocolate-cacao"] }
+  springsteen-sagging-patent: { name: "JEAN® SAGGING", color: "PATENT™", swatch: ["#283b62"], shoes: ["black", "tobacco", "sneak01", "chelsea-tobacco", "chelsea-tuxedo", "chelsea-mahogany", "workboot-wheat", "workboot-oxblood", "workboot-tuxedo", "duck-peyote", "duck-inkwell-after-hours", "duck-chocolate-cacao"] }
+  springsteen-sagging-selvedge: { name: "JEAN® SAGGING", color: "SELVEDGE™", swatch: ["#161d3a"], shoes: ["black", "tobacco", "sneak01", "chelsea-tobacco", "chelsea-tuxedo", "chelsea-mahogany", "workboot-wheat", "workboot-oxblood", "workboot-tuxedo", "duck-peyote", "duck-inkwell-after-hours", "duck-chocolate-cacao"] }
+  watermelons-tomato-vine: { name: "WATERMELONS®", color: "TOMATO VINE", swatch: ["#3f7a55"], shoes: ["tobacco", "black", "brown", "sneak01", "chelsea-tobacco", "chelsea-tuxedo", "chelsea-mahogany", "workboot-wheat", "workboot-oxblood", "workboot-tuxedo", "duck-peyote", "duck-inkwell-after-hours", "duck-chocolate-cacao"] }
+  jean-mosaic-springsteen-good-blue: { name: "JEAN® MOSAIC", color: "SPRINGSTEEN/GOOD® BLUE", swatch: ["#37baf7", "#0000ff"], shoes: [] }
+  runway-marshmallow-mosaic-marshmallow-blaue: { name: "RUNWAY® MARSHMALLOW MOSAIC", color: "MARSHMALLOW/BLAUE", swatch: ["#f7f2ea", "#2468ff"], shoes: [] }
+  runway-cross-jean-unique: { name: "RUNWAY® CROSS JEAN", color: "UNIQUE", swatch: ["#0093d7", "#ffffff"], shoes: [] }
+shoes:
+  black: { name: "LOAFER®", color: "TUXEDO™", swatch: ["#1b1b1f"] }
+  brown: { name: "LOAFER®", color: "MAHOGANY™", swatch: ["#5a1e14"] }
+  tobacco: { name: "LOAFER®", color: "TOBACCO™", swatch: ["#b57a36"] }
+  sneak01: { name: "SNEAK01", color: "COTTON™/GOOD® BLUE", swatch: ["#f4f4f2", "#0000ff"] }
+  chelsea-tobacco: { name: "CHELSEA®", color: "TOBACCO™", swatch: ["#b57a36"] }
+  chelsea-tuxedo: { name: "CHELSEA®", color: "TUXEDO™", swatch: ["#1b1b1f"] }
+  chelsea-mahogany: { name: "CHELSEA®", color: "MAHOGANY™", swatch: ["#5a1e14"] }
+  workboot-wheat: { name: "WORKBOOT®", color: "WHEAT™", swatch: ["#c8913f"] }
+  workboot-oxblood: { name: "WORKBOOT®", color: "OXBLOOD™", swatch: ["#713a40"] }
+  workboot-tuxedo: { name: "WORKBOOT®", color: "TUXEDO™", swatch: ["#1b1b1f"] }
+  duck-peyote: { name: "DUCK BOOT®", color: "PEYOTE™/PEYOTE™", swatch: ["#c4b294", "#e4d9c6"] }
+  duck-inkwell-after-hours: { name: "DUCK BOOT®", color: "INKWELL™/AFTER HOURS™", swatch: ["#2f343c", "#16171d"] }
+  duck-chocolate-cacao: { name: "DUCK BOOT®", color: "CHOCOLATE™/CACAO™", swatch: ["#6e4631", "#3b2527"] }
