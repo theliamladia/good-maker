@@ -46,11 +46,15 @@ final class NpcStands {
             npc.data().setPersistent(NPC.Metadata.NAMEPLATE_VISIBLE, false);
             npc.setProtected(true);
             npc.getOrAddTrait(SkinTrait.class).setSkinPersistent("good-" + code, j.get("signature").getAsString(), j.get("value").getAsString());
-            npc.getOrAddTrait(LookClose.class).lookClose(true);
             npc.getOrAddTrait(Equipment.class);
             npc.spawn(at);
             p.sendMessage(ChatColor.BLUE + "GOOD® stand " + code + " is up: " + ChatColor.WHITE + name);
         }));
+    }
+
+    // Stands hold still: take head-tracking off any made by older versions.
+    static void stopLooking() {
+        for (NPC npc : CitizensAPI.getNPCRegistry()) if (npc.data().has(KEY) && npc.hasTrait(LookClose.class)) npc.removeTrait(LookClose.class);
     }
 
     // Nearest GOOD® NPC within 5 blocks; true if one was removed.

@@ -53,6 +53,8 @@ public final class GoodStands extends JavaPlugin implements TabCompleter {
     @Override public void onEnable() {
         tag = new NamespacedKey(this, "goodstand");
         saveDefaultConfig();
+        // Citizens loads its NPCs after plugins enable; tidy ours once the server is up.
+        Bukkit.getScheduler().runTaskLater(this, () -> { if (citizens()) NpcStands.stopLooking(); }, 100L);
         load();
         Objects.requireNonNull(getCommand("goodstand")).setTabCompleter(this);
         getLogger().info("Loaded " + tops.size() + " tops, " + bottoms.size() + " bottoms, " + shoes.size() + " shoes.");
