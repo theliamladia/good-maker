@@ -200,7 +200,7 @@
       return root;
     }
     function showTree(on) {
-      if (on && !tree) { tree = makeTree(); viewer.scene.add(tree); treeT = performance.now(); dropTree(); viewer.zoom = 0.52; }
+      if (on && !tree) { tree = makeTree(); viewer.scene.add(tree); treeT = performance.now(); dropTree(); viewer.zoom = 0.8; }
       if (!on && tree) { viewer.scene.remove(tree); tree = null; viewer.zoom = 0.85; }
     }
     // It falls in from above and settles with a small bounce.
