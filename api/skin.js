@@ -12,7 +12,11 @@ async function getJson(url) {
   return res.json();
 }
 
+const stand = require('./_stand');
+
 module.exports = async function handler(req, res) {
+  // /api/stand (MINECRAFT STAND codes) is rewritten here to stay under Vercel's function limit.
+  if (req.method === 'POST' || (req.query && req.query.stand)) return stand(req, res);
   const name = String((req.query && req.query.name) || '').trim();
   if (!NAME_RE.test(name)) {
     res.status(400).json({ error: 'invalid_name' });
