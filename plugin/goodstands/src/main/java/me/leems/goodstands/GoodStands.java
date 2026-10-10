@@ -3,6 +3,7 @@ package me.leems.goodstands;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Color;
+import org.bukkit.FluidCollisionMode;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
@@ -26,6 +27,7 @@ import org.bukkit.inventory.meta.trim.TrimPattern;
 import org.bukkit.persistence.PersistentDataType;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.util.EulerAngle;
+import org.bukkit.util.RayTraceResult;
 
 import java.io.InputStreamReader;
 import java.net.URLDecoder;
@@ -124,16 +126,15 @@ public final class GoodStands extends JavaPlugin implements TabCompleter {
                 for (Piece pc : m.values()) sender.sendMessage(ChatColor.WHITE + pc.id() + ChatColor.GRAY + "  " + pc.label());
             }
             case "remove" -> {
+                // The GOOD® stand you're looking at, up to 8 blocks away (walls block the look).
                 if (!(sender instanceof Player p)) { sender.sendMessage("Players only."); return true; }
-                Entity best = null; double bd = 25;
-                for (Entity e : p.getNearbyEntities(5, 5, 5)) {
-                    if (!(e instanceof ArmorStand) || !e.getPersistentDataContainer().has(tag, PersistentDataType.BYTE)) continue;
-                    double d = e.getLocation().distanceSquared(p.getLocation());
-                    if (d < bd) { bd = d; best = e; }
-                }
-                if (best == null && citizens() && NpcStands.removeNearest(p)) { sender.sendMessage(ChatColor.BLUE + "Removed the nearest GOOD® stand."); return true; }
-                if (best == null) sender.sendMessage(ChatColor.RED + "No GOOD® stand within 5 blocks.");
-                else { best.remove(); sender.sendMessage(ChatColor.BLUE + "Removed the nearest GOOD® stand."); }
+                boolean npcs = citizens();
+                RayTraceResult hit = p.getWorld().rayTrace(p.getEyeLocation(), p.getEyeLocation().getDirection(), 8,
+                        FluidCollisionMode.NEVER, true, 0.3, e -> e != p && (isStand(e) || (npcs && NpcStands.isStand(e))));
+                Entity e = hit == null ? null : hit.getHitEntity();
+                if (e == null) { sender.sendMessage(ChatColor.RED + "Look at a GOOD® stand (within 8 blocks) to remove it."); return true; }
+                if (isStand(e)) e.remove(); else NpcStands.destroy(e);
+                sender.sendMessage(ChatColor.BLUE + "Removed that GOOD® stand.");
             }
             case "reload" -> { load(); sender.sendMessage(ChatColor.BLUE + "GoodStands reloaded: " + tops.size() + " tops, " + bottoms.size() + " bottoms."); }
             default -> help(sender, label);
@@ -147,7 +148,7 @@ public final class GoodStands extends JavaPlugin implements TabCompleter {
         s.sendMessage(ChatColor.WHITE + "/" + l + " spawn <top|none> [bottom|none] [shoe] [skin]" + ChatColor.GRAY + " – dress a stand");
         s.sendMessage(ChatColor.WHITE + "/" + l + " look <link from THE MAKER> [skin]" + ChatColor.GRAY + " – a stand from a good.leems.me link");
         s.sendMessage(ChatColor.WHITE + "/" + l + " list [tops|bottoms|shoes]" + ChatColor.GRAY + " – what's available");
-        s.sendMessage(ChatColor.WHITE + "/" + l + " remove" + ChatColor.GRAY + " – remove the nearest GOOD® stand");
+        s.sendMessage(ChatColor.WHITE + "/" + l + " remove" + ChatColor.GRAY + " – remove the GOOD® stand you're looking at");
         s.sendMessage(ChatColor.WHITE + "/" + l + " reload" + ChatColor.GRAY + " – reload outfits.yml");
     }
 
@@ -176,6 +177,7 @@ public final class GoodStands extends JavaPlugin implements TabCompleter {
         at.setYaw(p.getLocation().getYaw() + 180); at.setPitch(0);
         return at;
     }
+    private boolean isStand(Entity e) { return e instanceof ArmorStand && e.getPersistentDataContainer().has(tag, PersistentDataType.BYTE); }
     String site() { return getConfig().getString("site", "https://good.leems.me").replaceAll("/+$", ""); }
     private boolean citizens() { return Bukkit.getPluginManager().isPluginEnabled("Citizens"); }
 

@@ -57,16 +57,14 @@ final class NpcStands {
         for (NPC npc : CitizensAPI.getNPCRegistry()) if (npc.data().has(KEY) && npc.hasTrait(LookClose.class)) npc.removeTrait(LookClose.class);
     }
 
-    // Nearest GOOD® NPC within 5 blocks; true if one was removed.
-    static boolean removeNearest(Player p) {
-        NPC best = null; double bd = 25;
-        for (NPC npc : CitizensAPI.getNPCRegistry()) {
-            if (!npc.isSpawned() || !npc.data().has(KEY) || npc.getEntity().getWorld() != p.getWorld()) continue;
-            double d = npc.getEntity().getLocation().distanceSquared(p.getLocation());
-            if (d < bd) { bd = d; best = npc; }
-        }
-        if (best == null) return false;
-        best.destroy();
-        return true;
+    // Is this entity one of our GOOD® NPC stands?
+    static boolean isStand(org.bukkit.entity.Entity e) {
+        NPC npc = CitizensAPI.getNPCRegistry().getNPC(e);
+        return npc != null && npc.data().has(KEY);
+    }
+
+    static void destroy(org.bukkit.entity.Entity e) {
+        NPC npc = CitizensAPI.getNPCRegistry().getNPC(e);
+        if (npc != null) npc.destroy();
     }
 }
