@@ -67,4 +67,9 @@ final class NpcStands {
         NPC npc = CitizensAPI.getNPCRegistry().getNPC(e);
         if (npc != null) npc.destroy();
     }
+
+    static void teleport(org.bukkit.entity.Entity e, Location at) {
+        NPC npc = CitizensAPI.getNPCRegistry().getNPC(e);
+        if (npc != null) npc.teleport(at, org.bukkit.event.player.PlayerTeleportEvent.TeleportCause.PLUGIN);
+    }
 }

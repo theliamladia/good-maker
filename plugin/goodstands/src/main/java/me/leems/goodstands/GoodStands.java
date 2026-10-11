@@ -125,16 +125,21 @@ public final class GoodStands extends JavaPlugin implements TabCompleter {
                 sender.sendMessage(ChatColor.BLUE + "" + ChatColor.BOLD + "GOOD® " + what.toUpperCase(Locale.ROOT) + ChatColor.GRAY + " (" + m.size() + ")");
                 for (Piece pc : m.values()) sender.sendMessage(ChatColor.WHITE + pc.id() + ChatColor.GRAY + "  " + pc.label());
             }
-            case "remove" -> {
-                // The GOOD® stand you're looking at, up to 8 blocks away (walls block the look).
+            case "remove", "center", "centre" -> {
+                // Acts on the GOOD® stand you're looking at, up to 8 blocks away (walls block the look).
                 if (!(sender instanceof Player p)) { sender.sendMessage("Players only."); return true; }
-                boolean npcs = citizens();
-                RayTraceResult hit = p.getWorld().rayTrace(p.getEyeLocation(), p.getEyeLocation().getDirection(), 8,
-                        FluidCollisionMode.NEVER, true, 0.3, e -> e != p && (isStand(e) || (npcs && NpcStands.isStand(e))));
-                Entity e = hit == null ? null : hit.getHitEntity();
-                if (e == null) { sender.sendMessage(ChatColor.RED + "Look at a GOOD® stand (within 8 blocks) to remove it."); return true; }
-                if (isStand(e)) e.remove(); else NpcStands.destroy(e);
-                sender.sendMessage(ChatColor.BLUE + "Removed that GOOD® stand.");
+                Entity e = targetStand(p);
+                if (e == null) { sender.sendMessage(ChatColor.RED + "Look at a GOOD® stand (within 8 blocks)."); return true; }
+                if (a[0].equalsIgnoreCase("remove")) {
+                    if (isStand(e)) e.remove(); else NpcStands.destroy(e);
+                    sender.sendMessage(ChatColor.BLUE + "Removed that GOOD® stand.");
+                } else {
+                    Location at = e.getLocation();
+                    at.setX(at.getBlockX() + 0.5); at.setZ(at.getBlockZ() + 0.5);
+                    at.setYaw(Math.round(at.getYaw() / 90f) * 90f); at.setPitch(0);
+                    if (isStand(e)) e.teleport(at); else NpcStands.teleport(e, at);
+                    sender.sendMessage(ChatColor.BLUE + "Centred that GOOD® stand.");
+                }
             }
             case "reload" -> { load(); sender.sendMessage(ChatColor.BLUE + "GoodStands reloaded: " + tops.size() + " tops, " + bottoms.size() + " bottoms."); }
             default -> help(sender, label);
@@ -148,6 +153,7 @@ public final class GoodStands extends JavaPlugin implements TabCompleter {
         s.sendMessage(ChatColor.WHITE + "/" + l + " spawn <top|none> [bottom|none] [shoe] [skin]" + ChatColor.GRAY + " – dress a stand");
         s.sendMessage(ChatColor.WHITE + "/" + l + " look <link from THE MAKER> [skin]" + ChatColor.GRAY + " – a stand from a good.leems.me link");
         s.sendMessage(ChatColor.WHITE + "/" + l + " list [tops|bottoms|shoes]" + ChatColor.GRAY + " – what's available");
+        s.sendMessage(ChatColor.WHITE + "/" + l + " center" + ChatColor.GRAY + " – snap the GOOD® stand you're looking at to the middle of its block");
         s.sendMessage(ChatColor.WHITE + "/" + l + " remove" + ChatColor.GRAY + " – remove the GOOD® stand you're looking at");
         s.sendMessage(ChatColor.WHITE + "/" + l + " reload" + ChatColor.GRAY + " – reload outfits.yml");
     }
@@ -177,6 +183,12 @@ public final class GoodStands extends JavaPlugin implements TabCompleter {
         at.setX(at.getBlockX() + 0.5); at.setY(at.getBlockY()); at.setZ(at.getBlockZ() + 0.5);
         at.setYaw(Math.round((p.getLocation().getYaw() + 180) / 90f) * 90f); at.setPitch(0);
         return at;
+    }
+    private Entity targetStand(Player p) {
+        boolean npcs = citizens();
+        RayTraceResult hit = p.getWorld().rayTrace(p.getEyeLocation(), p.getEyeLocation().getDirection(), 8,
+                FluidCollisionMode.NEVER, true, 0.3, e -> e != p && (isStand(e) || (npcs && NpcStands.isStand(e))));
+        return hit == null ? null : hit.getHitEntity();
     }
     private boolean isStand(Entity e) { return e instanceof ArmorStand && e.getPersistentDataContainer().has(tag, PersistentDataType.BYTE); }
     String site() { return getConfig().getString("site", "https://good.leems.me").replaceAll("/+$", ""); }
@@ -249,7 +261,7 @@ public final class GoodStands extends JavaPlugin implements TabCompleter {
     // ---------- Tab completion ----------
     @Override public List<String> onTabComplete(CommandSender s, Command c, String l, String[] a) {
         List<String> opts;
-        if (a.length == 1) opts = List.of("npc", "spawn", "look", "list", "remove", "reload");
+        if (a.length == 1) opts = List.of("npc", "spawn", "look", "list", "center", "remove", "reload");
         else if (a[0].equalsIgnoreCase("list") && a.length == 2) opts = List.of("tops", "bottoms", "shoes");
         else if (a[0].equalsIgnoreCase("spawn") && a.length == 2) opts = with("none", tops.keySet());
         else if (a[0].equalsIgnoreCase("spawn") && a.length == 3) opts = with("none", bottoms.keySet());
