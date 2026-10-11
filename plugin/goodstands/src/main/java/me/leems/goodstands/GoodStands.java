@@ -171,10 +171,11 @@ public final class GoodStands extends JavaPlugin implements TabCompleter {
         return q;
     }
 
-    // Two blocks in front of the player, facing them.
+    // Dead centre of the block two in front of the player, squared up to face them.
     static Location inFront(Player p) {
         Location at = p.getLocation().add(p.getLocation().getDirection().setY(0).normalize().multiply(2));
-        at.setYaw(p.getLocation().getYaw() + 180); at.setPitch(0);
+        at.setX(at.getBlockX() + 0.5); at.setY(at.getBlockY()); at.setZ(at.getBlockZ() + 0.5);
+        at.setYaw(Math.round((p.getLocation().getYaw() + 180) / 90f) * 90f); at.setPitch(0);
         return at;
     }
     private boolean isStand(Entity e) { return e instanceof ArmorStand && e.getPersistentDataContainer().has(tag, PersistentDataType.BYTE); }

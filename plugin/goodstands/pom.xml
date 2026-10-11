@@ -3,7 +3,7 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>me.leems</groupId>
   <artifactId>goodstands</artifactId>
-  <version>1.1.4</version>
+  <version>1.1.5</version>
   <name>GoodStands</name>
   <properties>
     <maven.compiler.release>21</maven.compiler.release>
