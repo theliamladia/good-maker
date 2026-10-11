@@ -314,6 +314,13 @@ window.OUTFITS = [
         swatch: ['#0000ff', '#0000ff'],
         long: { classic: 'outfits/doubbie-double-blue-classic.png', slim: 'outfits/doubbie-double-blue-slim.png' },
       },
+      {
+        // AMONG THE TREES®: the SHIRT® II COTTON/MAPLE LEAF CROPPIE® over a MAUVE tee with a TOMATO VINE G.
+        id: 'doubbie-cotton-mauve',
+        color: 'COTTON/MAUVE',
+        swatch: ['#ffffff', '#b48a9f'],
+        long: { classic: 'outfits/doubbie-cotton-mauve-classic.png', slim: 'outfits/doubbie-cotton-mauve-slim.png' },
+      },
     ],
   },
   {

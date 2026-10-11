@@ -29,6 +29,7 @@ tops:
   doubbie-good-blue: { name: "DOUBBIE® I", color: "GOOD® BLUE/COTTON", swatch: ["#0000ff", "#ffffff"] }
   doubbie-dust-pink: { name: "DOUBBIE® I", color: "DUST PINK/TOMATO VINE", swatch: ["#c98aa0", "#3f7a55"] }
   doubbie-double-blue: { name: "DOUBBIE® I", color: "GOOD® BLUE/GOOD® BLUE", swatch: ["#0000ff", "#0000ff"] }
+  doubbie-cotton-mauve: { name: "DOUBBIE® I", color: "COTTON/MAUVE", swatch: ["#ffffff", "#b48a9f"] }
   smiley-pumpkin-neon: { name: "SMILEY®", color: "PUMPKIN/NEON", swatch: ["#fda327", "#b5ff61"] }
   smiley-good-blue: { name: "SMILEY®", color: "GOOD® BLUE/COTTON", swatch: ["#0000ff", "#ffffff"] }
   smiley-safety-good-blue: { name: "SMILEY®", color: "SAFETY/GOOD® BLUE", swatch: ["#ff5a1f", "#0000ff"] }
