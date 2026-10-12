@@ -90,7 +90,9 @@ const FOLD = [
   [48, 48, 16, 16, -16, 0],  // left sleeve -> left arm
 ];
 function foldOverlay(img) {
-  const out = { width: img.width, height: img.height, data: new Uint8ClampedArray(img.data) };
+  // A real ImageData in the browser: the page draws state.user with putImageData.
+  const data = new Uint8ClampedArray(img.data);
+  const out = typeof ImageData === 'function' ? new ImageData(data, img.width, img.height) : { width: img.width, height: img.height, data };
   for (const [x0, y0, w, h, dx, dy] of FOLD) {
     if (y0 + h > img.height) continue; // 64×32 skins only have the hat
     for (let y = y0; y < y0 + h; y++) for (let x = x0; x < x0 + w; x++) {
