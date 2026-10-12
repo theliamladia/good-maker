@@ -643,7 +643,7 @@
 
   // ---------- Upload ----------
   function useSkin(data, name, isDemo) {
-    state.user = data;
+    state.user = SkinLib.foldOverlay(data); // outer-layer-only skins keep their face and arms
     state.userName = name;
     state.isDemo = isDemo;
     state.fromName = false; // set by the username form: only then can the look link carry the name

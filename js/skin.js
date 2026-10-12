@@ -76,6 +76,31 @@ function to64(img) {
   return out;
 }
 
+// Some skins draw everything on the outer layer and leave the base layer
+// empty (or full of holes). THE MAKER swaps the outer layer for clothes, so
+// those players would lose their face and arms. Copy each outer pixel down
+// into the base pixel under it wherever the base is see-through; skins with a
+// full base layer come back unchanged.
+const FOLD = [
+  [32, 0, 32, 16, -32, 0],   // hat -> head
+  [16, 32, 24, 16, 0, -16],  // jacket -> torso
+  [40, 32, 16, 16, 0, -16],  // right sleeve -> right arm
+  [0, 32, 16, 16, 0, -16],   // right pant -> right leg
+  [0, 48, 16, 16, 16, 0],    // left pant -> left leg
+  [48, 48, 16, 16, -16, 0],  // left sleeve -> left arm
+];
+function foldOverlay(img) {
+  const out = { width: img.width, height: img.height, data: new Uint8ClampedArray(img.data) };
+  for (const [x0, y0, w, h, dx, dy] of FOLD) {
+    if (y0 + h > img.height) continue; // 64×32 skins only have the hat
+    for (let y = y0; y < y0 + h; y++) for (let x = x0; x < x0 + w; x++) {
+      const o = (y * SIZE + x) * 4, b = ((y + dy) * SIZE + (x + dx)) * 4;
+      if (out.data[o + 3] > 0 && out.data[b + 3] < 255) out.data.copyWithin(b, o, o + 4);
+    }
+  }
+  return out;
+}
+
 // Skin tone = the lower-face colour that best matches the hands. Colours that
 // also cover the back/sides of the head are usually hair, so they're heavily
 // discounted unless the hands confirm them (e.g. furry/creature skins).
@@ -641,6 +666,6 @@ function tartanBoxers(pants) {
   return out;
 }
 
-const SkinLib = { tartanBoxers, baseUnderHoles, washPants, combineOutfit, waistRows, sampleSkinTone, mergeSkin, bodyParts, shadeTone, detectSlim, estimateHairRows, extractHair };
+const SkinLib = { foldOverlay, tartanBoxers, baseUnderHoles, washPants, combineOutfit, waistRows, sampleSkinTone, mergeSkin, bodyParts, shadeTone, detectSlim, estimateHairRows, extractHair };
 if (typeof module !== 'undefined') module.exports = SkinLib;
 else window.SkinLib = SkinLib;
