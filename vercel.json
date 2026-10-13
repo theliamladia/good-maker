@@ -1,7 +1,7 @@
 {
   "functions": {
     "api/ubiquity.js": {
-      "includeFiles": "api/_ubiquity/**"
+      "includeFiles": "api/{_ubiquity,_gud}/**"
     },
     "api/outfit.js": {
       "includeFiles": "api/_locked/**"

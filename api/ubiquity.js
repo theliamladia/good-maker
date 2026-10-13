@@ -1,4 +1,6 @@
-// Vercel serverless function: POST /api/ubiquity  { password, file? }
+// Vercel serverless function: POST /api/ubiquity  { password, file?, vault? }
+// vault 'gud' opens the GUD™ early views (api/_gud/, tools/gud-seal.js) with the
+// same scheme; it shares this function to stay under Vercel's function limit.
 // UBIQUITY® is locked. Its research lives in api/_ubiquity/ encrypted
 // (AES-256-GCM, key = scrypt of the password; see tools/ubiquity-seal.js).
 // The password is not stored anywhere: the key is derived from what was typed,
@@ -9,19 +11,19 @@ const fs = require('fs');
 const path = require('path');
 const crypto = require('crypto');
 
-const DIR = path.join(__dirname, '_ubiquity');
+const VAULTS = { ubiquity: path.join(__dirname, '_ubiquity'), gud: path.join(__dirname, '_gud') };
 const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
-let cfg = null;
-const keys = new Map(); // sha256(password) -> key, so each image isn't another scrypt
+const cfgs = {};
+const keys = new Map(); // vault + sha256(password) -> key, so each image isn't another scrypt
 
-function keyFor(pw) {
-  cfg ||= JSON.parse(fs.readFileSync(path.join(DIR, 'salt.json'), 'utf8'));
-  const h = crypto.createHash('sha256').update(pw).digest('hex');
+function keyFor(vault, pw) {
+  const cfg = (cfgs[vault] ||= JSON.parse(fs.readFileSync(path.join(VAULTS[vault], 'salt.json'), 'utf8')));
+  const h = vault + crypto.createHash('sha256').update(pw).digest('hex');
   if (!keys.has(h)) keys.set(h, crypto.scryptSync(pw, Buffer.from(cfg.salt, 'base64'), 32, { N: cfg.N, r: cfg.r, p: cfg.p, maxmem: cfg.maxmem }));
   return keys.get(h);
 }
-function open(name, key) {
-  const box = JSON.parse(fs.readFileSync(path.join(DIR, name), 'utf8'));
+function open(vault, name, key) {
+  const box = JSON.parse(fs.readFileSync(path.join(VAULTS[vault], name), 'utf8'));
   const d = crypto.createDecipheriv('aes-256-gcm', key, Buffer.from(box.iv, 'base64'));
   d.setAuthTag(Buffer.from(box.tag, 'base64'));
   return Buffer.concat([d.update(Buffer.from(box.data, 'base64')), d.final()]);
@@ -33,11 +35,12 @@ module.exports = async function handler(req, res) {
   let body = req.body;
   if (typeof body === 'string') { try { body = JSON.parse(body); } catch { body = {}; } }
   const pw = String((body && body.password) || '');
+  const vault = body && body.vault === 'gud' ? 'gud' : 'ubiquity';
   if (!pw || pw.length > 200) { await sleep(600); res.status(401).json({ error: 'locked' }); return; }
   let key, manifest;
   try {
-    key = keyFor(pw);
-    manifest = JSON.parse(open('index.enc', key).toString('utf8'));
+    key = keyFor(vault, pw);
+    manifest = JSON.parse(open(vault, 'index.enc', key).toString('utf8'));
   } catch {
     keys.clear();
     await sleep(700);
@@ -47,5 +50,5 @@ module.exports = async function handler(req, res) {
   if (!body.file) { res.status(200).json(manifest); return; }
   const f = manifest.files.find((x) => x.id === body.file);
   if (!f) { res.status(404).json({ error: 'file' }); return; }
-  res.status(200).json({ type: f.type, name: f.name, data: open(`${f.id}.enc`, key).toString('base64') });
+  res.status(200).json({ type: f.type, name: f.name, data: open(vault, `${f.id}.enc`, key).toString('base64') });
 };

@@ -25,7 +25,7 @@
     anim.finished.then(arrive).catch(() => {});
   }
   skip.onclick = arrive;
-  addEventListener('keydown', (e) => { if (e.key === ' ' || e.key === 'Enter' || e.key === 'Escape') arrive(); });
+  addEventListener('keydown', (e) => { if (e.target.closest && e.target.closest('input')) return; if (e.key === ' ' || e.key === 'Enter' || e.key === 'Escape') arrive(); });
 
   // ---------- Logo ----------
   // Metal Mania at 28px with hard edges, scaled up by CSS: 8-bit metal that still reads GUD.
@@ -102,6 +102,51 @@
     latin.classList.add('out');
     setTimeout(() => { li = (li + 1) % LATIN.length; latin.textContent = LATIN[li]; latin.classList.remove('out'); }, 380);
   }, 3600);
+
+  // ---------- Early views (password) ----------
+  // Nothing is in the page: the views arrive sealed from /api/ubiquity (vault "gud")
+  // only for the right password, and are drawn onto canvases (no image URLs).
+  const api = async (body) => {
+    const r = await fetch('/api/ubiquity', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ vault: 'gud', ...body }) });
+    if (!r.ok) throw new Error(String(r.status));
+    return r.json();
+  };
+  const form = $('pass'), views = $('views'), grid = $('grid');
+  let opened = false;
+  form.onsubmit = async (e) => {
+    e.preventDefault();
+    const password = $('pw').value.trim().toUpperCase();
+    if (!password) return;
+    form.classList.add('busy');
+    try {
+      const { files } = await api({ password });
+      if (!opened) {
+        opened = true;
+        grid.replaceChildren(...files.map((f) => {
+          const fig = document.createElement('figure'); fig.className = 'gd-card';
+          const cv = document.createElement('canvas');
+          const cap = document.createElement('figcaption'); cap.textContent = f.line;
+          const b = document.createElement('b'); b.textContent = f.name; cap.append(b);
+          fig.append(cv, cap);
+          api({ password, file: f.id }).then(async ({ data }) => {
+            const bytes = Uint8Array.from(atob(data), (ch) => ch.charCodeAt(0));
+            const bmp = await createImageBitmap(new Blob([bytes]));
+            cv.width = bmp.width; cv.height = bmp.height;
+            cv.getContext('2d').drawImage(bmp, 0, 0); bmp.close();
+          }).catch(() => {});
+          return fig;
+        }));
+      }
+      $('pw').value = '';
+      arrive();
+      views.hidden = false;
+    } catch {
+      form.classList.remove('no'); void form.offsetWidth; form.classList.add('no');
+    } finally { form.classList.remove('busy'); }
+  };
+  $('closeViews').onclick = () => { views.hidden = true; };
+  views.addEventListener('contextmenu', (e) => e.preventDefault());
+  addEventListener('keydown', (e) => { if (e.key === 'Escape' && !views.hidden) views.hidden = true; });
 
   // ---------- Countdown ----------
   const pad = (n) => String(n).padStart(2, '0');

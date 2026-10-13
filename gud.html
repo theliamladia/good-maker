@@ -60,6 +60,10 @@
           <div><b id="cd-m">00</b><span>MIN</span></div>
           <div><b id="cd-s">00</b><span>SEC</span></div>
         </div>
+        <form class="gd-pass" id="pass" autocomplete="off">
+          <input id="pw" type="password" aria-label="Password" placeholder="PASSWORD" spellcheck="false" autocapitalize="characters">
+          <button type="submit" aria-label="Enter">↵</button>
+        </form>
       </div>
     </section>
   </div>
@@ -69,6 +73,12 @@
   <p lang="la">HAEC COLLABORATIO INTER GOOD® ET GUD™ A GOOD® CREATIVE ET GOOD® DESIGN NEQUE PROBATA NEQUE SANCITA EST: MERA EXERCITATIO ARTIS, IN SOCIETATE ET TOLERANTIA.</p>
   <p>A COLLABORATION BETWEEN GOOD® AND GUD™. NOT CONDONED BY GOOD® CREATIVE NOR GOOD® DESIGN: PURELY A CREATIVE EXERCISE IN COLLABORATION AND TOLERANCE.</p>
 </footer>
+
+<!-- Locked: the views arrive from /api/ubiquity (vault "gud") only after the password. -->
+<section class="gd-views" id="views" hidden aria-label="GUD™ views">
+  <header><h2>GUD™ · EARLY VIEWS</h2><button type="button" id="closeViews" aria-label="Close">✕</button></header>
+  <div class="gd-grid" id="grid"></div>
+</section>
 
 <div class="gd-crt" aria-hidden="true"></div>
 <button type="button" class="gd-skip" id="skip">SKIP ↓</button>
