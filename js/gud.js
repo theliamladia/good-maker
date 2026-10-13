@@ -84,6 +84,25 @@
     e.addEventListener('animationend', () => e.remove());
   }, 140);
 
+  // ---------- Latin ----------
+  // Incantations under the title, one at a time.
+  const LATIN = [
+    'EX CAELO IN INFERNUM.',                    // from the sky into hell
+    'BONUM ET MALUM, UNA VESTIS.',              // good and evil, one garment
+    'GOOD® ET GUD™: DUO NOMINA, UNA FLAMMA.',   // two names, one flame
+    'QUOD SUPRA CAERULEUM EST, INFRA ARDET.',   // what is blue above burns below
+    'NON OMNE QUOD ARDET CONSUMITUR.',          // not everything that burns is consumed
+    'DESCENDITE. INDUITE. ARDETE.',             // descend. get dressed. burn.
+    'IN TOLERANTIA, FLAMMA.',                   // in tolerance, flame
+    'SURGIT.',                                  // it rises
+  ];
+  const latin = $('latin');
+  let li = 0;
+  if (!reduce) setInterval(() => {
+    latin.classList.add('out');
+    setTimeout(() => { li = (li + 1) % LATIN.length; latin.textContent = LATIN[li]; latin.classList.remove('out'); }, 380);
+  }, 3600);
+
   // ---------- Countdown ----------
   const pad = (n) => String(n).padStart(2, '0');
   function tick() {
