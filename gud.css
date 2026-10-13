@@ -1,0 +1,92 @@
+/* GUD™: from the OG GOOD® sky down to hell. Heavy CRT on everything. */
+* { box-sizing: border-box; }
+html, body { margin: 0; height: 100%; }
+body.gd { overflow: hidden; background: #1a0000; color: #ff2a1a; font-family: 'Press Start 2P', monospace; }
+
+.gd-view { position: fixed; inset: 0; overflow: hidden; }
+.gd-world { position: absolute; left: 0; right: 0; top: 0; height: 400vh; will-change: transform; }
+.gd-world > section { position: relative; height: 100vh; overflow: hidden; }
+
+/* 1. The OG sky (the homepage before GOOD® BLUE) */
+.gd-sky { background: linear-gradient(to bottom, #3f8fe8 0%, #7cbcf5 55%, #cfe8ff 100%); }
+.gd-cloud { position: absolute; background: #fff; border-radius: 999px; filter: blur(1px); opacity: 0.92; animation: gd-drift linear infinite; }
+.gd-cloud::before, .gd-cloud::after { content: ''; position: absolute; background: inherit; border-radius: 50%; }
+.gd-cloud::before { width: 55%; height: 180%; left: 12%; bottom: 20%; }
+.gd-cloud::after { width: 40%; height: 140%; right: 14%; bottom: 25%; }
+.gd-cloud-1 { width: 260px; height: 64px; top: 14%; animation-duration: 90s; animation-delay: -20s; }
+.gd-cloud-2 { width: 180px; height: 46px; top: 36%; animation-duration: 120s; animation-delay: -70s; opacity: 0.8; }
+.gd-cloud-3 { width: 320px; height: 78px; top: 62%; animation-duration: 105s; animation-delay: -45s; }
+.gd-cloud-4 { width: 140px; height: 38px; top: 82%; animation-duration: 140s; animation-delay: -110s; opacity: 0.75; }
+@keyframes gd-drift { from { transform: translateX(-40vw); } to { transform: translateX(140vw); } }
+
+/* 2-3. Sinking: the sky burns out, then the dark */
+.gd-dusk { background: linear-gradient(to bottom, #cfe8ff 0%, #f6c08a 30%, #e2643a 65%, #8e1c12 100%); }
+.gd-deep { background: linear-gradient(to bottom, #8e1c12 0%, #4a0606 45%, #1a0000 100%); }
+
+/* 4. Hell */
+.gd-hell { background: radial-gradient(ellipse 120% 70% at 50% 110%, #ff3a00 0%, #8a0d00 30%, #2a0000 60%, #120000 100%); }
+.gd-fire { position: absolute; left: 0; right: 0; bottom: 0; width: 100%; height: 30vh; image-rendering: pixelated; image-rendering: crisp-edges; }
+.gd-embers { position: absolute; inset: 0; pointer-events: none; }
+.gd-ember { position: absolute; bottom: 20vh; width: 4px; height: 4px; background: #ffb21a; box-shadow: 0 0 6px #ff5a00; animation: gd-rise linear forwards; }
+@keyframes gd-rise { to { transform: translate(var(--dx), -85vh); opacity: 0; } }
+
+.gd-title { position: absolute; left: 0; right: 0; top: 9vh; z-index: 2; text-align: center; opacity: 0; transition: opacity 0.2s; }
+.gd-title.on { opacity: 1; animation: gd-flicker 4s steps(1) infinite; }
+.gd-logo {
+  position: relative; margin: 0; font-family: 'Jacquard 24', 'Press Start 2P', serif; font-weight: 400; line-height: 0.85;
+  font-size: clamp(6rem, 24vw, 17rem); color: #ff1a10; letter-spacing: 0.02em;
+  text-shadow: 3px 0 rgba(0, 255, 255, 0.35), -3px 0 rgba(255, 0, 60, 0.9), 0 0 18px #ff1a00, 0 0 48px #ff3c00, 0 0 110px #b00000;
+}
+/* RGB-split ghost that jitters, like a bad signal */
+.gd-logo span { position: relative; display: inline-block; }
+.gd-logo sup { font-family: 'Press Start 2P', monospace; font-size: 0.14em; vertical-align: top; position: relative; top: 0.5em; margin-left: 0.08em; }
+.gd-logo span::after { content: attr(data-text); position: absolute; inset: 0; color: #ff1a10; opacity: 0.55; mix-blend-mode: screen; clip-path: inset(40% 0 45% 0); animation: gd-glitch 2.6s steps(2) infinite; }
+@keyframes gd-glitch {
+  0%, 82%, 100% { transform: translateX(0); clip-path: inset(40% 0 45% 0); }
+  84% { transform: translateX(-8px); clip-path: inset(18% 0 70% 0); }
+  88% { transform: translateX(10px); clip-path: inset(62% 0 22% 0); }
+  92% { transform: translateX(-4px); clip-path: inset(30% 0 55% 0); }
+}
+.gd-sub { margin: 2.2rem 0 0; font-size: clamp(0.62rem, 1.7vw, 1rem); letter-spacing: 0.22em; color: #ff3b2f; text-shadow: 2px 0 rgba(0, 255, 255, 0.3), -2px 0 rgba(255, 0, 0, 0.8), 0 0 12px #ff2000; }
+.gd-count { display: flex; justify-content: center; gap: clamp(10px, 3vw, 28px); margin-top: 2.6rem; }
+.gd-count div { display: flex; flex-direction: column; align-items: center; gap: 10px; min-width: 4.2em; padding: 14px 10px 12px; border: 3px solid #ff2a1a; background: rgba(30, 0, 0, 0.55); box-shadow: 0 0 18px rgba(255, 30, 0, 0.45), inset 0 0 14px rgba(255, 30, 0, 0.25); }
+.gd-count b { font-weight: 400; font-size: clamp(1.1rem, 3.6vw, 2.2rem); color: #ff2a1a; text-shadow: 2px 0 rgba(0, 255, 255, 0.3), -2px 0 rgba(255, 0, 0, 0.9), 0 0 14px #ff2000; }
+.gd-count span { font-size: clamp(0.42rem, 1vw, 0.6rem); letter-spacing: 0.2em; color: #ff8a6a; }
+.gd-count.done { font-size: clamp(0.9rem, 3vw, 1.6rem); letter-spacing: 0.2em; text-shadow: 0 0 14px #ff2000; }
+@keyframes gd-flicker { 0%, 100% { opacity: 1; } 41% { opacity: 0.86; } 42% { opacity: 1; } 77% { opacity: 0.9; } 78% { opacity: 1; } }
+
+/* Heavy CRT: scanlines, an RGB aperture grille, vignette, a rolling bar, flicker */
+.gd-crt { position: fixed; inset: 0; z-index: 10; pointer-events: none; animation: gd-crt-flicker 0.12s steps(2) infinite; }
+.gd-crt::before {
+  content: ''; position: absolute; inset: 0;
+  background:
+    repeating-linear-gradient(to bottom, rgba(0, 0, 0, 0.42) 0 1px, transparent 1px 3px),
+    repeating-linear-gradient(to right, rgba(255, 0, 0, 0.07) 0 1px, rgba(0, 255, 0, 0.05) 1px 2px, rgba(0, 0, 255, 0.07) 2px 3px);
+}
+.gd-crt::after {
+  content: ''; position: absolute; inset: 0;
+  background:
+    linear-gradient(to bottom, transparent 0%, rgba(255, 255, 255, 0.06) 48%, rgba(255, 255, 255, 0.12) 50%, rgba(255, 255, 255, 0.06) 52%, transparent 100%) 0 -100vh / 100% 30vh no-repeat,
+    radial-gradient(ellipse 85% 80% at 50% 50%, transparent 55%, rgba(0, 0, 0, 0.75) 100%);
+  animation: gd-roll 7s linear infinite;
+}
+@keyframes gd-roll { to { background-position: 0 130vh, 0 0; } }
+@keyframes gd-crt-flicker { 50% { opacity: 0.94; } }
+
+.gd-back, .gd-skip {
+  position: fixed; z-index: 11; font-family: 'Press Start 2P', monospace; font-size: 0.6rem; letter-spacing: 0.14em;
+  color: #fff; text-decoration: none; background: rgba(0, 0, 0, 0.35); border: 2px solid currentColor; padding: 8px 10px; cursor: pointer;
+}
+.gd-back { top: 16px; left: 16px; }
+.gd-skip { bottom: 16px; right: 16px; transition: opacity 0.4s; }
+.gd-skip.gone { opacity: 0; pointer-events: none; }
+.gd.arrived .gd-back { color: #ff3b2f; }
+
+@media (max-width: 600px) {
+  .gd-title { top: 16vh; }
+  .gd-count { gap: 8px; }
+  .gd-count div { min-width: 0; padding: 10px 6px 8px; border-width: 2px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .gd-cloud, .gd-crt, .gd-crt::after, .gd-logo::after, .gd-title.on { animation: none; }
+}
