@@ -143,10 +143,10 @@ bottoms:
   jean-mosaic-springsteen-good-blue: { name: "JEAN® MOSAIC", color: "SPRINGSTEEN/GOOD® BLUE", swatch: ["#37baf7", "#0000ff"], shoes: [] }
   runway-marshmallow-mosaic-marshmallow-blaue: { name: "RUNWAY® MARSHMALLOW MOSAIC", color: "MARSHMALLOW/BLAUE", swatch: ["#f7f2ea", "#2468ff"], shoes: [] }
   runway-cross-jean-unique: { name: "RUNWAY® CROSS JEAN", color: "UNIQUE", swatch: ["#0093d7", "#ffffff"], shoes: [] }
-  deep-jean-trouser-brown: { name: "DEEP END® JEAN®", color: "TROUSER BROWN", swatch: ["#86341f"], shoes: [] }
-  deep-jean-deep-teal: { name: "DEEP END® JEAN®", color: "DEEP TEAL", swatch: ["#0f7fa0"], shoes: [] }
-  deep-jean-anchor-blue: { name: "DEEP END® JEAN®", color: "ANCHOR BLUE", swatch: ["#4a40d8"], shoes: [] }
-  deep-jort-seafoam-green: { name: "DEEP END® JORT®", color: "SEAFOAM GREEN", swatch: ["#3a9a0a"], shoes: [] }
+  deep-jean-trouser-brown: { name: "DEEP END® JEAN®", color: "TROUSER BROWN", swatch: ["#86341f"], shoes: ["black", "brown", "tobacco", "sneak01", "chelsea-tobacco", "chelsea-tuxedo", "chelsea-mahogany", "workboot-wheat", "workboot-oxblood", "workboot-tuxedo", "duck-peyote", "duck-inkwell-after-hours", "duck-chocolate-cacao"] }
+  deep-jean-deep-teal: { name: "DEEP END® JEAN®", color: "DEEP TEAL", swatch: ["#0f7fa0"], shoes: ["black", "brown", "tobacco", "sneak01", "chelsea-tobacco", "chelsea-tuxedo", "chelsea-mahogany", "workboot-wheat", "workboot-oxblood", "workboot-tuxedo", "duck-peyote", "duck-inkwell-after-hours", "duck-chocolate-cacao"] }
+  deep-jean-anchor-blue: { name: "DEEP END® JEAN®", color: "ANCHOR BLUE", swatch: ["#4a40d8"], shoes: ["black", "brown", "tobacco", "sneak01", "chelsea-tobacco", "chelsea-tuxedo", "chelsea-mahogany", "workboot-wheat", "workboot-oxblood", "workboot-tuxedo", "duck-peyote", "duck-inkwell-after-hours", "duck-chocolate-cacao"] }
+  deep-jort-seafoam-green: { name: "DEEP END® JORT®", color: "SEAFOAM GREEN", swatch: ["#3a9a0a"], shoes: ["black", "brown", "tobacco", "sneak01", "chelsea-tobacco", "chelsea-tuxedo", "chelsea-mahogany", "workboot-wheat", "workboot-oxblood", "workboot-tuxedo", "duck-peyote", "duck-inkwell-after-hours", "duck-chocolate-cacao"] }
 shoes:
   black: { name: "LOAFER®", color: "TUXEDO™", swatch: ["#1b1b1f"] }
   brown: { name: "LOAFER®", color: "MAHOGANY™", swatch: ["#5a1e14"] }

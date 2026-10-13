@@ -874,6 +874,11 @@ const WASHES = [
 ];
 const washes = (kind) => WASHES.map((w) => ({ swatch: w.wash, ...w, id: `${kind}-${w.id}` }));
 
+// DEEP END® bottoms come in every shoe the JEAN® does.
+const deepShoes = (look) => Object.fromEntries(['black', 'brown', 'tobacco', 'sneak01', 'chelsea-tobacco', 'chelsea-tuxedo', 'chelsea-mahogany',
+  'workboot-wheat', 'workboot-oxblood', 'workboot-tuxedo', 'duck-peyote', 'duck-inkwell-after-hours', 'duck-chocolate-cacao']
+  .map((k) => [k, `outfits/deep/pants-${look}-${k}.png`]));
+
 window.PANTS = [
   {
     // AMONG THE TREES® (GOOD® CAPSULE Nº2). Cargo pocket on each outer leg, contrast waistband.
@@ -1423,21 +1428,21 @@ window.PANTS = [
     locked: true,
     colors: [{ id: 'runway-cross-jean-unique', color: 'UNIQUE', swatch: ['#0093d7', '#ffffff'], src: 'api/outfit?id=runway-cross-jean' }],
   },
-  // DEEP END® bottoms (shoes drawn in, so no Shoe control).
+  // DEEP END® bottoms, in every shoe (deepShoes below).
   {
     id: 'deep-end-jean',
     name: 'DEEP END® JEAN®',
     drop: 'deep',
     colors: [
-      { id: 'deep-jean-trouser-brown', color: 'TROUSER BROWN', swatch: '#86341f', src: 'outfits/deep/pants-square.png' },
-      { id: 'deep-jean-deep-teal', color: 'DEEP TEAL', swatch: '#0f7fa0', src: 'outfits/deep/pants-drop.png' },
-      { id: 'deep-jean-anchor-blue', color: 'ANCHOR BLUE', swatch: '#4a40d8', src: 'outfits/deep/pants-claw.png' },
+      { id: 'deep-jean-trouser-brown', color: 'TROUSER BROWN', swatch: '#86341f', shoes: deepShoes('square') },
+      { id: 'deep-jean-deep-teal', color: 'DEEP TEAL', swatch: '#0f7fa0', shoes: deepShoes('drop') },
+      { id: 'deep-jean-anchor-blue', color: 'ANCHOR BLUE', swatch: '#4a40d8', shoes: deepShoes('claw') },
     ],
   },
   {
     id: 'deep-end-jort',
     name: 'DEEP END® JORT®',
     drop: 'deep',
-    colors: [{ id: 'deep-jort-seafoam-green', color: 'SEAFOAM GREEN', swatch: '#3a9a0a', src: 'outfits/deep/pants-star.png' }],
+    colors: [{ id: 'deep-jort-seafoam-green', color: 'SEAFOAM GREEN', swatch: '#3a9a0a', shoes: deepShoes('star') }],
   },
 ];
