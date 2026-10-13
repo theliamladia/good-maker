@@ -70,6 +70,8 @@ body.gd { overflow: hidden; background: #1a0000; color: #ff2a1a; font-family: 'P
 .gd-views h2 { margin: 0; font-size: clamp(0.6rem, 1.4vw, 0.85rem); letter-spacing: 0.22em; color: #ff2a1a; text-shadow: 0 0 10px #ff2000; }
 .gd-views header button { font: 0.8rem 'Press Start 2P', monospace; color: #ff3b2f; background: none; border: 2px solid currentColor; padding: 6px 9px; cursor: pointer; }
 .gd-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 440px), 1fr)); gap: 22px; }
+.gd-group { grid-column: 1 / -1; margin: 18px 0 0; font-size: 0.6rem; font-weight: 400; letter-spacing: 0.3em; color: #ff8a6a; border-bottom: 1px solid #5a0d08; padding-bottom: 10px; }
+.gd-group:first-child { margin-top: 0; }
 .gd-card { margin: 0; padding: 16px 14px 14px; border: 2px solid #5a0d08; background: radial-gradient(ellipse at 50% 120%, #3a0400, #140000 70%); user-select: none; -webkit-user-select: none; }
 .gd-card canvas { display: block; width: 100%; height: auto; pointer-events: none; }
 .gd-card figcaption { margin-top: 12px; font-size: 0.55rem; letter-spacing: 0.2em; color: #ff8a6a; }

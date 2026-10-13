@@ -122,7 +122,13 @@
       const { files } = await api({ password });
       if (!opened) {
         opened = true;
-        grid.replaceChildren(...files.map((f) => {
+        let group = null;
+        grid.replaceChildren(...files.flatMap((f) => {
+          const out = [];
+          if (f.group && f.group !== group) {
+            group = f.group;
+            const h = document.createElement('h3'); h.className = 'gd-group'; h.textContent = group; out.push(h);
+          }
           const fig = document.createElement('figure'); fig.className = 'gd-card';
           const cv = document.createElement('canvas');
           const cap = document.createElement('figcaption'); cap.textContent = f.line;
@@ -134,7 +140,8 @@
             cv.width = bmp.width; cv.height = bmp.height;
             cv.getContext('2d').drawImage(bmp, 0, 0); bmp.close();
           }).catch(() => {});
-          return fig;
+          out.push(fig);
+          return out;
         }));
       }
       $('pw').value = '';

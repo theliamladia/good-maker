@@ -1,6 +1,6 @@
 // Seal the GUD™ early views for /gud.
 //   GUD_PASSWORD=... node tools/gud-seal.js <folder>
-// <folder> holds content.json ({ pieces: [{ line, name, img }] }) and the images
+// <folder> holds content.json ({ pieces: [{ group, line, name, img }] }) and the images
 // it names. Same scheme as tools/ubiquity-seal.js: AES-256-GCM under a scrypt
 // key from the password, written to api/_gud/. The password is never stored;
 // api/ubiquity.js (vault "gud") derives the key from what the visitor types.
@@ -27,7 +27,7 @@ fs.mkdirSync(OUT, { recursive: true });
 const files = content.pieces.map((p, i) => {
   const id = `f${i}`;
   fs.writeFileSync(path.join(OUT, `${id}.enc`), seal(fs.readFileSync(path.join(dir, p.img))));
-  return { id, line: p.line, name: p.name, type: 'image/png' };
+  return { id, group: p.group, line: p.line, name: p.name, type: 'image/png' };
 });
 fs.writeFileSync(path.join(OUT, 'index.enc'), seal(Buffer.from(JSON.stringify({ files }))));
 fs.writeFileSync(path.join(OUT, 'salt.json'), JSON.stringify({ salt: salt.toString('base64'), ...SCRYPT }));
