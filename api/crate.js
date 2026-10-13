@@ -1,7 +1,7 @@
 // Vercel serverless function: the GOOD® CRATE.
 //   GET  /api/crate                     -> { price, refund, goldOdds, items: [{ id, name, color, tier, pct, pulled }] }
 //   POST /api/crate { action: 'open' }  -> { roll: { id, item, serial, gold, dup }, coins }
-//   POST /api/crate { action: 'reset' } -> owner only: clears the owner's pulls and every serial counter (testing)
+//   POST /api/crate { action: 'reset' } -> owner only: clears the owner's own pulls (testing; serials are never reused)
 // Signed in only. Opening costs 5 GOOD® COINS; the roll happens here, never on
 // the page. Every roll is serialized per item (GD-001, GD-002, ...) and added to
 // the account's inventory (user:<uid>:inv). A piece you already had refunds 2.
@@ -21,6 +21,36 @@ function pick(odds) {
 }
 const serialOf = (n) => `GD-${String(n).padStart(3, '0')}`;
 
+// One-time repair: no two copies of a piece may share a serial. The earliest
+// pull keeps it; later ones move to the next free number. Every counter then
+// sits at the highest serial held, so new pulls can't reuse one.
+async function dedupeSerials() {
+  if (!(await redis('SET', 'fix:serials-dedupe-1', 1, 'NX'))) return;
+  const keys = [];
+  let cursor = '0';
+  do { const [next, batch] = await redis('SCAN', cursor, 'MATCH', 'user:*:inv', 'COUNT', 200); cursor = String(next); keys.push(...batch); } while (cursor !== '0');
+  const byItem = {};
+  for (const k of keys) for (const r of (await redis('LRANGE', k, 0, -1)) || []) {
+    const e = JSON.parse(r);
+    if (e.serial === 'GD-999') continue;
+    (byItem[e.item] ||= []).push({ k, e });
+  }
+  for (const [item, list] of Object.entries(byItem)) {
+    let top = Math.max(0, ...list.map(({ e }) => +e.serial.slice(3)));
+    const seen = new Set();
+    for (const { k, e } of list.sort((a, b) => a.e.at.localeCompare(b.e.at))) {
+      if (!seen.has(e.serial)) { seen.add(e.serial); continue; }
+      const serial = serialOf(++top);
+      const cur = (await redis('LRANGE', k, 0, -1)) || [];
+      const i = cur.findIndex((r) => JSON.parse(r).id === e.id);
+      if (i >= 0) await redis('LSET', k, i, JSON.stringify({ ...e, serial }));
+      seen.add(serial);
+    }
+    const n = +(await redis('GET', `crate:serial:${item}`)) || 0;
+    if (n < top) await redis('SET', `crate:serial:${item}`, top);
+  }
+}
+
 module.exports = async function handler(req, res) {
   res.setHeader('Cache-Control', 'no-store');
   // Owner only: who owns which serials (account names, never emails).
@@ -28,6 +58,7 @@ module.exports = async function handler(req, res) {
     try {
       const me = configured() && await currentUser(req);
       if (!isOwner(me)) { res.status(403).json({ error: 'owner_only' }); return; }
+      await dedupeSerials();
       const keys = [];
       let cursor = '0';
       do { const [next, batch] = await redis('SCAN', cursor, 'MATCH', 'user:*:inv', 'COUNT', 200); cursor = String(next); keys.push(...batch); } while (cursor !== '0');
@@ -74,9 +105,10 @@ module.exports = async function handler(req, res) {
     if (!me) { res.status(401).json({ error: 'signed_out' }); return; }
     const action = parseBody(req).action;
     if (action === 'reset' && isOwner(me)) {
-      // Keeps the owner's GD-999 set; clears every other pull and resets all serial counters.
+      // Keeps the owner's GD-999 set and clears the owner's other pulls. Serial
+      // counters are never rewound: other accounts still hold those numbers.
       const keep = ((await redis('LRANGE', `user:${me.uid}:inv`, 0, -1)) || []).filter((r) => JSON.parse(r).serial === 'GD-999');
-      await redis('DEL', `user:${me.uid}:inv`, `user:${me.uid}:owned`, ...Object.keys(ITEMS).map((id) => `crate:serial:${id}`));
+      await redis('DEL', `user:${me.uid}:inv`, `user:${me.uid}:owned`);
       for (const r of keep.reverse()) { await redis('LPUSH', `user:${me.uid}:inv`, r); await redis('SADD', `user:${me.uid}:owned`, JSON.parse(r).item); }
       // Test pulls don't keep crate achievements either.
       if ((await redis('GET', 'ach:weewy-sowwy:first')) === me.uid) await redis('DEL', 'ach:weewy-sowwy:first');
@@ -84,6 +116,7 @@ module.exports = async function handler(req, res) {
       res.status(200).json({ ok: true }); return;
     }
     if (action !== 'open') { res.status(400).json({ error: 'action' }); return; }
+    await dedupeSerials();
     if (await overLimit(req, `crate:${me.uid}`, 20)) { res.status(429).json({ error: 'slow_down' }); return; }
     // One open at a time per account, so coins can't be spent twice.
     const lock = `crate:lock:${me.uid}`;
