@@ -32,21 +32,14 @@ body.gd { overflow: hidden; background: #1a0000; color: #ff2a1a; font-family: 'P
 
 .gd-title { position: absolute; left: 0; right: 0; top: 9vh; z-index: 2; text-align: center; opacity: 0; transition: opacity 0.2s; }
 .gd-title.on { opacity: 1; animation: gd-flicker 4s steps(1) infinite; }
-.gd-logo {
-  position: relative; margin: 0; font-family: 'Jacquard 24', 'Press Start 2P', serif; font-weight: 400; line-height: 0.85;
-  font-size: clamp(6rem, 24vw, 17rem); color: #ff1a10; letter-spacing: 0.02em;
-  text-shadow: 3px 0 rgba(0, 255, 255, 0.35), -3px 0 rgba(255, 0, 60, 0.9), 0 0 18px #ff1a00, 0 0 48px #ff3c00, 0 0 110px #b00000;
-}
-/* RGB-split ghost that jitters, like a bad signal */
-.gd-logo span { position: relative; display: inline-block; }
-.gd-logo sup { font-family: 'Press Start 2P', monospace; font-size: 0.14em; vertical-align: top; position: relative; top: 0.5em; margin-left: 0.08em; }
-.gd-logo span::after { content: attr(data-text); position: absolute; inset: 0; color: #ff1a10; opacity: 0.55; mix-blend-mode: screen; clip-path: inset(40% 0 45% 0); animation: gd-glitch 2.6s steps(2) infinite; }
-@keyframes gd-glitch {
-  0%, 82%, 100% { transform: translateX(0); clip-path: inset(40% 0 45% 0); }
-  84% { transform: translateX(-8px); clip-path: inset(18% 0 70% 0); }
-  88% { transform: translateX(10px); clip-path: inset(62% 0 22% 0); }
-  92% { transform: translateX(-4px); clip-path: inset(30% 0 55% 0); }
-}
+.gd-logo { position: relative; margin: 0; line-height: 0; color: #ff1a10; display: inline-flex; align-items: flex-start; }
+/* GUD drawn small in Metal Mania and blown up with hard pixels (js/gud.js) */
+.gd-logo canvas { width: min(78vw, 540px); height: auto; image-rendering: pixelated; image-rendering: crisp-edges;
+  filter: drop-shadow(3px 0 rgba(0, 255, 255, 0.35)) drop-shadow(-3px 0 rgba(255, 0, 60, 0.9)) drop-shadow(0 0 14px #ff1a00) drop-shadow(0 0 40px #ff3c00);
+  animation: gd-glitch 2.6s steps(2) infinite; }
+@keyframes gd-glitch { 0%, 82%, 100% { transform: translateX(0); } 84% { transform: translateX(-7px) skewX(-4deg); } 88% { transform: translateX(9px); } 92% { transform: translateX(-3px); } }
+.gd-logo sup { font-family: 'Press Start 2P', monospace; font-size: clamp(0.8rem, 2.2vw, 1.6rem); line-height: 1; margin: 1.4em 0 0 0.2em; text-shadow: -2px 0 rgba(255, 0, 60, 0.9), 0 0 12px #ff1a00; }
+.gd-vh { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
 .gd-sub { margin: 2.2rem 0 0; font-size: clamp(0.62rem, 1.7vw, 1rem); letter-spacing: 0.22em; color: #ff3b2f; text-shadow: 2px 0 rgba(0, 255, 255, 0.3), -2px 0 rgba(255, 0, 0, 0.8), 0 0 12px #ff2000; }
 .gd-count { display: flex; justify-content: center; gap: clamp(10px, 3vw, 28px); margin-top: 2.6rem; }
 .gd-count div { display: flex; flex-direction: column; align-items: center; gap: 10px; min-width: 4.2em; padding: 14px 10px 12px; border: 3px solid #ff2a1a; background: rgba(30, 0, 0, 0.55); box-shadow: 0 0 18px rgba(255, 30, 0, 0.45), inset 0 0 14px rgba(255, 30, 0, 0.25); }
@@ -88,5 +81,5 @@ body.gd { overflow: hidden; background: #1a0000; color: #ff2a1a; font-family: 'P
   .gd-count div { min-width: 0; padding: 10px 6px 8px; border-width: 2px; }
 }
 @media (prefers-reduced-motion: reduce) {
-  .gd-cloud, .gd-crt, .gd-crt::after, .gd-logo::after, .gd-title.on { animation: none; }
+  .gd-cloud, .gd-crt, .gd-crt::after, .gd-logo canvas, .gd-title.on { animation: none; }
 }

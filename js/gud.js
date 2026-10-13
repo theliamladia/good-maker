@@ -27,6 +27,20 @@
   skip.onclick = arrive;
   addEventListener('keydown', (e) => { if (e.key === ' ' || e.key === 'Enter' || e.key === 'Escape') arrive(); });
 
+  // ---------- Logo ----------
+  // Metal Mania at 28px with hard edges, scaled up by CSS: 8-bit metal that still reads GUD.
+  async function drawLogo() {
+    try { await document.fonts.load('28px "Metal Mania"'); } catch { /* fall back to whatever loads */ }
+    const c = $('logo'), x = c.getContext('2d'), h = 28, font = `${h}px "Metal Mania", serif`;
+    x.font = font;
+    c.width = Math.ceil(x.measureText('GUD').width) + 4; c.height = Math.ceil(h * 1.15);
+    x.font = font; x.fillStyle = '#ff1a10'; x.fillText('GUD', 2, Math.round(h * 0.92));
+    const d = x.getImageData(0, 0, c.width, c.height);
+    for (let i = 3; i < d.data.length; i += 4) d.data[i] = d.data[i] > 110 ? 255 : 0;
+    x.putImageData(d, 0, 0);
+  }
+  drawLogo();
+
   // ---------- Fire ----------
   const cv = $('fire'), ctx = cv.getContext('2d');
   // Square fire cells: 60 rows, as many columns as the canvas's shape needs.
