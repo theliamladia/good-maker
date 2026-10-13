@@ -604,7 +604,7 @@ body { text-shadow: 0.5px 0 rgba(255, 0, 60, 0.22), -0.5px 0 rgba(0, 190, 255, 0
 
 /* ---------- DEEP END® ---------- */
 .dp-pine {
-  position: fixed; top: 64px; right: 26px; z-index: 450; width: 84px; padding: 0; border: 0; background: none; cursor: pointer;
+  position: fixed; top: 96px; left: 262px; z-index: 450; width: 60px; padding: 0; border: 0; background: none; cursor: pointer;
   filter: drop-shadow(0 12px 18px rgba(0, 30, 90, 0.35)); animation: dp-bob 3.6s ease-in-out infinite;
 }
 .dp-pine { transition: opacity 0.5s ease-in, translate 0.5s ease-in, scale 0.5s ease-in; }
@@ -685,7 +685,7 @@ body { text-shadow: 0.5px 0 rgba(255, 0, 60, 0.22), -0.5px 0 rgba(0, 190, 255, 0
 .dp-get:hover { transform: translateY(-2px); }
 .dp-legal { text-align: center; font-size: 0.6rem; letter-spacing: 0.1em; opacity: 0.7; margin: 14px 0 0; }
 @media (max-width: 900px) {
-  .dp-pine { top: auto; bottom: 16px; right: 16px; width: 64px; }
+  .dp-pine { top: auto; bottom: 16px; left: 16px; width: 64px; }
   .dp-stage { padding: 14px 16px; }
   .dp-head { grid-template-columns: 1fr auto; }
   .dp-title { font-size: 1.8rem; justify-self: end; }
@@ -1039,6 +1039,11 @@ body.st {
 .season-x { padding: 2px 7px; font-size: 0.72rem; border-color: #a65a2e; background: #a65a2e; color: #fff4e2; }
 .season-x:hover { background: #7e3a1d; border-color: #7e3a1d; }
 .season-x[hidden] { display: none; }
+.season-select { appearance: none; -webkit-appearance: none; padding-right: 20px; max-width: 150px; text-transform: uppercase;
+  background: transparent url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='8' height='5'%3E%3Cpath d='M0 0l4 5 4-5z' fill='%230b1526'/%3E%3C/svg%3E") no-repeat right 8px center; }
+.season-select.on { background-color: #a65a2e; border-color: #a65a2e; color: #fff4e2;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='8' height='5'%3E%3Cpath d='M0 0l4 5 4-5z' fill='%23fff4e2'/%3E%3C/svg%3E"); }
+.season-select option { color: #0b1526; background: #fff; }
 
 /* Shoe cards: LOAFER®, SNEAK01, CHELSEA® (colourways picked under them) */
 .shoe-cards { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 6px; }

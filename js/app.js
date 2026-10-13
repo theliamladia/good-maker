@@ -7,7 +7,7 @@
   // colour, files and swatch. kind.current = the colour last picked for it.
   function catalogue(kinds) {
     return kinds.map((k) => {
-      const kind = { id: k.id, name: k.name, line: k.line || 'good', season: k.season || 1 };
+      const kind = { id: k.id, name: k.name, line: k.line || 'good', season: k.season || 1, drop: k.drop };
       kind.colors = (k.colors || [k]).map((c) => ({
         locked: k.locked, baseUnderHoles: k.baseUnderHoles, hat: k.hat, shoes: k.shoes, boxers: k.boxers, src: k.src, cropped: k.cropped, noTuck: k.noTuck, ...c, name: k.name, kind,
       }));
@@ -23,10 +23,22 @@
   const ALL_PANTS = PANTS.flatMap((k) => k.colors);
   // GOOD® / BABY®: kinds shown under the current line ('both' shows under either).
   const inLine = (k) => k.line === 'both' || k.line === state.line;
-  // CURRENT SEASON: when on, only the latest season's kinds are shown.
+  // The filter dropdown by the SHIRT and PANTS labels (one value for both lists):
+  // ALL, CURRENT SEASON (the latest season's kinds), GOOD® CRATE Nº001 (kinds
+  // with a piece from the crate), FALL® (AMONG THE TREES®, season 2) and DEEP END®.
   const LATEST = Math.max(...[...SHIRTS, ...PANTS].map((k) => k.season));
   [...SHIRTS, ...PANTS].forEach((k) => { k.isNew = LATEST > 1 && k.season === LATEST; });
-  const inSeason = (k) => !state.seasonOnly || k.season === LATEST;
+  // Mirrors the unlock ids in api/_crate.js.
+  const CRATE1 = new Set(['goodie-im-sowwy', 'shirt-ii-im-sowwy', 'shirt-im-sowwy', 'goodie-black-chrome', 'runway-cross-jean',
+    'runway-destroyed-longsleeve', 'shirt-og', 'runway-allover-g', 'jean-mosaic', 'runway-marshmallow-mosaic']);
+  const FILTERS = {
+    all: () => true,
+    current: (k) => k.season === LATEST,
+    crate1: (k) => CRATE1.has(k.id) || k.colors.some((c) => CRATE1.has(c.id)),
+    fall: (k) => k.season === 2,
+    deep: (k) => k.drop === 'deep',
+  };
+  const inSeason = (k) => (FILTERS[state.filter] || FILTERS.all)(k);
   const lineShirts = () => SHIRTS.filter((k) => inLine(k) && inSeason(k));
 
   const state = {
@@ -37,7 +49,7 @@
     body: 'classic',     // 'classic' | 'slim'
     sleeve: 'short',     // 'short' | 'long'
     pants: ALL_PANTS.find((p) => p.id === SHIRTS[0].current.pants) || PANTS[0].current, // the default top's pairing
-    seasonOnly: false,   // CURRENT SEASON filter on the shirt and pants lists
+    filter: 'all',       // the filter dropdown on the shirt and pants lists (FILTERS)
     pantsPicked: false,  // once the user picks pants, shirts stop changing them
     noTop: false,        // the top was taken off (equipped squares by the model)
     noBottom: false,     // the bottom (pants) was taken off
@@ -381,16 +393,14 @@
     drawPants();
   }
 
-  // CURRENT SEASON buttons (by the shirt and pants labels): one filter for both lists.
-  function setSeasonOnly(on) {
-    state.seasonOnly = on;
-    document.querySelectorAll('[data-season]').forEach((b) => b.setAttribute('aria-pressed', on));
-    document.querySelectorAll('[data-season-off]').forEach((b) => { b.hidden = !on; });
+  // Filter dropdowns (by the shirt and pants labels): one value for both lists.
+  function setFilter(v) {
+    state.filter = FILTERS[v] ? v : 'all';
+    document.querySelectorAll('[data-filter]').forEach((sel) => { sel.value = state.filter; sel.classList.toggle('on', state.filter !== 'all'); });
     $('outfits').scrollLeft = 0; $('pants').scrollLeft = 0;
     drawOutfits();
   }
-  document.querySelectorAll('[data-season]').forEach((b) => { b.onclick = () => setSeasonOnly(!state.seasonOnly); });
-  document.querySelectorAll('[data-season-off]').forEach((b) => { b.onclick = () => setSeasonOnly(false); });
+  document.querySelectorAll('[data-filter]').forEach((sel) => { sel.onchange = () => setFilter(sel.value); });
 
   // ---------- Shoe cards ----------
   // Shoes are kinds with colourways, like tops and bottoms. Each colour's id is

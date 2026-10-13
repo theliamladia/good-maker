@@ -89,6 +89,11 @@ tops:
   shirt-og-vintage-cotton-denim: { name: "SHIRT® OG", color: "VINTAGE COTTON/DENIM", swatch: ["#d6d5cf", "#57b3ea"] }
   runway-destroyed-longsleeve-blaue-cotton: { name: "RUNWAY® DESTROYED LONGSLEEVE", color: "BLAUE/COTTON", swatch: ["#2468ff", "#ffffff"] }
   runway-allover-g-cotton-glacier: { name: "RUNWAY® ALLOVER", color: "COTTON/GLACIER", swatch: ["#ffffff", "#bcd9e6"] }
+  deep-goodie-square: { name: "DEEP END® GOODIE®", color: "SPONGE/GOOD® BLUE", swatch: ["#ffe600", "#0000ff"] }
+  deep-goodie-star: { name: "DEEP END® GOODIE®", color: "STARFISH PINK/GOOD® BLUE", swatch: ["#e45fc6", "#0000ff"] }
+  deep-goodie-drop: { name: "DEEP END® GOODIE®", color: "TENTACLE TEAL/GOOD® BLUE", swatch: ["#1fc0ff", "#0000ff"] }
+  deep-goodie-claw: { name: "DEEP END® GOODIE®", color: "CLAW RED/GOOD® BLUE", swatch: ["#ff1a10", "#0000ff"] }
+  deep-shirt-krab: { name: "DEEP END® SHIRT® KRAB", color: "COTTON/KRAB RED", swatch: ["#ffffff", "#d7261e"] }
 bottoms:
   cargo-cinnamon-toast-fern: { name: "CARGO®", color: "CINNAMON TOAST/FERN", swatch: ["#a65a2e", "#4f6b45"], shoes: ["black", "brown", "tobacco", "sneak01", "chelsea-tobacco", "chelsea-tuxedo", "chelsea-mahogany", "workboot-wheat", "workboot-oxblood", "workboot-tuxedo", "duck-peyote", "duck-inkwell-after-hours", "duck-chocolate-cacao"] }
   cargo-wash-day-trench: { name: "CARGO®", color: "WASH DAY/TRENCH", swatch: ["#8eaee6", "#c4b38a"], shoes: ["black", "brown", "tobacco", "sneak01", "chelsea-tobacco", "chelsea-tuxedo", "chelsea-mahogany", "workboot-wheat", "workboot-oxblood", "workboot-tuxedo", "duck-peyote", "duck-inkwell-after-hours", "duck-chocolate-cacao"] }
@@ -138,6 +143,10 @@ bottoms:
   jean-mosaic-springsteen-good-blue: { name: "JEAN® MOSAIC", color: "SPRINGSTEEN/GOOD® BLUE", swatch: ["#37baf7", "#0000ff"], shoes: [] }
   runway-marshmallow-mosaic-marshmallow-blaue: { name: "RUNWAY® MARSHMALLOW MOSAIC", color: "MARSHMALLOW/BLAUE", swatch: ["#f7f2ea", "#2468ff"], shoes: [] }
   runway-cross-jean-unique: { name: "RUNWAY® CROSS JEAN", color: "UNIQUE", swatch: ["#0093d7", "#ffffff"], shoes: [] }
+  deep-jean-trouser-brown: { name: "DEEP END® JEAN®", color: "TROUSER BROWN", swatch: ["#86341f"], shoes: [] }
+  deep-jean-deep-teal: { name: "DEEP END® JEAN®", color: "DEEP TEAL", swatch: ["#0f7fa0"], shoes: [] }
+  deep-jean-anchor-blue: { name: "DEEP END® JEAN®", color: "ANCHOR BLUE", swatch: ["#4a40d8"], shoes: [] }
+  deep-jort-seafoam-green: { name: "DEEP END® JORT®", color: "SEAFOAM GREEN", swatch: ["#3a9a0a"], shoes: [] }
 shoes:
   black: { name: "LOAFER®", color: "TUXEDO™", swatch: ["#1b1b1f"] }
   brown: { name: "LOAFER®", color: "MAHOGANY™", swatch: ["#5a1e14"] }

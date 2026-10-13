@@ -831,6 +831,27 @@ window.OUTFITS = [
       bodies: { classic: 'api/outfit?id=runway-allover-g-classic', slim: 'api/outfit?id=runway-allover-g-slim' },
     }],
   },
+  // DEEP END® (the SpongeBob collab): also behind the pineapple on THE MAKER.
+  {
+    id: 'deep-end-goodie',
+    name: 'DEEP END® GOODIE®',
+    drop: 'deep',
+    baseUnderHoles: true,
+    colors: [
+      { id: 'deep-goodie-square', color: 'SPONGE/GOOD® BLUE', swatch: ['#ffe600', '#0000ff'], pants: 'deep-jean-trouser-brown', long: { classic: 'outfits/deep/goodie-square-classic.png', slim: 'outfits/deep/goodie-square-slim.png' } },
+      { id: 'deep-goodie-star', color: 'STARFISH PINK/GOOD® BLUE', swatch: ['#e45fc6', '#0000ff'], pants: 'deep-jort-seafoam-green', long: { classic: 'outfits/deep/goodie-star-classic.png', slim: 'outfits/deep/goodie-star-slim.png' } },
+      { id: 'deep-goodie-drop', color: 'TENTACLE TEAL/GOOD® BLUE', swatch: ['#1fc0ff', '#0000ff'], pants: 'deep-jean-deep-teal', long: { classic: 'outfits/deep/goodie-drop-classic.png', slim: 'outfits/deep/goodie-drop-slim.png' } },
+      { id: 'deep-goodie-claw', color: 'CLAW RED/GOOD® BLUE', swatch: ['#ff1a10', '#0000ff'], pants: 'deep-jean-anchor-blue', long: { classic: 'outfits/deep/goodie-claw-classic.png', slim: 'outfits/deep/goodie-claw-slim.png' } },
+    ],
+  },
+  {
+    id: 'deep-end-shirt-krab',
+    name: 'DEEP END® SHIRT® KRAB',
+    drop: 'deep',
+    colors: [
+      { id: 'deep-shirt-krab', color: 'COTTON/KRAB RED', swatch: ['#ffffff', '#d7261e'], pants: 'jean-bootcut-springsteen', bodies: { classic: 'outfits/deep/shirt-krab-classic.png', slim: 'outfits/deep/shirt-krab-slim.png' } },
+    ],
+  },
 ];
 
 // Pants: legs (both layers) plus anything on the torso that belongs to the
@@ -1401,5 +1422,22 @@ window.PANTS = [
     name: 'RUNWAY® CROSS JEAN',
     locked: true,
     colors: [{ id: 'runway-cross-jean-unique', color: 'UNIQUE', swatch: ['#0093d7', '#ffffff'], src: 'api/outfit?id=runway-cross-jean' }],
+  },
+  // DEEP END® bottoms (shoes drawn in, so no Shoe control).
+  {
+    id: 'deep-end-jean',
+    name: 'DEEP END® JEAN®',
+    drop: 'deep',
+    colors: [
+      { id: 'deep-jean-trouser-brown', color: 'TROUSER BROWN', swatch: '#86341f', src: 'outfits/deep/pants-square.png' },
+      { id: 'deep-jean-deep-teal', color: 'DEEP TEAL', swatch: '#0f7fa0', src: 'outfits/deep/pants-drop.png' },
+      { id: 'deep-jean-anchor-blue', color: 'ANCHOR BLUE', swatch: '#4a40d8', src: 'outfits/deep/pants-claw.png' },
+    ],
+  },
+  {
+    id: 'deep-end-jort',
+    name: 'DEEP END® JORT®',
+    drop: 'deep',
+    colors: [{ id: 'deep-jort-seafoam-green', color: 'SEAFOAM GREEN', swatch: '#3a9a0a', src: 'outfits/deep/pants-star.png' }],
   },
 ];
