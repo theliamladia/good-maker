@@ -18,6 +18,7 @@ const { redis, configured, overLimit, parseBody } = require('./_redis');
 const { sha, currentUser, endSession, saveUser, unlocksFor, isOwner, slugOf, claimProfile } = require('./_account');
 const ACH = require('./_achievements');
 const { applySeeds } = require('./_seeds');
+const { privateIds } = require('./_private');
 
 const COINS_PER_SAVE = 10;
 const SAVES_PER_DAY = 2;
@@ -29,14 +30,19 @@ for (const k of win.OUTFITS) for (const c of k.colors || [k]) if (k.locked || c.
 for (const k of win.PANTS) for (const c of k.colors || [k]) { if (k.locked || c.locked) LOCKED.set(c.id, k.id); BOTTOMS.set(c.id, Object.keys(c.shoes || k.shoes || {})); }
 
 // Locked tops only for accounts that own them (by colour id or kind id).
-function cleanLook(L, unlocks = []) {
+function cleanLook(L, unlocks = [], owner = false) {
   L = L || {};
   const out = {};
+  const priv = owner ? privateIds() : null;   // the owner's own pieces (api/_private.js)
   const owns = (id) => LOCKED.has(id) && (unlocks.includes(id) || unlocks.includes(LOCKED.get(id)));
-  if (L.top) { if (!TOPS.has(String(L.top)) && !owns(String(L.top))) return null; out.top = String(L.top); }
-  if (L.bottom) { if (!BOTTOMS.has(String(L.bottom)) || (LOCKED.has(String(L.bottom)) && !owns(String(L.bottom)))) return null; out.bottom = String(L.bottom); }
+  if (L.top) { if (!TOPS.has(String(L.top)) && !owns(String(L.top)) && !(priv && priv.tops.has(String(L.top)))) return null; out.top = String(L.top); }
+  if (L.bottom) {
+    const b = String(L.bottom), mine = priv && priv.bottoms.has(b);
+    if (!mine && (!BOTTOMS.has(b) || (LOCKED.has(b) && !owns(b)))) return null;
+    out.bottom = b;
+  }
   if (!out.top && !out.bottom) return null;
-  if (out.bottom && BOTTOMS.get(out.bottom).includes(L.shoe)) out.shoe = L.shoe;
+  if (out.bottom && (BOTTOMS.get(out.bottom) || priv.bottoms.get(out.bottom)).includes(L.shoe)) out.shoe = L.shoe;
   if (L.feet === 'bare') out.feet = 'bare';
   if (['short', 'long'].includes(L.sleeve)) out.sleeve = L.sleeve;
   if (['classic', 'slim'].includes(L.body)) out.body = L.body;
@@ -58,11 +64,11 @@ function cleanFt(F) {
   return Object.keys(out).length ? out : null;
 }
 // THE MAKER preferences: a look recipe that may be empty (a blank canvas), plus body, MY SKIN and tone.
-function cleanPrefs(P, unlocks) {
+function cleanPrefs(P, unlocks, owner = false) {
   P = P || {};
   const out = {};
   const L = P.look || {};
-  const look = (L.top || L.bottom) ? cleanLook(L, unlocks) : {};
+  const look = (L.top || L.bottom) ? cleanLook(L, unlocks, owner) : {};
   if (look) { if (L.feet === 'bare') look.feet = 'bare'; out.look = look; }
   if (['classic', 'slim'].includes(P.body)) out.body = P.body;
   if (typeof P.keepSkin === 'boolean') out.keepSkin = P.keepSkin;
@@ -145,7 +151,7 @@ module.exports = async function handler(req, res) {
       res.status(200).json({ ok: true }); return;
     }
     if (body.action === 'save') {
-      const look = cleanLook(body.look, await unlocksFor(user));
+      const look = cleanLook(body.look, await unlocksFor(user), isOwner(user));
       if (!look) { res.status(400).json({ error: 'look' }); return; }
       const key = `user:${user.uid}:wardrobe`;
       const rows = ((await redis('LRANGE', key, 0, MAX_LOOKS - 1)) || []).map((r) => JSON.parse(r));
@@ -169,7 +175,7 @@ module.exports = async function handler(req, res) {
       res.status(200).json({ ok: true, item, coins: user.coins || 0, earned: earned ? COINS_PER_SAVE : 0, capped: !!(fresh && !earned), daily: await dailyOf(user.uid) }); return;
     }
     if (body.action === 'prefs') {
-      user.prefs = cleanPrefs(body.prefs, await unlocksFor(user));
+      user.prefs = cleanPrefs(body.prefs, await unlocksFor(user), isOwner(user));
       await saveUser(user);
       res.status(200).json({ ok: true }); return;
     }

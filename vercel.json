@@ -5,6 +5,12 @@
     },
     "api/outfit.js": {
       "includeFiles": "api/{_locked,_private}/**"
+    },
+    "api/me.js": {
+      "includeFiles": "api/_private/index.enc"
+    },
+    "api/profile.js": {
+      "includeFiles": "api/_private/index.enc"
     }
   },
   "cleanUrls": true,

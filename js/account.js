@@ -112,11 +112,10 @@
   fetch('api/me').then((r) => (r.ok ? r.json() : { user: null })).catch(() => ({ user: null })).then(async (j) => {
     me = j.user; draw(); drawDaily();
     if (me && me.unlocks && me.unlocks.length && app()) app().unlock(me.unlocks);
+    // The owner's own pieces, before the saved settings (they may be wearing one).
     if (me && me.owner && app() && app().addPrivate) {
-      fetch('api/outfit?private=1', { cache: 'no-store' }).then((r) => (r.ok ? r.json() : null)).then(async (cat) => {
-        if (!cat) return;
-        await app().whenBooted(); app().addPrivate(cat);
-      }).catch(() => {});
+      const cat = await fetch('api/outfit?private=1', { cache: 'no-store' }).then((r) => (r.ok ? r.json() : null)).catch(() => null);
+      if (cat) { await app().whenBooted(); await app().addPrivate(cat); }
     }
     // The account's saved settings win over this browser's (a shared link's fit still wins).
     if (me && me.prefs && app()) { await app().whenBooted(); await app().applyPrefs(me.prefs); }

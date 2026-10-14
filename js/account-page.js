@@ -183,8 +183,13 @@
   const q = new URLSearchParams(location.search);
   const signin = q.get('signin');
   if (signin) history.replaceState(null, '', location.pathname);
-  fetch('api/me').then((r) => (r.ok ? r.json() : { user: null })).catch(() => ({ user: null })).then((j) => {
+  fetch('api/me').then((r) => (r.ok ? r.json() : { user: null })).catch(() => ({ user: null })).then(async (j) => {
     me = j.user; wardrobe = j.wardrobe || []; inventory = j.inventory || []; achievements = j.achievements || [];
+    // The owner's own pieces: loaded before the wardrobe draws, so fits with them show.
+    if (me && me.owner) {
+      const cat = await fetch('api/outfit?private=1', { cache: 'no-store' }).then((r) => (r.ok ? r.json() : null)).catch(() => null);
+      if (cat) GoodCompose.addPrivate(cat);
+    }
     render();
     fetch('api/crate').then((r) => r.json()).then((c) => { crateItems = Object.fromEntries((c.items || []).map((i) => [i.id, i])); if (me) { drawInventory(); drawLedger(); drawSuggestions(); } }).catch(() => {});
     if (signin === 'ok' && me) toast(`SIGNED IN AS ${me.name}.`);

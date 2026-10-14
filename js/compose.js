@@ -77,5 +77,7 @@ window.GoodCompose = (() => {
     return c;
   }
   const label = (piece) => (piece ? `${piece.name}${piece.color ? ' ' + piece.color : ''}` : '');
-  return { compose, front, load, label };
+  // The owner's own pieces (/api/outfit?private=1), so their saved fits draw too.
+  const addPrivate = ({ tops = [], pants = [] } = {}) => { TOPS.push(...catalogue(tops)); BOTTOMS.push(...catalogue(pants)); };
+  return { compose, front, load, label, addPrivate };
 })();

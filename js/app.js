@@ -816,6 +816,10 @@
       document.querySelectorAll('[data-filter]').forEach((sel) => {
         const o = document.createElement('option'); o.value = 'crate2'; o.textContent = 'GOOD® CRATE 2 · OWNER'; sel.append(o);
       });
+      // A link (e.g. a saved fit's OPEN) that names one of these pieces: put it on now.
+      const L = BOOT_LOOK;
+      const ids = new Set([...T, ...P].flatMap((k) => k.colors.map((c) => c.id)));
+      if (L && (ids.has(L.top) || ids.has(L.bottom))) return applyLook(L, false).then(() => render());
       drawOutfits();
     },
     unlock: (ids) => {
@@ -1369,6 +1373,9 @@
     if (!q.get('top') && !q.get('bottom')) return null;
     return Object.fromEntries(['u', 'top', 'bottom', 'shoe', 'feet', 'sleeve', 'body', 'tuck', 'boxer'].filter((k) => q.get(k)).map((k) => [k, q.get(k)]));
   }
+  // The address bar's look as the page opened (before syncUrl rewrites it), for owner
+  // pieces that only arrive after boot (addPrivate).
+  const BOOT_LOOK = lookFromUrl();
   // Put a look on. withSkin: also load the player named in it (shared links);
   // otherwise keep your own skin.
   async function applyLook(L, withSkin) {
