@@ -30,12 +30,42 @@ function unseal(id) {
   return Buffer.concat([d.update(Buffer.from(data, 'base64')), d.final()]);
 }
 
-module.exports = function handler(req, res) {
+// Owner-only pieces (tools/private-seal.js): api/_private/<id>.enc and the catalogue,
+// index.enc (?private=1). For anyone but the owner's session they answer exactly like
+// an unknown id, so nothing shows they exist.
+const PRIVATE = { has: (id) => /^[0-9a-f]{16}$/.test(id) && fs.existsSync(path.join(__dirname, '_private', `${id}.enc`)) };
+function unsealFile(file) {
+  const key = Buffer.from(process.env.GOOD_LOCK_KEY || '', 'base64');
+  if (key.length !== 32) return null;
+  const { iv, tag, data } = JSON.parse(fs.readFileSync(file, 'utf8'));
+  const d = crypto.createDecipheriv('aes-256-gcm', key, Buffer.from(iv, 'base64'));
+  d.setAuthTag(Buffer.from(tag, 'base64'));
+  return Buffer.concat([d.update(Buffer.from(data, 'base64')), d.final()]);
+}
+async function ownerOnly(req) {
+  try { const { currentUser, isOwner } = require('./_account'); return isOwner(await currentUser(req)); } catch { return false; }
+}
+
+module.exports = async function handler(req, res) {
   const id = String((req.query && req.query.id) || '');
   res.setHeader('Cache-Control', 'no-store');
+  const unknown = () => res.status(404).json({ error: 'unknown_outfit' });
+  const wantsPrivate = req.query && req.query.private === '1';
+  if (wantsPrivate || PRIVATE.has(id)) {
+    if (!(await ownerOnly(req))) { unknown(); return; }
+    let buf = null;
+    try { buf = unsealFile(path.join(__dirname, '_private', wantsPrivate ? 'index.enc' : `${id}.enc`)); } catch { buf = null; }
+    if (!buf) { unknown(); return; }
+    if (wantsPrivate) { res.status(200).json(JSON.parse(buf.toString('utf8'))); return; }
+    const key = crypto.randomBytes(32);
+    const data = Buffer.alloc(buf.length);
+    for (let i = 0; i < buf.length; i++) data[i] = buf[i] ^ key[i % key.length];
+    res.status(200).json({ k: key.toString('base64'), d: data.toString('base64') });
+    return;
+  }
   const envName = LOCKED[id];
   if (!envName && !SEALED.has(id)) {
-    res.status(404).json({ error: 'unknown_outfit' });
+    unknown();
     return;
   }
   let png = null;

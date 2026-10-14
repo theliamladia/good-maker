@@ -4,7 +4,7 @@
       "includeFiles": "api/{_ubiquity,_gud}/**"
     },
     "api/outfit.js": {
-      "includeFiles": "api/_locked/**"
+      "includeFiles": "api/{_locked,_private}/**"
     }
   },
   "cleanUrls": true,

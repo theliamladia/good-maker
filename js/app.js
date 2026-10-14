@@ -805,6 +805,19 @@
     useHomeSkin: (data, name) => { useSkin(data, name, false); render(); },
     loadSkinUrl: async (url) => checkSkin(imageData(await loadImage(url))),
     whenBooted: () => bootDone,
+    // Owner-only pieces (from /api/outfit?private=1, only for the owner's session):
+    // added to the lists with their own filter option, wearable and downloadable.
+    addPrivate: ({ tops = [], pants = [] } = {}) => {
+      if (FILTERS.crate2) return;
+      const T = catalogue(tops), P = catalogue(pants);
+      for (const k of [...T, ...P]) for (const c of k.colors) c.owned = true;
+      SHIRTS.push(...T); PANTS.push(...P); ALL_PANTS.push(...P.flatMap((k) => k.colors));
+      FILTERS.crate2 = (k) => k.drop === 'crate2';
+      document.querySelectorAll('[data-filter]').forEach((sel) => {
+        const o = document.createElement('option'); o.value = 'crate2'; o.textContent = 'GOOD® CRATE 2 · OWNER'; sel.append(o);
+      });
+      drawOutfits();
+    },
     unlock: (ids) => {
       let any = false;
       for (const k of [...SHIRTS, ...PANTS]) for (const c of k.colors) if (c.locked && (ids.includes(k.id) || ids.includes(c.id))) { c.owned = true; any = true; }
