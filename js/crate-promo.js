@@ -32,12 +32,13 @@
         <a class="cp-later mono" href="good-crate">HOW IT WORKS</a>
         <button type="button" class="cp-later mono" data-close>NOT NOW</button>
       </div>
+      <p class="cp-timer mono" data-coin-timer></p>
       <p class="cp-fine mono">GOOD® COINS: +10 FOR EACH NEW FIT YOU SAVE TO YOUR WARDROBE, UP TO 2 A DAY.</p>
     </section>`;
   document.body.append(modal);
 
   const app = () => window.GoodApp;
-  function open() { modal.hidden = false; app() && app().setModalOpen && app().setModalOpen(true); modal.querySelector('.cp-go').focus(); remember(); }
+  function open() { window.GoodCoinTimer && GoodCoinTimer.refresh(); modal.hidden = false; app() && app().setModalOpen && app().setModalOpen(true); modal.querySelector('.cp-go').focus(); remember(); }
   function close() { modal.hidden = true; app() && app().setModalOpen && app().setModalOpen(false); }
   btn.addEventListener('click', (e) => { e.preventDefault(); open(); });
   modal.addEventListener('click', (e) => { if (e.target.closest('[data-close]')) close(); });

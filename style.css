@@ -1123,3 +1123,4 @@ body.st {
 .cp-fine { position: relative; margin: 18px 0 0; font-size: 0.56rem; letter-spacing: 0.16em; opacity: 0.6; }
 @media (max-width: 600px) { .cp-crate { width: 64px; right: 14px; bottom: 14px; } .dp-pine { right: 88px; bottom: 14px; width: 48px; } .cp-list b { display: block; } }
 @media (prefers-reduced-motion: reduce) { .cp-crate, .cp-art, .cp-rays { animation: none; } }
+.cp-timer { position: relative; margin: 16px 0 0; font-size: 0.66rem; font-weight: 700; letter-spacing: 0.16em; }
