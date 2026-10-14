@@ -17,6 +17,7 @@ const crypto = require('crypto');
 const { redis, configured, overLimit, parseBody } = require('./_redis');
 const { sha, currentUser, endSession, saveUser, unlocksFor, isOwner, slugOf, claimProfile } = require('./_account');
 const ACH = require('./_achievements');
+const { applySeeds } = require('./_seeds');
 
 const COINS_PER_SAVE = 10;
 const SAVES_PER_DAY = 2;
@@ -84,6 +85,9 @@ module.exports = async function handler(req, res) {
         const rows = (await redis('LRANGE', 'suggestions', 0, 499)) || [];
         res.status(200).json({ suggestions: rows.map((r) => JSON.parse(r)) }); return;
       }
+      // One-time account set-ups (api/_seeds.js); re-read in case this account was one of them.
+      await applySeeds();
+      { const raw = await redis('GET', `user:${user.uid}`); if (raw) Object.assign(user, JSON.parse(raw)); }
       // One-time owner set-up, on the owner's next visit: take back the 1000-coin grant
       // if it was applied, and add every GOOD® CRATE piece at serial GD-999 (outside
       // the normal serial counters, so GD-001 onwards stay attainable).
