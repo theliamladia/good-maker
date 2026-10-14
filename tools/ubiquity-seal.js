@@ -1,6 +1,7 @@
 // Seal the UBIQUITY® research folder for the locked page.
 //   UBIQUITY_PASSWORD=... node tools/ubiquity-seal.js <folder>
-// The folder holds content.json plus every file it names (images, textures,
+// The folder holds content.json (one project, or { projects: [...] } for several
+// project files) plus every file it names (images, textures,
 // source). Each file is encrypted with AES-256-GCM under a key derived from
 // the password (scrypt, random salt) and written to api/_ubiquity/ as f<n>.enc;
 // the manifest (content + file list) is index.enc. The password is never
@@ -27,7 +28,8 @@ const seal = (buf) => {
 const TYPES = { '.png': 'image/png', '.webp': 'image/webp', '.py': 'text/plain', '.js': 'text/plain', '.json': 'application/json', '.md': 'text/plain' };
 
 const content = JSON.parse(fs.readFileSync(path.join(dir, 'content.json'), 'utf8'));
-const names = [...new Set(content.sections.flatMap((s) => [...(s.img || []), ...(s.files || []), ...(s.code || [])]))];
+const projects = content.projects || [content];   // one project, or several project files
+const names = [...new Set(projects.flatMap((pr) => pr.sections).flatMap((s) => [...(s.img || []), ...(s.files || []), ...(s.code || [])]))];
 fs.rmSync(OUT, { recursive: true, force: true });
 fs.mkdirSync(OUT, { recursive: true });
 const files = names.map((name, i) => {

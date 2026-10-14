@@ -28,3 +28,6 @@
 .ub-code { margin-top: 12px; border: 1px solid rgba(255, 255, 255, 0.5); }
 .ub-code summary { cursor: pointer; padding: 10px 14px; font-size: 0.72rem; letter-spacing: 0.14em; }
 .ub-code pre { margin: 0; padding: 14px; max-height: 420px; overflow: auto; font-size: 0.7rem; line-height: 1.5; background: rgba(0, 0, 0, 0.25); white-space: pre; }
+.ub-tabs { display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: clamp(40px, 7vh, 72px); }
+.ub-tab { font: inherit; font-size: 0.72rem; font-weight: 700; letter-spacing: 0.18em; padding: 10px 16px; border: 1px solid #fff; background: transparent; color: #fff; cursor: pointer; }
+.ub-tab[aria-current="page"], .ub-tab:hover { background: #fff; color: #0000ff; }

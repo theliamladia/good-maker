@@ -70,32 +70,53 @@
 
   function render({ content, files }) {
     const byName = Object.fromEntries(files.map((f) => [f.name, f]));
+    const projects = content.projects || [content];
     const doc = $('doc');
     doc.hidden = false;
-    doc.append(el('p', 'ub-tag mono', content.kicker), el('h1', 'ub-title', content.title), el('p', 'ub-date mono', `UPDATED ${content.updated}`));
-    for (const s of content.sections) {
-      const sec = el('section', 'ub-sec');
-      sec.append(el('h2', null, s.h));
-      for (const p of s.p || []) sec.append(el('p', 'ub-p', p));
-      if (s.list) { const ul = el('ul', 'ub-list'); s.list.forEach((t) => ul.append(el('li', null, t))); sec.append(ul); }
-      for (const name of s.img || []) {
-        const fig = el('figure', 'ub-fig'); const img = el('img'); img.alt = name; img.draggable = false;
-        fig.append(img, el('figcaption', 'mono', name)); sec.append(fig);
-        load(byName[name], (u) => { img.src = u; });
-      }
-      if (s.files) {
-        const row = el('div', 'ub-tex');
-        for (const name of s.files) {
-          const box = el('figure', 'ub-texbox'); const img = el('img'); img.alt = name; box.append(img, el('figcaption', 'mono', name)); row.append(box);
+    // Project files: one tab each; a project's images load the first time it opens.
+    const tabs = el('nav', 'ub-tabs mono'); tabs.setAttribute('aria-label', 'Project files');
+    const panes = projects.map((pr) => {
+      const pane = el('div', 'ub-proj'); pane.hidden = true; pane.filled = false;
+      const tab = el('button', 'ub-tab', pr.title); tab.type = 'button';
+      tab.onclick = () => show(pane);
+      pane.tab = tab; pane.pr = pr; tabs.append(tab); doc.append(pane);
+      return pane;
+    });
+    if (projects.length > 1) doc.prepend(tabs);
+    function show(pane) {
+      for (const p of panes) { p.hidden = p !== pane; p.tab.setAttribute('aria-current', p === pane ? 'page' : 'false'); }
+      if (!pane.filled) { pane.filled = true; fill(pane, pane.pr); }
+      try { localStorage.setItem('ub:proj', pane.pr.id || pane.pr.title); } catch { /* fine */ }
+    }
+    let last = null; try { last = localStorage.getItem('ub:proj'); } catch { /* fine */ }
+    show(panes.find((p) => (p.pr.id || p.pr.title) === last) || panes[0]);
+
+    function fill(pane, pr) {
+      pane.append(el('p', 'ub-tag mono', pr.kicker), el('h1', 'ub-title', pr.title), el('p', 'ub-date mono', `UPDATED ${pr.updated}`));
+      for (const s of pr.sections) {
+        const sec = el('section', 'ub-sec');
+        sec.append(el('h2', null, s.h));
+        for (const p of s.p || []) sec.append(el('p', 'ub-p', p));
+        if (s.list) { const ul = el('ul', 'ub-list'); s.list.forEach((t) => ul.append(el('li', null, t))); sec.append(ul); }
+        for (const name of s.img || []) {
+          const fig = el('figure', 'ub-fig'); const img = el('img'); img.alt = name; img.draggable = false;
+          fig.append(img, el('figcaption', 'mono', name)); sec.append(fig);
           load(byName[name], (u) => { img.src = u; });
         }
-        sec.append(row);
+        if (s.files) {
+          const row = el('div', 'ub-tex');
+          for (const name of s.files) {
+            const box = el('figure', 'ub-texbox'); const img = el('img'); img.alt = name; box.append(img, el('figcaption', 'mono', name)); row.append(box);
+            load(byName[name], (u) => { img.src = u; });
+          }
+          sec.append(row);
+        }
+        for (const name of s.code || []) {
+          const d = el('details', 'ub-code'); d.append(el('summary', 'mono', name)); const pre = el('pre'); d.append(pre); sec.append(d);
+          d.addEventListener('toggle', () => { if (d.open && !pre.textContent) load(byName[name], null, (t) => { pre.textContent = t; }); }, { once: false });
+        }
+        pane.append(sec);
       }
-      for (const name of s.code || []) {
-        const d = el('details', 'ub-code'); d.append(el('summary', 'mono', name)); const pre = el('pre'); d.append(pre); sec.append(d);
-        d.addEventListener('toggle', () => { if (d.open && !pre.textContent) load(byName[name], null, (t) => { pre.textContent = t; }); }, { once: false });
-      }
-      doc.append(sec);
     }
   }
   async function load(f, onUrl, onText) {
