@@ -1,0 +1,99 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>ART® IN MOTION · GOOD® DESIGN</title>
+  <meta name="description" content="ART® IN MOTION, the new collection from GOOD®: a study of colour in movement, painted en plein air.">
+  <meta name="theme-color" content="#fbfaf6">
+  <link rel="canonical" href="https://good.leems.me/inmotion">
+  <meta property="og:site_name" content="GOOD® DESIGN">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://good.leems.me/inmotion">
+  <meta property="og:title" content="GOOD® · ART® IN MOTION">
+  <meta property="og:description" content="The new collection from GOOD®: a study of colour in movement, painted en plein air.">
+  <meta property="og:image" content="https://good.leems.me/assets/og-inmotion.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:image:alt" content="ART® IN MOTION: strokes of NAPLES YELLOW, VIRIDIAN, ALIZARIN, PAYNE'S GREY, COBALT VIOLET and MANGANESE BLUE paint across a white canvas.">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="GOOD® · ART® IN MOTION">
+  <meta name="twitter:description" content="The new collection from GOOD®: a study of colour in movement, painted en plein air.">
+  <meta name="twitter:image" content="https://good.leems.me/assets/og-inmotion.png">
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+  <link rel="icon" href="/favicon-32.png" sizes="32x32" type="image/png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="inmotion.css">
+</head>
+<body class="im">
+
+<canvas class="im-canvas" id="paint" aria-hidden="true"></canvas>
+<div class="im-weave" aria-hidden="true"></div>
+
+<a class="im-home sc" href="./">GOOD® DESIGN</a>
+
+<main class="im-main">
+  <section class="im-hero" id="hero">
+    <p class="im-kicker sc">GOOD® · CRATE Nº002</p>
+    <h1 class="im-title">ART<sup>®</sup> IN MOTION</h1>
+    <p class="im-lede">The new collection from GOOD®. A study of colour in movement, painted <em>en plein air</em>: pigment given to the open light, to weather, and to the hand that moves through it.</p>
+    <p class="im-soon sc">OPENING SOON</p>
+  </section>
+
+  <section class="im-crate" aria-labelledby="crateTitle">
+    <figure class="im-box" aria-hidden="true">
+      <svg viewBox="0 0 420 340" role="presentation">
+        <defs>
+          <linearGradient id="imTop" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#ffffff"/><stop offset="1" stop-color="#f1eee7"/></linearGradient>
+          <linearGradient id="imFront" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#fdfcf9"/><stop offset="1" stop-color="#efebe3"/></linearGradient>
+          <linearGradient id="imSide" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#e6e1d7"/><stop offset="1" stop-color="#d9d3c7"/></linearGradient>
+          <filter id="imShadow" x="-20%" y="-20%" width="140%" height="160%"><feGaussianBlur stdDeviation="10"/></filter>
+        </defs>
+        <ellipse cx="200" cy="312" rx="170" ry="16" fill="#3b3a36" opacity="0.14" filter="url(#imShadow)"/>
+        <!-- lid -->
+        <polygon points="60,92 300,92 360,52 120,52" fill="url(#imTop)" stroke="#e2ddd2" stroke-width="1"/>
+        <!-- front and side -->
+        <rect x="60" y="92" width="240" height="210" fill="url(#imFront)" stroke="#e2ddd2" stroke-width="1"/>
+        <polygon points="300,92 360,52 360,262 300,302" fill="url(#imSide)"/>
+        <!-- the lid's edge -->
+        <rect x="60" y="92" width="240" height="14" fill="#f6f3ec"/>
+        <polygon points="300,92 360,52 360,66 300,106" fill="#e9e4da"/>
+        <line x1="60" y1="106" x2="300" y2="106" stroke="#e2ddd2"/>
+        <!-- the G, one pigment per square -->
+        <g transform="translate(130 154)">
+          <rect x="25" y="0" width="24" height="24" fill="#f3d88a"/>
+          <rect x="50" y="0" width="24" height="24" fill="#2e7d6b"/>
+          <rect x="75" y="0" width="24" height="24" fill="#a8203a"/>
+          <rect x="0" y="25" width="24" height="24" fill="#4a5560"/>
+          <rect x="0" y="50" width="24" height="24" fill="#9b4f96"/>
+          <rect x="75" y="50" width="24" height="24" fill="#3fb0c4"/>
+          <rect x="25" y="75" width="24" height="24" fill="#0000ff"/>
+          <rect x="50" y="75" width="24" height="24" fill="#f3d88a"/>
+          <rect x="75" y="75" width="24" height="24" fill="#2e7d6b"/>
+        </g>
+      </svg>
+    </figure>
+    <div class="im-crate-copy">
+      <p class="im-kicker sc">THE CRATE</p>
+      <h2 class="im-h2" id="crateTitle">A white box, and every colour of the season.</h2>
+      <p class="im-p">Plain, quiet, made to be kept. The G is set in six pigments and GOOD® BLUE, so the colour is waiting before the lid is lifted.</p>
+      <ul class="im-palette sc">
+        <li><i style="--c:#f3d88a"></i>NAPLES YELLOW™</li>
+        <li><i style="--c:#2e7d6b"></i>VIRIDIAN™</li>
+        <li><i style="--c:#a8203a"></i>ALIZARIN™</li>
+        <li><i style="--c:#4a5560"></i>PAYNE'S GREY™</li>
+        <li><i style="--c:#9b4f96"></i>COBALT VIOLET™</li>
+        <li><i style="--c:#3fb0c4"></i>MANGANESE BLUE™</li>
+        <li><i style="--c:#f7f2ea"></i>ON MARSHMALLOW™</li>
+      </ul>
+    </div>
+  </section>
+</main>
+
+<footer class="im-foot sc">© 2026 GOOD® DESIGN · <a href="./">THE MAKER</a> · <a href="/privacy">PRIVACY</a></footer>
+
+<script src="js/inmotion.js"></script>
+</body>
+</html>
