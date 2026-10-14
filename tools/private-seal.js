@@ -2,8 +2,8 @@
 //   GOOD_LOCK_KEY=<base64 32 bytes> node tools/private-seal.js <folder>
 // The folder holds catalog.json ({ tops: [kinds], pants: [kinds]} in the js/outfits.js
 // shape, file names in bodies/src) plus those PNGs. Each PNG is sealed with AES-256-GCM
-// under GOOD_LOCK_KEY into api/_private/<random id>.enc, and the catalogue (pointing at
-// api/outfit?id=<random id>) into api/_private/index.enc. /api/outfit only opens them
+// under GOOD_LOCK_KEY into api/_private/<id>.enc (a keyed hash of the file name), and the catalogue (pointing at
+// api/outfit?id=<id>) into api/_private/index.enc. /api/outfit only opens them
 // for the owner's session; to anyone else they don't exist. Keep the folder out of git.
 const fs = require('fs');
 const path = require('path');
@@ -21,10 +21,12 @@ const seal = (buf) => {
   const data = Buffer.concat([c.update(buf), c.final()]);
   return JSON.stringify({ iv: iv.toString('base64'), tag: c.getAuthTag().toString('base64'), data: data.toString('base64') });
 };
-const ids = new Map();   // file name -> random id (a file used twice is sealed once)
+const ids = new Map();   // file name -> id (a file used twice is sealed once)
 const ref = (name) => {
   if (!ids.has(name)) {
-    const id = crypto.randomBytes(8).toString('hex');
+    // Stable per file name (keyed, so the names can't be guessed): re-sealing keeps every
+    // id, so a page opened before a deploy still finds its pieces.
+    const id = crypto.createHmac('sha256', key).update('private:' + name).digest('hex').slice(0, 16);
     fs.writeFileSync(path.join(OUT, `${id}.enc`), seal(fs.readFileSync(path.join(dir, name))));
     ids.set(name, id);
   }
