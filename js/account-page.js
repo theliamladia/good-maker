@@ -145,9 +145,32 @@
     }).catch(() => {});
   }
 
+  // SUGGESTION BOX: anyone signed in can drop one in; the owner reads them all here.
+  $('suggestForm').onsubmit = async (e) => {
+    e.preventDefault();
+    const text = $('suggestText').value.trim();
+    if (text.length < 3) { toast('WRITE A LITTLE MORE FIRST.'); return; }
+    try { await post('api/me', { action: 'suggest', text }); $('suggestText').value = ''; toast('IN THE BOX. THANK YOU!'); drawSuggestions(); }
+    catch (err) { toast(err.code === 'slow_down' ? 'THAT’S A LOT OF IDEAS. TRY AGAIN IN AN HOUR.' : 'COULDN’T SEND IT. TRY AGAIN.'); }
+  };
+  function drawSuggestions() {
+    if (!(me && me.owner)) { $('suggestions').hidden = true; return; }
+    fetch('api/me?suggestions=1').then((r) => (r.ok ? r.json() : null)).then((j) => {
+      if (!j) return;
+      $('suggestions').hidden = false;
+      $('suggestCount').textContent = `${j.suggestions.length} IN THE BOX`;
+      $('suggestRows').replaceChildren(...j.suggestions.map((sg) => {
+        const li = document.createElement('li');
+        const meta = document.createElement('small'); meta.textContent = `${sg.name} · ${(sg.at || '').slice(0, 16).replace('T', ' ')} UTC`;
+        li.append(meta, document.createTextNode(sg.text));
+        return li;
+      }));
+    }).catch(() => {});
+  }
+
   $('invReset').onclick = async () => {
-    if (!confirm('Clear your GOOD® CRATE pulls and reset every serial back to GD-001?')) return;
-    try { await post('api/crate', { action: 'reset' }); inventory = inventory.filter((e) => e.serial === 'GD-999'); drawInventory(); drawLedger(); toast('CRATE TEST RESET. SERIALS START AT GD-001 AGAIN.'); } catch { toast('COULDN’T RESET. TRY AGAIN.'); }
+    if (!confirm('Clear your own GOOD® CRATE test pulls? (Serials are never reused.)')) return;
+    try { await post('api/crate', { action: 'reset' }); inventory = inventory.filter((e) => e.serial === 'GD-999'); drawInventory(); drawLedger(); toast('CRATE TEST RESET.'); } catch { toast('COULDN’T RESET. TRY AGAIN.'); }
   };
 
   $('form').onsubmit = async (e) => {
@@ -174,7 +197,7 @@
   fetch('api/me').then((r) => (r.ok ? r.json() : { user: null })).catch(() => ({ user: null })).then((j) => {
     me = j.user; wardrobe = j.wardrobe || []; inventory = j.inventory || []; achievements = j.achievements || [];
     render();
-    fetch('api/crate').then((r) => r.json()).then((c) => { crateItems = Object.fromEntries((c.items || []).map((i) => [i.id, i])); if (me) { drawInventory(); drawLedger(); } }).catch(() => {});
+    fetch('api/crate').then((r) => r.json()).then((c) => { crateItems = Object.fromEntries((c.items || []).map((i) => [i.id, i])); if (me) { drawInventory(); drawLedger(); drawSuggestions(); } }).catch(() => {});
     if (signin === 'ok' && me) toast(`SIGNED IN AS ${me.name}.`);
     if (signin === 'expired') toast('THAT LINK EXPIRED. ASK FOR A NEW ONE.');
   });

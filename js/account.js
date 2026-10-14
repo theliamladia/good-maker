@@ -46,11 +46,41 @@
   }
   $('homeUse').onclick = useHome;
 
+  // ---------- Saved settings ----------
+  // THE MAKER calls this (debounced) whenever the fit, body or MY SKIN changes.
+  let prefsT;
+  window.GoodAccount = {
+    savePrefs(p) {
+      if (!me) return;
+      clearTimeout(prefsT);
+      prefsT = setTimeout(() => post('api/me', { action: 'prefs', prefs: p }).catch(() => {}), 2500);
+    },
+  };
+
+  // ---------- GOOD® COINS today ----------
+  // Under SAVE TO WARDROBE: how many coin saves are left today, or when they come back.
+  let dailyT;
+  const pad = (n) => String(n).padStart(2, '0');
+  function drawDaily() {
+    clearTimeout(dailyT);
+    const span = $('saveLook').querySelector('span');
+    const coin = '<span class="coin" aria-hidden="true"></span>';
+    if (!me || !me.daily) { span.innerHTML = `${coin}+10 GOOD® COINS · 2 FITS A DAY`; return; }
+    const d = me.daily;
+    if (d.left > 0) { span.innerHTML = `${coin}SAVE ${d.left} MORE NEW FIT${d.left > 1 ? 'S' : ''} TODAY FOR +${d.coins} EACH`; return; }
+    const ms = Date.parse(d.resetsAt) - Date.now();
+    if (ms <= 0) { d.left = d.per; drawDaily(); return; }
+    const t = Math.floor(ms / 1000);
+    span.innerHTML = `${coin}MORE GOOD® COINS IN ${pad(Math.floor(t / 3600))}:${pad(Math.floor(t / 60) % 60)}:${pad(t % 60)}`;
+    dailyT = setTimeout(drawDaily, 1000 - (Date.now() % 1000));
+  }
+
   // ---------- Wardrobe ----------
   $('saveLook').onclick = async () => {
     if (!me) { location.href = 'account'; return; }
     try {
       const j = await post('api/me', { action: 'save', look: app().currentLook() });
+      if (j.daily) { me.daily = j.daily; drawDaily(); }
       if (j.duplicate) { toast('ALREADY IN YOUR WARDROBE.'); return; }
       me.coins = j.coins; draw();
       toast(j.earned ? `SAVED TO YOUR WARDROBE. +${j.earned} GOOD® COINS` : j.capped ? 'SAVED. YOU’VE EARNED TODAY’S GOOD® COINS (2 FITS). BACK TOMORROW FOR MORE.' : 'SAVED TO YOUR WARDROBE.');
@@ -80,8 +110,10 @@
 
   // ---------- Boot ----------
   fetch('api/me').then((r) => (r.ok ? r.json() : { user: null })).catch(() => ({ user: null })).then(async (j) => {
-    me = j.user; draw();
+    me = j.user; draw(); drawDaily();
     if (me && me.unlocks && me.unlocks.length && app()) app().unlock(me.unlocks);
+    // The account's saved settings win over this browser's (a shared link's fit still wins).
+    if (me && me.prefs && app()) { await app().whenBooted(); await app().applyPrefs(me.prefs); }
     // Signed in with a home skin: it loads automatically (unless a shared look named a player).
     if (me && me.hasSkin && app() && !app().linked) { await app().whenBooted(); useHome(); }
   });

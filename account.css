@@ -123,3 +123,11 @@
 .ac-profile .ac-link { font-size: 0.62rem; letter-spacing: 0.16em; }
 .ac-card.ac-static { cursor: default; }
 .ac-card.ac-static:hover { transform: none; }
+
+/* SUGGESTION BOX */
+.ac-suggest { display: flex; flex-direction: column; align-items: flex-start; gap: 12px; margin-top: 22px; max-width: 640px; }
+.ac-suggest textarea { width: 100%; padding: 14px 16px; border: 1px solid #fff; background: transparent; color: #fff; font: 500 1rem/1.5 'Inter', sans-serif; resize: vertical; outline: none; }
+.ac-suggest textarea::placeholder { color: rgba(255, 255, 255, 0.6); }
+.ac-sugg-list { margin: 0; padding: 0; list-style: none; display: grid; gap: 12px; }
+.ac-sugg-list li { padding: 12px 14px; border: 1px solid rgba(255, 255, 255, 0.35); line-height: 1.5; }
+.ac-sugg-list li small { display: block; margin-bottom: 6px; font-family: 'Space Mono', monospace; font-size: 0.62rem; letter-spacing: 0.14em; opacity: 0.75; }

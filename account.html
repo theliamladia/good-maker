@@ -80,7 +80,20 @@
         <header class="ac-bar"><h2 class="mono">OWNER · WHO OWNS WHAT</h2><span class="mono" id="ledgerCount"></span></header>
         <table class="ac-ledger-t mono"><thead><tr><th>SERIAL</th><th>PIECE</th><th>OWNER</th><th>PULLED</th></tr></thead><tbody id="ledgerRows"></tbody></table>
       </div>
-      <button type="button" class="ac-link mono" id="invReset" hidden>OWNER: RESET MY CRATE TEST (CLEARS MY PULLS AND ALL SERIALS)</button>
+      <button type="button" class="ac-link mono" id="invReset" hidden>OWNER: RESET MY CRATE TEST (CLEARS MY PULLS)</button>
+    </section>
+
+    <section class="ac-block" id="suggest" aria-labelledby="sTitle">
+      <header class="ac-bar"><h2 class="mono" id="sTitle">SUGGESTION BOX</h2><span class="mono">IDEAS, BUGS, WISHES</span></header>
+      <p class="ac-lede">Got an idea for GOOD® DESIGN, or found something broken? Drop it here. Everything lands in one box and gets read.</p>
+      <form class="ac-suggest" id="suggestForm">
+        <textarea id="suggestText" maxlength="1000" rows="4" placeholder="Your idea…" aria-label="Your suggestion"></textarea>
+        <button type="submit" class="ac-link mono">DROP IT IN</button>
+      </form>
+      <div class="ac-ledger" id="suggestions" hidden>
+        <header class="ac-bar"><h2 class="mono">OWNER · THE BOX</h2><span class="mono" id="suggestCount"></span></header>
+        <ol class="ac-sugg-list" id="suggestRows"></ol>
+      </div>
     </section>
 
     <footer class="ac-danger">

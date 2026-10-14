@@ -93,13 +93,15 @@ function foldOverlay(img) {
   // A real ImageData in the browser: the page draws state.user with putImageData.
   const data = new Uint8ClampedArray(img.data);
   const out = typeof ImageData === 'function' ? new ImageData(data, img.width, img.height) : { width: img.width, height: img.height, data };
+  let n = 0;
   for (const [x0, y0, w, h, dx, dy] of FOLD) {
     if (y0 + h > img.height) continue; // 64×32 skins only have the hat
     for (let y = y0; y < y0 + h; y++) for (let x = x0; x < x0 + w; x++) {
       const o = (y * SIZE + x) * 4, b = ((y + dy) * SIZE + (x + dx)) * 4;
-      if (out.data[o + 3] > 0 && out.data[b + 3] < 255) out.data.copyWithin(b, o, o + 4);
+      if (out.data[o + 3] > 0 && out.data[b + 3] < 255) { out.data.copyWithin(b, o, o + 4); n++; }
     }
   }
+  out.folded = n; // how many base pixels came from the outer layer (lots = an outer-layer-only skin)
   return out;
 }
 

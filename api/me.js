@@ -6,6 +6,9 @@
 //   POST /api/me { action: 'save', look }         -> adds a look to the wardrobe; the first 2 new fits each day earn +10 GOOD® COINS each
 //   POST /api/me { action: 'remove', id }
 //   POST /api/me { action: 'delete' }             -> deletes the account and everything in it
+//   POST /api/me { action: 'prefs', prefs }       -> THE MAKER settings to start from (fit or none, body, MY SKIN, tone)
+//   POST /api/me { action: 'suggest', text }      -> the SUGGESTION BOX
+//   GET  /api/me?suggestions=1                    -> owner only: every suggestion, newest first
 // Looks are recipes of catalogue ids (like the address bar), never pictures.
 const fs = require('fs');
 const path = require('path');
@@ -40,6 +43,25 @@ function cleanLook(L, unlocks = []) {
   if (L.boxer === 'tartan') out.boxer = 'tartan';
   return out;
 }
+// THE MAKER preferences: a look recipe that may be empty (a blank canvas), plus body, MY SKIN and tone.
+function cleanPrefs(P, unlocks) {
+  P = P || {};
+  const out = {};
+  const L = P.look || {};
+  const look = (L.top || L.bottom) ? cleanLook(L, unlocks) : {};
+  if (look) { if (L.feet === 'bare') look.feet = 'bare'; out.look = look; }
+  if (['classic', 'slim'].includes(P.body)) out.body = P.body;
+  if (typeof P.keepSkin === 'boolean') out.keepSkin = P.keepSkin;
+  if (Array.isArray(P.tone) && P.tone.length === 3 && P.tone.every((v) => Number.isInteger(v) && v >= 0 && v <= 255)) out.tone = P.tone;
+  return out;
+}
+// Today's GOOD® COINS saves left, and when the UTC day resets.
+async function dailyOf(uid) {
+  const now = new Date();
+  const used = +(await redis('GET', `user:${uid}:coins2:${now.toISOString().slice(0, 10)}`)) || 0;
+  const reset = Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate() + 1);
+  return { left: Math.max(0, SAVES_PER_DAY - used), per: SAVES_PER_DAY, coins: COINS_PER_SAVE, resetsAt: new Date(reset).toISOString() };
+}
 const lookKey = (L) => JSON.stringify(Object.keys(L).sort().map((k) => [k, L[k]]));
 const isPng = (b) => b.length > 24 && b.length < 40000 && b.readUInt32BE(0) === 0x89504e47 && b.readUInt32BE(16) === 64 && [32, 64].includes(b.readUInt32BE(20));
 
@@ -57,6 +79,11 @@ module.exports = async function handler(req, res) {
         return;
       }
       if (!user) { res.status(200).json({ user: null }); return; }
+      if (req.query && req.query.suggestions) {
+        if (!isOwner(user)) { res.status(403).json({ error: 'owner_only' }); return; }
+        const rows = (await redis('LRANGE', 'suggestions', 0, 499)) || [];
+        res.status(200).json({ suggestions: rows.map((r) => JSON.parse(r)) }); return;
+      }
       // One-time owner set-up, on the owner's next visit: take back the 1000-coin grant
       // if it was applied, and add every GOOD® CRATE piece at serial GD-999 (outside
       // the normal serial counters, so GD-001 onwards stay attainable).
@@ -74,7 +101,7 @@ module.exports = async function handler(req, res) {
       await ACH.touch(user.uid);
       const achievements = await ACH.list(user.uid);
       const profile = await claimProfile(user);
-      res.status(200).json({ user: { name: user.name, coins: user.coins || 0, hasSkin, unlocks: await unlocksFor(user), owner: isOwner(user) || undefined, profile }, wardrobe: rows.map((r) => JSON.parse(r)), inventory: inv, achievements });
+      res.status(200).json({ user: { name: user.name, coins: user.coins || 0, hasSkin, unlocks: await unlocksFor(user), owner: isOwner(user) || undefined, profile, prefs: user.prefs || null, daily: await dailyOf(user.uid) }, wardrobe: rows.map((r) => JSON.parse(r)), inventory: inv, achievements });
       return;
     }
     if (req.method !== 'POST') { res.status(405).json({ error: 'method' }); return; }
@@ -105,7 +132,7 @@ module.exports = async function handler(req, res) {
       if (!look) { res.status(400).json({ error: 'look' }); return; }
       const key = `user:${user.uid}:wardrobe`;
       const rows = ((await redis('LRANGE', key, 0, MAX_LOOKS - 1)) || []).map((r) => JSON.parse(r));
-      if (rows.some((r) => lookKey(r.look) === lookKey(look))) { res.status(200).json({ ok: true, duplicate: true, coins: user.coins || 0 }); return; }
+      if (rows.some((r) => lookKey(r.look) === lookKey(look))) { res.status(200).json({ ok: true, duplicate: true, coins: user.coins || 0, daily: await dailyOf(user.uid) }); return; }
       if (rows.length >= MAX_LOOKS) { res.status(400).json({ error: 'full' }); return; }
       const item = { id: crypto.randomBytes(6).toString('base64url'), look, at: new Date().toISOString() };
       await redis('LPUSH', key, JSON.stringify(item));
@@ -121,7 +148,23 @@ module.exports = async function handler(req, res) {
         earned = (await redis('INCR', dayKey)) <= SAVES_PER_DAY;
       }
       if (earned) { user.coins = (user.coins || 0) + COINS_PER_SAVE; await saveUser(user); }
-      res.status(200).json({ ok: true, item, coins: user.coins || 0, earned: earned ? COINS_PER_SAVE : 0, capped: !!(fresh && !earned) }); return;
+      res.status(200).json({ ok: true, item, coins: user.coins || 0, earned: earned ? COINS_PER_SAVE : 0, capped: !!(fresh && !earned), daily: await dailyOf(user.uid) }); return;
+    }
+    if (body.action === 'prefs') {
+      user.prefs = cleanPrefs(body.prefs, await unlocksFor(user));
+      await saveUser(user);
+      res.status(200).json({ ok: true }); return;
+    }
+    if (body.action === 'suggest') {
+      const text = String(body.text || '').replace(/[<>]/g, '').replace(/\s+/g, ' ').trim().slice(0, 1000);
+      if (text.length < 3) { res.status(400).json({ error: 'empty' }); return; }
+      // At most 10 suggestions an hour per account.
+      const hk = `user:${user.uid}:suggest:${new Date().toISOString().slice(0, 13)}`;
+      await redis('SET', hk, 0, 'EX', 3700, 'NX');
+      if ((await redis('INCR', hk)) > 10) { res.status(429).json({ error: 'slow_down' }); return; }
+      await redis('LPUSH', 'suggestions', JSON.stringify({ name: user.name, text, at: new Date().toISOString() }));
+      await redis('LTRIM', 'suggestions', 0, 499);
+      res.status(200).json({ ok: true }); return;
     }
     if (body.action === 'title') {
       // Name a saved fit (shown on the account page and the public profile). Empty clears it.

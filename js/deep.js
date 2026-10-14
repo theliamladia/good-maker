@@ -1,20 +1,21 @@
 // DEEP END®: the underwater drop. A pineapple floats in the corner; clicking
 // it sends bubbles up the screen, the page sinks underwater, and the looks
 // appear on the player's own skin (from the main page, or any Minecraft
-// username typed in), each with a GOOD® ME download.
+// username typed in), each with OPEN IN MAKER: the look goes onto THE MAKER,
+// to tweak, download (GOOD® ME) or save to the wardrobe.
 (() => {
   const EASE_OUT = 'cubic-bezier(0.16, 1, 0.3, 1)';
   // top = shirt file per body; pants = pants file; holes = GOODIE® (base layer
   // only fills the G, see SkinLib.baseUnderHoles).
   const deep = (id) => ({ top: (b) => `outfits/deep/goodie-${id}-${b}.png`, bottom: `outfits/deep/pants-${id}.png`, holes: true });
   const LOOKS = [
-    { name: 'GOODIE® SQUARE', color: 'SPONGE/GOOD® BLUE', pants: 'JEAN® TROUSER BROWN', ...deep('square') },
-    { name: 'GOODIE® STAR', color: 'STARFISH PINK/GOOD® BLUE', pants: 'JORT® SEAFOAM GREEN', ...deep('star') },
-    { name: 'GOODIE® DROP', color: 'TENTACLE TEAL/GOOD® BLUE', pants: 'JEAN® DEEP TEAL', ...deep('drop') },
-    { name: 'GOODIE® CLAW', color: 'CLAW RED/GOOD® BLUE', pants: 'JEAN® ANCHOR BLUE', ...deep('claw') },
+    { name: 'GOODIE® SQUARE', color: 'SPONGE/GOOD® BLUE', pants: 'JEAN® TROUSER BROWN', maker: { top: 'deep-goodie-square', bottom: 'deep-jean-trouser-brown' }, ...deep('square') },
+    { name: 'GOODIE® STAR', color: 'STARFISH PINK/GOOD® BLUE', pants: 'JORT® SEAFOAM GREEN', maker: { top: 'deep-goodie-star', bottom: 'deep-jort-seafoam-green' }, ...deep('star') },
+    { name: 'GOODIE® DROP', color: 'TENTACLE TEAL/GOOD® BLUE', pants: 'JEAN® DEEP TEAL', maker: { top: 'deep-goodie-drop', bottom: 'deep-jean-deep-teal' }, ...deep('drop') },
+    { name: 'GOODIE® CLAW', color: 'CLAW RED/GOOD® BLUE', pants: 'JEAN® ANCHOR BLUE', maker: { top: 'deep-goodie-claw', bottom: 'deep-jean-anchor-blue' }, ...deep('claw') },
     {
       // Krusty employee: the GOOD® shirt with a Krab red G, bootcut SPRINGSTEEN™ jeans.
-      name: 'SHIRT® KRAB', color: 'COTTON/KRAB RED', pants: 'JEAN® BOOTCUT SPRINGSTEEN™',
+      name: 'SHIRT® KRAB', color: 'COTTON/KRAB RED', pants: 'JEAN® BOOTCUT SPRINGSTEEN™', maker: { top: 'deep-shirt-krab', bottom: 'jean-bootcut-springsteen' },
       top: (b) => `outfits/deep/shirt-krab-${b}.png`, bottom: 'outfits/pants/good-jean-bootcut-black.png',
     },
   ];
@@ -158,16 +159,19 @@
         <div class="dp-view"></div>
         <div class="dp-name">${look.name}</div>
         <div class="dp-color mono">${look.color}<br>${look.pants}</div>
-        <button type="button" class="dp-get">GOOD® ME</button>`;
+        <button type="button" class="dp-get">OPEN IN MAKER</button>`;
       row.appendChild(col);
       col.animate([{ transform: 'translateY(80px)', opacity: 0 }, { transform: 'none', opacity: 1 }],
         { duration: 1000, delay: 150 + i * 140, easing: EASE_OUT, fill: 'backwards' });
+      col.querySelector('.dp-get').onclick = async () => {
+        await surface();
+        await window.GoodApp.applyLook(look.maker);
+      };
       return { look, col, view: col.querySelector('.dp-view'), tex: null, viewer: null };
     });
     stage.querySelector('.dp-head').animate([{ opacity: 0, transform: 'translateY(-16px)' }, { opacity: 1, transform: 'none' }],
       { duration: 700, delay: 200, easing: EASE_OUT, fill: 'backwards' });
 
-    let name = cur.isDemo ? '' : (cur.name || ''); // download: <name>GOOD.png
     const show = async (skin) => {
       const slim = SkinLib.detectSlim(skin);
       const tone = SkinLib.sampleSkinTone(skin);
@@ -189,12 +193,7 @@
           }
           c.viewer.loadSkin(c.tex, { model: slim ? 'slim' : 'default' });
         }
-        c.col.querySelector('.dp-get').onclick = () => {
-          const a = document.createElement('a');
-          a.href = c.tex.toDataURL('image/png');
-          a.download = `${name.replace(/[^A-Za-z0-9_]/g, '')}GOOD.png`;
-          a.click();
-        };
+
       }
     };
     if (cur.skin) show(cur.skin);
@@ -206,7 +205,6 @@
       msg.textContent = 'FETCHING SKIN…';
       try {
         const skin = await window.GoodApp.skinForName(n);
-        name = n;
         await show(skin);
         msg.textContent = '';
       } catch (err) {

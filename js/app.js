@@ -65,6 +65,8 @@
     merged: null,
     tone: [224, 172, 140],
     keepSkin: false,     // MY SKIN: bare skin keeps the player's own texture, not the tone
+    keepSkinChosen: false, // MY SKIN set by the player (or their saved settings): skins don't override it
+    bodyChosen: false,   // Classic/Slim set by the player (or their saved settings): skins don't override it
     resultUrl: null,
   };
   const cache = {};
@@ -616,7 +618,7 @@
   }
   $('body').onclick = (e) => {
     const btn = e.target.closest('[data-body]');
-    if (btn) setBody(btn.dataset.body);
+    if (btn) { state.bodyChosen = true; setBody(btn.dataset.body); }
   };
 
   // ---------- Hair ----------
@@ -665,7 +667,10 @@
     state.hairGuess = SkinLib.estimateHairRows(data, state.tone);
     const slim = SkinLib.detectSlim(data);
     state.newSkin = true;
-    setBody(slim ? 'slim' : 'classic', `DETECTED ${slim ? 'SLIM' : 'CLASSIC'} / YOU CAN SAVE AS ${slim ? 'CLASSIC' : 'SLIM'}`);
+    // Skins drawn only on the outer layer (no base) only look like themselves with MY SKIN.
+    if (!isDemo && !state.keepSkinChosen && state.user.folded > 300) setKeepSkin(true, false);
+    if (state.bodyChosen) setBody(state.body);
+    else setBody(slim ? 'slim' : 'classic', `DETECTED ${slim ? 'SLIM' : 'CLASSIC'} / YOU CAN SAVE AS ${slim ? 'CLASSIC' : 'SLIM'}`);
   }
 
   const showError = (msg) => {
@@ -842,7 +847,7 @@
     $('toneRow').classList.toggle('off', on);
     if (rerender) render();
   }
-  $('mySkin').onclick = () => setKeepSkin(!state.keepSkin);
+  $('mySkin').onclick = () => { state.keepSkinChosen = true; setKeepSkin(!state.keepSkin); };
   $('auto').onclick = () => state.user && setTone(SkinLib.sampleSkinTone(state.user));
 
   function drawFace() {
@@ -1299,6 +1304,35 @@
   const lookUrl = (L) => `${location.origin}${location.pathname}?${new URLSearchParams(L)}`;
   function syncUrl() {
     if (booted) history.replaceState(null, '', lookUrl(currentLook()));
+    savePrefsSoon();
+  }
+  // ---------- Saved settings ----------
+  // What's on (or nothing: a blank canvas), Classic/Slim and MY SKIN come back on the next
+  // visit: kept in this browser, and on the account when signed in (js/account.js).
+  const PREFS_KEY = 'good:prefs';
+  function prefs() {
+    const look = currentLook(false);
+    delete look.body;
+    return { look, body: state.body, keepSkin: state.keepSkin };
+  }
+  let prefsT;
+  function savePrefsSoon() {
+    if (!booted) return;
+    clearTimeout(prefsT);
+    prefsT = setTimeout(() => {
+      const p = prefs();
+      try { localStorage.setItem(PREFS_KEY, JSON.stringify(p)); } catch { /* private mode */ }
+      if (window.GoodAccount) window.GoodAccount.savePrefs(p);
+    }, 900);
+  }
+  function localPrefs() { try { return JSON.parse(localStorage.getItem(PREFS_KEY) || 'null'); } catch { return null; } }
+  // withLook = false when the address bar already names a look (a shared link wins).
+  async function applyPrefs(P, withLook) {
+    if (!P) return;
+    if (withLook && P.look) await applyLook(P.look, false);
+    if (typeof P.keepSkin === 'boolean') { state.keepSkinChosen = true; setKeepSkin(P.keepSkin, false); }
+    if (['classic', 'slim'].includes(P.body)) { state.bodyChosen = true; setBody(P.body); }
+    else render();
   }
   function lookFromUrl() {
     const q = new URLSearchParams(location.search);
@@ -1347,7 +1381,10 @@
   setBody('classic');
   const linked = lookFromUrl();
   const bootDone = loadData(DEMO_SKIN).then((d) => useSkin(d, 'Chinny', true)).catch(() => render())
-    .then(() => linked && applyLook(linked, true))
+    .then(() => (linked ? applyLook(linked, true) : null))
+    .then(() => applyPrefs(localPrefs(), !linked))
     .finally(() => { booted = true; if (linked) syncUrl(); }); // a plain visit keeps a clean address until something changes
   window.GoodApp.linked = !!(linked && linked.u);
+  window.GoodApp.linkedLook = !!linked;
+  window.GoodApp.applyPrefs = (P) => applyPrefs(P, !linked);
 })();
