@@ -1,4 +1,5 @@
 // Vercel serverless function: the GOOD® CRATE.
+//   GET  /api/crate?crate=2             -> GOOD® CRATE Nº002 (not open yet): { price, open: false, items }
 //   GET  /api/crate                     -> { price, refund, goldOdds, items: [{ id, name, color, tier, pct, pulled }] }
 //   POST /api/crate { action: 'open' }  -> { roll: { id, item, serial, gold, dup }, coins }
 //   POST /api/crate { action: 'reset' } -> owner only: clears the owner's own pulls (testing; serials are never reused)
@@ -9,7 +10,7 @@
 const crypto = require('crypto');
 const { redis, configured, overLimit, parseBody } = require('./_redis');
 const { currentUser, saveUser, isOwner } = require('./_account');
-const { ITEMS, ODDS, GOLD_ODDS, PRICE, REFUND, table } = require('./_crate');
+const { ITEMS, ODDS, GOLD_ODDS, PRICE, REFUND, table, table2 } = require('./_crate');
 const ACH = require('./_achievements');
 
 // Weighted pick in hundredths of a percent, from a cryptographic RNG.
@@ -88,6 +89,11 @@ module.exports = async function handler(req, res) {
       rows.sort((a, b) => a.item.localeCompare(b.item) || a.serial.localeCompare(b.serial));
       res.status(200).json({ rows }); return;
     } catch { res.status(502).json({ error: 'storage' }); return; }
+  }
+  // GOOD® CRATE Nº002 (ART® IN MOTION): the pieces and odds for /inmotion. It can't be opened yet.
+  if (req.method === 'GET' && req.query && req.query.crate === '2') {
+    res.status(200).json({ price: PRICE, open: false, items: table2() });
+    return;
   }
   if (req.method === 'GET') {
     // pulled = how many serialized copies of each piece exist (the serial counters; the owner's GD-999 set isn't counted).

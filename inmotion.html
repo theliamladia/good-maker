@@ -39,12 +39,19 @@
     <p class="im-kicker sc">GOOD® · CRATE Nº002</p>
     <h1 class="im-title">ART<sup>®</sup> IN MOTION</h1>
     <p class="im-lede">The new collection from GOOD®. A study of colour in movement, painted <em>en plein air</em>: pigment given to the open light, to weather, and to the hand that moves through it.</p>
-    <p class="im-soon sc">OPENING SOON</p>
+    <div class="im-actions">
+      <button type="button" class="im-open sc" disabled>OPENING SOON</button>
+      <a class="im-link sc" href="account" id="inv">MY INVENTORY® →</a>
+    </div>
+    <p class="im-wallet sc" id="wallet" aria-live="polite">&nbsp;</p>
+    <p class="im-timer sc" data-coin-timer></p>
   </section>
 
   <section class="im-crate" aria-labelledby="crateTitle">
-    <figure class="im-box" aria-hidden="true">
-      <svg viewBox="0 0 420 340" role="presentation">
+    <figure class="im-box">
+      <canvas class="im-3d" id="crate3d" aria-label="The ART® IN MOTION crate in 3D: a white box with the G in every colour of the season, lid lifted, the pieces inside. Drag to turn."></canvas>
+      <figcaption class="im-hint sc" id="hint">DRAG TO TURN</figcaption>
+      <svg class="im-flat" aria-hidden="true" viewBox="0 0 420 340" role="presentation">
         <defs>
           <linearGradient id="imTop" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#ffffff"/><stop offset="1" stop-color="#f1eee7"/></linearGradient>
           <linearGradient id="imFront" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#fdfcf9"/><stop offset="1" stop-color="#efebe3"/></linearGradient>
@@ -78,7 +85,7 @@
     <div class="im-crate-copy">
       <p class="im-kicker sc">THE CRATE</p>
       <h2 class="im-h2" id="crateTitle">A white box, and every colour of the season.</h2>
-      <p class="im-p">Plain, quiet, made to be kept. The G is set in six pigments and GOOD® BLUE, so the colour is waiting before the lid is lifted.</p>
+      <p class="im-p">Plain, quiet, made to be kept. The G is set in six pigments and GOOD® BLUE, so the colour is waiting before the lid is lifted. Inside: every piece of the collection, in three colourways on MARSHMALLOW™.</p>
       <ul class="im-palette sc">
         <li><i style="--c:#f3d88a"></i>NAPLES YELLOW™</li>
         <li><i style="--c:#2e7d6b"></i>VIRIDIAN™</li>
@@ -90,10 +97,49 @@
       </ul>
     </div>
   </section>
+
+  <section class="im-sec" aria-labelledby="howTitle">
+    <p class="im-kicker sc">HOW IT WORKS</p>
+    <h2 class="im-h2" id="howTitle">Five steps, unhurried.</h2>
+    <ol class="im-steps">
+      <li><span class="sc">01</span><p><b>Earn GOOD® COINS.</b> Sign in and save new fits to your wardrobe in THE MAKER: ten coins each, up to two a day.</p></li>
+      <li><span class="sc">02</span><p><b>Open the crate.</b> Five GOOD® COINS, when it opens. We ask once whether you're sure.</p></li>
+      <li><span class="sc">03</span><p><b>Watch the reel.</b> Every piece passes the marker, slows, and settles on yours.</p></li>
+      <li><span class="sc">04</span><p><b>Keep it, numbered.</b> Every pull is serialized and lands in MY INVENTORY®.</p></li>
+      <li><span class="sc">05</span><p><b>Wear it.</b> Own a serialized copy and the piece is yours to wear in THE MAKER.</p></li>
+    </ol>
+  </section>
+
+  <section class="im-sec im-chase" aria-labelledby="chaseTitle">
+    <canvas class="im-chase-fig" id="chaseFig" aria-hidden="true"></canvas>
+    <div>
+      <p class="im-kicker sc">THE CHASE · <span id="chaseOdds">1%</span> OF CRATES</p>
+      <h2 class="im-h2" id="chaseTitle">JEAN<sup>®</sup> PAINTER SPLATTER</h2>
+      <p class="im-p">A MARSHMALLOW™ jean, worn through a season at the easel and flicked with all six pigments. No two marks repeat; none of it was planned.</p>
+      <p class="im-p">The rarest piece in the crate. Beside it, two quieter rarities: the SCARF® I'M SOWWY and the JEAJEAN® AGATE/SPRINGSTEEN, belted in white with GOOD® BLUE buckles.</p>
+    </div>
+  </section>
+
+  <section class="im-sec" aria-labelledby="insideTitle">
+    <p class="im-kicker sc">WHAT'S INSIDE · <span id="insideCount">ODDS PER CRATE</span></p>
+    <h2 class="im-h2" id="insideTitle">The collection.</h2>
+    <div class="im-grid" id="inside"></div>
+  </section>
+
+  <section class="im-sec im-end">
+    <h2 class="im-h2">Opening soon.</h2>
+    <p class="im-p">No GOOD® COINS yet? <a href="account">Sign in</a>, then save a new fit in <a href="./">THE MAKER</a>.</p>
+    <p class="im-timer sc" data-coin-timer></p>
+  </section>
 </main>
 
 <footer class="im-foot sc">© 2026 GOOD® DESIGN · <a href="./">THE MAKER</a> · <a href="/privacy">PRIVACY</a></footer>
 
+<script src="https://cdn.jsdelivr.net/npm/three@0.156.1/build/three.min.js"></script>
+<script src="js/gooditems.js"></script>
 <script src="js/inmotion.js"></script>
+<script src="js/inmotion-crate.js"></script>
+<script src="js/inmotion-page.js"></script>
+<script src="js/coin-timer.js"></script>
 </body>
 </html>

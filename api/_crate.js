@@ -38,4 +38,40 @@ function table() {
   for (const [k, p] of GOLD_ODDS) pct[k] = (gold * p) / 100;
   return Object.entries(ITEMS).map(([id, it]) => ({ id, ...it, pct: Math.round(pct[id] * 100) / 100 }));
 }
-module.exports = { ITEMS, ODDS, GOLD_ODDS, PRICE, REFUND, table };
+// GOOD® CRATE Nº002 · ART® IN MOTION: shown on /inmotion (GET /api/crate?crate=2), not
+// open yet: nothing here can be rolled. pct = percent of every crate (sums to 100).
+// tex = the preview-only texture (api/_locked/aim-*.enc).
+const ITEMS2 = {
+  'chore-naples-paynes': { name: "CHORE®", color: "NAPLES YELLOW/PAYNE'S GREY", tier: 'core', pct: 3.4, tex: 'aim-chore-naples-paynes' },
+  'chore-viridian-cobalt': { name: "CHORE®", color: "VIRIDIAN/COBALT VIOLET", tier: 'core', pct: 3.4, tex: 'aim-chore-viridian-cobalt' },
+  'chore-alizarin-manganese': { name: "CHORE®", color: "ALIZARIN/MANGANESE BLUE", tier: 'core', pct: 3.4, tex: 'aim-chore-alizarin-manganese' },
+  'trench-naples-paynes': { name: "TRENCH®", color: "NAPLES YELLOW/PAYNE'S GREY", tier: 'core', pct: 3.4, tex: 'aim-trench-naples-paynes' },
+  'trench-viridian-cobalt': { name: "TRENCH®", color: "VIRIDIAN/COBALT VIOLET", tier: 'core', pct: 3.4, tex: 'aim-trench-viridian-cobalt' },
+  'trench-alizarin-manganese': { name: "TRENCH®", color: "ALIZARIN/MANGANESE BLUE", tier: 'core', pct: 3.4, tex: 'aim-trench-alizarin-manganese' },
+  'inside-out-naples-paynes': { name: "INSIDE OUT®", color: "NAPLES YELLOW/PAYNE'S GREY", tier: 'core', pct: 3.4, tex: 'aim-inside-out-naples-paynes' },
+  'inside-out-viridian-cobalt': { name: "INSIDE OUT®", color: "VIRIDIAN/COBALT VIOLET", tier: 'core', pct: 3.4, tex: 'aim-inside-out-viridian-cobalt' },
+  'inside-out-alizarin-manganese': { name: "INSIDE OUT®", color: "ALIZARIN/MANGANESE BLUE", tier: 'core', pct: 3.4, tex: 'aim-inside-out-alizarin-manganese' },
+  'baby-hoodie-naples-paynes': { name: "BABY® BOYFRIEND HOODIE", color: "NAPLES YELLOW/PAYNE'S GREY", tier: 'core', pct: 3.4, tex: 'aim-baby-hoodie-naples-paynes' },
+  'baby-hoodie-viridian-cobalt': { name: "BABY® BOYFRIEND HOODIE", color: "VIRIDIAN/COBALT VIOLET", tier: 'core', pct: 3.4, tex: 'aim-baby-hoodie-viridian-cobalt' },
+  'baby-hoodie-alizarin-manganese': { name: "BABY® BOYFRIEND HOODIE", color: "ALIZARIN/MANGANESE BLUE", tier: 'core', pct: 3.4, tex: 'aim-baby-hoodie-alizarin-manganese' },
+  'baby-cozyknit-naples-paynes': { name: "BABY® COZYKNIT", color: "NAPLES YELLOW/PAYNE'S GREY", tier: 'core', pct: 3.4, tex: 'aim-baby-cozyknit-naples-paynes' },
+  'baby-cozyknit-viridian-cobalt': { name: "BABY® COZYKNIT", color: "VIRIDIAN/COBALT VIOLET", tier: 'core', pct: 3.4, tex: 'aim-baby-cozyknit-viridian-cobalt' },
+  'baby-cozyknit-alizarin-manganese': { name: "BABY® COZYKNIT", color: "ALIZARIN/MANGANESE BLUE", tier: 'core', pct: 3.4, tex: 'aim-baby-cozyknit-alizarin-manganese' },
+  'scarf-im-sowwy': { name: "SCARF®", color: "I'M SOWWY", tier: 'rare', pct: 1.5, tex: 'aim-scarf-im-sowwy' },
+  'splatter-springsteen': { name: "JEAN® SPLATTER", color: "SPRINGSTEEN", tier: 'core', pct: 4, tex: 'aim-splatter-springsteen', bottom: true },
+  'splatter-the-jean': { name: "JEAN® SPLATTER", color: "THE JEAN", tier: 'core', pct: 4, tex: 'aim-splatter-the-jean', bottom: true },
+  'splatter-selvedge': { name: "JEAN® SPLATTER", color: "SELVEDGE", tier: 'core', pct: 4, tex: 'aim-splatter-selvedge', bottom: true },
+  'jean-ice': { name: "JEAN® ICE", color: "ICE", tier: 'core', pct: 4, tex: 'aim-jean-ice', bottom: true },
+  'jean-bleached': { name: "JEAN® BLEACHED", color: "BLEACHED", tier: 'core', pct: 4, tex: 'aim-jean-bleached', bottom: true },
+  'jeajean-springsteen-the-jean': { name: "JEAJEAN®", color: "SPRINGSTEEN/THE JEAN", tier: 'core', pct: 4, tex: 'aim-jeajean-springsteen-the-jean', bottom: true },
+  'jeajean-ice-selvedge': { name: "JEAJEAN®", color: "ICE/SELVEDGE", tier: 'core', pct: 4, tex: 'aim-jeajean-ice-selvedge', bottom: true },
+  'jeajean-springsteen-agate': { name: "JEAJEAN®", color: "SPRINGSTEEN/AGATE", tier: 'core', pct: 4, tex: 'aim-jeajean-springsteen-agate', bottom: true },
+  'jeajean-agate-springsteen': { name: "JEAJEAN®", color: "AGATE/SPRINGSTEEN", tier: 'rare', pct: 2.5, tex: 'aim-jeajean-agate-springsteen', bottom: true },
+  'jean-painter': { name: "JEAN® PAINTER SPLATTER", color: "ART® IN MOTION", tier: 'chase', pct: 1, tex: 'aim-jean-painter', bottom: true, chase: true },
+  'baby-tights-naples-paynes': { name: "BABY® TIGHTS", color: "NAPLES YELLOW/PAYNE'S GREY", tier: 'core', pct: 4, tex: 'aim-baby-tights-naples-paynes', bottom: true },
+  'baby-tights-viridian-cobalt': { name: "BABY® TIGHTS", color: "VIRIDIAN/COBALT VIOLET", tier: 'core', pct: 4, tex: 'aim-baby-tights-viridian-cobalt', bottom: true },
+  'baby-tights-alizarin-manganese': { name: "BABY® TIGHTS", color: "ALIZARIN/MANGANESE BLUE", tier: 'core', pct: 4, tex: 'aim-baby-tights-alizarin-manganese', bottom: true },
+};
+const table2 = () => Object.entries(ITEMS2).map(([id, it]) => ({ id, ...it }));
+
+module.exports = { ITEMS, ODDS, GOLD_ODDS, PRICE, REFUND, table, table2 };
