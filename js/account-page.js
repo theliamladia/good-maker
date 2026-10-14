@@ -93,23 +93,12 @@
     drawAchievements();
   }
 
-  // MY INVENTORY®: every GOOD® CRATE pull, newest first, the piece alone with its serial.
+  // MY INVENTORY®: every GOOD® CRATE pull, identical pieces stacked (lowest serial on top).
   function drawInventory() {
     $('iCount').textContent = `${inventory.length} ${inventory.length === 1 ? 'PIECE' : 'PIECES'}`;
     $('iEmpty').hidden = inventory.length > 0;
     $('invReset').hidden = !(me && me.owner && inventory.some((e) => e.serial !== 'GD-999'));
-    $('inv').replaceChildren(...inventory.map((e) => {
-      const it = crateItems[e.item] || { id: e.item, name: e.item.toUpperCase(), color: '' };
-      const el = document.createElement('div');
-      el.className = `ac-card${it.tier === 'gold' || it.tier === 'ticket' ? ' ac-gold' : ''}`;
-      el.innerHTML = '<canvas class="ac-inv-fig" aria-hidden="true"></canvas><span class="ac-piece"></span><span class="ac-cw mono"></span><span class="ac-serial mono"></span>';
-      el.querySelector('.ac-piece').textContent = it.name;
-      el.querySelector('.ac-cw').textContent = it.color;
-      el.querySelector('.ac-serial').textContent = e.serial;
-      el.setAttribute('aria-label', `${it.name} ${it.color}, serial ${e.serial}`);
-      if (window.GoodItems && crateItems[e.item]) GoodItems.draw(it, el.querySelector('canvas')).catch(() => {});
-      return el;
-    }));
+    $('inv').replaceChildren(...GoodItems.inventoryCards(inventory, crateItems));
   }
 
   // ACHIEVEMENTS: earned ones first, each with the % of players who have it.

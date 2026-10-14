@@ -66,5 +66,39 @@ window.GoodItems = (() => {
     if (item.hem) img = hem(img);
     flat(img, cv, item.bottom);
   }
-  return { locked, hem, flat, ticket, draw };
+  // MY INVENTORY®: identical pieces stack into one card with the lowest serial on top.
+  // A stack shows ×N; clicking it lists every serial in it, lowest first.
+  const serialNo = (s) => { const m = /(\d+)/.exec(s || ''); return m ? +m[1] : Infinity; };
+  function inventoryCards(inventory, items) {
+    const stacks = new Map();   // first seen first: the inventory comes newest first
+    for (const e of inventory) {
+      if (!stacks.has(e.item)) stacks.set(e.item, []);
+      stacks.get(e.item).push(e.serial);
+    }
+    return [...stacks].map(([id, serials]) => {
+      serials.sort((a, b) => serialNo(a) - serialNo(b) || String(a).localeCompare(String(b)));
+      const it = items[id] || { id, name: String(id).toUpperCase(), color: '' };
+      const n = serials.length;
+      const el = document.createElement('div');
+      el.className = `ac-card${it.tier === 'gold' || it.tier === 'ticket' ? ' ac-gold' : ''}${n > 1 ? ' ac-stack' : ''}`;
+      el.innerHTML = '<canvas class="ac-inv-fig" aria-hidden="true"></canvas><span class="ac-piece"></span><span class="ac-cw mono"></span><span class="ac-serial mono"></span>';
+      el.querySelector('.ac-piece').textContent = it.name;
+      el.querySelector('.ac-cw').textContent = it.color;
+      el.querySelector('.ac-serial').textContent = serials[0];
+      el.setAttribute('aria-label', n > 1 ? `${it.name} ${it.color}, ${n} copies, lowest serial ${serials[0]}` : `${it.name} ${it.color}, serial ${serials[0]}`);
+      if (n > 1) {
+        const badge = document.createElement('span'); badge.className = 'ac-count mono'; badge.textContent = `×${n}`;
+        const list = document.createElement('div'); list.className = 'ac-serials mono'; list.hidden = true;
+        for (const sr of serials) { const b = document.createElement('span'); b.textContent = sr; list.append(b); }
+        el.append(badge, list);
+        el.tabIndex = 0; el.setAttribute('role', 'button'); el.setAttribute('aria-expanded', 'false');
+        const toggle = () => { list.hidden = !list.hidden; el.classList.toggle('open', !list.hidden); el.setAttribute('aria-expanded', String(!list.hidden)); };
+        el.addEventListener('click', toggle);
+        el.addEventListener('keydown', (ev) => { if (ev.key === 'Enter' || ev.key === ' ') { ev.preventDefault(); toggle(); } });
+      }
+      if (items[id]) draw(it, el.querySelector('canvas')).catch(() => {});
+      return el;
+    });
+  }
+  return { locked, hem, flat, ticket, draw, inventoryCards };
 })();

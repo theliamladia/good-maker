@@ -46,17 +46,7 @@
     const items = Object.fromEntries((c.items || []).map((i) => [i.id, i]));
     $('iCount').textContent = `${p.inventory.length} ${p.inventory.length === 1 ? 'PIECE' : 'PIECES'}`;
     $('iEmpty').hidden = p.inventory.length > 0;
-    $('inv').replaceChildren(...p.inventory.map((e) => {
-      const it = items[e.item] || { id: e.item, name: e.item.toUpperCase(), color: '' };
-      const el = document.createElement('div');
-      el.className = `ac-card${it.tier === 'gold' || it.tier === 'ticket' ? ' ac-gold' : ''}`;
-      el.innerHTML = '<canvas class="ac-inv-fig" aria-hidden="true"></canvas><span class="ac-piece"></span><span class="ac-cw mono"></span><span class="ac-serial mono"></span>';
-      el.querySelector('.ac-piece').textContent = it.name;
-      el.querySelector('.ac-cw').textContent = it.color;
-      el.querySelector('.ac-serial').textContent = e.serial;
-      if (items[e.item]) GoodItems.draw(it, el.querySelector('canvas')).catch(() => {});
-      return el;
-    }));
+    $('inv').replaceChildren(...GoodItems.inventoryCards(p.inventory, items));
 
     // Home skin and wardrobe (each fit drawn on their home skin)
     let skin;
