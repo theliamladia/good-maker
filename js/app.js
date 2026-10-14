@@ -793,6 +793,8 @@
     current: () => ({ skin: state.user, name: state.userName, isDemo: state.isDemo }),
     // For js/account.js: the look on screen, putting a saved one on, and the home skin.
     currentLook: () => currentLook(false),
+    // The look to save to the wardrobe: the recipe plus FINE TUNING (erased pixels, hair, hat layer, tone, MY SKIN).
+    savedLook: () => ({ ...currentLook(false), ft: fineTune() }),
     // For the MINECRAFT STAND button: the finished PNG, only when it could be downloaded.
     // Just the clothes, on a plain white mannequin (no face, no hair, no player skin).
     standSkin: () => ($('download').disabled || !state.resultUrl || !state.stand ? null : {
@@ -1300,6 +1302,21 @@
     if (canTuck() && !state.tucked) L.tuck = 'out';
     if (!state.noBottom && p.boxers && state.boxer === 'tartan') L.boxer = 'tartan';
     return L;
+  }
+  // FINE TUNING, so a saved fit looks the way it was touched up. Erased pixels are a
+  // 64×64 bitmap (512 bytes) in base64; tone only when it isn't the skin's own.
+  function fineTune() {
+    const ft = { hair: state.hair, hw: state.headwear, ks: !!state.keepSkin };
+    if (state.user) {
+      const auto = SkinLib.sampleSkinTone(state.user);
+      if (state.tone.some((v, i) => v !== auto[i])) ft.tone = [...state.tone];
+    }
+    if (state.erased.size) {
+      const bits = new Uint8Array(512);
+      for (const k of state.erased) { const [x, y] = k.split(',').map(Number); const i = y * 64 + x; bits[i >> 3] |= 1 << (i & 7); }
+      ft.e = btoa(String.fromCharCode(...bits));
+    }
+    return ft;
   }
   const lookUrl = (L) => `${location.origin}${location.pathname}?${new URLSearchParams(L)}`;
   function syncUrl() {

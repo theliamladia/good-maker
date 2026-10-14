@@ -49,8 +49,18 @@ window.GoodCompose = (() => {
       pants = SkinLib.washPants(pants, p.wash);
       outfit = SkinLib.combineOutfit(outfit, pants, !!(L.tuck !== 'out' || (o && o.cropped) || p.noTuck));
     }
-    const tone = SkinLib.sampleSkinTone(user);
-    const merged = SkinLib.mergeSkin(user, outfit, tone, slim, slim ? SkinLib.estimateHairRows(user, tone) : 0, null, 'keep', false);
+    // FINE TUNING saved with the fit (L.ft): hair rows, erased pixels, hat layer, tone, MY SKIN.
+    if (SkinLib.foldOverlay) user = SkinLib.foldOverlay(user);
+    const ft = L.ft || {};
+    const tone = Array.isArray(ft.tone) ? ft.tone : SkinLib.sampleSkinTone(user);
+    const hair = Number.isInteger(ft.hair) ? ft.hair : slim ? SkinLib.estimateHairRows(user, tone) : 0;
+    let erased = null;
+    if (ft.e) {
+      erased = new Set();
+      const bits = Uint8Array.from(atob(ft.e), (c) => c.charCodeAt(0));
+      for (let i = 0; i < 4096; i++) if (bits[i >> 3] & (1 << (i & 7))) erased.add((i & 63) + ',' + (i >> 6));
+    }
+    const merged = SkinLib.mergeSkin(user, outfit, tone, slim, hair, erased, ft.hw || 'keep', !!ft.ks);
     if (o && o.hat) for (let y = 0; y < 16; y++) { const i = (y * 64 + 32) * 4; merged.data.set(outfit.data.subarray(i, i + 32 * 4), i); }
     return { merged, slim, top: o, bottom: p };
   }

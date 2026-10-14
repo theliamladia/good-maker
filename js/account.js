@@ -79,7 +79,7 @@
   $('saveLook').onclick = async () => {
     if (!me) { location.href = 'account'; return; }
     try {
-      const j = await post('api/me', { action: 'save', look: app().currentLook() });
+      const j = await post('api/me', { action: 'save', look: app().savedLook ? app().savedLook() : app().currentLook() });
       if (j.daily) { me.daily = j.daily; drawDaily(); }
       if (j.duplicate) { toast('ALREADY IN YOUR WARDROBE.'); return; }
       me.coins = j.coins; draw();

@@ -12,7 +12,7 @@
   };
   let toastT;
   const toast = (m) => { const t = $('toast'); t.textContent = m; t.hidden = false; clearTimeout(toastT); toastT = setTimeout(() => { t.hidden = true; }, 2800); };
-  const lookHref = (L) => `./?${new URLSearchParams(L)}`;
+  const lookHref = ({ ft, ...L }) => `./?${new URLSearchParams(L)}`;   // FINE TUNING stays with the saved fit
 
   let me = null, wardrobe = [], skin = null, inventory = [], crateItems = {}, achievements = [];
 

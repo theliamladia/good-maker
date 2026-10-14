@@ -42,7 +42,20 @@ function cleanLook(L, unlocks = []) {
   if (['classic', 'slim'].includes(L.body)) out.body = L.body;
   if (L.tuck === 'out') out.tuck = 'out';
   if (L.boxer === 'tartan') out.boxer = 'tartan';
+  const ft = cleanFt(L.ft);
+  if (ft) out.ft = ft;
   return out;
+}
+// FINE TUNING saved with a fit: hair rows, hat layer, MY SKIN, tone, erased pixels (64×64 bitmap, base64).
+function cleanFt(F) {
+  if (!F || typeof F !== 'object') return null;
+  const out = {};
+  if (Number.isInteger(F.hair) && F.hair >= 0 && F.hair <= 12) out.hair = F.hair;
+  if (['keep', 'auto', 'none'].includes(F.hw)) out.hw = F.hw;
+  if (typeof F.ks === 'boolean') out.ks = F.ks;
+  if (Array.isArray(F.tone) && F.tone.length === 3 && F.tone.every((v) => Number.isInteger(v) && v >= 0 && v <= 255)) out.tone = F.tone;
+  if (typeof F.e === 'string' && F.e.length <= 700 && /^[A-Za-z0-9+/]+=*$/.test(F.e) && Buffer.from(F.e, 'base64').length === 512) out.e = F.e;
+  return Object.keys(out).length ? out : null;
 }
 // THE MAKER preferences: a look recipe that may be empty (a blank canvas), plus body, MY SKIN and tone.
 function cleanPrefs(P, unlocks) {
@@ -143,7 +156,8 @@ module.exports = async function handler(req, res) {
       // Coins are earned once per distinct look ever saved, so delete-and-resave can't farm them.
       // +10 GOOD® COINS for each of the first 2 new fits saved each day (UTC). The day's
       // counter is created with its expiry first (NX), then counted up.
-      const fresh = await redis('SADD', `user:${user.uid}:earned`, sha(lookKey(look)));
+      const { ft: _ft, ...recipe } = look;   // a touch-up of the same fit doesn't earn again
+      const fresh = await redis('SADD', `user:${user.uid}:earned`, sha(lookKey(recipe)));
       const today = new Date().toISOString().slice(0, 10);
       let earned = false;
       if (fresh) {

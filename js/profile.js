@@ -78,7 +78,7 @@
     $('grid').replaceChildren(...p.wardrobe.map((w) => {
       // Only your own fits open in THE MAKER; on someone else's profile they're just to look at.
       const a = document.createElement(mine ? 'a' : 'div');
-      a.className = `ac-card${mine ? '' : ' ac-static'}`; if (mine) a.href = `./?${new URLSearchParams(w.look)}`; a.hidden = true;
+      a.className = `ac-card${mine ? '' : ' ac-static'}`; if (mine) { const { ft, ...L } = w.look; a.href = `./?${new URLSearchParams(L)}`; } a.hidden = true;
       a.innerHTML = '<span class="ac-fig"></span><span class="ac-fit-title"></span><span class="ac-piece"></span><span class="ac-cw mono"></span>';
       a.querySelector('.ac-fit-title').textContent = w.title || '';
       if (mine) {
