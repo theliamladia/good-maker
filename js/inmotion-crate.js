@@ -131,11 +131,16 @@
   // ---------- Size, drag to turn, open ----------
   function size() {
     const w = canvas.clientWidth, h = canvas.clientHeight;
+    if (!w || !h) return;
     renderer.setSize(w, h, false); camera.aspect = w / h;
     camera.position.z = w / h < 0.9 ? 78 : 62;
     camera.updateProjectionMatrix();
   }
+  // Show the 3D crate first (it replaces the flat drawing), then size it: a hidden canvas
+  // measures 0×0. A ResizeObserver keeps it right whenever its box changes.
+  canvas.closest('figure').classList.add('has3d');
   addEventListener('resize', size); size();
+  if (window.ResizeObserver) new ResizeObserver(size).observe(canvas);
 
   let rotY = -0.55, vel = 0, drag = null;
   canvas.addEventListener('pointerdown', (e) => { drag = { x: e.clientX, r: rotY }; canvas.setPointerCapture(e.pointerId); const h = document.getElementById('hint'); if (h) h.style.opacity = 0; });
@@ -143,7 +148,6 @@
   const end = () => { drag = null; };
   canvas.addEventListener('pointerup', end); canvas.addEventListener('pointercancel', end);
 
-  canvas.closest('figure').classList.add('has3d');   // the 3D crate replaces the flat drawing
 
   let last = performance.now();
   function tick(now) {
