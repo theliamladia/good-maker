@@ -156,3 +156,4 @@ body.im { background: var(--paper); color: var(--ink); font-family: var(--sans);
 #gotName { overflow-wrap: anywhere; }
 .im-got-c { display: block; margin-top: 14px; font-size: 0.66rem; letter-spacing: 0.26em; color: var(--soft); }
 .im-dropping .im-main { z-index: 30; }   /* the unboxing card sits above everything else on the page */
+.im-ach { display: inline-block; margin-top: 10px; color: #a8203a; font-weight: 600; letter-spacing: 0.12em; }

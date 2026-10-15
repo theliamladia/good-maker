@@ -123,8 +123,8 @@ module.exports = async function handler(req, res) {
       await redis('DEL', `user:${me.uid}:inv`, `user:${me.uid}:owned`);
       for (const r of keep.reverse()) { await redis('LPUSH', `user:${me.uid}:inv`, r); await redis('SADD', `user:${me.uid}:owned`, JSON.parse(r).item); }
       // Test pulls don't keep crate achievements either.
-      if ((await redis('GET', 'ach:weewy-sowwy:first')) === me.uid) await redis('DEL', 'ach:weewy-sowwy:first');
-      for (const a of ['weewy-sowwy', 'im-sowwy']) { await redis('SREM', `user:${me.uid}:ach`, a); await redis('SREM', `ach:${a}`, me.uid); }
+      for (const f of ['weewy-sowwy', 'en-plein-air']) if ((await redis('GET', `ach:${f}:first`)) === me.uid) await redis('DEL', `ach:${f}:first`);
+      for (const a of ['weewy-sowwy', 'im-sowwy', 'scarfin-it-down', 'en-plein-air', 'creatif']) { await redis('SREM', `user:${me.uid}:ach`, a); await redis('SREM', `ach:${a}`, me.uid); }
       res.status(200).json({ ok: true }); return;
     }
     if (action !== 'open') { res.status(400).json({ error: 'action' }); return; }

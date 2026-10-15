@@ -94,6 +94,7 @@
     $('gotName').replaceChildren(item.name, Object.assign(document.createElement('span'), { className: 'im-got-c sc', textContent: item.color }));
     $('gotSerial').textContent = roll.serial;
     $('gotMeta').innerHTML = `${TIER[item.tier]} · ${pct(item.pct)} · ADDED TO MY INVENTORY® AND UNLOCKED IN THE MAKER${roll.dup ? ` · YOU ALREADY HAD ONE: +${roll.refund} ${coin} REFUNDED` : ''}`;
+    if ((j.achievements || []).length) $('gotMeta').innerHTML += j.achievements.map((a) => `<br><b class="im-ach">★ ACHIEVEMENT UNLOCKED: ${a.name}</b>`).join('');
     $('got').hidden = false;
     me.coins = j.coins;
     document.querySelectorAll('[data-acct]').forEach((a) => { a.innerHTML = `${me.name} · ${coin}${me.coins}`; });
