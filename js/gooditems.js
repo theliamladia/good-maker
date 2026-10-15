@@ -22,10 +22,15 @@ window.GoodItems = (() => {
     return { width: 64, height: 64, data: d };
   }
   // Front view laid flat. Tops: torso with both sleeves (16×12). Bottoms: both legs (8×12).
-  function flat(img, cv, bottom) {
+  function flat(img, cv, bottom, accessory) {
     const src = document.createElement('canvas'); src.width = src.height = 64;
     src.getContext('2d').putImageData(new ImageData(new Uint8ClampedArray(img.data), 64, 64), 0, 0);
     const x = cv.getContext('2d');
+    if (accessory) {   // ACCESSORIES (the SCARF®): the head's front over the torso's front, both layers (8×20)
+      cv.width = 8; cv.height = 20; x.imageSmoothingEnabled = false;
+      for (const [sx, sy, dy, h] of [[8, 8, 0, 8], [40, 8, 0, 8], [20, 20, 8, 12], [20, 36, 8, 12]]) x.drawImage(src, sx, sy, 8, h, 0, dy, 8, h);
+      return;
+    }
     if (bottom) {
       cv.width = 8; cv.height = 12; x.imageSmoothingEnabled = false;
       for (const [sx, sy, dx] of [[4, 20, 0], [4, 36, 0], [20, 52, 4], [4, 52, 4]]) x.drawImage(src, sx, sy, 4, 12, dx, 0, 4, 12);
@@ -59,12 +64,12 @@ window.GoodItems = (() => {
     cv.width = cv.height = 16; const x = cv.getContext('2d'); x.clearRect(0, 0, 16, 16);
     TICKET.forEach((row, y) => [...row].forEach((ch, i) => { if (TC[ch]) { x.fillStyle = TC[ch]; x.fillRect(i, y, 1, 1); } }));
   }
-  // Draw any crate item into a canvas. item = { id, tex, hem, bottom } (from /api/crate).
+  // Draw any crate item into a canvas. item = { id, tex, hem, bottom, accessory } (from /api/crate).
   async function draw(item, cv) {
     if (item.id === 'golden-ticket') { ticket(cv); return; }
     let img = await locked(item.tex);
     if (item.hem) img = hem(img);
-    flat(img, cv, item.bottom);
+    flat(img, cv, item.bottom, item.accessory);
   }
   // MY INVENTORY®: identical pieces stack into one card with the lowest serial on top.
   // A stack shows ×N; clicking it lists every serial in it, lowest first.

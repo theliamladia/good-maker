@@ -1,6 +1,6 @@
 // Seal owner-only pieces for THE MAKER.
 //   GOOD_LOCK_KEY=<base64 32 bytes> node tools/private-seal.js <folder>
-// The folder holds catalog.json ({ tops: [kinds], pants: [kinds]} in the js/outfits.js
+// The folder holds catalog.json ({ tops, pants, accessories: [kinds] } in the js/outfits.js
 // shape, file names in bodies/src) plus those PNGs. Each PNG is sealed with AES-256-GCM
 // under GOOD_LOCK_KEY into api/_private/<id>.enc (a keyed hash of the file name), and the catalogue (pointing at
 // api/outfit?id=<id>) into api/_private/index.enc. /api/outfit only opens them
@@ -33,7 +33,7 @@ const ref = (name) => {
   return `api/outfit?id=${ids.get(name)}`;
 };
 const cat = JSON.parse(fs.readFileSync(path.join(dir, 'catalog.json'), 'utf8'));
-for (const k of [...cat.tops, ...cat.pants]) {
+for (const k of [...cat.tops, ...cat.pants, ...(cat.accessories || [])]) {
   k.locked = true;   // served scrambled, like the other preview pieces
   for (const c of k.colors) {
     for (const set of ['bodies', 'long']) if (c[set]) for (const b of Object.keys(c[set])) c[set][b] = ref(c[set][b]);

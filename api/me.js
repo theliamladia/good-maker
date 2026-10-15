@@ -21,7 +21,7 @@ const { applySeeds } = require('./_seeds');
 const { privateIds } = require('./_private');
 
 const COINS_PER_SAVE = 10;
-const SAVES_PER_DAY = 2;
+const SAVES_PER_DAY = 4;
 const MAX_LOOKS = 60;
 const win = {};
 vm.runInNewContext(fs.readFileSync(path.join(__dirname, '../js/outfits.js'), 'utf8'), { window: win });
@@ -48,6 +48,7 @@ function cleanLook(L, unlocks = [], owner = false) {
   if (['classic', 'slim'].includes(L.body)) out.body = L.body;
   if (L.tuck === 'out') out.tuck = 'out';
   if (L.boxer === 'tartan') out.boxer = 'tartan';
+  if (L.acc && priv && priv.accs.has(String(L.acc))) out.acc = String(L.acc);
   const ft = cleanFt(L.ft);
   if (ft) out.ft = ft;
   return out;

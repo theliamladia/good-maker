@@ -65,7 +65,7 @@
     clearTimeout(dailyT);
     const span = $('saveLook').querySelector('span');
     const coin = '<span class="coin" aria-hidden="true"></span>';
-    if (!me || !me.daily) { span.innerHTML = `${coin}+10 GOOD® COINS · 2 FITS A DAY`; return; }
+    if (!me || !me.daily) { span.innerHTML = `${coin}+10 GOOD® COINS · 4 FITS A DAY`; return; }
     const d = me.daily;
     if (d.left > 0) { span.innerHTML = `${coin}SAVE ${d.left} MORE NEW FIT${d.left > 1 ? 'S' : ''} TODAY FOR +${d.coins} EACH`; return; }
     const ms = Date.parse(d.resetsAt) - Date.now();
@@ -83,7 +83,7 @@
       if (j.daily) { me.daily = j.daily; drawDaily(); }
       if (j.duplicate) { toast('ALREADY IN YOUR WARDROBE.'); return; }
       me.coins = j.coins; draw();
-      toast(j.earned ? `SAVED TO YOUR WARDROBE. +${j.earned} GOOD® COINS` : j.capped ? 'SAVED. YOU’VE EARNED TODAY’S GOOD® COINS (2 FITS). BACK TOMORROW FOR MORE.' : 'SAVED TO YOUR WARDROBE.');
+      toast(j.earned ? `SAVED TO YOUR WARDROBE. +${j.earned} GOOD® COINS` : j.capped ? 'SAVED. YOU’VE EARNED TODAY’S GOOD® COINS (4 FITS). BACK TOMORROW FOR MORE.' : 'SAVED TO YOUR WARDROBE.');
     } catch (e) {
       toast(e.code === 'full' ? 'WARDROBE FULL (60). REMOVE ONE ON YOUR ACCOUNT PAGE.' : e.code === 'look' ? 'PUT ON A TOP OR BOTTOM FIRST.' : 'COULDN’T SAVE. TRY AGAIN.');
     }

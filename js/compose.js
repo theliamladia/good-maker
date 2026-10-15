@@ -62,6 +62,8 @@ window.GoodCompose = (() => {
     }
     const merged = SkinLib.mergeSkin(user, outfit, tone, slim, hair, erased, ft.hw || 'keep', !!ft.ks);
     if (o && o.hat) for (let y = 0; y < 16; y++) { const i = (y * 64 + 32) * 4; merged.data.set(outfit.data.subarray(i, i + 32 * 4), i); }
+    const acc = L.acc && ACCS.find((c) => c.id === L.acc);   // an ACCESSORY, laid over everything
+    if (acc) { const a = await loadLocked(acc.src).catch(() => null); if (a) for (let i = 0; i < a.data.length; i += 4) if (a.data[i + 3]) merged.data.set(a.data.subarray(i, i + 4), i); }
     return { merged, slim, top: o, bottom: p };
   }
   function front(merged, slim) {
@@ -78,6 +80,7 @@ window.GoodCompose = (() => {
   }
   const label = (piece) => (piece ? `${piece.name}${piece.color ? ' ' + piece.color : ''}` : '');
   // The owner's own pieces (/api/outfit?private=1), so their saved fits draw too.
-  const addPrivate = ({ tops = [], pants = [] } = {}) => { TOPS.push(...catalogue(tops)); BOTTOMS.push(...catalogue(pants)); };
+  const ACCS = [];
+  const addPrivate = ({ tops = [], pants = [], accessories = [] } = {}) => { TOPS.push(...catalogue(tops)); BOTTOMS.push(...catalogue(pants)); ACCS.push(...catalogue(accessories)); };
   return { compose, front, load, label, addPrivate };
 })();

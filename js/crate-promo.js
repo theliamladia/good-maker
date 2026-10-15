@@ -1,39 +1,38 @@
-// THE MAKER: the GOOD® CRATE in the bottom-right corner. Clicking it (or the
-// first visit, once) opens a short intro with the way to the crate page.
+// THE MAKER: the newest GOOD® CRATE (Nº002, ART® IN MOTION) in the bottom-right corner.
+// Clicking it (or the first visit, once) opens a short intro with the way to its page.
 (() => {
-  const seen = (() => { try { return localStorage.getItem('goodCrateIntro') === '1'; } catch { return true; } })();
-  const remember = () => { try { localStorage.setItem('goodCrateIntro', '1'); } catch {} };
+  const seen = (() => { try { return localStorage.getItem('goodCrate2Intro') === '1'; } catch { return true; } })();
+  const remember = () => { try { localStorage.setItem('goodCrate2Intro', '1'); } catch {} };
 
   const btn = document.createElement('a');
-  btn.className = 'cp-crate'; btn.href = 'crate';
-  btn.setAttribute('aria-label', 'GOOD® CRATE: open the intro');
-  btn.innerHTML = '<img src="assets/crate.svg" alt="" draggable="false"><span class="cp-tag mono">GOOD® CRATE</span>';
+  btn.className = 'cp-crate cp-crate2'; btn.href = 'inmotion';
+  btn.setAttribute('aria-label', 'GOOD® CRATE Nº002: open the intro');
+  btn.innerHTML = '<img src="assets/crate2.svg" alt="" draggable="false"><span class="cp-tag mono">GOOD® CRATE 2</span>';
   document.body.append(btn);
 
   const modal = document.createElement('div');
   modal.className = 'cp-modal'; modal.hidden = true;
   modal.innerHTML = `
     <div class="cp-backdrop" data-close></div>
-    <section class="cp-card" role="dialog" aria-modal="true" aria-labelledby="cpTitle">
+    <section class="cp-card cp-card2" role="dialog" aria-modal="true" aria-labelledby="cpTitle">
       <button type="button" class="cp-close mono" data-close aria-label="Close">✕</button>
-      <div class="cp-rays" aria-hidden="true"></div>
-      <img class="cp-art" src="assets/crate.svg" alt="" draggable="false">
-      <p class="cp-kicker mono">NEW · GOOD® CRATE Nº001</p>
-      <h2 class="cp-title" id="cpTitle">Something soft is trying to get out.</h2>
-      <p class="cp-lede">One crate, solid GOOD® BLUE. Inside: the archived GOODIE®s, the I'M SOWWY shirts and every RUNWAY® piece, most of them never released. Open one for 5 GOOD® COINS, watch the reel, keep what you pull.</p>
+      <img class="cp-art" src="assets/crate2.svg" alt="" draggable="false">
+      <p class="cp-kicker mono">NEW · GOOD® CRATE Nº002</p>
+      <h2 class="cp-title" id="cpTitle">ART® IN MOTION</h2>
+      <p class="cp-lede">The new collection from GOOD®: a study of colour in movement, painted en plein air. A white crate, six pigments on MARSHMALLOW™, thirty pieces.</p>
       <ul class="cp-list mono">
-        <li><b>THE CHASE</b> GOODIE® I'M SOWWY, from a ★ GOLD ROLL</li>
-        <li><b>SERIALIZED</b> every pull gets a number, GD-001 and up</li>
-        <li><b>YOURS TO WEAR</b> own one and it unlocks here in THE MAKER</li>
-        <li><b>(?) SECRET</b> one GOLDEN TICKET is hiding in there</li>
+        <li><b>THE CHASE</b> JEAN® PAINTER SPLATTER and SCARF® I'M SOWWY, 1% each</li>
+        <li><b>ACCESSORIES</b> the SCARF®, now in SPLATTER</li>
+        <li><b>LOOKBOOK</b> the collection, worn by our players</li>
+        <li><b>OPENING SOON</b> save GOOD® COINS for it now</li>
       </ul>
       <div class="cp-actions">
-        <a class="cp-go mono" href="crate">GO TO THE CRATE →</a>
-        <a class="cp-later mono" href="good-crate">HOW IT WORKS</a>
+        <a class="cp-go mono" href="inmotion">VIEW THE NEW CRATE →</a>
+        <a class="cp-later mono" href="releases">ALL RELEASES®</a>
         <button type="button" class="cp-later mono" data-close>NOT NOW</button>
       </div>
       <p class="cp-timer mono" data-coin-timer></p>
-      <p class="cp-fine mono">GOOD® COINS: +10 FOR EACH NEW FIT YOU SAVE TO YOUR WARDROBE, UP TO 2 A DAY.</p>
+      <p class="cp-fine mono">GOOD® COINS: +10 FOR EACH NEW FIT YOU SAVE TO YOUR WARDROBE, UP TO 4 A DAY.</p>
     </section>`;
   document.body.append(modal);
 

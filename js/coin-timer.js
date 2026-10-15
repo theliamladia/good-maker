@@ -8,7 +8,7 @@
   function draw() {
     clearTimeout(t);
     let html;
-    if (!signedIn || !daily) html = `${coin}+10 GOOD® COINS FOR EACH NEW FIT · 2 A DAY`;
+    if (!signedIn || !daily) html = `${coin}+10 GOOD® COINS FOR EACH NEW FIT · 4 A DAY`;
     else if (daily.left > 0) html = `${coin}SAVE ${daily.left} MORE NEW FIT${daily.left > 1 ? 'S' : ''} TODAY FOR +${daily.coins} EACH`;
     else {
       const ms = Date.parse(daily.resetsAt) - Date.now();

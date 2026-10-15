@@ -20,6 +20,9 @@
   // owns them (see api/_account.js UNLOCKS, sent by api/me and applied by js/account.js).
   const isLocked = (o) => !!o.locked && !o.owned;
   const PANTS = catalogue(window.PANTS);
+  // ACCESSORIES: worn over any top and bottom (none in the public catalogue yet;
+  // the owner's arrive through addPrivate).
+  const ACCS = [];
   const ALL_PANTS = PANTS.flatMap((k) => k.colors);
   // GOOD® / BABY®: kinds shown under the current line ('both' shows under either).
   const inLine = (k) => k.line === 'both' || k.line === state.line;
@@ -482,6 +485,19 @@
     $('tuckSection').hidden = !canTuck();
     $('boxer').querySelectorAll('button').forEach((b) => b.setAttribute('aria-checked', b.dataset.boxer === state.boxer));
   }
+  // ACCESSORY: NONE or one piece, as chips under the pants (only when there are any).
+  function drawAccessories() {
+    const box = $('accSection');
+    if (!box) return;
+    const list = box.querySelector('.acc-list');
+    const chip = (label, sw, on, pick) => {
+      const b = document.createElement('button'); b.type = 'button'; b.className = 'acc-chip mono'; b.setAttribute('aria-pressed', on);
+      b.innerHTML = (sw ? `<i style="background:linear-gradient(90deg,${[].concat(sw).join(',')})"></i>` : '') + `<span></span>`;
+      b.querySelector('span').textContent = label; b.onclick = pick; return b;
+    };
+    list.replaceChildren(chip('NONE', null, !state.acc, () => { state.acc = null; drawAccessories(); render(); }),
+      ...ACCS.flatMap((k) => k.colors.map((c) => chip(`${k.name} ${c.color}`, c.swatch, state.acc === c, () => { state.acc = c; drawAccessories(); render(); }))));
+  }
   // Tuck: tucked shows the pants' waistband; untucked lets the shirt hang over it.
   // Cropped tops and skirts (noTuck) have nothing to tuck: always tucked, control hidden.
   const canTuck = () => !state.noTop && !state.noBottom && !state.outfit.cropped && !state.pants.noTuck;
@@ -807,9 +823,16 @@
     whenBooted: () => bootDone,
     // Owner-only pieces (from /api/outfit?private=1, only for the owner's session):
     // added to the lists with their own filter option, wearable and downloadable.
-    addPrivate: ({ tops = [], pants = [] } = {}) => {
+    addPrivate: ({ tops = [], pants = [], accessories = [] } = {}) => {
       if (FILTERS.crate2) return;
       const T = catalogue(tops), P = catalogue(pants);
+      ACCS.push(...catalogue(accessories));
+      if (ACCS.length && !$('accSection')) {
+        const sec = document.createElement('div'); sec.id = 'accSection';
+        sec.innerHTML = '<div class="section-tag mono">ACCESSORY</div><div class="acc-list"></div>';
+        $('pantsSection').after(sec);
+        drawAccessories();
+      }
       for (const k of [...T, ...P]) for (const c of k.colors) c.owned = true;
       SHIRTS.push(...T); PANTS.push(...P); ALL_PANTS.push(...P.flatMap((k) => k.colors));
       FILTERS.crate2 = (k) => k.drop === 'crate2';
@@ -818,8 +841,8 @@
       });
       // A link (e.g. a saved fit's OPEN) that names one of these pieces: put it on now.
       const L = BOOT_LOOK;
-      const ids = new Set([...T, ...P].flatMap((k) => k.colors.map((c) => c.id)));
-      if (L && (ids.has(L.top) || ids.has(L.bottom))) return applyLook(L, false).then(() => render());
+      const ids = new Set([...T, ...P, ...ACCS].flatMap((k) => k.colors.map((c) => c.id)));
+      if (L && (ids.has(L.top) || ids.has(L.bottom) || ids.has(L.acc))) return applyLook(L, false).then(() => render());
       drawOutfits();
     },
     unlock: (ids) => {
@@ -940,6 +963,7 @@
         else if (state.noShoes) pants = shoePart(pants, false);    // the pants, barefoot
       }
       outfit = SkinLib.combineOutfit(outfit, pants, state.tucked || !canTuck());
+      var accImg = state.acc ? await loadLocked(state.acc.src).catch(() => null) : null;
     } catch (err) {
       if (id !== renderId) return;
       // Couldn't load this colour (e.g. a locked one that isn't set up yet).
@@ -968,6 +992,8 @@
         merged.data.set(outfit.data.subarray(i, i + 32 * 4), i);
       }
     }
+    // ACCESSORY (owner-only for now): laid over everything, outer layers only (the SCARF®).
+    if (accImg) for (let i = 0; i < accImg.data.length; i += 4) if (accImg.data[i + 3]) merged.data.set(accImg.data.subarray(i, i + 4), i);
     // Eraser maps: for preview-only outfits, draw them without the outfit.
     state.merged = locked ? SkinLib.mergeSkin(state.user, EMPTY_OUTFIT, ...args) : merged;
     state.hairKeys = new Set(
@@ -1318,6 +1344,7 @@
     if (bodiesOf(o).length > 1) L.body = state.body;
     if (canTuck() && !state.tucked) L.tuck = 'out';
     if (!state.noBottom && p.boxers && state.boxer === 'tartan') L.boxer = 'tartan';
+    if (state.acc) L.acc = state.acc.id;
     return L;
   }
   // FINE TUNING, so a saved fit looks the way it was touched up. Erased pixels are a
@@ -1371,7 +1398,7 @@
   function lookFromUrl() {
     const q = new URLSearchParams(location.search);
     if (!q.get('top') && !q.get('bottom')) return null;
-    return Object.fromEntries(['u', 'top', 'bottom', 'shoe', 'feet', 'sleeve', 'body', 'tuck', 'boxer'].filter((k) => q.get(k)).map((k) => [k, q.get(k)]));
+    return Object.fromEntries(['u', 'top', 'bottom', 'shoe', 'feet', 'sleeve', 'body', 'tuck', 'boxer', 'acc'].filter((k) => q.get(k)).map((k) => [k, q.get(k)]));
   }
   // The address bar's look as the page opened (before syncUrl rewrites it), for owner
   // pieces that only arrive after boot (addPrivate).
@@ -1389,6 +1416,8 @@
     state.noTop = !top;
     state.noBottom = !bottom;
     state.noShoes = L.feet === 'bare';
+    state.acc = ACCS.flatMap((k) => k.colors).find((c) => c.id === L.acc) || null;
+    drawAccessories();
     if (top) {
       if (top.kind.line !== 'both' && top.kind.line !== state.line) { state.line = top.kind.line; drawLine(); }
       top.kind.current = top;

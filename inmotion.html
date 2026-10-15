@@ -10,22 +10,22 @@
   <meta property="og:site_name" content="GOOD® DESIGN">
   <meta property="og:type" content="website">
   <meta property="og:url" content="https://good.leems.me/inmotion">
-  <meta property="og:title" content="GOOD® · ART® IN MOTION">
+  <meta property="og:title" content="INMOTION® · GOOD® CRATE Nº002">
   <meta property="og:description" content="The new collection from GOOD®: a study of colour in movement, painted en plein air.">
-  <meta property="og:image" content="https://good.leems.me/assets/og-inmotion.png">
+  <meta property="og:image" content="https://good.leems.me/assets/og-inmotion.png?v=2">
   <meta property="og:image:width" content="1200">
   <meta property="og:image:height" content="630">
-  <meta property="og:image:alt" content="ART® IN MOTION: strokes of NAPLES YELLOW, VIRIDIAN, ALIZARIN, PAYNE'S GREY, COBALT VIOLET and MANGANESE BLUE paint across a white canvas.">
+  <meta property="og:image:alt" content="INMOTION®: ten GOOD® players in the ART® IN MOTION collection, standing in a row over a canvas painted in the season's pigments.">
   <meta name="twitter:card" content="summary_large_image">
-  <meta name="twitter:title" content="GOOD® · ART® IN MOTION">
+  <meta name="twitter:title" content="INMOTION® · GOOD® CRATE Nº002">
   <meta name="twitter:description" content="The new collection from GOOD®: a study of colour in movement, painted en plein air.">
-  <meta name="twitter:image" content="https://good.leems.me/assets/og-inmotion.png">
+  <meta name="twitter:image" content="https://good.leems.me/assets/og-inmotion.png?v=2">
   <link rel="icon" href="/favicon.svg" type="image/svg+xml">
   <link rel="icon" href="/favicon-32.png" sizes="32x32" type="image/png">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="inmotion.css?v=2">
+  <link rel="stylesheet" href="inmotion.css?v=3">
 </head>
 <body class="im">
 
@@ -98,11 +98,17 @@
     </div>
   </section>
 
+  <section class="im-sec" aria-labelledby="lookTitle">
+    <p class="im-kicker sc">LOOKBOOK</p>
+    <h2 class="im-h2" id="lookTitle">Worn, in motion.</h2>
+    <div class="im-looks" id="looks"></div>
+  </section>
+
   <section class="im-sec" aria-labelledby="howTitle">
     <p class="im-kicker sc">HOW IT WORKS</p>
     <h2 class="im-h2" id="howTitle">Five steps, unhurried.</h2>
     <ol class="im-steps">
-      <li><span class="sc">01</span><p><b>Earn GOOD® COINS.</b> Sign in and save new fits to your wardrobe in THE MAKER: ten coins each, up to two a day.</p></li>
+      <li><span class="sc">01</span><p><b>Earn GOOD® COINS.</b> Sign in and save new fits to your wardrobe in THE MAKER: ten coins each, up to four a day.</p></li>
       <li><span class="sc">02</span><p><b>Open the crate.</b> Five GOOD® COINS, when it opens. We ask once whether you're sure.</p></li>
       <li><span class="sc">03</span><p><b>Watch the reel.</b> Every piece passes the marker, slows, and settles on yours.</p></li>
       <li><span class="sc">04</span><p><b>Keep it, numbered.</b> Every pull is serialized and lands in MY INVENTORY®.</p></li>
@@ -116,14 +122,19 @@
       <p class="im-kicker sc">THE CHASE · <span id="chaseOdds">1%</span> OF CRATES</p>
       <h2 class="im-h2" id="chaseTitle">JEAN<sup>®</sup> PAINTER SPLATTER</h2>
       <p class="im-p">A MARSHMALLOW™ jean, worn through a season at the easel and flicked with all six pigments. No two marks repeat; none of it was planned.</p>
-      <p class="im-p">The rarest piece in the crate, shared only with the SCARF® I'M SOWWY. Close behind: the JEAJEAN® AGATE/SPRINGSTEEN, belted in white with GOOD® BLUE buckles.</p>
+      <p class="im-p">The rarest piece in the crate, shared only with the SCARF® I'M SOWWY. Close behind: the SCARF® SPLATTER, and the JEAJEAN® AGATE/SPRINGSTEEN, belted in white with GOOD® BLUE buckles.</p>
     </div>
   </section>
 
   <section class="im-sec" aria-labelledby="insideTitle">
     <p class="im-kicker sc">WHAT'S INSIDE · <span id="insideCount">ODDS PER CRATE</span></p>
     <h2 class="im-h2" id="insideTitle">The collection.</h2>
-    <div class="im-grid" id="inside"></div>
+    <h3 class="im-h3 sc">TOPS</h3>
+    <div class="im-grid" id="insideTops"></div>
+    <h3 class="im-h3 sc">BOTTOMS</h3>
+    <div class="im-grid" id="insideBottoms"></div>
+    <h3 class="im-h3 sc">ACCESSORIES</h3>
+    <div class="im-grid" id="insideAcc"></div>
   </section>
 
   <section class="im-sec im-end">
@@ -136,10 +147,10 @@
 <footer class="im-foot sc">© 2026 GOOD® DESIGN · <a href="./">THE MAKER</a> · <a href="/privacy">PRIVACY</a></footer>
 
 <script src="https://cdn.jsdelivr.net/npm/three@0.156.1/build/three.min.js"></script>
-<script src="js/gooditems.js?v=2"></script>
+<script src="js/gooditems.js?v=3"></script>
 <script src="js/inmotion.js?v=2"></script>
 <script src="js/inmotion-crate.js?v=3"></script>
-<script src="js/inmotion-page.js?v=2"></script>
+<script src="js/inmotion-page.js?v=3"></script>
 <script src="js/coin-timer.js?v=2"></script>
 </body>
 </html>
