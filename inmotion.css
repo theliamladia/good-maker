@@ -73,8 +73,30 @@ body.im { background: var(--paper); color: var(--ink); font-family: var(--sans);
 .im-steps li span { padding-top: 0.55em; color: var(--soft); }
 .im-steps p { margin: 0; }
 .im-steps b { font-weight: 500; }
+.im-chase-art { display: grid; gap: 28px; }
+.im-chase-looks { display: grid; grid-template-columns: 1fr 1fr; gap: clamp(16px, 2vw, 28px); }
+.im-chase-looks figure { margin: 0; }
+.im-chase-looks canvas { display: block; width: 100%; aspect-ratio: 300 / 520; background: rgba(233, 230, 223, 0.75); user-select: none; }
+.im-chase-looks figcaption, .im-chase-tile figcaption, .im-chase-who { margin-top: 12px; font-size: 0.56rem; letter-spacing: 0.22em; color: var(--soft); }
+.im-chase-tiles { display: grid; grid-template-columns: repeat(3, 1fr); gap: clamp(12px, 1.6vw, 22px); }
+.im-chase-tile { margin: 0; }
+.im-chase-tile canvas { display: block; width: 100%; aspect-ratio: 1; object-fit: contain; image-rendering: pixelated; background: rgba(233, 230, 223, 0.85); padding: 18%; }
+.im-chase-who { margin: 0; }
+/* THE CHASE sits on the painted canvas: the live paint shows through, with a few fixed splatters of the six pigments. */
+.im-sec.im-chase {
+  background:
+    radial-gradient(circle at 8% 14%, rgba(243, 216, 138, 0.55) 0 26px, transparent 27px),
+    radial-gradient(circle at 12% 20%, rgba(243, 216, 138, 0.45) 0 7px, transparent 8px),
+    radial-gradient(ellipse 140px 18px at 34% 92%, rgba(168, 32, 58, 0.35) 0 60%, transparent 61%),
+    radial-gradient(circle at 47% 8%, rgba(63, 176, 196, 0.45) 0 14px, transparent 15px),
+    radial-gradient(circle at 51% 12%, rgba(63, 176, 196, 0.4) 0 5px, transparent 6px),
+    radial-gradient(ellipse 120px 14px at 88% 82%, rgba(46, 125, 107, 0.35) 0 60%, transparent 61%),
+    radial-gradient(circle at 93% 18%, rgba(155, 79, 150, 0.45) 0 18px, transparent 19px),
+    radial-gradient(circle at 96% 24%, rgba(155, 79, 150, 0.4) 0 5px, transparent 6px),
+    radial-gradient(circle at 70% 96%, rgba(74, 85, 96, 0.35) 0 10px, transparent 11px),
+    rgba(251, 250, 246, 0.42);
+}
 .im-chase { display: grid; grid-template-columns: minmax(0, 0.8fr) minmax(0, 1fr); gap: clamp(56px, 9vw, 180px); align-items: center; }
-.im-chase-fig { object-fit: contain; width: 100%; max-width: 360px; aspect-ratio: 8 / 12; image-rendering: pixelated; justify-self: center; background: #e9e6df; padding: clamp(28px, 4vw, 48px); box-shadow: 0 30px 60px -40px rgba(31, 32, 36, 0.35); }
 .im-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(190px, 1fr)); gap: clamp(36px, 4vw, 64px) clamp(28px, 3vw, 48px); margin-top: clamp(64px, 8vw, 112px); }
 .im-card { margin: 0; }
 .im-card canvas { display: block; width: 100%; aspect-ratio: 1; object-fit: contain; image-rendering: pixelated; background: #e9e6df; padding: 22%; box-shadow: inset 0 0 0 1px rgba(31, 32, 36, 0.06); }
@@ -106,3 +128,31 @@ body.im { background: var(--paper); color: var(--ink); font-family: var(--sans);
 @media (prefers-reduced-motion: reduce) {
   .im-hero > * { transition: none; }
 }
+
+/* The unboxing: a paper card over the page, the reel, then the piece. */
+.im-open:not(:disabled) { color: var(--ink); border-color: var(--ink); cursor: pointer; }
+.im-open:not(:disabled):hover { background: var(--ink); color: var(--paper); }
+.im-open.im-sure { background: #a8203a; border-color: #a8203a; color: #fff; }
+.im-drop { position: fixed; inset: 0; z-index: 20; display: grid; place-items: center; padding: 24px; background: rgba(31, 32, 36, 0.35); backdrop-filter: blur(6px); -webkit-backdrop-filter: blur(6px); }
+.im-drop[hidden] { display: none; }
+.im-drop-card { position: relative; width: min(1040px, 100%); max-height: calc(100vh - 48px); overflow: auto; background: var(--paper); padding: clamp(32px, 6vw, 80px); box-shadow: 0 40px 90px -40px rgba(31, 32, 36, 0.6); }
+.im-drop-x { position: absolute; top: 18px; right: 22px; background: none; border: 0; color: var(--ink); font-size: 0.9rem; cursor: pointer; }
+.im-reel { position: relative; overflow: hidden; margin-top: 24px; padding: 18px 0; border-top: 1px solid rgba(31, 32, 36, 0.15); border-bottom: 1px solid rgba(31, 32, 36, 0.15); }
+.im-reel[hidden] { display: none; }
+.im-strip { display: flex; gap: 14px; width: max-content; will-change: transform; }
+.im-reel-card { flex: 0 0 150px; display: grid; gap: 10px; padding: 14px; background: #ece9e2; transition: background 0.15s; }
+.im-reel-card canvas { width: 100%; aspect-ratio: 1; object-fit: contain; image-rendering: pixelated; }
+.im-reel-card span { font-size: 0.5rem; letter-spacing: 0.16em; line-height: 1.5; }
+.im-reel-card.im-t-chase { box-shadow: inset 0 0 0 1px #a8203a; }
+.im-reel-card.im-t-rare { box-shadow: inset 0 0 0 1px #2e7d6b; }
+.im-reel-card.im-under, .im-reel-card.im-won { background: #fff; }
+.im-marker { position: absolute; top: 0; bottom: 0; left: 50%; width: 1px; background: var(--ink); }
+.im-got { display: grid; grid-template-columns: minmax(0, 0.8fr) minmax(0, 1fr); gap: clamp(28px, 5vw, 72px); align-items: center; margin-top: 24px; }
+.im-got[hidden] { display: none; }
+.im-got canvas { width: 100%; max-width: 320px; aspect-ratio: 1; object-fit: contain; image-rendering: pixelated; background: #e9e6df; padding: 16%; justify-self: center; }
+.im-serial { margin: 18px 0 0; font-size: 0.9rem; letter-spacing: 0.3em; }
+.im-dropping { overflow: hidden; }
+@media (max-width: 760px) { .im-got { grid-template-columns: 1fr; } }
+#gotName { overflow-wrap: anywhere; }
+.im-got-c { display: block; margin-top: 14px; font-size: 0.66rem; letter-spacing: 0.26em; color: var(--soft); }
+.im-dropping .im-main { z-index: 30; }   /* the unboxing card sits above everything else on the page */

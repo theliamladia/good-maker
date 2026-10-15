@@ -852,6 +852,76 @@ window.OUTFITS = [
       { id: 'deep-shirt-krab', color: 'COTTON/KRAB RED', swatch: ['#ffffff', '#d7261e'], pants: 'jean-bootcut-springsteen', bodies: { classic: 'outfits/deep/shirt-krab-classic.png', slim: 'outfits/deep/shirt-krab-slim.png' } },
     ],
   },
+  {
+    // GOOD® CRATE Nº002 · ART® IN MOTION: preview-only until pulled from the crate (/inmotion).
+    id: 'c2-chore',
+    name: "CHORE®",
+    season: 3,
+    drop: 'crate2',
+    locked: true,
+    line: 'good',
+    colors: [
+      { id: "c2-chore-naples-paynes", color: "NAPLES YELLOW/PAYNE'S GREY", swatch: ["#f3d88a", "#4a5560"], bodies: {classic: "api/outfit?id=c2-chore-naples-paynes-classic", slim: "api/outfit?id=c2-chore-naples-paynes-slim"} },
+      { id: "c2-chore-viridian-cobalt", color: "VIRIDIAN/COBALT VIOLET", swatch: ["#2e7d6b", "#9b4f96"], bodies: {classic: "api/outfit?id=c2-chore-viridian-cobalt-classic", slim: "api/outfit?id=c2-chore-viridian-cobalt-slim"} },
+      { id: "c2-chore-alizarin-manganese", color: "ALIZARIN/MANGANESE BLUE", swatch: ["#a8203a", "#3fb0c4"], bodies: {classic: "api/outfit?id=c2-chore-alizarin-manganese-classic", slim: "api/outfit?id=c2-chore-alizarin-manganese-slim"} },
+    ],
+  },
+  {
+    // GOOD® CRATE Nº002 · ART® IN MOTION: preview-only until pulled from the crate (/inmotion).
+    id: 'c2-trench',
+    name: "TRENCH®",
+    season: 3,
+    drop: 'crate2',
+    locked: true,
+    line: 'good',
+    colors: [
+      { id: "c2-trench-naples-paynes", color: "NAPLES YELLOW/PAYNE'S GREY", swatch: ["#f3d88a", "#4a5560"], bodies: {classic: "api/outfit?id=c2-trench-naples-paynes-classic", slim: "api/outfit?id=c2-trench-naples-paynes-slim"} },
+      { id: "c2-trench-viridian-cobalt", color: "VIRIDIAN/COBALT VIOLET", swatch: ["#2e7d6b", "#9b4f96"], bodies: {classic: "api/outfit?id=c2-trench-viridian-cobalt-classic", slim: "api/outfit?id=c2-trench-viridian-cobalt-slim"} },
+      { id: "c2-trench-alizarin-manganese", color: "ALIZARIN/MANGANESE BLUE", swatch: ["#a8203a", "#3fb0c4"], bodies: {classic: "api/outfit?id=c2-trench-alizarin-manganese-classic", slim: "api/outfit?id=c2-trench-alizarin-manganese-slim"} },
+    ],
+  },
+  {
+    // GOOD® CRATE Nº002 · ART® IN MOTION: preview-only until pulled from the crate (/inmotion).
+    id: 'c2-inside-out',
+    name: "INSIDE OUT®",
+    season: 3,
+    drop: 'crate2',
+    locked: true,
+    line: 'good',
+    colors: [
+      { id: "c2-inside-out-naples-paynes", color: "NAPLES YELLOW/PAYNE'S GREY", swatch: ["#f3d88a", "#4a5560"], bodies: {classic: "api/outfit?id=c2-inside-out-naples-paynes-classic", slim: "api/outfit?id=c2-inside-out-naples-paynes-slim"} },
+      { id: "c2-inside-out-viridian-cobalt", color: "VIRIDIAN/COBALT VIOLET", swatch: ["#2e7d6b", "#9b4f96"], bodies: {classic: "api/outfit?id=c2-inside-out-viridian-cobalt-classic", slim: "api/outfit?id=c2-inside-out-viridian-cobalt-slim"} },
+      { id: "c2-inside-out-alizarin-manganese", color: "ALIZARIN/MANGANESE BLUE", swatch: ["#a8203a", "#3fb0c4"], bodies: {classic: "api/outfit?id=c2-inside-out-alizarin-manganese-classic", slim: "api/outfit?id=c2-inside-out-alizarin-manganese-slim"} },
+    ],
+  },
+  {
+    // GOOD® CRATE Nº002 · ART® IN MOTION: preview-only until pulled from the crate (/inmotion).
+    id: 'c2-baby-hoodie',
+    name: "BABY® BOYFRIEND HOODIE",
+    season: 3,
+    drop: 'crate2',
+    locked: true,
+    line: 'baby',
+    colors: [
+      { id: "c2-baby-hoodie-naples-paynes", color: "NAPLES YELLOW/PAYNE'S GREY", swatch: ["#f3d88a", "#4a5560"], bodies: {slim: "api/outfit?id=c2-baby-hoodie-naples-paynes-slim", classic: "api/outfit?id=c2-baby-hoodie-naples-paynes-classic"} },
+      { id: "c2-baby-hoodie-viridian-cobalt", color: "VIRIDIAN/COBALT VIOLET", swatch: ["#2e7d6b", "#9b4f96"], bodies: {slim: "api/outfit?id=c2-baby-hoodie-viridian-cobalt-slim", classic: "api/outfit?id=c2-baby-hoodie-viridian-cobalt-classic"} },
+      { id: "c2-baby-hoodie-alizarin-manganese", color: "ALIZARIN/MANGANESE BLUE", swatch: ["#a8203a", "#3fb0c4"], bodies: {slim: "api/outfit?id=c2-baby-hoodie-alizarin-manganese-slim", classic: "api/outfit?id=c2-baby-hoodie-alizarin-manganese-classic"} },
+    ],
+  },
+  {
+    // GOOD® CRATE Nº002 · ART® IN MOTION: preview-only until pulled from the crate (/inmotion).
+    id: 'c2-baby-cozyknit',
+    name: "BABY® COZYKNIT",
+    season: 3,
+    drop: 'crate2',
+    locked: true,
+    line: 'baby',
+    colors: [
+      { id: "c2-baby-cozyknit-naples-paynes", color: "NAPLES YELLOW/PAYNE'S GREY", swatch: ["#f3d88a", "#4a5560"], bodies: {slim: "api/outfit?id=c2-baby-cozyknit-naples-paynes-slim", classic: "api/outfit?id=c2-baby-cozyknit-naples-paynes-classic"} },
+      { id: "c2-baby-cozyknit-viridian-cobalt", color: "VIRIDIAN/COBALT VIOLET", swatch: ["#2e7d6b", "#9b4f96"], bodies: {slim: "api/outfit?id=c2-baby-cozyknit-viridian-cobalt-slim", classic: "api/outfit?id=c2-baby-cozyknit-viridian-cobalt-classic"} },
+      { id: "c2-baby-cozyknit-alizarin-manganese", color: "ALIZARIN/MANGANESE BLUE", swatch: ["#a8203a", "#3fb0c4"], bodies: {slim: "api/outfit?id=c2-baby-cozyknit-alizarin-manganese-slim", classic: "api/outfit?id=c2-baby-cozyknit-alizarin-manganese-classic"} },
+    ],
+  },
 ];
 
 // Pants: legs (both layers) plus anything on the torso that belongs to the
@@ -1444,5 +1514,95 @@ window.PANTS = [
     name: 'DEEP END® JORT®',
     drop: 'deep',
     colors: [{ id: 'deep-jort-seafoam-green', color: 'SEAFOAM GREEN', swatch: '#3a9a0a', shoes: deepShoes('star') }],
+  },
+  {
+    // GOOD® CRATE Nº002 · ART® IN MOTION: preview-only until pulled from the crate (/inmotion).
+    id: 'c2-jean-splatter',
+    name: "JEAN® SPLATTER",
+    season: 3,
+    drop: 'crate2',
+    locked: true,
+    colors: [
+      { id: "c2-splatter-springsteen", color: "SPRINGSTEEN", swatch: "#37baf7", shoes: { black: "api/outfit?id=c2-splatter-springsteen-black", brown: "api/outfit?id=c2-splatter-springsteen-brown", tobacco: "api/outfit?id=c2-splatter-springsteen-tobacco", sneak01: "api/outfit?id=c2-splatter-springsteen-sneak01", "chelsea-tobacco": "api/outfit?id=c2-splatter-springsteen-chelsea-tobacco", "chelsea-tuxedo": "api/outfit?id=c2-splatter-springsteen-chelsea-tuxedo", "chelsea-mahogany": "api/outfit?id=c2-splatter-springsteen-chelsea-mahogany", "workboot-wheat": "api/outfit?id=c2-splatter-springsteen-workboot-wheat", "workboot-oxblood": "api/outfit?id=c2-splatter-springsteen-workboot-oxblood", "workboot-tuxedo": "api/outfit?id=c2-splatter-springsteen-workboot-tuxedo", "duck-peyote": "api/outfit?id=c2-splatter-springsteen-duck-peyote", "duck-inkwell-after-hours": "api/outfit?id=c2-splatter-springsteen-duck-inkwell-after-hours", "duck-chocolate-cacao": "api/outfit?id=c2-splatter-springsteen-duck-chocolate-cacao" } },
+      { id: "c2-splatter-the-jean", color: "THE JEAN", swatch: "#3d5886", shoes: { black: "api/outfit?id=c2-splatter-the-jean-black", brown: "api/outfit?id=c2-splatter-the-jean-brown", tobacco: "api/outfit?id=c2-splatter-the-jean-tobacco", sneak01: "api/outfit?id=c2-splatter-the-jean-sneak01", "chelsea-tobacco": "api/outfit?id=c2-splatter-the-jean-chelsea-tobacco", "chelsea-tuxedo": "api/outfit?id=c2-splatter-the-jean-chelsea-tuxedo", "chelsea-mahogany": "api/outfit?id=c2-splatter-the-jean-chelsea-mahogany", "workboot-wheat": "api/outfit?id=c2-splatter-the-jean-workboot-wheat", "workboot-oxblood": "api/outfit?id=c2-splatter-the-jean-workboot-oxblood", "workboot-tuxedo": "api/outfit?id=c2-splatter-the-jean-workboot-tuxedo", "duck-peyote": "api/outfit?id=c2-splatter-the-jean-duck-peyote", "duck-inkwell-after-hours": "api/outfit?id=c2-splatter-the-jean-duck-inkwell-after-hours", "duck-chocolate-cacao": "api/outfit?id=c2-splatter-the-jean-duck-chocolate-cacao" } },
+      { id: "c2-splatter-selvedge", color: "SELVEDGE", swatch: "#161d3a", shoes: { black: "api/outfit?id=c2-splatter-selvedge-black", brown: "api/outfit?id=c2-splatter-selvedge-brown", tobacco: "api/outfit?id=c2-splatter-selvedge-tobacco", sneak01: "api/outfit?id=c2-splatter-selvedge-sneak01", "chelsea-tobacco": "api/outfit?id=c2-splatter-selvedge-chelsea-tobacco", "chelsea-tuxedo": "api/outfit?id=c2-splatter-selvedge-chelsea-tuxedo", "chelsea-mahogany": "api/outfit?id=c2-splatter-selvedge-chelsea-mahogany", "workboot-wheat": "api/outfit?id=c2-splatter-selvedge-workboot-wheat", "workboot-oxblood": "api/outfit?id=c2-splatter-selvedge-workboot-oxblood", "workboot-tuxedo": "api/outfit?id=c2-splatter-selvedge-workboot-tuxedo", "duck-peyote": "api/outfit?id=c2-splatter-selvedge-duck-peyote", "duck-inkwell-after-hours": "api/outfit?id=c2-splatter-selvedge-duck-inkwell-after-hours", "duck-chocolate-cacao": "api/outfit?id=c2-splatter-selvedge-duck-chocolate-cacao" } },
+    ],
+  },
+  {
+    // GOOD® CRATE Nº002 · ART® IN MOTION: preview-only until pulled from the crate (/inmotion).
+    id: 'c2-jean-ice',
+    name: "JEAN® ICE",
+    season: 3,
+    drop: 'crate2',
+    locked: true,
+    colors: [
+      { id: "c2-jean-ice", color: "ICE", swatch: "#cfe0ee", shoes: { black: "api/outfit?id=c2-jean-ice-black", brown: "api/outfit?id=c2-jean-ice-brown", tobacco: "api/outfit?id=c2-jean-ice-tobacco", sneak01: "api/outfit?id=c2-jean-ice-sneak01", "chelsea-tobacco": "api/outfit?id=c2-jean-ice-chelsea-tobacco", "chelsea-tuxedo": "api/outfit?id=c2-jean-ice-chelsea-tuxedo", "chelsea-mahogany": "api/outfit?id=c2-jean-ice-chelsea-mahogany", "workboot-wheat": "api/outfit?id=c2-jean-ice-workboot-wheat", "workboot-oxblood": "api/outfit?id=c2-jean-ice-workboot-oxblood", "workboot-tuxedo": "api/outfit?id=c2-jean-ice-workboot-tuxedo", "duck-peyote": "api/outfit?id=c2-jean-ice-duck-peyote", "duck-inkwell-after-hours": "api/outfit?id=c2-jean-ice-duck-inkwell-after-hours", "duck-chocolate-cacao": "api/outfit?id=c2-jean-ice-duck-chocolate-cacao" } },
+    ],
+  },
+  {
+    // GOOD® CRATE Nº002 · ART® IN MOTION: preview-only until pulled from the crate (/inmotion).
+    id: 'c2-jean-bleached',
+    name: "JEAN® BLEACHED",
+    season: 3,
+    drop: 'crate2',
+    locked: true,
+    colors: [
+      { id: "c2-jean-bleached", color: "BLEACHED", swatch: "#a9c4de", shoes: { black: "api/outfit?id=c2-jean-bleached-black", brown: "api/outfit?id=c2-jean-bleached-brown", tobacco: "api/outfit?id=c2-jean-bleached-tobacco", sneak01: "api/outfit?id=c2-jean-bleached-sneak01", "chelsea-tobacco": "api/outfit?id=c2-jean-bleached-chelsea-tobacco", "chelsea-tuxedo": "api/outfit?id=c2-jean-bleached-chelsea-tuxedo", "chelsea-mahogany": "api/outfit?id=c2-jean-bleached-chelsea-mahogany", "workboot-wheat": "api/outfit?id=c2-jean-bleached-workboot-wheat", "workboot-oxblood": "api/outfit?id=c2-jean-bleached-workboot-oxblood", "workboot-tuxedo": "api/outfit?id=c2-jean-bleached-workboot-tuxedo", "duck-peyote": "api/outfit?id=c2-jean-bleached-duck-peyote", "duck-inkwell-after-hours": "api/outfit?id=c2-jean-bleached-duck-inkwell-after-hours", "duck-chocolate-cacao": "api/outfit?id=c2-jean-bleached-duck-chocolate-cacao" } },
+    ],
+  },
+  {
+    // GOOD® CRATE Nº002 · ART® IN MOTION: preview-only until pulled from the crate (/inmotion).
+    id: 'c2-jeajean',
+    name: "JEAJEAN®",
+    boxers: true, // sagging: the boxer control (POOLSIDE™ blue or HIGHLAND™ tartan)
+    season: 3,
+    drop: 'crate2',
+    locked: true,
+    colors: [
+      { id: "c2-jeajean-springsteen-the-jean", color: "SPRINGSTEEN/THE JEAN", swatch: ["#37baf7", "#3d5886"], shoes: { black: "api/outfit?id=c2-jeajean-springsteen-the-jean-black", tobacco: "api/outfit?id=c2-jeajean-springsteen-the-jean-tobacco", sneak01: "api/outfit?id=c2-jeajean-springsteen-the-jean-sneak01", "chelsea-tobacco": "api/outfit?id=c2-jeajean-springsteen-the-jean-chelsea-tobacco", "chelsea-tuxedo": "api/outfit?id=c2-jeajean-springsteen-the-jean-chelsea-tuxedo", "chelsea-mahogany": "api/outfit?id=c2-jeajean-springsteen-the-jean-chelsea-mahogany", "workboot-wheat": "api/outfit?id=c2-jeajean-springsteen-the-jean-workboot-wheat", "workboot-oxblood": "api/outfit?id=c2-jeajean-springsteen-the-jean-workboot-oxblood", "workboot-tuxedo": "api/outfit?id=c2-jeajean-springsteen-the-jean-workboot-tuxedo", "duck-peyote": "api/outfit?id=c2-jeajean-springsteen-the-jean-duck-peyote", "duck-inkwell-after-hours": "api/outfit?id=c2-jeajean-springsteen-the-jean-duck-inkwell-after-hours", "duck-chocolate-cacao": "api/outfit?id=c2-jeajean-springsteen-the-jean-duck-chocolate-cacao" } },
+      { id: "c2-jeajean-ice-selvedge", color: "ICE/SELVEDGE", swatch: ["#cfe0ee", "#161d3a"], shoes: { black: "api/outfit?id=c2-jeajean-ice-selvedge-black", tobacco: "api/outfit?id=c2-jeajean-ice-selvedge-tobacco", sneak01: "api/outfit?id=c2-jeajean-ice-selvedge-sneak01", "chelsea-tobacco": "api/outfit?id=c2-jeajean-ice-selvedge-chelsea-tobacco", "chelsea-tuxedo": "api/outfit?id=c2-jeajean-ice-selvedge-chelsea-tuxedo", "chelsea-mahogany": "api/outfit?id=c2-jeajean-ice-selvedge-chelsea-mahogany", "workboot-wheat": "api/outfit?id=c2-jeajean-ice-selvedge-workboot-wheat", "workboot-oxblood": "api/outfit?id=c2-jeajean-ice-selvedge-workboot-oxblood", "workboot-tuxedo": "api/outfit?id=c2-jeajean-ice-selvedge-workboot-tuxedo", "duck-peyote": "api/outfit?id=c2-jeajean-ice-selvedge-duck-peyote", "duck-inkwell-after-hours": "api/outfit?id=c2-jeajean-ice-selvedge-duck-inkwell-after-hours", "duck-chocolate-cacao": "api/outfit?id=c2-jeajean-ice-selvedge-duck-chocolate-cacao" } },
+      { id: "c2-jeajean-springsteen-agate", color: "SPRINGSTEEN/AGATE", swatch: ["#37baf7", "#5b6577"], shoes: { black: "api/outfit?id=c2-jeajean-springsteen-agate-black", tobacco: "api/outfit?id=c2-jeajean-springsteen-agate-tobacco", sneak01: "api/outfit?id=c2-jeajean-springsteen-agate-sneak01", "chelsea-tobacco": "api/outfit?id=c2-jeajean-springsteen-agate-chelsea-tobacco", "chelsea-tuxedo": "api/outfit?id=c2-jeajean-springsteen-agate-chelsea-tuxedo", "chelsea-mahogany": "api/outfit?id=c2-jeajean-springsteen-agate-chelsea-mahogany", "workboot-wheat": "api/outfit?id=c2-jeajean-springsteen-agate-workboot-wheat", "workboot-oxblood": "api/outfit?id=c2-jeajean-springsteen-agate-workboot-oxblood", "workboot-tuxedo": "api/outfit?id=c2-jeajean-springsteen-agate-workboot-tuxedo", "duck-peyote": "api/outfit?id=c2-jeajean-springsteen-agate-duck-peyote", "duck-inkwell-after-hours": "api/outfit?id=c2-jeajean-springsteen-agate-duck-inkwell-after-hours", "duck-chocolate-cacao": "api/outfit?id=c2-jeajean-springsteen-agate-duck-chocolate-cacao" } },
+      { id: "c2-jeajean-agate-springsteen", color: "AGATE/SPRINGSTEEN", swatch: ["#5b6577", "#37baf7"], shoes: { black: "api/outfit?id=c2-jeajean-agate-springsteen-black", tobacco: "api/outfit?id=c2-jeajean-agate-springsteen-tobacco", sneak01: "api/outfit?id=c2-jeajean-agate-springsteen-sneak01", "chelsea-tobacco": "api/outfit?id=c2-jeajean-agate-springsteen-chelsea-tobacco", "chelsea-tuxedo": "api/outfit?id=c2-jeajean-agate-springsteen-chelsea-tuxedo", "chelsea-mahogany": "api/outfit?id=c2-jeajean-agate-springsteen-chelsea-mahogany", "workboot-wheat": "api/outfit?id=c2-jeajean-agate-springsteen-workboot-wheat", "workboot-oxblood": "api/outfit?id=c2-jeajean-agate-springsteen-workboot-oxblood", "workboot-tuxedo": "api/outfit?id=c2-jeajean-agate-springsteen-workboot-tuxedo", "duck-peyote": "api/outfit?id=c2-jeajean-agate-springsteen-duck-peyote", "duck-inkwell-after-hours": "api/outfit?id=c2-jeajean-agate-springsteen-duck-inkwell-after-hours", "duck-chocolate-cacao": "api/outfit?id=c2-jeajean-agate-springsteen-duck-chocolate-cacao" } },
+    ],
+  },
+  {
+    // GOOD® CRATE Nº002 · ART® IN MOTION: preview-only until pulled from the crate (/inmotion).
+    id: 'c2-jean-painter',
+    name: "JEAN® PAINTER SPLATTER",
+    season: 3,
+    drop: 'crate2',
+    locked: true,
+    colors: [
+      { id: "c2-jean-painter", color: "ART® IN MOTION", swatch: ["#f7f2ea", "#a8203a"], shoes: { black: "api/outfit?id=c2-jean-painter-black", brown: "api/outfit?id=c2-jean-painter-brown", tobacco: "api/outfit?id=c2-jean-painter-tobacco", sneak01: "api/outfit?id=c2-jean-painter-sneak01", "chelsea-tobacco": "api/outfit?id=c2-jean-painter-chelsea-tobacco", "chelsea-tuxedo": "api/outfit?id=c2-jean-painter-chelsea-tuxedo", "chelsea-mahogany": "api/outfit?id=c2-jean-painter-chelsea-mahogany", "workboot-wheat": "api/outfit?id=c2-jean-painter-workboot-wheat", "workboot-oxblood": "api/outfit?id=c2-jean-painter-workboot-oxblood", "workboot-tuxedo": "api/outfit?id=c2-jean-painter-workboot-tuxedo", "duck-peyote": "api/outfit?id=c2-jean-painter-duck-peyote", "duck-inkwell-after-hours": "api/outfit?id=c2-jean-painter-duck-inkwell-after-hours", "duck-chocolate-cacao": "api/outfit?id=c2-jean-painter-duck-chocolate-cacao" } },
+    ],
+  },
+  {
+    // GOOD® CRATE Nº002 · ART® IN MOTION: preview-only until pulled from the crate (/inmotion).
+    id: 'c2-baby-tights',
+    name: "BABY® TIGHTS",
+    season: 3,
+    drop: 'crate2',
+    locked: true,
+    colors: [
+      { id: "c2-baby-tights-naples-paynes", color: "NAPLES YELLOW/PAYNE'S GREY", swatch: ["#f3d88a", "#4a5560"], src: "api/outfit?id=c2-baby-tights-naples-paynes" },
+      { id: "c2-baby-tights-viridian-cobalt", color: "VIRIDIAN/COBALT VIOLET", swatch: ["#2e7d6b", "#9b4f96"], src: "api/outfit?id=c2-baby-tights-viridian-cobalt" },
+      { id: "c2-baby-tights-alizarin-manganese", color: "ALIZARIN/MANGANESE BLUE", swatch: ["#a8203a", "#3fb0c4"], src: "api/outfit?id=c2-baby-tights-alizarin-manganese" },
+    ],
+  },
+];
+
+// ACCESSORIES: worn over any top and bottom (THE MAKER's ACCESSORY row). Same shape as PANTS (src).
+window.ACCESSORIES = [
+  {
+    // GOOD® CRATE Nº002 · ART® IN MOTION: preview-only until pulled from the crate (/inmotion).
+    id: 'c2-scarf',
+    name: "SCARF®",
+    season: 3,
+    drop: 'crate2',
+    locked: true,
+    colors: [
+      { id: "c2-scarf-im-sowwy", color: "I'M SOWWY", swatch: ["#f7cac9", "#92a8d1"], src: "api/outfit?id=c2-scarf-im-sowwy" },
+      { id: "c2-scarf-splatter", color: "SPLATTER", swatch: ["#f7f2ea", "#a8203a"], src: "api/outfit?id=c2-scarf-splatter" },
+    ],
   },
 ];

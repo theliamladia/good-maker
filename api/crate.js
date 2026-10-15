@@ -1,5 +1,6 @@
 // Vercel serverless function: the GOOD® CRATE.
-//   GET  /api/crate?crate=2             -> GOOD® CRATE Nº002 (not open yet): { price, open: false, items }
+//   GET  /api/crate?crate=2             -> GOOD® CRATE Nº002 (ART® IN MOTION): { price, refund, open, items: [... pulled] }
+//   POST /api/crate { action: 'open', crate: 2 } -> the same, rolled from Nº002
 //   GET  /api/crate                     -> { price, refund, goldOdds, items: [{ id, name, color, tier, pct, pulled }] }
 //   POST /api/crate { action: 'open' }  -> { roll: { id, item, serial, gold, dup }, coins }
 //   POST /api/crate { action: 'reset' } -> owner only: clears the owner's own pulls (testing; serials are never reused)
@@ -10,7 +11,7 @@
 const crypto = require('crypto');
 const { redis, configured, overLimit, parseBody } = require('./_redis');
 const { currentUser, saveUser, isOwner } = require('./_account');
-const { ITEMS, ODDS, GOLD_ODDS, PRICE, REFUND, table, table2 } = require('./_crate');
+const { ITEMS, ODDS, GOLD_ODDS, PRICE, REFUND, table, ITEMS2, ODDS2, table2 } = require('./_crate');
 const ACH = require('./_achievements');
 
 // Weighted pick in hundredths of a percent, from a cryptographic RNG.
@@ -90,9 +91,13 @@ module.exports = async function handler(req, res) {
       res.status(200).json({ rows }); return;
     } catch { res.status(502).json({ error: 'storage' }); return; }
   }
-  // GOOD® CRATE Nº002 (ART® IN MOTION): the pieces and odds for /inmotion. It can't be opened yet.
+  // GOOD® CRATE Nº002 (ART® IN MOTION): the pieces, odds and copies pulled, for /inmotion.
   if (req.method === 'GET' && req.query && req.query.crate === '2') {
-    res.status(200).json({ price: PRICE, open: false, items: table2() });
+    let pulled = {};
+    try {
+      if (configured()) { const ids = Object.keys(ITEMS2); const n = await redis('MGET', ...ids.map((id) => `crate:serial:${id}`)); pulled = Object.fromEntries(ids.map((id, i) => [id, +(n && n[i]) || 0])); }
+    } catch { pulled = {}; }
+    res.status(200).json({ price: PRICE, refund: REFUND, open: true, items: table2().map((it) => ({ ...it, pulled: pulled[it.id] })) });
     return;
   }
   if (req.method === 'GET') {
@@ -109,7 +114,8 @@ module.exports = async function handler(req, res) {
   try {
     const me = await currentUser(req);
     if (!me) { res.status(401).json({ error: 'signed_out' }); return; }
-    const action = parseBody(req).action;
+    const body = parseBody(req), action = body.action;
+    const two = String(body.crate) === '2';   // GOOD® CRATE Nº002
     if (action === 'reset' && isOwner(me)) {
       // Keeps the owner's GD-999 set and clears the owner's other pulls. Serial
       // counters are never rewound: other accounts still hold those numbers.
@@ -132,8 +138,8 @@ module.exports = async function handler(req, res) {
       const user = raw ? JSON.parse(raw) : null;
       if (!user) { res.status(401).json({ error: 'signed_out' }); return; }
       if ((user.coins || 0) < PRICE) { res.status(402).json({ error: 'coins', coins: user.coins || 0, price: PRICE }); return; }
-      let id = pick(ODDS);
-      const gold = id === 'GOLD';
+      let id = pick(two ? ODDS2 : ODDS);
+      const gold = !two && id === 'GOLD';
       if (gold) id = pick(GOLD_ODDS);
       const n = await redis('INCR', `crate:serial:${id}`);
       const fresh = await redis('SADD', `user:${user.uid}:owned`, id);
@@ -143,7 +149,7 @@ module.exports = async function handler(req, res) {
       user.coins = (user.coins || 0) - PRICE + (dup ? REFUND : 0);
       await saveUser(user);
       const achievements = await ACH.onPull(user.uid, id);
-      const it = ITEMS[id];
+      const it = (two ? ITEMS2 : ITEMS)[id];
       res.status(200).json({ roll: { ...entry, name: it.name, color: it.color, tier: it.tier, gold, dup, refund: dup ? REFUND : 0 }, coins: user.coins, achievements });
     } finally {
       await redis('DEL', lock);

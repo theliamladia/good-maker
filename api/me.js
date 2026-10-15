@@ -28,6 +28,8 @@ vm.runInNewContext(fs.readFileSync(path.join(__dirname, '../js/outfits.js'), 'ut
 const TOPS = new Set(); const LOCKED = new Map(); const BOTTOMS = new Map();
 for (const k of win.OUTFITS) for (const c of k.colors || [k]) if (k.locked || c.locked) LOCKED.set(c.id, k.id); else TOPS.add(c.id);
 for (const k of win.PANTS) for (const c of k.colors || [k]) { if (k.locked || c.locked) LOCKED.set(c.id, k.id); BOTTOMS.set(c.id, Object.keys(c.shoes || k.shoes || {})); }
+const ACCS = new Set();   // ACCESSORIES: all locked until owned
+for (const k of win.ACCESSORIES || []) for (const c of k.colors || [k]) { ACCS.add(c.id); if (k.locked || c.locked) LOCKED.set(c.id, k.id); }
 
 // Locked tops only for accounts that own them (by colour id or kind id).
 function cleanLook(L, unlocks = [], owner = false) {
@@ -48,7 +50,7 @@ function cleanLook(L, unlocks = [], owner = false) {
   if (['classic', 'slim'].includes(L.body)) out.body = L.body;
   if (L.tuck === 'out') out.tuck = 'out';
   if (L.boxer === 'tartan') out.boxer = 'tartan';
-  if (L.acc && priv && priv.accs.has(String(L.acc))) out.acc = String(L.acc);
+  if (L.acc) { const a = String(L.acc); if ((ACCS.has(a) && (!LOCKED.has(a) || owns(a))) || (priv && priv.accs.has(a))) out.acc = a; }
   const ft = cleanFt(L.ft);
   if (ft) out.ft = ft;
   return out;

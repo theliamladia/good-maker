@@ -38,41 +38,42 @@ function table() {
   for (const [k, p] of GOLD_ODDS) pct[k] = (gold * p) / 100;
   return Object.entries(ITEMS).map(([id, it]) => ({ id, ...it, pct: Math.round(pct[id] * 100) / 100 }));
 }
-// GOOD® CRATE Nº002 · ART® IN MOTION: shown on /inmotion (GET /api/crate?crate=2), not
-// open yet: nothing here can be rolled. pct = percent of every crate (sums to 100).
+// GOOD® CRATE Nº002 · ART® IN MOTION (/inmotion; GET /api/crate?crate=2, POST { action: 'open', crate: 2 }).
+// Keys are THE MAKER colour ids; owning a serialized copy unlocks that colour. pct = percent of every crate (sums to 100).
 // tex = the preview-only texture (api/_locked/aim-*.enc); bottom / accessory = which section it shows in.
 const ITEMS2 = {
-  'chore-naples-paynes': { name: "CHORE®", color: "NAPLES YELLOW/PAYNE'S GREY", tier: 'core', pct: 3.3, tex: 'aim-chore-naples-paynes' },
-  'chore-viridian-cobalt': { name: "CHORE®", color: "VIRIDIAN/COBALT VIOLET", tier: 'core', pct: 3.3, tex: 'aim-chore-viridian-cobalt' },
-  'chore-alizarin-manganese': { name: "CHORE®", color: "ALIZARIN/MANGANESE BLUE", tier: 'core', pct: 3.3, tex: 'aim-chore-alizarin-manganese' },
-  'trench-naples-paynes': { name: "TRENCH®", color: "NAPLES YELLOW/PAYNE'S GREY", tier: 'core', pct: 3.3, tex: 'aim-trench-naples-paynes' },
-  'trench-viridian-cobalt': { name: "TRENCH®", color: "VIRIDIAN/COBALT VIOLET", tier: 'core', pct: 3.3, tex: 'aim-trench-viridian-cobalt' },
-  'trench-alizarin-manganese': { name: "TRENCH®", color: "ALIZARIN/MANGANESE BLUE", tier: 'core', pct: 3.3, tex: 'aim-trench-alizarin-manganese' },
-  'inside-out-naples-paynes': { name: "INSIDE OUT®", color: "NAPLES YELLOW/PAYNE'S GREY", tier: 'core', pct: 3.3, tex: 'aim-inside-out-naples-paynes' },
-  'inside-out-viridian-cobalt': { name: "INSIDE OUT®", color: "VIRIDIAN/COBALT VIOLET", tier: 'core', pct: 3.3, tex: 'aim-inside-out-viridian-cobalt' },
-  'inside-out-alizarin-manganese': { name: "INSIDE OUT®", color: "ALIZARIN/MANGANESE BLUE", tier: 'core', pct: 3.3, tex: 'aim-inside-out-alizarin-manganese' },
-  'baby-hoodie-naples-paynes': { name: "BABY® BOYFRIEND HOODIE", color: "NAPLES YELLOW/PAYNE'S GREY", tier: 'core', pct: 3.3, tex: 'aim-baby-hoodie-naples-paynes' },
-  'baby-hoodie-viridian-cobalt': { name: "BABY® BOYFRIEND HOODIE", color: "VIRIDIAN/COBALT VIOLET", tier: 'core', pct: 3.3, tex: 'aim-baby-hoodie-viridian-cobalt' },
-  'baby-hoodie-alizarin-manganese': { name: "BABY® BOYFRIEND HOODIE", color: "ALIZARIN/MANGANESE BLUE", tier: 'core', pct: 3.3, tex: 'aim-baby-hoodie-alizarin-manganese' },
-  'baby-cozyknit-naples-paynes': { name: "BABY® COZYKNIT", color: "NAPLES YELLOW/PAYNE'S GREY", tier: 'core', pct: 3.3, tex: 'aim-baby-cozyknit-naples-paynes' },
-  'baby-cozyknit-viridian-cobalt': { name: "BABY® COZYKNIT", color: "VIRIDIAN/COBALT VIOLET", tier: 'core', pct: 3.3, tex: 'aim-baby-cozyknit-viridian-cobalt' },
-  'baby-cozyknit-alizarin-manganese': { name: "BABY® COZYKNIT", color: "ALIZARIN/MANGANESE BLUE", tier: 'core', pct: 3.3, tex: 'aim-baby-cozyknit-alizarin-manganese' },
-  'scarf-splatter': { name: "SCARF®", color: "SPLATTER", tier: 'rare', pct: 1.5, tex: 'aim-scarf-splatter', accessory: true },
-  'scarf-im-sowwy': { name: "SCARF®", color: "I'M SOWWY", tier: 'chase', pct: 1, tex: 'aim-scarf-im-sowwy', accessory: true },
-  'splatter-springsteen': { name: "JEAN® SPLATTER", color: "SPRINGSTEEN", tier: 'core', pct: 4, tex: 'aim-splatter-springsteen', bottom: true },
-  'splatter-the-jean': { name: "JEAN® SPLATTER", color: "THE JEAN", tier: 'core', pct: 4, tex: 'aim-splatter-the-jean', bottom: true },
-  'splatter-selvedge': { name: "JEAN® SPLATTER", color: "SELVEDGE", tier: 'core', pct: 4, tex: 'aim-splatter-selvedge', bottom: true },
-  'jean-ice': { name: "JEAN® ICE", color: "ICE", tier: 'core', pct: 4, tex: 'aim-jean-ice', bottom: true },
-  'jean-bleached': { name: "JEAN® BLEACHED", color: "BLEACHED", tier: 'core', pct: 4, tex: 'aim-jean-bleached', bottom: true },
-  'jeajean-springsteen-the-jean': { name: "JEAJEAN®", color: "SPRINGSTEEN/THE JEAN", tier: 'core', pct: 4, tex: 'aim-jeajean-springsteen-the-jean', bottom: true },
-  'jeajean-ice-selvedge': { name: "JEAJEAN®", color: "ICE/SELVEDGE", tier: 'core', pct: 4, tex: 'aim-jeajean-ice-selvedge', bottom: true },
-  'jeajean-springsteen-agate': { name: "JEAJEAN®", color: "SPRINGSTEEN/AGATE", tier: 'core', pct: 4, tex: 'aim-jeajean-springsteen-agate', bottom: true },
-  'jeajean-agate-springsteen': { name: "JEAJEAN®", color: "AGATE/SPRINGSTEEN", tier: 'rare', pct: 3, tex: 'aim-jeajean-agate-springsteen', bottom: true },
-  'jean-painter': { name: "JEAN® PAINTER SPLATTER", color: "ART® IN MOTION", tier: 'chase', pct: 1, tex: 'aim-jean-painter', bottom: true, chase: true },
-  'baby-tights-naples-paynes': { name: "BABY® TIGHTS", color: "NAPLES YELLOW/PAYNE'S GREY", tier: 'core', pct: 4, tex: 'aim-baby-tights-naples-paynes', bottom: true },
-  'baby-tights-viridian-cobalt': { name: "BABY® TIGHTS", color: "VIRIDIAN/COBALT VIOLET", tier: 'core', pct: 4, tex: 'aim-baby-tights-viridian-cobalt', bottom: true },
-  'baby-tights-alizarin-manganese': { name: "BABY® TIGHTS", color: "ALIZARIN/MANGANESE BLUE", tier: 'core', pct: 4, tex: 'aim-baby-tights-alizarin-manganese', bottom: true },
+  'c2-chore-naples-paynes': { name: "CHORE®", color: "NAPLES YELLOW/PAYNE'S GREY", tier: 'core', pct: 3.3, tex: 'aim-chore-naples-paynes', unlock: 'c2-chore-naples-paynes' },
+  'c2-chore-viridian-cobalt': { name: "CHORE®", color: "VIRIDIAN/COBALT VIOLET", tier: 'core', pct: 3.3, tex: 'aim-chore-viridian-cobalt', unlock: 'c2-chore-viridian-cobalt' },
+  'c2-chore-alizarin-manganese': { name: "CHORE®", color: "ALIZARIN/MANGANESE BLUE", tier: 'core', pct: 3.3, tex: 'aim-chore-alizarin-manganese', unlock: 'c2-chore-alizarin-manganese' },
+  'c2-trench-naples-paynes': { name: "TRENCH®", color: "NAPLES YELLOW/PAYNE'S GREY", tier: 'core', pct: 3.3, tex: 'aim-trench-naples-paynes', unlock: 'c2-trench-naples-paynes' },
+  'c2-trench-viridian-cobalt': { name: "TRENCH®", color: "VIRIDIAN/COBALT VIOLET", tier: 'core', pct: 3.3, tex: 'aim-trench-viridian-cobalt', unlock: 'c2-trench-viridian-cobalt' },
+  'c2-trench-alizarin-manganese': { name: "TRENCH®", color: "ALIZARIN/MANGANESE BLUE", tier: 'core', pct: 3.3, tex: 'aim-trench-alizarin-manganese', unlock: 'c2-trench-alizarin-manganese' },
+  'c2-inside-out-naples-paynes': { name: "INSIDE OUT®", color: "NAPLES YELLOW/PAYNE'S GREY", tier: 'core', pct: 3.3, tex: 'aim-inside-out-naples-paynes', unlock: 'c2-inside-out-naples-paynes' },
+  'c2-inside-out-viridian-cobalt': { name: "INSIDE OUT®", color: "VIRIDIAN/COBALT VIOLET", tier: 'core', pct: 3.3, tex: 'aim-inside-out-viridian-cobalt', unlock: 'c2-inside-out-viridian-cobalt' },
+  'c2-inside-out-alizarin-manganese': { name: "INSIDE OUT®", color: "ALIZARIN/MANGANESE BLUE", tier: 'core', pct: 3.3, tex: 'aim-inside-out-alizarin-manganese', unlock: 'c2-inside-out-alizarin-manganese' },
+  'c2-baby-hoodie-naples-paynes': { name: "BABY® BOYFRIEND HOODIE", color: "NAPLES YELLOW/PAYNE'S GREY", tier: 'core', pct: 3.3, tex: 'aim-baby-hoodie-naples-paynes', unlock: 'c2-baby-hoodie-naples-paynes' },
+  'c2-baby-hoodie-viridian-cobalt': { name: "BABY® BOYFRIEND HOODIE", color: "VIRIDIAN/COBALT VIOLET", tier: 'core', pct: 3.3, tex: 'aim-baby-hoodie-viridian-cobalt', unlock: 'c2-baby-hoodie-viridian-cobalt' },
+  'c2-baby-hoodie-alizarin-manganese': { name: "BABY® BOYFRIEND HOODIE", color: "ALIZARIN/MANGANESE BLUE", tier: 'core', pct: 3.3, tex: 'aim-baby-hoodie-alizarin-manganese', unlock: 'c2-baby-hoodie-alizarin-manganese' },
+  'c2-baby-cozyknit-naples-paynes': { name: "BABY® COZYKNIT", color: "NAPLES YELLOW/PAYNE'S GREY", tier: 'core', pct: 3.3, tex: 'aim-baby-cozyknit-naples-paynes', unlock: 'c2-baby-cozyknit-naples-paynes' },
+  'c2-baby-cozyknit-viridian-cobalt': { name: "BABY® COZYKNIT", color: "VIRIDIAN/COBALT VIOLET", tier: 'core', pct: 3.3, tex: 'aim-baby-cozyknit-viridian-cobalt', unlock: 'c2-baby-cozyknit-viridian-cobalt' },
+  'c2-baby-cozyknit-alizarin-manganese': { name: "BABY® COZYKNIT", color: "ALIZARIN/MANGANESE BLUE", tier: 'core', pct: 3.3, tex: 'aim-baby-cozyknit-alizarin-manganese', unlock: 'c2-baby-cozyknit-alizarin-manganese' },
+  'c2-scarf-splatter': { name: "SCARF®", color: "SPLATTER", tier: 'rare', pct: 1.5, tex: 'aim-scarf-splatter', accessory: true, unlock: 'c2-scarf-splatter' },
+  'c2-scarf-im-sowwy': { name: "SCARF®", color: "I'M SOWWY", tier: 'chase', pct: 1, tex: 'aim-scarf-im-sowwy', accessory: true, unlock: 'c2-scarf-im-sowwy' },
+  'c2-splatter-springsteen': { name: "JEAN® SPLATTER", color: "SPRINGSTEEN", tier: 'core', pct: 4, tex: 'aim-splatter-springsteen', bottom: true, unlock: 'c2-splatter-springsteen' },
+  'c2-splatter-the-jean': { name: "JEAN® SPLATTER", color: "THE JEAN", tier: 'core', pct: 4, tex: 'aim-splatter-the-jean', bottom: true, unlock: 'c2-splatter-the-jean' },
+  'c2-splatter-selvedge': { name: "JEAN® SPLATTER", color: "SELVEDGE", tier: 'core', pct: 4, tex: 'aim-splatter-selvedge', bottom: true, unlock: 'c2-splatter-selvedge' },
+  'c2-jean-ice': { name: "JEAN® ICE", color: "ICE", tier: 'core', pct: 4, tex: 'aim-jean-ice', bottom: true, unlock: 'c2-jean-ice' },
+  'c2-jean-bleached': { name: "JEAN® BLEACHED", color: "BLEACHED", tier: 'core', pct: 4, tex: 'aim-jean-bleached', bottom: true, unlock: 'c2-jean-bleached' },
+  'c2-jeajean-springsteen-the-jean': { name: "JEAJEAN®", color: "SPRINGSTEEN/THE JEAN", tier: 'core', pct: 4, tex: 'aim-jeajean-springsteen-the-jean', bottom: true, unlock: 'c2-jeajean-springsteen-the-jean' },
+  'c2-jeajean-ice-selvedge': { name: "JEAJEAN®", color: "ICE/SELVEDGE", tier: 'core', pct: 4, tex: 'aim-jeajean-ice-selvedge', bottom: true, unlock: 'c2-jeajean-ice-selvedge' },
+  'c2-jeajean-springsteen-agate': { name: "JEAJEAN®", color: "SPRINGSTEEN/AGATE", tier: 'core', pct: 4, tex: 'aim-jeajean-springsteen-agate', bottom: true, unlock: 'c2-jeajean-springsteen-agate' },
+  'c2-jeajean-agate-springsteen': { name: "JEAJEAN®", color: "AGATE/SPRINGSTEEN", tier: 'rare', pct: 3, tex: 'aim-jeajean-agate-springsteen', bottom: true, unlock: 'c2-jeajean-agate-springsteen' },
+  'c2-jean-painter': { name: "JEAN® PAINTER SPLATTER", color: "ART® IN MOTION", tier: 'chase', pct: 1, tex: 'aim-jean-painter', bottom: true, chase: true, unlock: 'c2-jean-painter' },
+  'c2-baby-tights-naples-paynes': { name: "BABY® TIGHTS", color: "NAPLES YELLOW/PAYNE'S GREY", tier: 'core', pct: 4, tex: 'aim-baby-tights-naples-paynes', bottom: true, unlock: 'c2-baby-tights-naples-paynes' },
+  'c2-baby-tights-viridian-cobalt': { name: "BABY® TIGHTS", color: "VIRIDIAN/COBALT VIOLET", tier: 'core', pct: 4, tex: 'aim-baby-tights-viridian-cobalt', bottom: true, unlock: 'c2-baby-tights-viridian-cobalt' },
+  'c2-baby-tights-alizarin-manganese': { name: "BABY® TIGHTS", color: "ALIZARIN/MANGANESE BLUE", tier: 'core', pct: 4, tex: 'aim-baby-tights-alizarin-manganese', bottom: true, unlock: 'c2-baby-tights-alizarin-manganese' },
 };
 const table2 = () => Object.entries(ITEMS2).map(([id, it]) => ({ id, ...it }));
+const ODDS2 = Object.entries(ITEMS2).map(([id, it]) => [id, it.pct]);
 
-module.exports = { ITEMS, ODDS, GOLD_ODDS, PRICE, REFUND, table, table2 };
+module.exports = { ITEMS, ODDS, GOLD_ODDS, PRICE, REFUND, table, ITEMS2, ODDS2, table2 };

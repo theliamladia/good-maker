@@ -24,10 +24,10 @@
         <li><b>THE CHASE</b> JEAN® PAINTER SPLATTER and SCARF® I'M SOWWY, 1% each</li>
         <li><b>ACCESSORIES</b> the SCARF®, now in SPLATTER</li>
         <li><b>LOOKBOOK</b> the collection, worn by our players</li>
-        <li><b>OPENING SOON</b> save GOOD® COINS for it now</li>
+        <li><b>OPEN NOW</b> 5 GOOD® COINS a crate, every pull serialized</li>
       </ul>
       <div class="cp-actions">
-        <a class="cp-go mono" href="inmotion">VIEW THE NEW CRATE →</a>
+        <a class="cp-go mono" href="inmotion">OPEN THE NEW CRATE →</a>
         <a class="cp-later mono" href="releases">ALL RELEASES®</a>
         <button type="button" class="cp-later mono" data-close>NOT NOW</button>
       </div>

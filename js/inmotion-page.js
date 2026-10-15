@@ -1,16 +1,10 @@
-// ART® IN MOTION (/inmotion): the wallet, THE CHASE and every piece with its odds,
-// from /api/crate?crate=2. The crate isn't open yet, so there's nothing to roll here.
+// ART® IN MOTION (/inmotion): the LOOKBOOK, THE CHASE and every piece with its odds,
+// from /api/crate?crate=2. Opening lives in js/inmotion-open.js.
 (() => {
   const $ = (id) => document.getElementById(id);
   const TIER = { chase: 'THE CHASE', rare: 'RARE', core: '' };
   const pct = (p) => `${String(p).replace(/\.0$/, '')}%`;
-  const coin = '<span class="coin" aria-hidden="true"></span>';
 
-  fetch('api/me').then((r) => (r.ok ? r.json() : { user: null })).catch(() => ({ user: null })).then(({ user }) => {
-    $('wallet').innerHTML = user
-      ? `${user.name} · YOU HAVE ${coin}${user.coins || 0} GOOD® COINS`
-      : '<a href="account">SIGN IN</a> TO COLLECT GOOD® COINS BEFORE IT OPENS';
-  });
 
   // LOOKBOOK: our players wearing the collection. Renders come scrambled like the pieces
   // and are drawn straight to canvas (no image files).
@@ -23,7 +17,7 @@
     ['DAJIGGLER', 'TRENCH® VIRIDIAN/COBALT VIOLET · JEAJEAN® SPRINGSTEEN/THE JEAN'],
     ['BOBAYEET', 'INSIDE OUT® ALIZARIN/MANGANESE BLUE · JEAN® SPLATTER SELVEDGE'],
     ['LINDSEYYHAZEL', 'BABY® COZYKNIT VIRIDIAN/COBALT VIOLET · BABY® TIGHTS'],
-    ['RACERJACK', "TRENCH® NAPLES YELLOW/PAYNE'S GREY · JEAN® BLEACHED · SCARF® SPLATTER"],
+    ['ISABELLEBLANCO', "TRENCH® NAPLES YELLOW/PAYNE'S GREY · JEAN® BLEACHED · SCARF® SPLATTER"],
     ['AUSTIN1333', 'CHORE® ALIZARIN/MANGANESE BLUE · JEAJEAN® ICE/SELVEDGE'],
   ];
   const scrambled = async (id) => {
@@ -42,11 +36,23 @@
     scrambled(`aim-look-${i}`).then((bmp) => { cv.width = bmp.width; cv.height = bmp.height; cv.getContext('2d').drawImage(bmp, 0, 0); bmp.close(); }).catch(() => {});
     return fig;
   }));
-  document.getElementById('looks').addEventListener('contextmenu', (e) => e.preventDefault());
+  document.querySelectorAll('#chaseLooks canvas').forEach((cv, i) => {
+    scrambled(`aim-chase-${i}`).then((bmp) => { cv.width = bmp.width; cv.height = bmp.height; cv.getContext('2d').drawImage(bmp, 0, 0); bmp.close(); }).catch(() => {});
+  });
+  for (const id of ['looks', 'chaseLooks']) document.getElementById(id).addEventListener('contextmenu', (e) => e.preventDefault());
 
   fetch('api/crate?crate=2').then((r) => r.json()).then(({ items = [] }) => {
+    // THE CHASE: the jean and both scarves as tiles (with odds), and Leeeeems wearing them.
     const chase = items.find((i) => i.chase);
-    if (chase) { $('chaseOdds').textContent = pct(chase.pct); GoodItems.draw(chase, $('chaseFig')).catch(() => {}); }
+    if (chase) $('chaseOdds').textContent = pct(chase.pct);
+    const trio = [chase, items.find((i) => i.id === 'c2-scarf-im-sowwy'), items.find((i) => i.id === 'c2-scarf-splatter')].filter(Boolean);
+    $('chaseTiles').replaceChildren(...trio.map((it) => {
+      const f = document.createElement('figure'); f.className = 'im-chase-tile';
+      f.innerHTML = '<canvas aria-hidden="true"></canvas><figcaption class="sc"></figcaption>';
+      f.querySelector('figcaption').textContent = `${it.name} ${it.color} · ${pct(it.pct)}`;
+      GoodItems.draw(it, f.querySelector('canvas')).catch(() => {});
+      return f;
+    }));
     $('insideCount').textContent = `${items.length} PIECES · ODDS PER CRATE`;
     // Rarest first, then the collection in its order.
     const order = { chase: 0, rare: 1, core: 2 };

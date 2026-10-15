@@ -20,9 +20,8 @@
   // owns them (see api/_account.js UNLOCKS, sent by api/me and applied by js/account.js).
   const isLocked = (o) => !!o.locked && !o.owned;
   const PANTS = catalogue(window.PANTS);
-  // ACCESSORIES: worn over any top and bottom (none in the public catalogue yet;
-  // the owner's arrive through addPrivate).
-  const ACCS = [];
+  // ACCESSORIES: worn over any top and bottom (window.ACCESSORIES; locked ones preview until owned).
+  const ACCS = catalogue(window.ACCESSORIES || []);
   const ALL_PANTS = PANTS.flatMap((k) => k.colors);
   // GOOD® / BABY®: kinds shown under the current line ('both' shows under either).
   const inLine = (k) => k.line === 'both' || k.line === state.line;
@@ -38,6 +37,7 @@
     all: () => true,
     current: (k) => k.season === LATEST,
     crate1: (k) => CRATE1.has(k.id) || k.colors.some((c) => CRATE1.has(c.id)),
+    crate2: (k) => k.drop === 'crate2',
     fall: (k) => k.season === 2,
     deep: (k) => k.drop === 'deep',
   };
@@ -496,7 +496,7 @@
       b.querySelector('span').textContent = label; b.onclick = pick; return b;
     };
     list.replaceChildren(chip('NONE', null, !state.acc, () => { state.acc = null; drawAccessories(); render(); }),
-      ...ACCS.flatMap((k) => k.colors.map((c) => chip(`${k.name} ${c.color}`, c.swatch, state.acc === c, () => { state.acc = c; drawAccessories(); render(); }))));
+      ...ACCS.flatMap((k) => k.colors.map((c) => chip(`${k.name} ${c.color}${isLocked(c) ? " · PREVIEW" : ""}`, c.swatch, state.acc === c, () => { state.acc = c; drawAccessories(); render(); }))));
   }
   // Tuck: tucked shows the pants' waistband; untucked lets the shirt hang over it.
   // Cropped tops and skirts (noTuck) have nothing to tuck: always tucked, control hidden.
@@ -847,7 +847,8 @@
     },
     unlock: (ids) => {
       let any = false;
-      for (const k of [...SHIRTS, ...PANTS]) for (const c of k.colors) if (c.locked && (ids.includes(k.id) || ids.includes(c.id))) { c.owned = true; any = true; }
+      for (const k of [...SHIRTS, ...PANTS, ...ACCS]) for (const c of k.colors) if (c.locked && (ids.includes(k.id) || ids.includes(c.id))) { c.owned = true; any = true; }
+      if (any) drawAccessories();
       if (any) render();
     },
     // Pop-ups freeze the page behind them (CSS animations + the 3D render loop).
@@ -952,7 +953,7 @@
     const id = ++renderId;
     const o = state.outfit;
     const noTop = state.noTop;
-    const locked = (!noTop && isLocked(o)) || (!state.noBottom && isLocked(state.pants));
+    const locked = (!noTop && isLocked(o)) || (!state.noBottom && isLocked(state.pants)) || (!!state.acc && isLocked(state.acc));
     let outfit;
     try {
       outfit = noTop ? EMPTY_OUTFIT : await loadOutfit(o, state.body);
@@ -1437,6 +1438,14 @@
       }
     }
     setBody(['classic', 'slim'].includes(L.body) ? L.body : state.body);
+  }
+
+  // The ACCESSORY row, under the pants.
+  if (ACCS.length && !$('accSection')) {
+    const sec = document.createElement('div'); sec.id = 'accSection';
+    sec.innerHTML = '<div class="section-tag mono">ACCESSORY</div><div class="acc-list"></div>';
+    $('pantsSection').after(sec);
+    drawAccessories();
   }
 
   // ---------- Boot with the demo head ----------

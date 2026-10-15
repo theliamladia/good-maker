@@ -25,7 +25,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="inmotion.css?v=3">
+  <link rel="stylesheet" href="inmotion.css?v=5">
 </head>
 <body class="im">
 
@@ -40,7 +40,7 @@
     <h1 class="im-title">ART<sup>®</sup> IN MOTION</h1>
     <p class="im-lede">The new collection from GOOD®. A study of colour in movement, painted <em>en plein air</em>: pigment given to the open light, to weather, and to the hand that moves through it.</p>
     <div class="im-actions">
-      <button type="button" class="im-open sc" disabled>OPENING SOON</button>
+      <button type="button" class="im-open sc" id="open">OPEN THE CRATE</button>
       <a class="im-link sc" href="account" id="inv">MY INVENTORY® →</a>
     </div>
     <p class="im-wallet sc" id="wallet" aria-live="polite">&nbsp;</p>
@@ -104,25 +104,20 @@
     <div class="im-looks" id="looks"></div>
   </section>
 
-  <section class="im-sec" aria-labelledby="howTitle">
-    <p class="im-kicker sc">HOW IT WORKS</p>
-    <h2 class="im-h2" id="howTitle">Five steps, unhurried.</h2>
-    <ol class="im-steps">
-      <li><span class="sc">01</span><p><b>Earn GOOD® COINS.</b> Sign in and save new fits to your wardrobe in THE MAKER: ten coins each, up to four a day.</p></li>
-      <li><span class="sc">02</span><p><b>Open the crate.</b> Five GOOD® COINS, when it opens. We ask once whether you're sure.</p></li>
-      <li><span class="sc">03</span><p><b>Watch the reel.</b> Every piece passes the marker, slows, and settles on yours.</p></li>
-      <li><span class="sc">04</span><p><b>Keep it, numbered.</b> Every pull is serialized and lands in MY INVENTORY®.</p></li>
-      <li><span class="sc">05</span><p><b>Wear it.</b> Own a serialized copy and the piece is yours to wear in THE MAKER.</p></li>
-    </ol>
-  </section>
-
   <section class="im-sec im-chase" aria-labelledby="chaseTitle">
-    <canvas class="im-chase-fig" id="chaseFig" aria-hidden="true"></canvas>
+    <div class="im-chase-art">
+      <div class="im-chase-looks" id="chaseLooks">
+        <figure><canvas aria-hidden="true"></canvas><figcaption class="sc">SCARF® I'M SOWWY</figcaption></figure>
+        <figure><canvas aria-hidden="true"></canvas><figcaption class="sc">SCARF® SPLATTER</figcaption></figure>
+      </div>
+      <div class="im-chase-tiles" id="chaseTiles"></div>
+      <p class="im-chase-who sc">SHOWN ON LEEEEEMS</p>
+    </div>
     <div>
       <p class="im-kicker sc">THE CHASE · <span id="chaseOdds">1%</span> OF CRATES</p>
       <h2 class="im-h2" id="chaseTitle">JEAN<sup>®</sup> PAINTER SPLATTER</h2>
       <p class="im-p">A MARSHMALLOW™ jean, worn through a season at the easel and flicked with all six pigments. No two marks repeat; none of it was planned.</p>
-      <p class="im-p">The rarest piece in the crate, shared only with the SCARF® I'M SOWWY. Close behind: the SCARF® SPLATTER, and the JEAJEAN® AGATE/SPRINGSTEEN, belted in white with GOOD® BLUE buckles.</p>
+      <p class="im-p">It shares the top of the crate with the SCARF® I'M SOWWY, at 1% each. Close behind is its companion, the SCARF® SPLATTER: the same paint on a MARSHMALLOW™ knit. The scarves are accessories, worn over anything.</p>
     </div>
   </section>
 
@@ -138,10 +133,33 @@
   </section>
 
   <section class="im-sec im-end">
-    <h2 class="im-h2">Opening soon.</h2>
-    <p class="im-p">No GOOD® COINS yet? <a href="account">Sign in</a>, then save a new fit in <a href="./">THE MAKER</a>.</p>
+    <h2 class="im-h2">Open it.</h2>
+    <p class="im-p">Five GOOD® COINS a crate. Every pull is serialized, lands in MY INVENTORY®, and is yours to wear in THE MAKER. A piece you already own returns two coins.</p>
+    <a class="im-link sc" href="#hero">BACK TO THE CRATE ↑</a>
+    <p class="im-p">No GOOD® COINS yet? <a href="account">Sign in</a>, then save a new fit in <a href="./">THE MAKER</a>: ten coins each, up to four a day.</p>
     <p class="im-timer sc" data-coin-timer></p>
   </section>
+
+  <!-- The unboxing: the reel, then the piece. -->
+  <div class="im-drop" id="drop" hidden>
+    <div class="im-drop-card" role="dialog" aria-modal="true" aria-labelledby="dropTag">
+      <button type="button" class="im-drop-x sc" id="dropClose" aria-label="Close">✕</button>
+      <p class="im-kicker sc" id="dropTag">OPENING…</p>
+      <div class="im-reel" id="reel"><div class="im-strip" id="strip"></div><i class="im-marker" aria-hidden="true"></i></div>
+      <div class="im-got" id="got" hidden>
+        <canvas id="gotFig" aria-hidden="true"></canvas>
+        <div>
+          <h2 class="im-h2" id="gotName"></h2>
+          <p class="im-serial sc" id="gotSerial"></p>
+          <p class="im-p" id="gotMeta"></p>
+          <div class="im-actions">
+            <button type="button" class="im-open sc" id="again">OPEN ANOTHER</button>
+            <a class="im-link sc" href="./">WEAR IT IN THE MAKER →</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
 </main>
 
 <footer class="im-foot sc">© 2026 GOOD® DESIGN · <a href="./">THE MAKER</a> · <a href="/privacy">PRIVACY</a></footer>
@@ -150,7 +168,8 @@
 <script src="js/gooditems.js?v=3"></script>
 <script src="js/inmotion.js?v=2"></script>
 <script src="js/inmotion-crate.js?v=3"></script>
-<script src="js/inmotion-page.js?v=3"></script>
+<script src="js/inmotion-page.js?v=4"></script>
+<script src="js/inmotion-open.js?v=2"></script>
 <script src="js/coin-timer.js?v=2"></script>
 </body>
 </html>

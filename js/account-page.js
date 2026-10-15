@@ -191,7 +191,8 @@
       if (cat) GoodCompose.addPrivate(cat);
     }
     render();
-    fetch('api/crate').then((r) => r.json()).then((c) => { crateItems = Object.fromEntries((c.items || []).map((i) => [i.id, i])); if (me) { drawInventory(); drawLedger(); drawSuggestions(); } }).catch(() => {});
+    // Both crates' pieces (Nº001 and Nº002), so every pull in MY INVENTORY® has its name.
+    Promise.all(['api/crate', 'api/crate?crate=2'].map((u) => fetch(u).then((r) => r.json()).catch(() => ({ items: [] })))).then(([a, b]) => ({ items: [...(a.items || []), ...(b.items || [])] })).then((c) => { crateItems = Object.fromEntries((c.items || []).map((i) => [i.id, i])); if (me) { drawInventory(); drawLedger(); drawSuggestions(); } }).catch(() => {});
     if (signin === 'ok' && me) toast(`SIGNED IN AS ${me.name}.`);
     if (signin === 'expired') toast('THAT LINK EXPIRED. ASK FOR A NEW ONE.');
   });

@@ -15,7 +15,7 @@
   };
   Promise.all([
     fetch(`api/profile?name=${key}`).then((r) => (r.ok ? r.json() : null)),
-    fetch('api/crate').then((r) => r.json()).catch(() => ({ items: [] })),
+    Promise.all(['api/crate', 'api/crate?crate=2'].map((u) => fetch(u).then((r) => r.json()).catch(() => ({ items: [] })))).then(([a, b]) => ({ items: [...(a.items || []), ...(b.items || [])] })),   // both crates' pieces
     fetch('api/me').then((r) => (r.ok ? r.json() : { user: null })).catch(() => ({ user: null })),
   ]).then(async ([p, c, m]) => {
     const viewer = m.user;
