@@ -5,7 +5,7 @@
 // decoded from /api/outfit's scrambled data straight to pixels.
 window.GoodCompose = (() => {
   const catalogue = (kinds) => kinds.flatMap((k) => (k.colors || [k]).map((c) => ({
-    baseUnderHoles: k.baseUnderHoles, hat: k.hat, shoes: k.shoes, boxers: k.boxers, src: k.src, cropped: k.cropped, noTuck: k.noTuck, locked: k.locked, ...c, name: k.name,
+    baseUnderHoles: k.baseUnderHoles, hat: k.hat, shoes: k.shoes, boxers: k.boxers, boxersExact: k.boxersExact, src: k.src, cropped: k.cropped, noTuck: k.noTuck, locked: k.locked, ...c, name: k.name,
   })));
   const TOPS = catalogue(window.OUTFITS), BOTTOMS = catalogue(window.PANTS);
   const cache = {};
@@ -45,7 +45,7 @@ window.GoodCompose = (() => {
       const shoe = shoes.includes(L.shoe) ? L.shoe : shoes[0];
       const psrc = p.shoes ? p.shoes[shoe] : p.src;
       let pants = await (p.locked ? loadLocked(psrc) : load(psrc));
-      if (p.boxers && L.boxer === 'tartan') pants = SkinLib.tartanBoxers(pants);
+      if (p.boxers && L.boxer === 'tartan') pants = SkinLib.tartanBoxers(pants, !!p.boxersExact);
       pants = SkinLib.washPants(pants, p.wash);
       outfit = SkinLib.combineOutfit(outfit, pants, !!(L.tuck !== 'out' || (o && o.cropped) || p.noTuck));
     }

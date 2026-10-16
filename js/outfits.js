@@ -1555,6 +1555,7 @@ window.PANTS = [
     id: 'c2-jeajean',
     name: "JEAJEAN®",
     boxers: true, // sagging: the boxer control (POOLSIDE™ blue or HIGHLAND™ tartan)
+    boxersExact: true, // pre-washed denim: tartan only the boxers' own blues
     season: 3,
     drop: 'crate2',
     locked: true,

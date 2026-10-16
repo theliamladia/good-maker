@@ -9,7 +9,7 @@
     return kinds.map((k) => {
       const kind = { id: k.id, name: k.name, line: k.line || 'good', season: k.season || 1, drop: k.drop };
       kind.colors = (k.colors || [k]).map((c) => ({
-        locked: k.locked, baseUnderHoles: k.baseUnderHoles, hat: k.hat, shoes: k.shoes, boxers: k.boxers, src: k.src, cropped: k.cropped, noTuck: k.noTuck, ...c, name: k.name, kind,
+        locked: k.locked, baseUnderHoles: k.baseUnderHoles, hat: k.hat, shoes: k.shoes, boxers: k.boxers, boxersExact: k.boxersExact, src: k.src, cropped: k.cropped, noTuck: k.noTuck, ...c, name: k.name, kind,
       }));
       kind.current = kind.colors[0];
       return kind;
@@ -306,7 +306,7 @@
     if (washed[key]) return washed[key];
     // Tartan first: once washed, darker denim falls in the boxers' blue range.
     let d = await (p.locked ? loadLocked(pantsSrc(p, shoe)) : loadData(pantsSrc(p, shoe)));
-    if (tartan(p, boxer)) d = SkinLib.tartanBoxers(d);
+    if (tartan(p, boxer)) d = SkinLib.tartanBoxers(d, !!p.boxersExact);
     return (washed[key] = SkinLib.washPants(d, p.wash));
   };
 
@@ -861,11 +861,16 @@
   $('file').onchange = (e) => handleFile(e.target.files[0]);
   // Whole page is a drop target.
   const drop = $('drop');
-  document.addEventListener('dragover', (e) => { e.preventDefault(); drop.classList.add('over'); });
+  // Drags that start on the page (a card's thumbnail) aren't skins: ignore them.
+  let innerDrag = false;
+  document.addEventListener('dragstart', () => { innerDrag = true; });
+  document.addEventListener('dragend', () => { innerDrag = false; });
+  document.addEventListener('dragover', (e) => { e.preventDefault(); if (!innerDrag) drop.classList.add('over'); });
   document.addEventListener('dragleave', (e) => { if (!e.relatedTarget) drop.classList.remove('over'); });
   document.addEventListener('drop', (e) => {
     e.preventDefault();
     drop.classList.remove('over');
+    if (innerDrag) { innerDrag = false; return; }
     handleFile(e.dataTransfer.files[0]);
   });
 

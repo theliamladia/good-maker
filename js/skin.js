@@ -647,7 +647,10 @@ function baseUnderHoles(skin) {
 // on the texture grid: dark bands every 4px across and 3px down (the boxers
 // only show a few rows), darker where they cross, and a thin gold line down
 // every 8px. Returns a new texture.
-function tartanBoxers(pants) {
+// exact: only the boxers' own three POOLSIDE™ colours (from the JEAN® SAGGING file), for
+// pre-washed jeans whose denim can share the boxer blues' hue (GOOD® CRATE Nº002 JEAJEAN®).
+const BOXER_BLUES = new Set(['0,76,174', '42,109,193', '43,129,239']);
+function tartanBoxers(pants, exact = false) {
   pants = to64(pants);
   const out = new ImageData(new Uint8ClampedArray(pants.data), 64, 64);
   const d = out.data;
@@ -657,6 +660,7 @@ function tartanBoxers(pants) {
       const [r, g, b] = [d[i], d[i + 1], d[i + 2]];
       const max = Math.max(r, g, b), min = Math.min(r, g, b);
       if (!d[i + 3] || max !== b || max - min < 60) continue;
+      if (exact && !BOXER_BLUES.has(`${r},${g},${b}`)) continue;
       const hue = 240 + (60 * (r - g)) / (max - min);
       if (hue < 208 || hue > 220) continue;
       const bx = x % 4 === 0, by = y % 3 === 0;
