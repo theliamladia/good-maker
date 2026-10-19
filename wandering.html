@@ -1,0 +1,124 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>WANDERING® · CHINNY + GOOD® · GOOD® DESIGN</title>
+  <meta name="description" content="WANDERING®: a collaboration with Chinny and GOOD®. Three collections for the long way round: TETON®, YELLOWSTONE® and CAMP®.">
+  <meta name="theme-color" content="#141838">
+  <link rel="canonical" href="https://good.leems.me/wandering">
+  <meta property="og:site_name" content="GOOD® DESIGN">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://good.leems.me/wandering">
+  <meta property="og:title" content="WANDERING® · CHINNY + GOOD®">
+  <meta property="og:description" content="A collaboration with Chinny and GOOD®. Three collections for the long way round: TETON®, YELLOWSTONE® and CAMP®.">
+  <meta property="og:image" content="https://good.leems.me/assets/og-wandering.png?v=1">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:image:alt" content="WANDERING®: a pixel valley at sunrise under a pink-lit mountain, with CHINNY + GOOD® in DUCK HUNTER™ orange.">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="WANDERING® · CHINNY + GOOD®">
+  <meta name="twitter:description" content="A collaboration with Chinny and GOOD®. Three collections for the long way round.">
+  <meta name="twitter:image" content="https://good.leems.me/assets/og-wandering.png?v=1">
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+  <link rel="icon" href="/favicon-32.png" sizes="32x32" type="image/png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;1,400&family=Press+Start+2P&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="wandering.css?v=1">
+</head>
+<body class="wd">
+
+<canvas class="wd-scene" id="scene" aria-hidden="true"></canvas>
+<a class="wd-home" href="./">← GOOD® DESIGN</a>
+
+<main class="wd-main" id="main">
+  <section class="wd-hero" id="hero">
+    <h1 class="wd-title"><span class="wd-by">CHINNY + GOOD<sup>®</sup></span><span class="wd-name">WANDERING<sup>®</sup></span></h1>
+    <p class="wd-lede">A collaboration with Chinny and GOOD®.</p>
+    <p class="wd-three">Three collections for the long way round: <b>TETON®</b> · <b>YELLOWSTONE®</b> · <b>CAMP®</b></p>
+    <p class="wd-down" aria-hidden="true">↓ WALK DOWN THE VALLEY</p>
+  </section>
+
+  <section class="wd-lore">
+    <p class="wd-kick">I · BEFORE DAWN</p>
+    <p>You left before the light did. The trail out of town goes quiet after the last fence post, and the valley opens up below you, still blue, still asleep. Somewhere behind the mountain, the sun is deciding.</p>
+  </section>
+
+  <section class="wd-lore">
+    <p class="wd-kick">II · FIRST LIGHT</p>
+    <p>First light hits the ridge and runs down it like water. Your jacket has been yours for years: the indigo gone soft, the elbows shaped to you. Underneath, the henley is the only thing that changes. Nothing else needs to.</p>
+  </section>
+
+  <section class="wd-col" aria-labelledby="teton">
+    <h2 id="teton">TETON<sup>®</sup></h2>
+    <p class="wd-copy">For the wandering cowboy. A lone stroll through the wilderness with nothing but your wits and the beauty of nature.</p>
+    <div class="wd-looks">
+      <figure data-id="wnd-teton-0"><canvas></canvas><figcaption><i style="--c:#e9e1cf"></i>ECRU/MARSHMALLOW™<span>Cream that has been lived in: washed, sun-dried, worn again.</span></figcaption></figure>
+      <figure data-id="wnd-teton-1"><canvas></canvas><figcaption><i style="--c:#e2672a"></i>DUCK HUNTER™<span>A bright, warm orange, made to be seen at the treeline.</span></figcaption></figure>
+      <figure data-id="wnd-teton-2"><canvas></canvas><figcaption><i style="--c:#2b2a28"></i>CAMPSITE™<span>Vintage black, the colour of a fire pit in the morning.</span></figcaption></figure>
+    </div>
+    <dl class="wd-pieces">
+      <div><dt>HERITAGE™ JEAN JACKET WITH HENLEY</dt><dd>Worn open, one indigo throughout. The henley carries the colour.</dd></div>
+      <div><dt>HERITAGE™ JEANS · UNIQUEⓤ</dt><dd>Five pockets, bootcut, worn soft by hard days on the ranch. A one-off wash, marked ⓤ.</dd></div>
+    </dl>
+  </section>
+
+  <section class="wd-lore">
+    <p class="wd-kick">III · THE PASS</p>
+    <p>By mid-morning the trail gives out. Weather comes over the pass without asking. You pull the hood up, cinch the hem, and keep walking. Nothing out here is going to tell you where to stop.</p>
+  </section>
+
+  <section class="wd-col" aria-labelledby="ys">
+    <h2 id="ys">YELLOWSTONE<sup>®</sup></h2>
+    <p class="wd-copy">For the explorer. No adverse condition can stop your wanderlust.</p>
+    <div class="wd-hood" role="group" aria-label="Hood">
+      <button type="button" class="on" data-hood="up" aria-pressed="true">HOOD UP</button>
+      <button type="button" data-hood="down" aria-pressed="false">HOOD DOWN</button>
+    </div>
+    <div class="wd-looks" id="ysLooks">
+      <figure data-id="wnd-ys-up-0" data-down="wnd-ys-down-0"><canvas></canvas><canvas hidden></canvas><figcaption><i style="--c:#4a3326"></i>BISON™ / DUCK HUNTER™<span>The darkest brown on the plain: a thick winter coat, steam on the breath at dawn.</span></figcaption></figure>
+      <figure data-id="wnd-ys-up-1" data-down="wnd-ys-down-1"><canvas></canvas><canvas hidden></canvas><figcaption><i style="--c:#7a5638"></i>ELK™ / DUCK HUNTER™<span>A warm middle brown: the herd moving through the trees at first light.</span></figcaption></figure>
+      <figure data-id="wnd-ys-up-2" data-down="wnd-ys-down-2"><canvas></canvas><canvas hidden></canvas><figcaption><i style="--c:#a8743f"></i>SADDLE™ / DUCK HUNTER™<span>Tan leather, oiled and broken in. Light enough to catch the sun.</span></figcaption></figure>
+    </div>
+    <dl class="wd-pieces">
+      <div><dt>HERITAGE™ ANORAK</dt><dd>Half-zip pullover, hood up or down, kangaroo pocket, drawcord hem. DUCK HUNTER™ at every edge.</dd></div>
+      <div><dt>HERITAGE™ BAGGY CAMO TROUSER</dt><dd>Cut loose and stacked over the boot, in brown camo to match.</dd></div>
+    </dl>
+  </section>
+
+  <section class="wd-lore">
+    <p class="wd-kick">IV · CAMP</p>
+    <p>Evening. You come down to the lake where the camp is. Smoke from the fire, a canoe pulled up on the stones, somebody calling everyone in. Mud to the knee, everyone in the same blue, faded to their own shade.</p>
+  </section>
+
+  <section class="wd-col" aria-labelledby="camp">
+    <h2 id="camp">CAMP<sup>®</sup></h2>
+    <p class="wd-copy">The latest in uniform options for GOOD®. A summer camp outfit, built to get dirty.</p>
+    <div class="wd-looks">
+      <figure data-id="wnd-camp-0"><canvas></canvas><figcaption><i style="--c:#0000ff"></i>RAGLAN WAFFLE<span>Linen waffle, GOOD® BLUE raglan sleeves, the new G.</span></figcaption></figure>
+      <figure data-id="wnd-camp-1"><canvas></canvas><figcaption><i style="--c:#6f6ff0"></i>SUN-FADED TEE<span>GOOD® BLUE, bleached by a whole summer outside.</span></figcaption></figure>
+      <figure data-id="wnd-camp-2"><canvas></canvas><figcaption><i style="--c:#0000ff"></i>FLEECE VEST®<span>GOOD® BLUE pile over a MARSHMALLOW LINEN™ tee.</span></figcaption></figure>
+    </div>
+    <dl class="wd-pieces">
+      <div><dt>GOOD® BLUE / MARSHMALLOW LINEN™</dt><dd>MARSHMALLOW™, woven loose in linen for summer, trimmed in our blue.</dd></div>
+      <div><dt>CAMP SHORT</dt><dd>Heavy canvas, rolled hem, GOOD® BLUE webbing belt, wool socks and hiking boots.</dd></div>
+    </dl>
+  </section>
+
+  <section class="wd-lore">
+    <p class="wd-kick">V · NIGHTFALL</p>
+    <p>The sun goes back behind the mountain. Tomorrow, you wander again.</p>
+  </section>
+
+  <section class="wd-camp" id="campScene" aria-label="The camp by the lake">
+    <footer class="wd-foot">WANDERING® · CHINNY + GOOD® · © 2026 GOOD® DESIGN · <a href="./">THE MAKER</a> · <a href="releases">RELEASES®</a></footer>
+  </section>
+</main>
+
+<div class="crt-scanlines" aria-hidden="true"></div>
+<div class="crt-vignette" aria-hidden="true"></div>
+
+<script src="js/wandering.js?v=1"></script>
+</body>
+</html>

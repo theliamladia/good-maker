@@ -1,0 +1,97 @@
+/* WANDERING® (/wandering): one long pixel valley, dark until the sun comes up,
+   walked from the summit down to the camp by the lake. CRT on top. */
+:root {
+  --duck: #e2672a; --ink: #2b2a28; --cream: #f7f2ea; --night: #141838; --blue: #0000ff;
+  --serif: 'Cormorant Garamond', Georgia, serif; --pixel: 'Press Start 2P', monospace; --mono: 'Space Mono', monospace;
+}
+* { box-sizing: border-box; }
+html { background: #05060f; }
+body { margin: 0; color: var(--cream); font-family: var(--mono); overflow-x: hidden; background: #05060f;
+  text-shadow: 0.5px 0 rgba(255, 0, 60, 0.22), -0.5px 0 rgba(0, 190, 255, 0.22); }
+a { color: inherit; }
+
+.wd-scene { position: absolute; top: 0; left: 0; width: 100%; z-index: 0; image-rendering: pixelated; image-rendering: crisp-edges; }
+.wd-home { position: fixed; top: 14px; left: 16px; z-index: 20; font-family: var(--pixel); font-size: 10px; text-decoration: none;
+  padding: 8px 10px; background: rgba(5, 6, 15, 0.55); border: 2px solid rgba(247, 242, 234, 0.5); }
+.wd-main { position: relative; z-index: 1; }
+
+/* ---------- the summit: dark, then the sun ---------- */
+.wd-hero { min-height: 100vh; min-height: 100svh; display: flex; flex-direction: column; justify-content: flex-start;
+  padding: clamp(84px, 14vh, 160px) clamp(16px, 6vw, 96px) 0; }
+.wd-title { margin: 0; font-family: var(--pixel); font-weight: 400; line-height: 1.15; color: var(--duck);
+  text-shadow: 4px 4px 0 #1a0f08, 0 0 24px rgba(226, 103, 42, 0.35); }
+.wd-title sup { font-size: 0.42em; vertical-align: 0.9em; }
+.wd-by { display: block; font-size: clamp(22px, 5.2vw, 72px); }
+.wd-name { display: block; font-size: clamp(34px, 9vw, 132px); margin-top: 0.12em; }
+.wd-lede { font-family: var(--serif); font-style: italic; font-size: clamp(22px, 3vw, 40px); margin: 22px 0 6px; text-shadow: 2px 2px 0 rgba(10, 8, 30, 0.8); }
+.wd-three { margin: 0; font-size: clamp(12px, 1.3vw, 16px); letter-spacing: 0.04em; text-shadow: 2px 2px 0 rgba(10, 8, 30, 0.8); }
+.wd-three b { color: #ffe2a0; }
+.wd-down { margin-top: auto; margin-bottom: 18vh; font-family: var(--pixel); font-size: 10px; opacity: 0.8; animation: wd-bob 1.6s ease-in-out infinite; }
+@keyframes wd-bob { 50% { transform: translateY(6px); } }
+/* nothing shows until the sun is up (js adds .risen) */
+.wd-hero > * { opacity: 0; transform: translateY(10px); transition: opacity 1.4s ease, transform 1.4s ease; }
+.risen .wd-hero > * { opacity: 1; transform: none; }
+.risen .wd-hero > :nth-child(2) { transition-delay: 0.4s; }
+.risen .wd-hero > :nth-child(3) { transition-delay: 0.7s; }
+.risen .wd-hero > :nth-child(4) { transition-delay: 1.4s; }
+
+/* ---------- lore: a voice over the valley ---------- */
+.wd-lore { max-width: 860px; margin: 0 auto; padding: clamp(60px, 12vh, 140px) clamp(16px, 5vw, 48px); }
+.wd-lore p { font-family: var(--serif); font-style: italic; font-size: clamp(22px, 2.6vw, 34px); line-height: 1.45; margin: 0;
+  text-shadow: 2px 2px 0 rgba(8, 10, 24, 0.9), 0 0 18px rgba(8, 10, 24, 0.8); }
+.wd-lore .wd-kick { font-family: var(--pixel); font-style: normal; font-size: 11px; color: #ffd296; margin-bottom: 18px; }
+
+/* ---------- a collection: a cream board in the meadow ---------- */
+.wd-col { width: min(1160px, calc(100% - 32px)); margin: 0 auto; padding: clamp(24px, 4vw, 56px); color: var(--ink); text-shadow: none;
+  background: rgba(247, 242, 234, 0.94); border: 4px solid #fff; box-shadow: 8px 8px 0 rgba(8, 10, 24, 0.55); position: relative; }
+.wd-col::before, .wd-col::after { content: ''; position: absolute; width: 8px; height: 8px; background: #fff; top: -8px; left: -8px; }
+.wd-col::after { left: auto; right: -8px; }
+.wd-col h2 { font-family: var(--pixel); font-weight: 400; font-size: clamp(26px, 5vw, 60px); margin: 0; color: var(--ink); }
+.wd-col h2 sup { font-size: 0.45em; vertical-align: 0.9em; }
+.wd-copy { font-family: var(--serif); font-style: italic; font-size: clamp(19px, 2vw, 26px); color: #5a5044; margin: 14px 0 8px; max-width: 46ch; }
+.wd-looks { display: grid; grid-template-columns: repeat(3, 1fr); gap: clamp(8px, 2vw, 28px); margin-top: 18px; }
+.wd-looks figure { margin: 0; text-align: center; -webkit-user-select: none; user-select: none; }
+.wd-looks canvas { width: 100%; max-width: 244px; aspect-ratio: 244 / 501; display: block; margin: 0 auto; image-rendering: auto; pointer-events: none; }
+.wd-looks canvas[hidden] { display: none; }
+.wd-looks figcaption { font-size: 12px; font-weight: 700; letter-spacing: 0.04em; margin-top: 10px; }
+.wd-looks figcaption i { display: inline-block; width: 12px; height: 12px; background: var(--c); border: 2px solid var(--ink); margin-right: 8px; vertical-align: -2px; }
+.wd-looks figcaption span { display: block; font-weight: 400; color: #6d6253; font-size: 11px; line-height: 1.5; margin: 6px auto 0; max-width: 30ch; letter-spacing: 0; }
+.wd-pieces { display: grid; grid-template-columns: 1fr 1fr; gap: 12px 40px; margin: 34px 0 0; border-top: 2px solid rgba(43, 42, 40, 0.15); padding-top: 22px; }
+.wd-pieces dt { color: var(--duck); font-weight: 700; font-size: 13px; }
+.wd-pieces dd { margin: 4px 0 0; font-size: 12px; color: #5a5044; line-height: 1.55; }
+.wd-hood { display: inline-flex; margin-top: 8px; border: 3px solid var(--ink); }
+.wd-hood button { font-family: var(--pixel); font-size: 10px; padding: 10px 14px; border: 0; background: transparent; color: var(--ink); cursor: pointer; }
+.wd-hood button.on { background: var(--duck); color: #fff; }
+.wd-hood button:focus-visible { outline: 3px solid var(--blue); outline-offset: 2px; }
+
+/* ---------- the camp by the lake: the scene is the content ---------- */
+.wd-camp { min-height: 92vh; display: flex; align-items: flex-end; justify-content: center; padding-bottom: 18px; }
+.wd-foot { font-size: 11px; letter-spacing: 0.04em; opacity: 0.85; text-align: center; padding: 0 16px; text-shadow: 1px 1px 0 #000; }
+
+/* ---------- CRT ---------- */
+.crt-scanlines, .crt-vignette { position: fixed; inset: 0; pointer-events: none; z-index: 1000; }
+.crt-scanlines {
+  background:
+    repeating-linear-gradient(to bottom, rgba(0, 0, 0, 0.16) 0 1px, transparent 1px 3px),
+    repeating-linear-gradient(to right, rgba(255, 0, 0, 0.03) 0 1px, rgba(0, 255, 0, 0.02) 1px 2px, rgba(0, 0, 255, 0.03) 2px 3px);
+  animation: wd-flicker 0.15s infinite;
+}
+.crt-scanlines::after {
+  content: ''; position: absolute; left: 0; right: 0; height: 20vh;
+  background: linear-gradient(to bottom, transparent, rgba(255, 255, 255, 0.06), transparent);
+  animation: wd-roll 8s linear infinite;
+}
+.crt-vignette { background: radial-gradient(ellipse at center, transparent 58%, rgba(0, 6, 24, 0.5) 100%); }
+@keyframes wd-flicker { 0%, 100% { opacity: 1; } 50% { opacity: 0.9; } }
+@keyframes wd-roll { from { top: -20vh; } to { top: 100vh; } }
+
+@media (max-width: 720px) {
+  .wd-looks { grid-template-columns: repeat(3, 1fr); gap: 6px; }
+  .wd-looks figcaption { font-size: 9px; }
+  .wd-looks figcaption span { display: none; }
+  .wd-pieces { grid-template-columns: 1fr; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .crt-scanlines, .crt-scanlines::after, .wd-down { animation: none; }
+  .wd-hero > * { transition: none; }
+}
