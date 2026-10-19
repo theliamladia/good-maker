@@ -19,6 +19,7 @@ const { sha, currentUser, endSession, saveUser, unlocksFor, isOwner, slugOf, cla
 const ACH = require('./_achievements');
 const { applySeeds } = require('./_seeds');
 const { privateIds } = require('./_private');
+const { gudIds } = require('./_drop');
 
 const COINS_PER_SAVE = 10;
 const SAVES_PER_DAY = 4;
@@ -36,15 +37,16 @@ function cleanLook(L, unlocks = [], owner = false) {
   L = L || {};
   const out = {};
   const priv = owner ? privateIds() : null;   // the owner's own pieces (api/_private.js)
+  const gud = gudIds();                        // GUD™, once it's live (api/_drop.js)
   const owns = (id) => LOCKED.has(id) && (unlocks.includes(id) || unlocks.includes(LOCKED.get(id)));
-  if (L.top) { if (!TOPS.has(String(L.top)) && !owns(String(L.top)) && !(priv && priv.tops.has(String(L.top)))) return null; out.top = String(L.top); }
+  if (L.top) { if (!TOPS.has(String(L.top)) && !owns(String(L.top)) && !(priv && priv.tops.has(String(L.top))) && !gud.tops.has(String(L.top))) return null; out.top = String(L.top); }
   if (L.bottom) {
-    const b = String(L.bottom), mine = priv && priv.bottoms.has(b);
+    const b = String(L.bottom), mine = (priv && priv.bottoms.has(b)) || gud.bottoms.has(b);
     if (!mine && (!BOTTOMS.has(b) || (LOCKED.has(b) && !owns(b)))) return null;
     out.bottom = b;
   }
   if (!out.top && !out.bottom) return null;
-  if (out.bottom && (BOTTOMS.get(out.bottom) || priv.bottoms.get(out.bottom)).includes(L.shoe)) out.shoe = L.shoe;
+  if (out.bottom && (BOTTOMS.get(out.bottom) || gud.bottoms.get(out.bottom) || (priv && priv.bottoms.get(out.bottom)) || []).includes(L.shoe)) out.shoe = L.shoe;
   if (L.feet === 'bare') out.feet = 'bare';
   if (['short', 'long'].includes(L.sleeve)) out.sleeve = L.sleeve;
   if (['classic', 'slim'].includes(L.body)) out.body = L.body;

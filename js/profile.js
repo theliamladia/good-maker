@@ -17,7 +17,10 @@
     fetch(`api/profile?name=${key}`).then((r) => (r.ok ? r.json() : null)),
     Promise.all(['api/crate', 'api/crate?crate=2'].map((u) => fetch(u).then((r) => r.json()).catch(() => ({ items: [] })))).then(([a, b]) => ({ items: [...(a.items || []), ...(b.items || [])] })),   // both crates' pieces
     fetch('api/me').then((r) => (r.ok ? r.json() : { user: null })).catch(() => ({ user: null })),
-  ]).then(async ([p, c, m]) => {
+    // GUD™ (released pieces from the server), so fits with them draw.
+    fetch('api/outfit?gud=1', { cache: 'no-store' }).then((r) => (r.ok ? r.json() : null)).catch(() => null),
+  ]).then(async ([p, c, m, gud]) => {
+    if (gud && window.GoodCompose) GoodCompose.addPrivate(gud);
     const viewer = m.user;
     const mine = !!viewer && viewer.profile === slug.toLowerCase();
     if (!p) { $('missing').hidden = false; document.title = 'NOT FOUND · GOOD® DESIGN'; return; }

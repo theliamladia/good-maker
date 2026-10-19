@@ -117,3 +117,10 @@ body.gd { overflow: hidden; background: #1a0000; color: #ff2a1a; font-family: 'P
 @media (prefers-reduced-motion: reduce) {
   .gd-cloud, .gd-crt, .gd-crt::after, .gd-logo canvas, .gd-mask, .gd-title.on { animation: none; }
 }
+
+/* After the drop: two ways in. */
+.gd-launch { display: flex; flex-wrap: wrap; justify-content: center; gap: 14px; margin-top: 22px; }
+.gd-btn { font: 400 12px 'Press Start 2P', monospace; letter-spacing: 0.08em; padding: 14px 18px; border: 2px solid #ff1a10; background: #ff1a10; color: #1a0000; text-decoration: none; cursor: pointer; box-shadow: 0 0 22px rgba(255, 40, 16, 0.55); }
+.gd-btn:hover { background: #ffd23f; border-color: #ffd23f; }
+.gd-btn-alt { background: transparent; color: #ff1a10; }
+.gd-btn-alt:hover { color: #1a0000; }

@@ -463,10 +463,13 @@
     else $('shoeColors').hidden = true;
   }
 
+  let pantsDrawId = 0;
   async function drawPants() {
+    const id = ++pantsDrawId;
     $('pantsSection').hidden = false;
     const pants = PANTS.filter(inSeason); // every bottom shows under both lines
     const thumbs = await Promise.all(pants.map((k) => (k.current.locked ? null : pantsThumb(k.current))));
+    if (id !== pantsDrawId) return; // a newer redraw started (e.g. the filter changed)
     fillPants(pants.map(({ current: p }, i) => { const el = card(
       !state.noBottom && p.kind === state.pants.kind,
       p.locked
@@ -823,28 +826,10 @@
     whenBooted: () => bootDone,
     // Owner-only pieces (from /api/outfit?private=1, only for the owner's session):
     // added to the lists with their own filter option, wearable and downloadable.
-    addPrivate: ({ tops = [], pants = [], accessories = [] } = {}) => {
-      if (FILTERS.crate2) return;
-      const T = catalogue(tops), P = catalogue(pants);
-      ACCS.push(...catalogue(accessories));
-      if (ACCS.length && !$('accSection')) {
-        const sec = document.createElement('div'); sec.id = 'accSection';
-        sec.innerHTML = '<div class="section-tag mono">ACCESSORY</div><div class="acc-list"></div>';
-        $('pantsSection').after(sec);
-        drawAccessories();
-      }
-      for (const k of [...T, ...P]) for (const c of k.colors) c.owned = true;
-      SHIRTS.push(...T); PANTS.push(...P); ALL_PANTS.push(...P.flatMap((k) => k.colors));
-      FILTERS.crate2 = (k) => k.drop === 'crate2';
-      document.querySelectorAll('[data-filter]').forEach((sel) => {
-        const o = document.createElement('option'); o.value = 'crate2'; o.textContent = 'GOOD® CRATE 2 · OWNER'; sel.append(o);
-      });
-      // A link (e.g. a saved fit's OPEN) that names one of these pieces: put it on now.
-      const L = BOOT_LOOK;
-      const ids = new Set([...T, ...P, ...ACCS].flatMap((k) => k.colors.map((c) => c.id)));
-      if (L && (ids.has(L.top) || ids.has(L.bottom) || ids.has(L.acc))) return applyLook(L, false).then(() => render());
-      drawOutfits();
-    },
+    // Pieces that arrive after boot: the owner's own (addPrivate) or a released drop like
+    // GUD™ (addDrop). They join the lists with their own filter option.
+    addPrivate: (cat) => addDrop(cat, { filter: 'crate2-owner', label: 'GOOD® CRATE 2 · OWNER' }),
+    addDrop: (cat, opts) => addDrop(cat, opts),
     unlock: (ids) => {
       let any = false;
       for (const k of [...SHIRTS, ...PANTS, ...ACCS]) for (const c of k.colors) if (c.locked && (ids.includes(k.id) || ids.includes(c.id))) { c.owned = true; any = true; }
@@ -1329,6 +1314,26 @@
     }));
   }
 
+  // ---------- Drops that arrive after boot ----------
+  function addDrop({ tops = [], pants = [], accessories = [] } = {}, { filter, label, owned = true } = {}) {
+    if (!filter || FILTERS[filter]) return;
+    const T = catalogue(tops), P = catalogue(pants), A = catalogue(accessories);
+    for (const k of [...T, ...P, ...A]) for (const c of k.colors) { c.locked = true; if (owned) c.owned = true; }
+    SHIRTS.push(...T); PANTS.push(...P); ALL_PANTS.push(...P.flatMap((k) => k.colors)); ACCS.push(...A);
+    const ids = new Set([...T, ...P, ...A].flatMap((k) => k.colors.map((c) => c.id)));
+    FILTERS[filter] = (k) => k.colors.some((c) => ids.has(c.id));
+    document.querySelectorAll('[data-filter]').forEach((sel) => {
+      const o = document.createElement('option'); o.value = filter; o.textContent = label; sel.append(o);
+    });
+    if (A.length) drawAccessories();
+    // A link that asks for this drop (e.g. /gud's WEAR IT IN THE MAKER → ./?filter=gud).
+    if (BOOT_FILTER === filter) { setFilter(filter); return; }
+    // A link (e.g. a saved fit's OPEN) that names one of these pieces: put it on now.
+    const L = BOOT_LOOK;
+    if (L && (ids.has(L.top) || ids.has(L.bottom) || ids.has(L.acc))) return applyLook(L, false).then(() => render());
+    drawOutfits();
+  }
+
   // ---------- Look links ----------
   // A look is a recipe: shirt + pants colour ids and the options in effect
   // (?u=<name>&top=<id>&bottom=<id>&shoe=&sleeve=&body=&tuck=out&boxer=tartan).
@@ -1409,6 +1414,7 @@
   // The address bar's look as the page opened (before syncUrl rewrites it), for owner
   // pieces that only arrive after boot (addPrivate).
   const BOOT_LOOK = lookFromUrl();
+  const BOOT_FILTER = new URLSearchParams(location.search).get('filter');   // ?filter=gud from /gud
   // Put a look on. withSkin: also load the player named in it (shared links);
   // otherwise keep your own skin.
   async function applyLook(L, withSkin) {
@@ -1444,6 +1450,12 @@
     }
     setBody(['classic', 'slim'].includes(L.body) ? L.body : state.body);
   }
+
+  // GUD™: released pieces come from the server (sealed until the drop; api/_drop.js).
+  fetch('api/outfit?gud=1', { cache: 'no-store' }).then((r) => (r.ok ? r.json() : null)).then(async (cat) => {
+    if (!cat) return;
+    await bootDone; addDrop(cat, { filter: 'gud', label: 'GUD™' });
+  }).catch(() => {});
 
   // The ACCESSORY row, under the pants.
   if (ACCS.length && !$('accSection')) {

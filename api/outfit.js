@@ -47,9 +47,19 @@ async function ownerOnly(req) {
 }
 
 module.exports = async function handler(req, res) {
-  const id = String((req.query && req.query.id) || '');
+  let id = String((req.query && req.query.id) || '');
   res.setHeader('Cache-Control', 'no-store');
   const unknown = () => res.status(404).json({ error: 'unknown_outfit' });
+  // GUD™: nothing exists before the drop (api/_drop.js). ?gud=1 is its catalogue.
+  const { gudOpen } = require('./_drop');
+  if (req.query && req.query.gud === '1') id = 'gud-index';
+  if (/^gud-/.test(id) && !gudOpen()) { unknown(); return; }
+  if (id === 'gud-index') {
+    let buf = null;
+    try { buf = unseal(id); } catch { buf = null; }
+    if (!buf) { unknown(); return; }
+    res.status(200).json(JSON.parse(buf.toString('utf8'))); return;
+  }
   const wantsPrivate = req.query && req.query.private === '1';
   if (wantsPrivate || PRIVATE.has(id)) {
     if (!(await ownerOnly(req))) { unknown(); return; }

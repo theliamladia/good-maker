@@ -4,8 +4,8 @@
   const $ = (id) => document.getElementById(id);
   const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
   const world = $('world'), title = $('title'), skip = $('skip');
-  // Drop day: 7 days from the announcement (midnight US Eastern).
-  const DROP = Date.parse('2026-10-20T00:00:00-04:00');
+  // Drop day: released 19 October 2026 (the server's gate is api/_drop.js).
+  const DROP = Date.parse('2026-10-19T00:00:00-04:00');
 
   // ---------- The descent ----------
   let arrived = false, anim = null;
@@ -155,11 +155,51 @@
   views.addEventListener('contextmenu', (e) => e.preventDefault());
   addEventListener('keydown', (e) => { if (e.key === 'Escape' && !views.hidden) views.hidden = true; });
 
+  // ---------- It has risen ----------
+  // After the drop, the pieces are public: the gallery comes from the server's GUD™
+  // catalogue (api/outfit?gud=1), each render scrambled and drawn straight to canvas.
+  let launched = false;
+  async function launch() {
+    if (launched) return; launched = true;
+    let cat = null;
+    try { const r = await fetch('api/outfit?gud=1', { cache: 'no-store' }); if (r.ok) cat = await r.json(); } catch { /* not yet */ }
+    if (!cat) { launched = false; return; }
+    const draw = async (id, cv) => {
+      const r = await fetch(`api/outfit?id=${id}`, { cache: 'no-store' });
+      if (!r.ok) return;
+      const { k, d } = await r.json();
+      const kb = Uint8Array.from(atob(k), (c) => c.charCodeAt(0));
+      const bmp = await createImageBitmap(new Blob([Uint8Array.from(atob(d), (c, i) => c.charCodeAt(0) ^ kb[i % kb.length])]));
+      cv.width = bmp.width; cv.height = bmp.height; cv.getContext('2d').drawImage(bmp, 0, 0); bmp.close();
+    };
+    let group = null;
+    grid.replaceChildren(...cat.renders.flatMap((f) => {
+      const out = [];
+      if (f.group !== group) { group = f.group; const h = document.createElement('h3'); h.className = 'gd-group'; h.textContent = group; out.push(h); }
+      const fig = document.createElement('figure'); fig.className = 'gd-card';
+      const cv = document.createElement('canvas');
+      const cap = document.createElement('figcaption'); cap.textContent = f.line;
+      const b = document.createElement('b'); b.textContent = f.name; cap.append(b);
+      fig.append(cv, cap); draw(f.id, cv).catch(() => {});
+      out.push(fig);
+      return out;
+    }));
+    opened = true;
+    views.querySelector('h2').textContent = 'GUD™ · OUT NOW';
+    // The password is no longer needed: two ways in instead.
+    const row = document.createElement('div'); row.className = 'gd-launch';
+    const see = document.createElement('button'); see.type = 'button'; see.className = 'gd-btn'; see.textContent = 'SEE THE PIECES';
+    see.onclick = () => { arrive(); views.hidden = false; };
+    const wear = document.createElement('a'); wear.className = 'gd-btn gd-btn-alt'; wear.href = './?filter=gud'; wear.textContent = 'WEAR IT IN THE MAKER →';
+    row.append(see, wear);
+    form.replaceWith(row);
+  }
+
   // ---------- Countdown ----------
   const pad = (n) => String(n).padStart(2, '0');
   function tick() {
     const left = Math.max(0, DROP - Date.now());
-    if (!left) { $('count').className = 'gd-count done'; $('count').textContent = 'IT HAS RISEN.'; return; }
+    if (!left) { $('count').className = 'gd-count done'; $('count').textContent = 'IT HAS RISEN.'; launch(); return; }
     const s = Math.floor(left / 1000);
     $('cd-d').textContent = pad(Math.floor(s / 86400));
     $('cd-h').textContent = pad(Math.floor(s / 3600) % 24);

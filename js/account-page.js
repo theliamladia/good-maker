@@ -185,6 +185,8 @@
   if (signin) history.replaceState(null, '', location.pathname);
   fetch('api/me').then((r) => (r.ok ? r.json() : { user: null })).catch(() => ({ user: null })).then(async (j) => {
     me = j.user; wardrobe = j.wardrobe || []; inventory = j.inventory || []; achievements = j.achievements || [];
+    // GUD™ (released pieces from the server), so saved fits with them draw.
+    { const gud = await fetch('api/outfit?gud=1', { cache: 'no-store' }).then((r) => (r.ok ? r.json() : null)).catch(() => null); if (gud) GoodCompose.addPrivate(gud); }
     // The owner's own pieces: loaded before the wardrobe draws, so fits with them show.
     if (me && me.owner) {
       const cat = await fetch('api/outfit?private=1', { cache: 'no-store' }).then((r) => (r.ok ? r.json() : null)).catch(() => null);
