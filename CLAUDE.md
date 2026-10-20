@@ -4,12 +4,12 @@
 
 GOOD® is quiet luxury. Every visual asset follows these rules:
 
-- **Negative space first.** Give everything far more room than feels necessary. Nothing should fill the frame edge to edge. Aim for at least 30–40% of any composition to be empty.
-- **Fewer things, bigger margins.** Show fewer figures per row (three or four, not six). Leave wide outer margins (8–10% of the width) and generous gaps between items.
-- **Light type.** Avoid heavy or extra-bold weights. Headlines use light or regular weights (a thin serif such as Cormorant Garamond, or Inter 300–400) with open letter-spacing. Small labels in Space Mono at modest sizes with wide tracking.
-- **Calm hierarchy.** One headline, one short line of copy, then the work. No crowded subtitles, no stacked labels, no decorative clutter (speed lines, busy patterns) competing with the pieces.
-- **Restrained colour.** A plain or very softly graded background; let the pieces carry the colour. Swatches are small and evenly spaced.
-- **Air around text.** Generous line height (1.5+), short line lengths, nothing tight against an edge or another element.
+- **The GOOD® look is COLLABORATIONS® (collab.css).** GOOD® BLUE (#0000ff) background, white type. Inter for headlines and copy, Space Mono for small tracked labels (about 0.72rem, letter-spacing 0.22em). Thin 1px white rules between sections. Not the STUDY® style (paper, serif): that belongs to STUDY® only.
+- **Not too bold.** Headlines in Inter 500–600 with slightly tight tracking, never the heaviest weights. Copy in Inter 300–400 with line height 1.55+.
+- **Liquid glass for anything on GOOD® BLUE.** Pieces sit on frosted glass panels (in the spirit of Apple's Liquid Glass): translucent white fill (about 10–16%), a strong background blur and saturation, a bright 1px top-edge highlight, a soft sheen, large continuous corner radii and a soft shadow. Put soft light behind the glass so it has something to refract. This keeps GOOD® BLUE clothing distinct from the GOOD® BLUE ground.
+- **Negative space first.** Give everything far more room than feels necessary. Nothing fills the frame edge to edge; aim for 30–40% empty. Wide outer margins (8–10% of the width), generous gaps.
+- **Fewer things.** Three or four figures per row at most, never six.
+- **Calm hierarchy.** One headline, one short line of copy, then the work. No speed lines, busy patterns or stacked subtitles. Swatches are small dots.
 
 When in doubt: remove something, and add space.
 
