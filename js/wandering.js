@@ -290,4 +290,17 @@
     document.querySelectorAll('.wd-hood button').forEach((o) => { o.classList.toggle('on', o === btn); o.setAttribute('aria-pressed', String(o === btn)); });
     document.querySelectorAll('#ysLooks figure').forEach((f) => { const [a, b] = f.querySelectorAll('canvas'); a.hidden = down; b.hidden = !down; if (down) { still(b, b.dataset.look); turntable(b, b.dataset.look); } });
   }));
+
+  // THE COLOR STORY®: hover, focus or tap a bar to read it
+  const read = document.getElementById('storyRead');
+  const idle = read.innerHTML;
+  const show = (b) => {
+    document.querySelectorAll('.wd-bar').forEach((o) => o.classList.toggle('on', o === b));
+    if (!b) { read.innerHTML = idle; return; }
+    read.replaceChildren(Object.assign(document.createElement('b'), { textContent: `${b.dataset.name} · ${b.dataset.hex} · ${b.dataset.where}` }), Object.assign(document.createElement('span'), { textContent: b.dataset.desc }));
+  };
+  document.querySelectorAll('.wd-bar').forEach((b) => {
+    b.addEventListener('mouseenter', () => show(b)); b.addEventListener('focus', () => show(b)); b.addEventListener('click', () => show(b));
+  });
+  document.querySelector('.wd-strip').addEventListener('mouseleave', () => show(null));
 })();
