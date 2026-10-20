@@ -10,6 +10,7 @@
   const right = document.querySelector('.right-col'), panel = document.querySelector('.panel.right');
   const left = document.querySelector('.panel.left'), stage = document.querySelector('.viewer-wrap');
   if (!right || !panel || !left || !stage) return;
+  body.classList.add('m-maker');   // the phone styles in style.css apply only here
   const mq = matchMedia('(max-width: 700px)');
 
   // ---------- Tabs (with the pull handle) ----------
