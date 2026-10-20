@@ -70,6 +70,12 @@
 /* Owner ledger */
 .ac-ledger { margin-top: 34px; }
 .ac-ledger[hidden] { display: none; }
+.ac-ledger-q { width: 100%; max-width: 420px; margin: 4px 0 18px; padding: 12px 14px; border: 1px solid rgba(255, 255, 255, 0.6); background: transparent; color: #fff; font-size: 0.7rem; letter-spacing: 0.16em; outline: none; }
+.ac-ledger-q::placeholder { color: rgba(255, 255, 255, 0.6); }
+.ac-ledger-q:focus { border-color: #fff; }
+.ac-pages { display: flex; align-items: center; justify-content: space-between; gap: 18px; margin-top: 16px; font-size: 0.66rem; letter-spacing: 0.18em; }
+.ac-pages[hidden] { display: none; }
+.ac-pages button:disabled { opacity: 0.3; cursor: default; }
 .ac-ledger-t { width: 100%; border-collapse: collapse; font-size: 0.66rem; letter-spacing: 0.08em; }
 .ac-ledger-t th, .ac-ledger-t td { text-align: left; padding: 9px 8px; border-bottom: 1px solid rgba(255, 255, 255, 0.25); }
 .ac-ledger-t th { font-weight: 700; letter-spacing: 0.18em; }

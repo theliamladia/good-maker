@@ -120,19 +120,40 @@
     }));
   }
 
-  // Owner: the ledger of every serialized pull (not the GD-999 set).
+  // Owner: the ledger of every serialized pull (not the GD-999 set), ten rows a page,
+  // searchable by owner or piece.
+  const PER = 10;
+  let ledger = [], ledgerPage = 0;
+  function drawLedgerPage() {
+    const q = $('ledgerQ').value.trim().toLowerCase();
+    const rows = q ? ledger.filter((r) => r.owner.toLowerCase().includes(q) || r.piece.toLowerCase().includes(q)) : ledger;
+    const pages = Math.max(1, Math.ceil(rows.length / PER));
+    ledgerPage = Math.min(ledgerPage, pages - 1);
+    $('ledgerCount').textContent = q ? `${rows.length} OF ${ledger.length} PULLS` : `${ledger.length} PULLS`;
+    $('ledgerRows').replaceChildren(...rows.slice(ledgerPage * PER, ledgerPage * PER + PER).map((r) => {
+      const tr = document.createElement('tr');
+      for (const t of [r.serial, r.piece, r.owner, r.at]) { const td = document.createElement('td'); td.textContent = t; tr.append(td); }
+      return tr;
+    }));
+    if (!rows.length) { const tr = document.createElement('tr'), td = document.createElement('td'); td.colSpan = 4; td.textContent = 'NOTHING MATCHES.'; tr.append(td); $('ledgerRows').append(tr); }
+    $('ledgerPage').textContent = `PAGE ${ledgerPage + 1} / ${pages}`;
+    $('ledgerPrev').disabled = ledgerPage === 0;
+    $('ledgerNext').disabled = ledgerPage >= pages - 1;
+    $('ledgerPages').hidden = pages < 2;
+  }
+  $('ledgerQ').addEventListener('input', () => { ledgerPage = 0; drawLedgerPage(); });
+  $('ledgerPrev').onclick = () => { ledgerPage--; drawLedgerPage(); };
+  $('ledgerNext').onclick = () => { ledgerPage++; drawLedgerPage(); };
   function drawLedger() {
     if (!(me && me.owner)) { $('ledger').hidden = true; return; }
     fetch('api/crate?ledger=1').then((r) => (r.ok ? r.json() : null)).then((j) => {
       if (!j) return;
       $('ledger').hidden = false;
-      $('ledgerCount').textContent = `${j.rows.length} PULLS`;
-      $('ledgerRows').replaceChildren(...j.rows.map((r) => {
+      ledger = j.rows.map((r) => {
         const it = crateItems[r.item] || { name: r.item, color: '' };
-        const tr = document.createElement('tr');
-        for (const t of [r.serial, `${it.name} ${it.color}`, r.name, (r.at || '').slice(0, 10)]) { const td = document.createElement('td'); td.textContent = t; tr.append(td); }
-        return tr;
-      }));
+        return { serial: r.serial, piece: `${it.name} ${it.color}`.trim(), owner: r.name || '', at: (r.at || '').slice(0, 10) };
+      });
+      drawLedgerPage();
     }).catch(() => {});
   }
 
