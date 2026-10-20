@@ -29,7 +29,7 @@ const serialOf = (n) => `GD-${String(n).padStart(3, '0')}`;
 // inventory into the market (hash market: lid -> { lid, uid, seller, entry, price, at });
 // buying moves it, serial and all, into the buyer's inventory and the coins to the seller.
 // Any copy can be listed; listing your last copy locks that piece again in MAKER® until it
-// sells or comes back (unlist). Every crate's pieces trade, the owner's GD-999 set included.
+// sells or comes back (unlist). Every crate's pieces trade; the owner's GD-999 set never does.
 const MARKET_MAX_PRICE = 9999, MARKET_MAX_LISTINGS = 20;
 async function marketRows() {
   const flat = (await redis('HGETALL', 'market')) || [];
@@ -53,6 +53,7 @@ async function market(me, body, res) {
       const raw = raws.find((r) => JSON.parse(r).id === body.entry);
       if (!raw) { res.status(404).json({ error: 'not_found' }); return; }
       const entry = JSON.parse(raw);
+      if (entry.serial === 'GD-999') { res.status(400).json({ error: 'not_tradable' }); return; }
       if (!(await redis('LREM', `user:${me.uid}:inv`, 1, raw))) { res.status(409).json({ error: 'busy' }); return; }
       // That was the last copy: the piece is no longer owned (locked in MAKER® again).
       if (raws.filter((r) => JSON.parse(r).item === entry.item).length < 2) await redis('SREM', `user:${me.uid}:owned`, entry.item);

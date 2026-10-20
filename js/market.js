@@ -20,7 +20,7 @@
     if (!r.ok) { const e = new Error(j.error || 'failed'); e.code = j.error; e.coins = j.coins; throw e; }
     return j;
   }
-  const ERR = { coins: 'NOT ENOUGH GOOD® COINS.', gone: 'SOMEONE GOT THERE FIRST.', busy: 'ONE MOMENT. TRY AGAIN.', price: 'PRICE: 1 TO 9999 GOOD® COINS.', too_many: 'TWENTY LISTINGS AT A TIME.', own_listing: 'THAT ONE IS YOURS.', slow_down: 'SLOW DOWN A LITTLE.', signed_out: 'SIGN IN FIRST.' };
+  const ERR = { coins: 'NOT ENOUGH GOOD® COINS.', gone: 'SOMEONE GOT THERE FIRST.', busy: 'ONE MOMENT. TRY AGAIN.', price: 'PRICE: 1 TO 9999 GOOD® COINS.', too_many: 'TWENTY LISTINGS AT A TIME.', own_listing: 'THAT ONE IS YOURS.', not_tradable: 'THE GD-999 SET STAYS WITH YOU.', slow_down: 'SLOW DOWN A LITTLE.', signed_out: 'SIGN IN FIRST.' };
 
   function piece(it, serial) {
     const f = document.createElement('figure');
@@ -83,12 +83,12 @@
     }));
   }
 
-  // Your pieces: every serialized copy from every GOOD® CRATE can be listed.
+  // Your pieces: every serialized copy from every GOOD® CRATE can be listed (not the owner's GD-999 set).
   function drawDoubles() {
     if (!me) { $('sellNote').innerHTML = '<a class="foot-link" href="account">Sign in</a> to list your pieces.'; $('doubles').replaceChildren(); return; }
     const count = {};
     for (const e of inventory) count[e.item] = (count[e.item] || 0) + 1;
-    const spare = [...inventory].sort((a, b) => a.item.localeCompare(b.item) || (+a.serial.slice(3) || 0) - (+b.serial.slice(3) || 0));
+    const spare = inventory.filter((e) => e.serial !== 'GD-999').sort((a, b) => a.item.localeCompare(b.item) || (+a.serial.slice(3) || 0) - (+b.serial.slice(3) || 0));
     if (!spare.length) { $('doubles').replaceChildren(Object.assign(document.createElement('p'), { className: 'mk-empty', textContent: 'Nothing to sell yet. Every piece you pull from a GOOD® CRATE shows up here.' })); return; }
     $('doubles').replaceChildren(...spare.map((e) => {
       const f = piece(items[e.item], count[e.item] < 2 ? `${e.serial} · YOUR ONLY COPY` : e.serial);
