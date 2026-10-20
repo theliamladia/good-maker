@@ -61,5 +61,5 @@
   }
   window.GoodNav = { update };
   paint(null);
-  fetch('/api/me').then((r) => (r.ok ? r.json() : { user: null })).then((j) => update(j.user)).catch(() => {});
+  (window.__goodMe ||= fetch('/api/me').then((r) => (r.ok ? r.json() : { user: null })).catch(() => ({ user: null }))).then((j) => update(j.user));
 })();

@@ -346,6 +346,15 @@
     const x = cv.getContext('2d'); x.imageSmoothingEnabled = false; x.drawImage(src, 0, 0);
   }
   const LOCKED_THUMB = '<canvas class="lk" aria-hidden="true"></canvas>';
+  // Sealed previews are fetched only when their card comes near the screen (each one is
+  // a server call); cards in a closed carousel or a hidden section wait until shown.
+  const lazyJobs = new WeakMap();
+  const lazyIO = 'IntersectionObserver' in window ? new IntersectionObserver((es) => es.forEach((e) => {
+    if (!e.isIntersecting) return;
+    lazyIO.unobserve(e.target);
+    const job = lazyJobs.get(e.target); lazyJobs.delete(e.target); if (job) job();
+  }), { rootMargin: '200px' }) : null;
+  const whenSeen = (el, job) => { if (!lazyIO) { job(); return; } lazyJobs.set(el, job); lazyIO.observe(el); };
 
   // Top thumbnails: a "ghost mannequin" front view, like the pants cards.
   // Torso front with both sleeve fronts either side (outer layer over base),
@@ -392,7 +401,7 @@
         ? `${LOCKED_THUMB}${nameOnly(c)}`
         : `${k.isNew ? NEW_TAG : ''}<img class="ghost-thumb" src="${thumbs[i]}" alt="">${nameOnly(c)}`,
       () => selectOutfit(o)
-    ); if (c.locked) paintLocked(el, c, false); return el; }));
+    ); if (c.locked) whenSeen(el, () => paintLocked(el, c, false)); return el; }));
     drawColors($('shirtColors'), state.outfit, (c) => selectOutfit(c));
     if (state.noTop) $('shirtColors').hidden = true;
     drawPants();
@@ -476,7 +485,7 @@
         ? `${LOCKED_THUMB}${nameOnly(p)}`
         : `${p.kind.isNew ? NEW_TAG : ''}<img class="pants-thumb" src="${thumbs[i]}" alt="">${nameOnly(p)}`,
       () => pickPants(p)
-    ); if (p.locked) paintLocked(el, p, true); return el; }));
+    ); if (p.locked) whenSeen(el, () => paintLocked(el, p, true)); return el; }));
     drawColors($('pantsColors'), state.pants, pickPants);
     if (state.noBottom) $('pantsColors').hidden = true;
     // Only the shoes these pants come in; a missing pick shows the first pair.
@@ -510,11 +519,11 @@
     const none = card(!state.acc, '<span class="acc-none" aria-hidden="true">∅</span><span class="outfit-name">NONE</span>', () => { state.acc = null; drawAccessories(); render(); });
     const cards = ACCS.flatMap((k) => k.colors.map((c) => {
       const el = card(state.acc === c, `${isLocked(c) ? '<span class="new-tag mono">PREVIEW</span>' : ''}${LOCKED_THUMB}<span class="outfit-name">${k.name} ${c.color}</span>`, () => { state.acc = c; drawAccessories(); render(); });
-      accThumb(c).then((src) => {
+      whenSeen(el, () => accThumb(c).then((src) => {
         const cv = el.querySelector('canvas.lk'); if (!src || !cv) return;
         cv.width = src.width; cv.height = src.height;
         const x = cv.getContext('2d'); x.imageSmoothingEnabled = false; x.drawImage(src, 0, 0);
-      });
+      }));
       return el;
     }));
     list.replaceChildren(none, ...cards);

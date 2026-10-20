@@ -3,6 +3,8 @@
 // loads on every visit; SAVE TO WARDROBE stores the fit (+10 GOOD® COINS a
 // each for the first 2 new fits a day). Signing in and the wardrobe itself live on account.html.
 (() => {
+  // One /api/me per page load, shared by every script that needs it.
+  const meOnce = () => (window.__goodMe ||= fetch('/api/me').then((r) => (r.ok ? r.json() : { user: null })).catch(() => ({ user: null })));
   const $ = (id) => document.getElementById(id);
   const app = () => window.GoodApp;
   let me = null;
@@ -108,7 +110,7 @@
   };
 
   // ---------- Boot ----------
-  fetch('api/me').then((r) => (r.ok ? r.json() : { user: null })).catch(() => ({ user: null })).then(async (j) => {
+  meOnce().then(async (j) => {
     me = j.user; draw(); drawDaily();
     if (me && me.unlocks && me.unlocks.length && app()) app().unlock(me.unlocks);
     // The owner's own pieces, before the saved settings (they may be wearing one).

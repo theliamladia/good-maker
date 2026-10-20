@@ -19,11 +19,13 @@
     }
     document.querySelectorAll('[data-coin-timer]').forEach((el) => { if (el.innerHTML !== html) el.innerHTML = html; });
   }
-  function refresh() {
-    return fetch('api/me').then((r) => (r.ok ? r.json() : {})).catch(() => ({})).then((j) => {
+  function refresh(shared) {
+    const get = shared ? (window.__goodMe ||= fetch('/api/me').then((r) => (r.ok ? r.json() : { user: null })).catch(() => ({ user: null })))
+      : fetch('/api/me').then((r) => (r.ok ? r.json() : {})).catch(() => ({}));
+    return get.then((j) => {
       signedIn = !!j.user; daily = (j.user && j.user.daily) || null; draw();
     });
   }
   window.GoodCoinTimer = { refresh, draw };
-  refresh();
+  refresh(true);
 })();

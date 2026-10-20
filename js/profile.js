@@ -1,7 +1,11 @@
 // Public GOOD® profile (/profiles/<slug>): achievements, serialized pulls and fits.
 (() => {
+  // One /api/me per page load, shared by every script that needs it.
+  const meOnce = () => (window.__goodMe ||= fetch('/api/me').then((r) => (r.ok ? r.json() : { user: null })).catch(() => ({ user: null })));
   const $ = (id) => document.getElementById(id);
   const slug = (location.pathname.match(/\/profiles\/([^/?#]+)/) || [])[1] || new URLSearchParams(location.search).get('u') || '';
+  // Each profile is its own page for search and sharing: point the canonical at it.
+  if (slug) { const c = document.createElement('link'); c.rel = 'canonical'; c.href = `https://good.leems.me/profiles/${encodeURIComponent(slug.toLowerCase())}`; document.head.append(c); }
   const DEMO = 'samples/spurdo.png';
   let toastT;
   const toast = (m) => { const t = $('toast'); t.textContent = m; t.hidden = false; clearTimeout(toastT); toastT = setTimeout(() => { t.hidden = true; }, 2400); };
@@ -16,7 +20,7 @@
   Promise.all([
     fetch(`api/profile?name=${key}`).then((r) => (r.ok ? r.json() : null)),
     Promise.all(['api/crate', 'api/crate?crate=2'].map((u) => fetch(u).then((r) => r.json()).catch(() => ({ items: [] })))).then(([a, b]) => ({ items: [...(a.items || []), ...(b.items || [])] })),   // both crates' pieces
-    fetch('api/me').then((r) => (r.ok ? r.json() : { user: null })).catch(() => ({ user: null })),
+    meOnce(),
     // GUD™ (released pieces from the server), so fits with them draw.
     fetch('api/outfit?gud=1', { cache: 'no-store' }).then((r) => (r.ok ? r.json() : null)).catch(() => null),
   ]).then(async ([p, c, m, gud]) => {

@@ -2,6 +2,8 @@
 // and the reveal. The roll happens on the server (POST /api/crate { action: 'open', crate: 2 });
 // this page only shows the result. Pieces stay locked in MAKER® until you pull them.
 (() => {
+  // One /api/me per page load, shared by every script that needs it.
+  const meOnce = () => (window.__goodMe ||= fetch('/api/me').then((r) => (r.ok ? r.json() : { user: null })).catch(() => ({ user: null })));
   const $ = (id) => document.getElementById(id);
   const btn = $('open'), again = $('again'), wallet = $('wallet'), drop = $('drop');
   const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
@@ -116,7 +118,7 @@
 
   Promise.all([
     fetch('api/crate?crate=2').then((r) => r.json()),
-    fetch('api/me').then((r) => (r.ok ? r.json() : { user: null })).catch(() => ({ user: null })),
+    meOnce(),
   ]).then(([c, m]) => {
     table = c.items || []; price = c.price || 5;
     me = m.user; drawButton();

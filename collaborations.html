@@ -15,14 +15,14 @@
   <meta property="og:url" content="https://good.leems.me/collaborations">
   <meta property="og:title" content="COLLABORATIONS® · GOOD®">
   <meta property="og:description" content="Since 2011, GOOD® has been creating. GOOD® is open to commissions.">
-  <meta property="og:image" content="https://good.leems.me/assets/og-site.png">
+  <meta property="og:image" content="https://good.leems.me/assets/og-site.png?v=2">
   <meta property="og:image:width" content="1200">
   <meta property="og:image:height" content="630">
   <meta property="og:image:alt" content="Seven Minecraft players posing in GOOD® outfits and jeans.">
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:title" content="COLLABORATIONS® · GOOD®">
   <meta name="twitter:description" content="Since 2011, GOOD® has been creating. GOOD® is open to commissions.">
-  <meta name="twitter:image" content="https://good.leems.me/assets/og-site.png">
+  <meta name="twitter:image" content="https://good.leems.me/assets/og-site.png?v=2">
   <meta name="twitter:image:alt" content="Seven Minecraft players posing in GOOD® outfits and jeans.">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -52,9 +52,9 @@
     <p class="co-lede">For more than a decade we have worked in the design world making ubiquitous solutions: ideas so simple they fold into everyday life and hit the nail on the head. Work that belongs to its moment, and still holds up long after it.</p>
     <dl class="co-stats">
       <div><dt class="mono">SINCE</dt><dd>2011</dd></div>
-      <div><dt class="mono">NAMED COLOURS</dt><dd>73</dd></div>
-      <div><dt class="mono">COLOURWAYS IN MAKER®</dt><dd>125</dd></div>
-      <div><dt class="mono">CAPSULES</dt><dd>2</dd></div>
+      <div><dt class="mono">NAMED COLOURS</dt><dd id="statColours">76</dd></div>
+      <div><dt class="mono">COLOURWAYS IN MAKER®</dt><dd id="statWays">176</dd></div>
+      <div><dt class="mono">RELEASES®</dt><dd id="statReleases">4</dd></div>
     </dl>
   </section>
 
@@ -272,5 +272,17 @@
   };
 </script>
 <script src="js/nav.js"></script>
+<script src="js/colors.js" defer></script>
+<script src="js/outfits.js" defer></script>
+<script>
+  // The stats count themselves (the numbers above are only the fallback): COLORS®, every
+  // colourway in MAKER®, and the posts on RELEASES®.
+  addEventListener('DOMContentLoaded', () => {
+    const set = (id, n) => { if (n) document.getElementById(id).textContent = n; };
+    set('statColours', (window.GOOD_COLORS || []).length);
+    set('statWays', [...(window.OUTFITS || []), ...(window.PANTS || []), ...(window.ACCESSORIES || [])].reduce((n, k) => n + (k.colors || []).length, 0));
+    fetch('releases').then((r) => r.text()).then((h) => set('statReleases', (h.match(/class="rl-post"/g) || []).length)).catch(() => {});
+  });
+</script>
 </body>
 </html>

@@ -2,6 +2,8 @@
 // GOOD® COINS and the WARDROBE, each fit drawn on your home skin. Clicking a
 // fit opens it in MAKER® (your home skin loads there automatically).
 (() => {
+  // One /api/me per page load, shared by every script that needs it.
+  const meOnce = () => (window.__goodMe ||= fetch('/api/me').then((r) => (r.ok ? r.json() : { user: null })).catch(() => ({ user: null })));
   const $ = (id) => document.getElementById(id);
   const DEMO = 'samples/spurdo.png';
   const post = async (url, body) => {
@@ -183,7 +185,7 @@
   const q = new URLSearchParams(location.search);
   const signin = q.get('signin');
   if (signin) history.replaceState(null, '', location.pathname);
-  fetch('api/me').then((r) => (r.ok ? r.json() : { user: null })).catch(() => ({ user: null })).then(async (j) => {
+  meOnce().then(async (j) => {
     me = j.user; wardrobe = j.wardrobe || []; inventory = j.inventory || []; achievements = j.achievements || [];
     // GUD™ (released pieces from the server), so saved fits with them draw.
     { const gud = await fetch('api/outfit?gud=1', { cache: 'no-store' }).then((r) => (r.ok ? r.json() : null)).catch(() => null); if (gud) GoodCompose.addPrivate(gud); }

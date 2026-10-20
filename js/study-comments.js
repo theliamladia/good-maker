@@ -29,7 +29,7 @@
   }).catch(() => { msg.textContent = 'Comments couldn’t load.'; });
 
   // Signed in: comments post under the account's GOOD® name.
-  fetch('/api/me').then((r) => (r.ok ? r.json() : null)).then((j) => {
+  (window.__goodMe ||= fetch('/api/me').then((r) => (r.ok ? r.json() : { user: null })).catch(() => ({ user: null }))).then((j) => {
     if (!j || !j.user) return;
     const n = form.elements.name;
     n.hidden = true;

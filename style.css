@@ -463,6 +463,9 @@ body.fall .site-header { background: #4f6b45; }
 .nav-avatar canvas { width: 26px; height: 26px; image-rendering: pixelated; outline: 1.5px solid currentColor; outline-offset: 1px; }
 .site-nav .nav-link.nav-avatar:hover, .site-nav .nav-link.nav-avatar:focus-visible { opacity: 0.75; }
 
+/* Read by screen readers and search, not shown */
+.sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; border: 0; }
+
 /* ---------- CRT ---------- */
 .crt-scanlines, .crt-vignette { position: fixed; inset: 0; pointer-events: none; z-index: 1000; }
 .crt-scanlines {

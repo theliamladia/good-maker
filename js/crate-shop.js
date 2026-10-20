@@ -1,6 +1,8 @@
 // GOOD® CRATE: the odds, the coins, ARE YOU SURE?, and the reveal. The roll
 // itself happens on the server (/api/crate); this page only shows the result.
 (() => {
+  // One /api/me per page load, shared by every script that needs it.
+  const meOnce = () => (window.__goodMe ||= fetch('/api/me').then((r) => (r.ok ? r.json() : { user: null })).catch(() => ({ user: null })));
   const $ = (id) => document.getElementById(id);
   const btn = $('open'), wallet = $('wallet');
   const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
@@ -148,7 +150,7 @@
 
   Promise.all([
     fetch('api/crate').then((r) => r.json()),
-    fetch('api/me').then((r) => (r.ok ? r.json() : { user: null })).catch(() => ({ user: null })),
+    meOnce(),
   ]).then(([c, m]) => {
     table = c.items || []; price = c.price || 5; refund = c.refund || 2;
     me = m.user; drawNav(); drawContents(); drawButton();
