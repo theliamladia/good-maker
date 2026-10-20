@@ -488,18 +488,36 @@
     $('tuckSection').hidden = !canTuck();
     $('boxer').querySelectorAll('button').forEach((b) => b.setAttribute('aria-checked', b.dataset.boxer === state.boxer));
   }
-  // ACCESSORY: NONE or one piece, as chips under the pants (only when there are any).
+  // ACCESSORY: NONE or one piece, as cards like the shirts and pants. The thumbnail is the
+  // flat front (head over torso, both layers), drawn as canvas pixels only, since the
+  // pieces are sealed.
+  const accThumbs = {};
+  function accThumb(c) {
+    return (accThumbs[c.src] ||= (async () => {
+      const d = /^api\//.test(c.src) ? await loadLocked(c.src) : await loadData(c.src);
+      const tex = document.createElement('canvas'); tex.width = tex.height = 64;
+      tex.getContext('2d').putImageData(new ImageData(new Uint8ClampedArray(d.data), 64, 64), 0, 0);
+      const cv = document.createElement('canvas'); cv.width = 8; cv.height = 20;
+      const x = cv.getContext('2d'); x.imageSmoothingEnabled = false;
+      for (const [sx, sy, dy, h] of [[8, 8, 0, 8], [40, 8, 0, 8], [20, 20, 8, 12], [20, 36, 8, 12]]) x.drawImage(tex, sx, sy, 8, h, 0, dy, 8, h);
+      return cv;
+    })().catch(() => null));
+  }
   function drawAccessories() {
     const box = $('accSection');
     if (!box) return;
     const list = box.querySelector('.acc-list');
-    const chip = (label, sw, on, pick) => {
-      const b = document.createElement('button'); b.type = 'button'; b.className = 'acc-chip mono'; b.setAttribute('aria-pressed', on);
-      b.innerHTML = (sw ? `<i style="background:linear-gradient(90deg,${[].concat(sw).join(',')})"></i>` : '') + `<span></span>`;
-      b.querySelector('span').textContent = label; b.onclick = pick; return b;
-    };
-    list.replaceChildren(chip('NONE', null, !state.acc, () => { state.acc = null; drawAccessories(); render(); }),
-      ...ACCS.flatMap((k) => k.colors.map((c) => chip(`${k.name} ${c.color}${isLocked(c) ? " · PREVIEW" : ""}`, c.swatch, state.acc === c, () => { state.acc = c; drawAccessories(); render(); }))));
+    const none = card(!state.acc, '<span class="acc-none" aria-hidden="true">∅</span><span class="outfit-name">NONE</span>', () => { state.acc = null; drawAccessories(); render(); });
+    const cards = ACCS.flatMap((k) => k.colors.map((c) => {
+      const el = card(state.acc === c, `${isLocked(c) ? '<span class="new-tag mono">PREVIEW</span>' : ''}${LOCKED_THUMB}<span class="outfit-name">${k.name} ${c.color}</span>`, () => { state.acc = c; drawAccessories(); render(); });
+      accThumb(c).then((src) => {
+        const cv = el.querySelector('canvas.lk'); if (!src || !cv) return;
+        cv.width = src.width; cv.height = src.height;
+        const x = cv.getContext('2d'); x.imageSmoothingEnabled = false; x.drawImage(src, 0, 0);
+      });
+      return el;
+    }));
+    list.replaceChildren(none, ...cards);
   }
   // Tuck: tucked shows the pants' waistband; untucked lets the shirt hang over it.
   // Cropped tops and skirts (noTuck) have nothing to tuck: always tucked, control hidden.
