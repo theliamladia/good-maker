@@ -248,7 +248,7 @@
   // Each look is a turntable: 24 frames side by side, sealed like the stills. The still
   // shows first; the turntable takes over once it arrives (loaded as the look nears the
   // screen), and only looks on screen are redrawn.
-  const FW = 202, FH = 407, FRAMES = 24, STEP = 110;
+  const FW = 202, FH = 407, FRAMES = 24, STEP = 260;
   const shown = new Set();
   const spinners = [];
   const still = (cvs, id) => scrambled(id).then((bmp) => {
@@ -271,7 +271,7 @@
   // Each spinner remembers the frame it last drew, so a turntable that arrives late (or
   // with reduced motion on, when nothing turns by itself) is drawn straight away.
   const spinLoop = (now) => {
-    const auto = reduce ? 0 : Math.floor(now / STEP);
+    const auto = Math.floor(now / STEP);   // always turning, slowly (a display, not a flourish)
     for (const s of spinners) {
       if (!shown.has(s.cvs) || s.cvs.hidden) continue;
       const k = (((auto + s.off + s.drag) % FRAMES) + FRAMES) % FRAMES;
