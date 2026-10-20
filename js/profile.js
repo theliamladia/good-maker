@@ -23,7 +23,7 @@
     if (gud && window.GoodCompose) GoodCompose.addPrivate(gud);
     const viewer = m.user;
     const mine = !!viewer && viewer.profile === slug.toLowerCase();
-    if (!p) { $('missing').hidden = false; document.title = 'NOT FOUND · GOOD® DESIGN'; return; }
+    if (!p) { $('missing').hidden = false; document.title = 'NOT FOUND · GOOD®'; return; }
     $('found').hidden = false;
     document.title = `${p.name} · GOOD® PROFILE`;
     $('name').textContent = p.name;
@@ -79,7 +79,7 @@
     $('wCount').textContent = `${p.wardrobe.length}`;
     $('wEmpty').hidden = p.wardrobe.length > 0;
     $('grid').replaceChildren(...p.wardrobe.map((w) => {
-      // Only your own fits open in THE MAKER; on someone else's profile they're just to look at.
+      // Only your own fits open in MAKER®; on someone else's profile they're just to look at.
       const a = document.createElement(mine ? 'a' : 'div');
       a.className = `ac-card${mine ? '' : ' ac-static'}`; if (mine) { const { ft, ...L } = w.look; a.href = `./?${new URLSearchParams(L)}`; } a.hidden = true;
       a.innerHTML = '<span class="ac-fig"></span><span class="ac-fit-title"></span><span class="ac-piece"></span><span class="ac-cw mono"></span>';

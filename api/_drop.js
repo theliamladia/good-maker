@@ -8,7 +8,7 @@ const crypto = require('crypto');
 const GUD_DROP = Date.parse('2026-10-19T00:00:00-04:00');
 const gudOpen = (now = Date.now()) => now >= GUD_DROP;
 
-// The GUD™ catalogue (THE MAKER ids), for checking saved fits once it's live.
+// The GUD™ catalogue (MAKER® ids), for checking saved fits once it's live.
 let ids = null;
 function gudIds() {
   if (!gudOpen()) return { tops: new Set(), bottoms: new Map() };

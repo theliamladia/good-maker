@@ -7,7 +7,7 @@
 // Signed in only. Opening costs 5 GOOD® COINS; the roll happens here, never on
 // the page. Every roll is serialized per item (GD-001, GD-002, ...) and added to
 // the account's inventory (user:<uid>:inv). A piece you already had refunds 2.
-// Owning at least one serialized copy unlocks that piece in THE MAKER.
+// Owning at least one serialized copy unlocks that piece in MAKER®.
 const crypto = require('crypto');
 const { redis, configured, overLimit, parseBody } = require('./_redis');
 const { currentUser, saveUser, isOwner } = require('./_account');

@@ -1,6 +1,6 @@
 // GOOD® COINS today, live: how many coin saves are left, or the countdown until
 // they come back. Fills every [data-coin-timer] on the page (the same line as
-// under SAVE TO WARDROBE in THE MAKER). GoodCoinTimer.refresh() re-reads /api/me.
+// under SAVE TO WARDROBE in MAKER®). GoodCoinTimer.refresh() re-reads /api/me.
 (() => {
   const pad = (n) => String(n).padStart(2, '0');
   const coin = '<span class="coin" aria-hidden="true"></span>';

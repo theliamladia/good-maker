@@ -1,4 +1,4 @@
-# GOOD® DESIGN
+# GOOD®
 
 Static site that dresses a Minecraft skin in a preset outfit.
 

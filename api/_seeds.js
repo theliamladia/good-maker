@@ -1,7 +1,7 @@
 // One-time account set-ups requested by the owner (not a route). Each runs once,
 // on the next signed-in visit by that player or by the owner (api/me.js).
 //   profile = the player's profile slug; skin = their home skin (base64 PNG);
-//   prefs = THE MAKER settings they start from; coins = GOOD® COINS added once.
+//   prefs = MAKER® settings they start from; coins = GOOD® COINS added once.
 //   profile may be a list of slugs to try (the first that exists wins).
 const { redis } = require('./_redis');
 

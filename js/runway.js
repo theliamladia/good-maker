@@ -161,7 +161,7 @@
       </div>
       ${preview ? '<div class="rw-preview mono">PREVIEW MODE · VIEW ONLY</div>' : ''}
       <div class="rw-looks"></div>
-      <p class="rw-legal mono">© ${new Date().getFullYear()} GOOD® DESIGN. RUNWAY® LOOKS ARE PROTECTED WORKS OF GOOD®. ALL RIGHTS RESERVED.</p>`;
+      <p class="rw-legal mono">© ${new Date().getFullYear()} GOOD®. RUNWAY® LOOKS ARE PROTECTED WORKS OF GOOD®. ALL RIGHTS RESERVED.</p>`;
     if (preview) {
       stage.classList.add('is-preview');
       stage.addEventListener('contextmenu', (e) => e.preventDefault());

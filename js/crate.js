@@ -2,7 +2,7 @@
 // chrome corners, the new G stamped on the sides), lid propped open, with the
 // GOODIE® I'M SOWWY peeking out. The GOODIE® is a preview-only piece: its
 // texture comes scrambled from /api/outfit and is decoded straight to pixels
-// (no image URL or PNG), the same way THE MAKER previews it.
+// (no image URL or PNG), the same way MAKER® previews it.
 (() => {
   const canvas = document.getElementById('crate');
   if (!canvas || !window.THREE) return;

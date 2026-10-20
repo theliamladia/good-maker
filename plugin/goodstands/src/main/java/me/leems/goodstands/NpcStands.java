@@ -20,7 +20,7 @@ import java.net.http.HttpResponse;
 import java.time.Duration;
 
 // GOOD® stands in the real skin: a Citizens NPC wearing the signed texture
-// behind a code from THE MAKER's MINECRAFT STAND button (good.leems.me/api/stand).
+// behind a code from MAKER®'s MINECRAFT STAND button (good.leems.me/api/stand).
 // Only loaded when Citizens is on the server.
 final class NpcStands {
     private static final String KEY = "goodstand";
@@ -30,7 +30,7 @@ final class NpcStands {
 
     static void spawn(GoodStands plugin, Player p, String rawCode) {
         String code = rawCode.trim().toUpperCase(java.util.Locale.ROOT);
-        if (!code.matches("[A-Z2-9]{6}")) { p.sendMessage(ChatColor.RED + "Stand codes are 6 letters/numbers, from MINECRAFT STAND in THE MAKER."); return; }
+        if (!code.matches("[A-Z2-9]{6}")) { p.sendMessage(ChatColor.RED + "Stand codes are 6 letters/numbers, from MINECRAFT STAND in MAKER®."); return; }
         Location at = GoodStands.inFront(p);
         p.sendMessage(ChatColor.GRAY + "Fetching GOOD® stand " + code + "…");
         HttpRequest req = HttpRequest.newBuilder(URI.create(plugin.site() + "/api/stand?code=" + code))

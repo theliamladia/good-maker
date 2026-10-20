@@ -1326,7 +1326,7 @@
       const o = document.createElement('option'); o.value = filter; o.textContent = label; sel.append(o);
     });
     if (A.length) drawAccessories();
-    // A link that asks for this drop (e.g. /gud's WEAR IT IN THE MAKER → ./?filter=gud).
+    // A link that asks for this drop (e.g. /gud's WEAR IT IN MAKER® → ./?filter=gud).
     if (BOOT_FILTER === filter) { setFilter(filter); return; }
     // A link (e.g. a saved fit's OPEN) that names one of these pieces: put it on now.
     const L = BOOT_LOOK;

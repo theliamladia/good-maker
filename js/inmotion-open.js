@@ -1,6 +1,6 @@
 // ART® IN MOTION (/inmotion): open the GOOD® CRATE Nº002. Coins, ARE YOU SURE?, the reel
 // and the reveal. The roll happens on the server (POST /api/crate { action: 'open', crate: 2 });
-// this page only shows the result. Pieces stay locked in THE MAKER until you pull them.
+// this page only shows the result. Pieces stay locked in MAKER® until you pull them.
 (() => {
   const $ = (id) => document.getElementById(id);
   const btn = $('open'), again = $('again'), wallet = $('wallet'), drop = $('drop');
@@ -17,7 +17,7 @@
     if (!me) { btn.disabled = false; btn.textContent = 'SIGN IN TO OPEN'; wallet.innerHTML = '<a href="account">SIGN IN</a> TO COLLECT GOOD® COINS AND OPEN THE CRATE'; return; }
     wallet.innerHTML = `${me.name} · YOU HAVE ${coin}${me.coins} GOOD® COINS`;
     if (state === 'busy') { btn.disabled = true; btn.textContent = 'OPENING…'; return; }
-    if (me.coins < price) { btn.disabled = true; btn.textContent = `NEED ${price} GOOD® COINS`; wallet.innerHTML += ' · SAVE NEW FITS IN THE MAKER: +10 EACH, 4 A DAY'; return; }
+    if (me.coins < price) { btn.disabled = true; btn.textContent = `NEED ${price} GOOD® COINS`; wallet.innerHTML += ' · SAVE NEW FITS IN MAKER®: +10 EACH, 4 A DAY'; return; }
     btn.disabled = false;
     if (state === 'sure') {
       btn.textContent = 'ARE YOU SURE?';
@@ -93,7 +93,7 @@
     GoodItems.draw(item, fig).catch(() => {});
     $('gotName').replaceChildren(item.name, Object.assign(document.createElement('span'), { className: 'im-got-c sc', textContent: item.color }));
     $('gotSerial').textContent = roll.serial;
-    $('gotMeta').innerHTML = `${TIER[item.tier]} · ${pct(item.pct)} · ADDED TO MY INVENTORY® AND UNLOCKED IN THE MAKER${roll.dup ? ` · YOU ALREADY HAD ONE: +${roll.refund} ${coin} REFUNDED` : ''}`;
+    $('gotMeta').innerHTML = `${TIER[item.tier]} · ${pct(item.pct)} · ADDED TO MY INVENTORY® AND UNLOCKED IN MAKER®${roll.dup ? ` · YOU ALREADY HAD ONE: +${roll.refund} ${coin} REFUNDED` : ''}`;
     if ((j.achievements || []).length) $('gotMeta').innerHTML += j.achievements.map((a) => `<br><b class="im-ach">★ ACHIEVEMENT UNLOCKED: ${a.name}</b>`).join('');
     $('got').hidden = false;
     me.coins = j.coins;

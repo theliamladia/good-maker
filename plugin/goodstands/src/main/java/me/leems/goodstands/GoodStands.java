@@ -36,7 +36,7 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 /**
- * GoodStands: armor stands dressed in GOOD® DESIGN outfits.
+ * GoodStands: armor stands dressed in GOOD® outfits.
  *
  * Minecraft can't put a custom skin texture on an armor stand, so each piece is shown the way
  * vanilla allows: the player's own head, a leather chestplate dyed the top's main colour with an
@@ -92,9 +92,9 @@ public final class GoodStands extends JavaPlugin implements TabCompleter {
         if (a.length == 0) { help(sender, label); return true; }
         switch (a[0].toLowerCase(Locale.ROOT)) {
             case "npc" -> {
-                // The real skin: a code from MINECRAFT STAND in THE MAKER.
+                // The real skin: a code from MINECRAFT STAND in MAKER®.
                 if (!(sender instanceof Player p)) { sender.sendMessage("Players only."); return true; }
-                if (a.length < 2) { sender.sendMessage(ChatColor.RED + "/" + label + " npc <code from MINECRAFT STAND in THE MAKER>"); return true; }
+                if (a.length < 2) { sender.sendMessage(ChatColor.RED + "/" + label + " npc <code from MINECRAFT STAND in MAKER®>"); return true; }
                 if (!citizens()) { sender.sendMessage(ChatColor.RED + "/" + label + " npc needs the Citizens plugin on the server."); return true; }
                 NpcStands.spawn(this, p, a[1]);
             }
@@ -109,9 +109,9 @@ public final class GoodStands extends JavaPlugin implements TabCompleter {
                 spawn(p, top, bottom, shoe, skin);
             }
             case "look" -> {
-                // Paste a link from THE MAKER: good.leems.me/?top=...&bottom=...&shoe=...
+                // Paste a link from MAKER®: good.leems.me/?top=...&bottom=...&shoe=...
                 if (!(sender instanceof Player p)) { sender.sendMessage("Players only."); return true; }
-                if (a.length < 2) { sender.sendMessage(ChatColor.RED + "/" + label + " look <link from THE MAKER> [skin player]"); return true; }
+                if (a.length < 2) { sender.sendMessage(ChatColor.RED + "/" + label + " look <link from MAKER®> [skin player]"); return true; }
                 Map<String, String> q = query(a[1]);
                 Piece top = pick(tops, q.getOrDefault("top", "")), bottom = pick(bottoms, q.getOrDefault("bottom", ""));
                 Piece shoe = "bare".equals(q.get("feet")) ? null : pick(shoes, q.getOrDefault("shoe", bottom != null && !bottom.shoes().isEmpty() ? bottom.shoes().get(0) : ""));
@@ -149,9 +149,9 @@ public final class GoodStands extends JavaPlugin implements TabCompleter {
 
     private void help(CommandSender s, String l) {
         s.sendMessage(ChatColor.BLUE + "" + ChatColor.BOLD + "GOOD® STANDS");
-        s.sendMessage(ChatColor.WHITE + "/" + l + " npc <code>" + ChatColor.GRAY + " – the real skin (MINECRAFT STAND in THE MAKER, needs Citizens)");
+        s.sendMessage(ChatColor.WHITE + "/" + l + " npc <code>" + ChatColor.GRAY + " – the real skin (MINECRAFT STAND in MAKER®, needs Citizens)");
         s.sendMessage(ChatColor.WHITE + "/" + l + " spawn <top|none> [bottom|none] [shoe] [skin]" + ChatColor.GRAY + " – dress a stand");
-        s.sendMessage(ChatColor.WHITE + "/" + l + " look <link from THE MAKER> [skin]" + ChatColor.GRAY + " – a stand from a good.leems.me link");
+        s.sendMessage(ChatColor.WHITE + "/" + l + " look <link from MAKER®> [skin]" + ChatColor.GRAY + " – a stand from a good.leems.me link");
         s.sendMessage(ChatColor.WHITE + "/" + l + " list [tops|bottoms|shoes]" + ChatColor.GRAY + " – what's available");
         s.sendMessage(ChatColor.WHITE + "/" + l + " center" + ChatColor.GRAY + " – snap the GOOD® stand you're looking at to the middle of its block");
         s.sendMessage(ChatColor.WHITE + "/" + l + " remove" + ChatColor.GRAY + " – remove the GOOD® stand you're looking at");
@@ -236,7 +236,7 @@ public final class GoodStands extends JavaPlugin implements TabCompleter {
         if (!(it.getItemMeta() instanceof LeatherArmorMeta m)) return it;
         m.setColor(pc.swatch().isEmpty() ? Color.fromRGB(0x888888) : pc.swatch().get(0));
         m.setDisplayName(ChatColor.WHITE + pc.label());
-        m.setLore(List.of(ChatColor.BLUE + "GOOD® DESIGN", ChatColor.GRAY + "good.leems.me"));
+        m.setLore(List.of(ChatColor.BLUE + "GOOD®", ChatColor.GRAY + "good.leems.me"));
         if (pattern != null && pc.swatch().size() > 1 && m instanceof ArmorMeta am) am.setTrim(new ArmorTrim(nearestTrim(pc.swatch().get(1)), pattern));
         it.setItemMeta(m);
         return it;

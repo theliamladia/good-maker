@@ -1,4 +1,4 @@
-// Fall leaves drifting behind THE MAKER (same leaves as AMONG THE TREES®).
+// Fall leaves drifting behind MAKER® (same leaves as AMONG THE TREES®).
 (() => {
   const cv = document.getElementById('leaves');
   if (!cv) return;

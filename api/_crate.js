@@ -1,6 +1,6 @@
 // GOOD® CRATE: what's inside and the odds. Not a route. The roll happens only
 // on the server (api/crate.js); the page just shows this table (GET /api/crate).
-//   unlock = the THE MAKER id (kind or colour) a serialized copy unlocks.
+//   unlock = the MAKER® id (kind or colour) a serialized copy unlocks.
 // Odds are percent of every crate opened. GOLD is a gold roll: it rolls again
 // between the three I'M SOWWY pieces (GOLD_ODDS, percent of a gold roll).
 const ITEMS = {
@@ -39,7 +39,7 @@ function table() {
   return Object.entries(ITEMS).map(([id, it]) => ({ id, ...it, pct: Math.round(pct[id] * 100) / 100 }));
 }
 // GOOD® CRATE Nº002 · ART® IN MOTION (/inmotion; GET /api/crate?crate=2, POST { action: 'open', crate: 2 }).
-// Keys are THE MAKER colour ids; owning a serialized copy unlocks that colour. pct = percent of every crate (sums to 100).
+// Keys are MAKER® colour ids; owning a serialized copy unlocks that colour. pct = percent of every crate (sums to 100).
 // tex = the preview-only texture (api/_locked/aim-*.enc); bottom / accessory = which section it shows in.
 const ITEMS2 = {
   'c2-chore-naples-paynes': { name: "CHORE®", color: "NAPLES YELLOW/PAYNE'S GREY", tier: 'core', pct: 3.3, tex: 'aim-chore-naples-paynes', unlock: 'c2-chore-naples-paynes' },

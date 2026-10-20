@@ -77,7 +77,7 @@ function to64(img) {
 }
 
 // Some skins draw everything on the outer layer and leave the base layer
-// empty (or full of holes). THE MAKER swaps the outer layer for clothes, so
+// empty (or full of holes). MAKER® swaps the outer layer for clothes, so
 // those players would lose their face and arms. Copy each outer pixel down
 // into the base pixel under it wherever the base is see-through; skins with a
 // full base layer come back unchanged.

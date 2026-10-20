@@ -1,4 +1,4 @@
-// THE MAKER: the newest GOOD® CRATE (Nº002, ART® IN MOTION) in the bottom-right corner.
+// MAKER®: the newest GOOD® CRATE (Nº002, ART® IN MOTION) in the bottom-right corner.
 // Clicking it (or the first visit, once) opens a short intro with the way to its page.
 (() => {
   const seen = (() => { try { return localStorage.getItem('goodCrate2Intro') === '1'; } catch { return true; } })();

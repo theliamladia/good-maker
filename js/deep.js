@@ -1,7 +1,7 @@
 // DEEP END®: the underwater drop. A pineapple floats in the corner; clicking
 // it sends bubbles up the screen, the page sinks underwater, and the looks
 // appear on the player's own skin (from the main page, or any Minecraft
-// username typed in), each with OPEN IN MAKER: the look goes onto THE MAKER,
+// username typed in), each with OPEN IN MAKER: the look goes onto MAKER®,
 // to tweak, download (GOOD® ME) or save to the wardrobe.
 (() => {
   const EASE_OUT = 'cubic-bezier(0.16, 1, 0.3, 1)';
@@ -143,7 +143,7 @@
       </header>
       <p class="dp-msg mono" aria-live="polite"></p>
       <div class="dp-looks"></div>
-      <p class="dp-legal mono">© ${new Date().getFullYear()} GOOD® DESIGN. ALL RIGHTS RESERVED.</p>`;
+      <p class="dp-legal mono">© ${new Date().getFullYear()} GOOD®. ALL RIGHTS RESERVED.</p>`;
     document.body.appendChild(stage);
     stage.querySelector('.dp-back').onclick = surface;
     const input = stage.querySelector('.dp-user input');

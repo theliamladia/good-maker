@@ -831,7 +831,7 @@ window.OUTFITS = [
       bodies: { classic: 'api/outfit?id=runway-allover-g-classic', slim: 'api/outfit?id=runway-allover-g-slim' },
     }],
   },
-  // DEEP END® (the SpongeBob collab): also behind the pineapple on THE MAKER.
+  // DEEP END® (the SpongeBob collab): also behind the pineapple on MAKER®.
   {
     id: 'deep-end-goodie',
     name: 'DEEP END® GOODIE®',
@@ -1592,7 +1592,7 @@ window.PANTS = [
   },
 ];
 
-// ACCESSORIES: worn over any top and bottom (THE MAKER's ACCESSORY row). Same shape as PANTS (src).
+// ACCESSORIES: worn over any top and bottom (MAKER®'s ACCESSORY row). Same shape as PANTS (src).
 window.ACCESSORIES = [
   {
     // GOOD® CRATE Nº002 · ART® IN MOTION: preview-only until pulled from the crate (/inmotion).

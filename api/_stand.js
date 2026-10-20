@@ -1,4 +1,4 @@
-// GOOD® STANDS (served at /api/stand, via api/skin.js): turn a fit from THE MAKER into a code the GoodStands plugin
+// GOOD® STANDS (served at /api/stand, via api/skin.js): turn a fit from MAKER® into a code the GoodStands plugin
 // can wear in Minecraft. POST (signed in) sends the finished skin PNG; it is
 // signed through MineSkin so Minecraft will render it, and stored under a
 // short code. GET ?code= returns the signed texture for the plugin.

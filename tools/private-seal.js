@@ -1,4 +1,4 @@
-// Seal owner-only pieces for THE MAKER.
+// Seal owner-only pieces for MAKER®.
 //   GOOD_LOCK_KEY=<base64 32 bytes> node tools/private-seal.js <folder>
 // The folder holds catalog.json ({ tops, pants, accessories: [kinds] } in the js/outfits.js
 // shape, file names in bodies/src) plus those PNGs. Each PNG is sealed with AES-256-GCM

@@ -22,7 +22,7 @@ const STUDY = [
     rubric: 'STUDY® / DESIGN',
     title: 'OLD G® TO NEW G®',
     dek: 'Why the G changed, and what didn’t.',
-    byline: 'GOOD® DESIGN',
+    byline: 'GOOD®',
     date: '2026-10-07',
     description: 'Three generations of the GOOD® G: the narrow Gen 0, the square, brutalist Gen 1, and the open new G. Why it changed, and what never will.',
     lead: {
@@ -68,7 +68,7 @@ const STUDY = [
     rubric: 'STUDY® / INTERVIEW',
     title: 'A STUDY IN JEAN',
     dek: 'A look at creating a timeless piece.',
-    byline: 'GOOD® DESIGN',
+    byline: 'GOOD®',
     date: '2026-09-30',
     description: 'How GOOD® made the JEAN®: SPRINGSTEEN™ Americana, six washes, two layers, and the best jean in Minecraft. An interview.',
     lead: {

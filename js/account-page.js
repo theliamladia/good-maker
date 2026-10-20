@@ -1,6 +1,6 @@
 // GOOD® ACCOUNT page: sign in by email link; signed in, the home skin, the
 // GOOD® COINS and the WARDROBE, each fit drawn on your home skin. Clicking a
-// fit opens it in THE MAKER (your home skin loads there automatically).
+// fit opens it in MAKER® (your home skin loads there automatically).
 (() => {
   const $ = (id) => document.getElementById(id);
   const DEMO = 'samples/spurdo.png';
@@ -39,7 +39,7 @@
       a.querySelector('.ac-fig').append(GoodCompose.front(merged, slim));
       a.querySelector('.ac-piece').textContent = [top && top.name, bottom && bottom.name].filter(Boolean).join(' + ');
       a.querySelector('.ac-cw').textContent = [top && top.color, bottom && bottom.color].filter(Boolean).join(' / ');
-      a.setAttribute('aria-label', `${[GoodCompose.label(top), GoodCompose.label(bottom)].filter(Boolean).join(' and ')}. Open in THE MAKER.`);
+      a.setAttribute('aria-label', `${[GoodCompose.label(top), GoodCompose.label(bottom)].filter(Boolean).join(' and ')}. Open in MAKER®.`);
       a.hidden = false;
       fits.set(w, [top, bottom]); story();
     }).catch(() => a.remove());   // a retired piece

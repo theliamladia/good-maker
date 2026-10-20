@@ -22,7 +22,7 @@ body {
   background: #0000ff; /* GOOD® BLUE */
   overflow-x: hidden;
 }
-/* THE MAKER: the AMONG THE TREES® fall gradient, leaves drifting behind the panels */
+/* MAKER®: the AMONG THE TREES® fall gradient, leaves drifting behind the panels */
 body.fall { background: linear-gradient(to bottom, #5f7a4c 0, #6f7a42 18%, #8a6a32 40%, #a8552a 64%, #c86f30 84%, #d98a3a 100%) fixed; }
 /* Header in fall green (FERN), so the top reads leafy rather than dark */
 body.fall .site-header { background: #4f6b45; }
@@ -882,7 +882,7 @@ body.st {
 .intro .im-banner { opacity: 0; }
 @media (max-width: 720px) { .im-banner { font-size: 0.6rem; letter-spacing: 0.16em; padding: 10px 12px; } .im-banner span { display: inline-block; margin-left: 8px; } }
 
-/* ---------- Fall banner (AMONG THE TREES®), retired from THE MAKER ---------- */
+/* ---------- Fall banner (AMONG THE TREES®), retired from MAKER® ---------- */
 .fall-banner {
   display: block; position: relative; z-index: 5; padding: 11px 16px; text-align: center; text-decoration: none;
   background: linear-gradient(90deg, #7a5d86 0%, #b06e7a 22%, #c2452b 50%, #d0802c 76%, #e0a24a 100%);
@@ -1114,8 +1114,9 @@ body.st {
 
 /* GOOD® COIN: metallic GOOD® BLUE fading into chrome, the new G stamped in */
 .coin { display: inline-block; width: 1.15em; height: 1.15em; background: url(assets/coin.svg) center / contain no-repeat; vertical-align: -0.22em; margin-right: 0.3em; }
-.wardrobe-save { flex-wrap: wrap; align-items: center; white-space: nowrap; }
-.wardrobe-save > span { display: inline-flex; align-items: center; }
+.wardrobe-save { flex-wrap: wrap; align-items: center; white-space: nowrap; row-gap: 4px; }
+/* the coins line wraps inside the pill instead of running out of it */
+.wardrobe-save > span { display: block; flex-basis: 100%; min-width: 0; white-space: normal; text-align: center; font-size: 0.62rem; letter-spacing: 0.1em; line-height: 1.45; }
 .foot-link { color: inherit; text-decoration: underline; text-underline-offset: 4px; }
 
 /* ---------- GOOD® CRATE: corner button and intro (js/crate-promo.js) ---------- */
@@ -1152,14 +1153,14 @@ body.st {
 @media (max-width: 600px) { .cp-crate { width: 64px; right: 14px; bottom: 14px; } .dp-pine { right: 88px; bottom: 14px; width: 48px; } .cp-list b { display: block; } }
 @media (prefers-reduced-motion: reduce) { .cp-crate, .cp-art, .cp-rays { animation: none; } }
 .cp-timer { position: relative; margin: 16px 0 0; font-size: 0.66rem; font-weight: 700; letter-spacing: 0.16em; }
-/* ACCESSORY chips (THE MAKER) */
+/* ACCESSORY chips (MAKER®) */
 #accSection { margin-top: 18px; }
 .acc-list { display: flex; flex-wrap: wrap; gap: 8px; }
 .acc-chip { display: inline-flex; align-items: center; gap: 8px; padding: 8px 12px; border: 1px solid rgba(255, 255, 255, 0.55); background: rgba(255, 255, 255, 0.12); color: inherit; font-size: 0.62rem; letter-spacing: 0.12em; cursor: pointer; }
 .acc-chip[aria-pressed="true"] { background: #fff; color: #0000ff; }
 .acc-chip i { width: 14px; height: 14px; border-radius: 50%; box-shadow: inset 0 0 0 1px rgba(0, 0, 0, 0.15); }
 
-/* GOOD® CRATE Nº002 in THE MAKER: the white crate and a quieter, paper-coloured card. */
+/* GOOD® CRATE Nº002 in MAKER®: the white crate and a quieter, paper-coloured card. */
 .cp-crate2 { filter: drop-shadow(0 12px 18px rgba(40, 36, 30, 0.35)); }
 .cp-card2 { background: #fbfaf6; color: #1f2024; }
 .cp-card2 .cp-title { font-family: 'Cormorant Garamond', 'Times New Roman', serif; font-weight: 400; letter-spacing: 0.05em; text-shadow: none; color: #1f2024; }

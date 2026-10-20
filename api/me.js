@@ -6,7 +6,7 @@
 //   POST /api/me { action: 'save', look }         -> adds a look to the wardrobe; the first 2 new fits each day earn +10 GOOD® COINS each
 //   POST /api/me { action: 'remove', id }
 //   POST /api/me { action: 'delete' }             -> deletes the account and everything in it
-//   POST /api/me { action: 'prefs', prefs }       -> THE MAKER settings to start from (fit or none, body, MY SKIN, tone)
+//   POST /api/me { action: 'prefs', prefs }       -> MAKER® settings to start from (fit or none, body, MY SKIN, tone)
 //   POST /api/me { action: 'suggest', text }      -> the SUGGESTION BOX
 //   GET  /api/me?suggestions=1                    -> owner only: every suggestion, newest first
 // Looks are recipes of catalogue ids (like the address bar), never pictures.
@@ -68,7 +68,7 @@ function cleanFt(F) {
   if (typeof F.e === 'string' && F.e.length <= 700 && /^[A-Za-z0-9+/]+=*$/.test(F.e) && Buffer.from(F.e, 'base64').length === 512) out.e = F.e;
   return Object.keys(out).length ? out : null;
 }
-// THE MAKER preferences: a look recipe that may be empty (a blank canvas), plus body, MY SKIN and tone.
+// MAKER® preferences: a look recipe that may be empty (a blank canvas), plus body, MY SKIN and tone.
 function cleanPrefs(P, unlocks, owner = false) {
   P = P || {};
   const out = {};

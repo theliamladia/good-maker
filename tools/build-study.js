@@ -28,7 +28,7 @@ function head({ title, description, url, image, imageAlt, type = 'website', extr
   <link rel="icon" href="/favicon.svg" type="image/svg+xml">
   <link rel="icon" href="/favicon-32.png" sizes="32x32" type="image/png">
   <link rel="apple-touch-icon" href="/apple-touch-icon.png">
-  <meta property="og:site_name" content="GOOD® DESIGN">
+  <meta property="og:site_name" content="GOOD®">
   <meta property="og:type" content="${type}">
   <meta property="og:url" content="${SITE}${url}">
   <meta property="og:title" content="${esc(title)}">
@@ -51,11 +51,11 @@ ${extra}  <link rel="preconnect" href="https://fonts.googleapis.com">
 
 const masthead = (back) => `
 <header class="st-bar">
-  <a class="st-wordmark" href="/">GOOD® <span>DESIGN</span></a>
+  <a class="st-wordmark" href="/">GOOD®</a>
   <nav class="st-nav" aria-label="Main">
     ${back}
     <a href="/colors">COLORS®</a>
-    <a href="/">THE MAKER</a>
+    <a href="/">MAKER®</a>
     <a href="/collaborations">COLLABORATIONS®</a>
     <a href="/members">MEMBERS®</a>
     <a href="/account" data-acct>ACCOUNT</a>
@@ -84,8 +84,8 @@ function postPage(post) {
     '@context': 'https://schema.org', '@type': 'Article',
     headline: full, description: post.description, image: [`${SITE}${post.og}`],
     datePublished: post.date, dateModified: post.date, mainEntityOfPage: `${SITE}${url}`,
-    author: { '@type': 'Organization', name: 'GOOD® DESIGN', url: SITE },
-    publisher: { '@type': 'Organization', name: 'GOOD® DESIGN', url: SITE, logo: { '@type': 'ImageObject', url: `${SITE}/apple-touch-icon.png` } },
+    author: { '@type': 'Organization', name: 'GOOD®', url: SITE },
+    publisher: { '@type': 'Organization', name: 'GOOD®', url: SITE, logo: { '@type': 'ImageObject', url: `${SITE}/apple-touch-icon.png` } },
   };
   const extra = `  <meta property="article:published_time" content="${post.date}">
   <meta property="article:section" content="STUDY®">
@@ -93,7 +93,7 @@ function postPage(post) {
 `;
   let firstP = true;
   const body = post.body.map((b) => { const f = firstP && !!b.p; if (b.p) firstP = false; return block(b, f); }).join('\n      ');
-  return `${head({ title: `${full} · STUDY® · GOOD® DESIGN`, description: post.description, url, image: post.og, imageAlt: post.lead.alt, type: 'article', extra })}
+  return `${head({ title: `${full} · STUDY® · GOOD®`, description: post.description, url, image: post.og, imageAlt: post.lead.alt, type: 'article', extra })}
 <body class="st">
 ${masthead('<a href="/study">← STUDY®</a>')}
 <main>
@@ -123,7 +123,7 @@ ${masthead('<a href="/study">← STUDY®</a>')}
     </section>
   </article>
 </main>
-<footer class="st-foot">© 2026 GOOD® DESIGN. All rights reserved. <a href="/study">More from STUDY®</a> · <a href="/privacy">Privacy</a></footer>
+<footer class="st-foot">© 2026 GOOD®. All rights reserved. <a href="/study">More from STUDY®</a> · <a href="/privacy">Privacy</a></footer>
 <script src="/js/study-comments.js"></script>
 <script src="/js/nav.js"></script>
 </body>
@@ -143,7 +143,7 @@ function archivePage() {
       </div>
     </article>`).join('');
   const latest = POSTS[0];
-  return `${head({ title: 'STUDY® · GOOD® DESIGN', description: 'STUDY®: notes, experiments and conversations from the GOOD® DESIGN studio. Every idea, including the ones that didn’t make it.', url: '/study', image: latest.og, imageAlt: latest.lead.alt })}
+  return `${head({ title: 'STUDY® · GOOD®', description: 'STUDY®: notes, experiments and conversations from the GOOD® studio. Every idea, including the ones that didn’t make it.', url: '/study', image: latest.og, imageAlt: latest.lead.alt })}
 <body class="st">
 <script>
   // Old links (study.html?p=<slug>) go to the post's own page.
@@ -157,7 +157,7 @@ ${masthead('<a href="/">← BACK</a>')}
   </header>
   ${items}
 </main>
-<footer class="st-foot">© 2026 GOOD® DESIGN. All rights reserved. <a href="/privacy">Privacy</a></footer>
+<footer class="st-foot">© 2026 GOOD®. All rights reserved. <a href="/privacy">Privacy</a></footer>
 <script src="/js/nav.js"></script>
 </body>
 </html>

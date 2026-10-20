@@ -1,6 +1,6 @@
 # GoodStands handoff (Minecraft server work)
 
-This is the handoff for the Minecraft side of GOOD® DESIGN. Work on the plugin lives in
+This is the handoff for the Minecraft side of GOOD®. Work on the plugin lives in
 `plugin/goodstands/` only. Touch the website (`api/`, `js/`, `index.html`) only when a task
 needs it, and say so.
 
@@ -35,7 +35,7 @@ cd plugin/goodstands && mvn -q -B package   # -> target/GoodStands-<version>.jar
 Two kinds of stand:
 
 1. **NPC stands (the main one).** A Citizens player NPC wears the outfit's real skin.
-   - In THE MAKER (good.leems.me), signed in, the **MINECRAFT STAND** button (`js/account.js` → `GoodApp.standSkin()` in `js/app.js`)
+   - In MAKER® (good.leems.me), signed in, the **MINECRAFT STAND** button (`js/account.js` → `GoodApp.standSkin()` in `js/app.js`)
      draws *just the clothes on a plain white mannequin* (blank white head, no face, no hair) and POSTs the PNG to `/api/stand`.
    - `/api/stand` is rewritten to `api/skin.js`, which hands off to `api/_stand.js` (this keeps Vercel at 11 functions;
      a 12th failed the deploy). The server signs the PNG with MineSkin (`/v2/generate`, unlisted, optional `MINESKIN_KEY`

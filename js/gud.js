@@ -190,7 +190,7 @@
     const row = document.createElement('div'); row.className = 'gd-launch';
     const see = document.createElement('button'); see.type = 'button'; see.className = 'gd-btn'; see.textContent = 'SEE THE PIECES';
     see.onclick = () => { arrive(); views.hidden = false; };
-    const wear = document.createElement('a'); wear.className = 'gd-btn gd-btn-alt'; wear.href = './?filter=gud'; wear.textContent = 'WEAR IT IN THE MAKER →';
+    const wear = document.createElement('a'); wear.className = 'gd-btn gd-btn-alt'; wear.href = './?filter=gud'; wear.textContent = 'WEAR IT IN MAKER® →';
     row.append(see, wear);
     form.replaceWith(row);
   }
