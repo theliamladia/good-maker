@@ -242,16 +242,52 @@
     const kb = Uint8Array.from(atob(k), (ch) => ch.charCodeAt(0));
     return createImageBitmap(new Blob([Uint8Array.from(atob(d), (ch, i) => ch.charCodeAt(0) ^ kb[i % kb.length])]));
   };
-  const paint = (cvs, id) => scrambled(id).then((bmp) => { cvs.width = bmp.width; cvs.height = bmp.height; cvs.getContext('2d').drawImage(bmp, 0, 0); bmp.close(); }).catch(() => {});
+  // Each look is a turntable: 24 frames side by side, sealed like the stills. The still
+  // shows first; the turntable takes over once it arrives (loaded as the look nears the
+  // screen), and only looks on screen are redrawn.
+  const FW = 202, FH = 407, FRAMES = 24, STEP = 110;
+  const shown = new Set();
+  const spinners = [];
+  const still = (cvs, id) => scrambled(id).then((bmp) => {
+    if (cvs.dataset.spin) { bmp.close(); return; }
+    cvs.width = FW; cvs.height = FH;
+    const k = Math.min(FW / bmp.width, FH / bmp.height), w = bmp.width * k, h = bmp.height * k;
+    cvs.getContext('2d').drawImage(bmp, (FW - w) / 2, FH - h, w, h); bmp.close();
+  }).catch(() => {});
+  const turntable = (cvs, id) => {
+    if (cvs.dataset.asked) return; cvs.dataset.asked = '1';
+    scrambled(id.replace(/^wnd-/, 'wnd-spin-')).then((sheet) => {
+      cvs.dataset.spin = '1'; cvs.width = FW; cvs.height = FH;
+      spinners.push({ cvs, sheet, off: spinners.length * 3 });
+    }).catch(() => {});
+  };
+  const near = new IntersectionObserver((es) => es.forEach((e) => {
+    const cvs = e.target;
+    if (e.isIntersecting) { shown.add(cvs); turntable(cvs, cvs.dataset.look); } else shown.delete(cvs);
+  }), { rootMargin: '600px 0px' });
+  let spinLast = -1;
+  const spinLoop = (now) => {
+    const f = reduce ? 0 : Math.floor(now / STEP);
+    if (f !== spinLast) {
+      spinLast = f;
+      for (const s of spinners) {
+        if (!shown.has(s.cvs) || s.cvs.hidden) continue;
+        const k = (f + s.off) % FRAMES, c = s.cvs.getContext('2d');
+        c.clearRect(0, 0, FW, FH); c.drawImage(s.sheet, k * FW, 0, FW, FH, 0, 0, FW, FH);
+      }
+    }
+    requestAnimationFrame(spinLoop);
+  };
+  requestAnimationFrame(spinLoop);
   document.querySelectorAll('.wd-looks figure').forEach((f) => {
     const [a, b] = f.querySelectorAll('canvas');
-    paint(a, f.dataset.id);
-    if (b && f.dataset.down) paint(b, f.dataset.down);
+    a.dataset.look = f.dataset.id; still(a, f.dataset.id); near.observe(a);
+    if (b && f.dataset.down) { b.dataset.look = f.dataset.down; near.observe(b); }
   });
   document.querySelectorAll('.wd-looks').forEach((g) => { g.addEventListener('contextmenu', (e) => e.preventDefault()); g.addEventListener('dragstart', (e) => e.preventDefault()); });
   document.querySelectorAll('.wd-hood button').forEach((btn) => btn.addEventListener('click', () => {
     const down = btn.dataset.hood === 'down';
     document.querySelectorAll('.wd-hood button').forEach((o) => { o.classList.toggle('on', o === btn); o.setAttribute('aria-pressed', String(o === btn)); });
-    document.querySelectorAll('#ysLooks figure').forEach((f) => { const [a, b] = f.querySelectorAll('canvas'); a.hidden = down; b.hidden = !down; });
+    document.querySelectorAll('#ysLooks figure').forEach((f) => { const [a, b] = f.querySelectorAll('canvas'); a.hidden = down; b.hidden = !down; if (down) { still(b, b.dataset.look); turntable(b, b.dataset.look); } });
   }));
 })();
