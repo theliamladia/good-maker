@@ -6,10 +6,12 @@ GOOD® is quiet luxury. Every visual asset follows these rules:
 
 - **The GOOD® look is COLLABORATIONS® (collab.css).** GOOD® BLUE (#0000ff) background, white type. Inter for headlines and copy, Space Mono for small tracked labels (about 0.72rem, letter-spacing 0.22em). Thin 1px white rules between sections. Not the STUDY® style (paper, serif): that belongs to STUDY® only.
 - **Not too bold.** Headlines in Inter 500–600 with slightly tight tracking, never the heaviest weights. Copy in Inter 300–400 with line height 1.55+.
-- **Liquid glass for anything on GOOD® BLUE.** Pieces sit on frosted glass panels (in the spirit of Apple's Liquid Glass): translucent white fill (about 10–16%), a strong background blur and saturation, a bright 1px top-edge highlight, a soft sheen, large continuous corner radii and a soft shadow. Put soft light behind the glass so it has something to refract. This keeps GOOD® BLUE clothing distinct from the GOOD® BLUE ground.
+- **Pieces on GOOD® BLUE sit in a spotlight.** No cards or panels: a soft white radial glow behind each piece (white at about 55% in the centre, fading to nothing) so GOOD® BLUE clothing still separates from the ground. Show the piece on its own, front view (not a quarter turn): tops zoomed in on the garment, trousers on their own. Under each piece: one dot per colour of the colourway, then its name (GOOD® BLUE/COTTON™).
+- **Colours as THE COLOR STORY®.** On sheets, the palette is a strip of vertical bars (no names) under the label THE COLOR STORY®, not a row of named swatches.
+- **Copy.** At most three sentences, in the WANDERING® voice: scene first, then what you wear.
 - **Negative space first.** Give everything far more room than feels necessary. Nothing fills the frame edge to edge; aim for 30–40% empty. Wide outer margins (8–10% of the width), generous gaps.
 - **Fewer things.** Three or four figures per row at most, never six.
-- **Calm hierarchy.** One headline, one short line of copy, then the work. No speed lines, busy patterns or stacked subtitles. Swatches are small dots.
+- **Calm hierarchy.** One headline, the copy, then the work. No speed lines, busy patterns or stacked subtitles.
 
 When in doubt: remove something, and add space.
 
