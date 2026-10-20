@@ -1,11 +1,13 @@
 // MARKET® (/market): spare serialized copies listed for GOOD® COINS. The server does every
 // check and moves the coins and the copy (POST /api/crate { action: 'list' | 'unlist' | 'buy' });
-// this page shows the listings, your pieces, and asks ARE YOU SURE? before a purchase.
+// this page shows the tape, the book (every piece: asks, floor, last, change, 24H volume), the asks,
+// your pieces, and MY TRADES (your own history), and asks ARE YOU SURE? before a purchase.
 (() => {
   const $ = (id) => document.getElementById(id);
   const coin = '<span class="coin" aria-hidden="true"></span>';
   const meOnce = () => (window.__goodMe ||= fetch('/api/me').then((r) => (r.ok ? r.json() : { user: null })).catch(() => ({ user: null })));
-  let me = null, inventory = [], items = {}, listings = [], sales = [];
+  let me = null, inventory = [], items = {}, listings = [], sales = [], trades = [];
+  let only = null, bookAll = false, bookSort = { key: 'asks', dir: -1 };
 
   // Colour dots: each colour in the colourway, looked up by name in COLORS®.
   const HEX = Object.fromEntries((window.GOOD_COLORS || []).map((c) => [c.name.toUpperCase(), [].concat(c.hex)[0]]));
@@ -21,6 +23,107 @@
     return j;
   }
   const ERR = { coins: 'NOT ENOUGH GOOD® COINS.', gone: 'SOMEONE GOT THERE FIRST.', busy: 'ONE MOMENT. TRY AGAIN.', price: 'PRICE: 1 TO 9999 GOOD® COINS.', too_many: 'TWENTY LISTINGS AT A TIME.', own_listing: 'THAT ONE IS YOURS.', not_tradable: 'THE GD-999 SET STAYS WITH YOU.', slow_down: 'SLOW DOWN A LITTLE.', signed_out: 'SIGN IN FIRST.' };
+
+  const DAY = 864e5;
+  const nameOf = (id) => { const it = items[id]; return it ? `${it.name} ${it.color}` : id; };
+  const ago = (iso) => {
+    const m = Math.max(0, Math.round((Date.now() - Date.parse(iso)) / 6e4));
+    if (m < 1) return 'NOW'; if (m < 60) return `${m}M AGO`; if (m < 1440) return `${Math.round(m / 60)}H AGO`;
+    return new Date(iso).toLocaleDateString('en-US', { month: 'short', day: 'numeric' }).toUpperCase();
+  };
+  const when = (iso) => new Date(iso).toLocaleString('en-US', { month: 'short', day: 'numeric', hour: 'numeric', minute: '2-digit' }).toUpperCase();
+  const c = (n) => (n == null ? '—' : `${coin}${n}`);
+  const pct = (v) => (v == null ? '—' : v === 0 ? '0%' : `${v > 0 ? '▲' : '▼'} ${Math.abs(v)}%`);
+
+  // Per piece: asks, floor (lowest ask), last sale, change against the sale before it, 24H volume.
+  function book() {
+    const rows = {};
+    const row = (id) => (rows[id] ||= { id, asks: 0, floor: null, last: null, prev: null, vol: 0 });
+    for (const id of Object.keys(items)) row(id);
+    for (const l of listings) { const r = row(l.item); r.asks++; if (r.floor == null || l.price < r.floor) r.floor = l.price; }
+    for (const s of sales) {   // newest first
+      const r = row(s.item);
+      if (r.last == null) r.last = s.price; else if (r.prev == null) r.prev = s.price;
+      if (Date.now() - Date.parse(s.at) < DAY) r.vol += s.price;
+    }
+    for (const r of Object.values(rows)) r.chg = r.last != null && r.prev ? Math.round(((r.last - r.prev) / r.prev) * 100) : null;
+    return Object.values(rows);
+  }
+
+  function drawStats() {
+    const day = sales.filter((s) => Date.now() - Date.parse(s.at) < DAY);
+    $('stListed').textContent = listings.length;
+    $('stFloor').innerHTML = listings.length ? c(Math.min(...listings.map((l) => l.price))) : '—';
+    $('stLast').innerHTML = sales[0] ? c(sales[0].price) : '—';
+    $('stVol').innerHTML = c(day.reduce((a, s) => a + s.price, 0));
+    $('stTrades').textContent = day.length;
+    // The tape: the latest trades, twice over so the loop is seamless.
+    const bits = sales.slice(0, 16).map((s) => `<span><b></b> ${s.serial} ${c(s.price)} <em>${ago(s.at)}</em></span>`);
+    const tape = $('tape');
+    if (!bits.length) { tape.innerHTML = '<span>NO TRADES YET · LIST A PIECE AND BE THE FIRST</span>'; tape.classList.add('mk-still'); return; }
+    tape.classList.remove('mk-still');
+    tape.innerHTML = bits.join('') + bits.join('');
+    tape.querySelectorAll('b').forEach((b, i) => { const s = sales[i % bits.length]; b.textContent = nameOf(s.item); });
+    tape.style.animationDuration = `${Math.max(20, bits.length * 6)}s`;
+  }
+
+  function drawBook() {
+    const every = book(), active = every.filter((r) => r.asks || r.last != null);
+    // Active pieces (asks or trades) by default; every piece on request, or when nothing trades yet.
+    const rows = bookAll || !active.length ? every : active;
+    const more = $('bookMore');
+    more.hidden = !active.length || active.length === every.length;
+    more.textContent = bookAll ? 'SHOW ACTIVE PIECES ONLY' : `SHOW ALL ${every.length} PIECES`;
+    const k = bookSort.key, d = bookSort.dir;
+    const val = (r) => (k === 'name' ? nameOf(r.id) : r[k]);
+    rows.sort((a, b) => {
+      const x = val(a), y = val(b);
+      if (x == null && y == null) return nameOf(a.id).localeCompare(nameOf(b.id));
+      if (x == null) return 1; if (y == null) return -1;
+      return (typeof x === 'string' ? x.localeCompare(y) : x - y) * d || nameOf(a.id).localeCompare(nameOf(b.id));
+    });
+    $('bookCount').textContent = `${every.length} PIECES · ${every.filter((r) => r.asks).length} WITH ASKS`;
+    document.querySelectorAll('.mk-book [data-sort]').forEach((b) => b.setAttribute('aria-sort', b.dataset.sort === k ? (d > 0 ? 'ascending' : 'descending') : 'none'));
+    $('book').replaceChildren(...rows.map((r) => {
+      const it = items[r.id] || {};
+      const tr = document.createElement('tr');
+      if (only === r.id) tr.className = 'on';
+      tr.innerHTML = `<td><span class="mk-pc"><canvas aria-hidden="true"></canvas><span><b></b><span class="mk-cw"><span class="mk-dots">${dots(it.color)}</span><span class="mono"></span></span></span></span></td>`
+        + `<td class="num mono" data-l="ASKS"><span>${r.asks || '—'}</span></td><td class="num mono" data-l="FLOOR"><span>${c(r.floor)}</span></td><td class="num mono" data-l="LAST"><span>${c(r.last)}</span></td>`
+        + `<td class="num mono mk-chg" data-l="CHANGE"><span>${pct(r.chg)}</span></td><td class="num mono" data-l="24H VOL"><span>${r.vol ? c(r.vol) : '—'}</span></td><td class="mk-go"></td>`;
+      tr.querySelector('b').textContent = it.name || r.id;
+      tr.querySelector('.mk-cw .mono').textContent = it.color || '';
+      const cv = tr.querySelector('canvas');
+      if (items[r.id]) { if (it.accessory) cv.className = 'mk-tall'; GoodItems.draw(it, cv).catch(() => {}); }
+      cv.addEventListener('contextmenu', (e) => e.preventDefault());
+      if (r.asks) {
+        const b = document.createElement('button'); b.type = 'button'; b.className = 'mk-btn mono'; b.textContent = only === r.id ? 'ALL ASKS' : 'VIEW ASKS';
+        b.onclick = () => { only = only === r.id ? null : r.id; drawBook(); drawListings(); if (only) $('asks').scrollIntoView({ behavior: 'smooth' }); };
+        tr.querySelector('.mk-go').append(b);
+      }
+      return tr;
+    }));
+  }
+
+  function drawTrades() {
+    const tab = document.querySelector('#tradeTabs [aria-selected="true"]').dataset.t;
+    const bought = trades.filter((t) => t.type === 'buy'), sold = trades.filter((t) => t.type === 'sell');
+    const spent = bought.reduce((a, t) => a + t.price, 0), earned = sold.reduce((a, t) => a + t.price, 0), net = earned - spent;
+    $('tradeSum').innerHTML = `<div><dt>BOUGHT</dt><dd>${bought.length} · ${c(spent)}</dd></div><div><dt>SOLD</dt><dd>${sold.length} · ${c(earned)}</dd></div>`
+      + `<div><dt>NET</dt><dd>${net > 0 ? '+' : net < 0 ? '−' : ''}${coin}${Math.abs(net)}</dd></div><div><dt>LISTED NOW</dt><dd>${listings.filter((l) => l.mine).length}</dd></div>`;
+    const rows = trades.filter((t) => tab === 'all' || t.type === tab || (tab === 'list' && t.type === 'unlist'));
+    const TYPE = { buy: 'BOUGHT', sell: 'SOLD', list: 'LISTED', unlist: 'UNLISTED' };
+    $('tradeEmpty').hidden = rows.length > 0;
+    $('tradeRows').replaceChildren(...rows.map((t) => {
+      const tr = document.createElement('tr');
+      tr.className = `mk-t-${t.type}`;
+      const amt = t.type === 'buy' ? `−${coin}${t.price}` : t.type === 'sell' ? `+${coin}${t.price}` : `<span class="mk-dim">${coin}${t.price}</span>`;
+      tr.innerHTML = `<td class="mono"></td><td class="mono"><span class="mk-type">${TYPE[t.type] || ''}</span></td><td></td><td class="mono"></td><td class="mono"></td><td class="num mono">${amt}</td>`;
+      const td = tr.children;
+      td[0].textContent = when(t.at); td[2].textContent = nameOf(t.item); td[3].textContent = t.serial; td[4].textContent = t.with || '—';
+      return tr;
+    }));
+  }
 
   function piece(it, serial) {
     const f = document.createElement('figure');
@@ -38,16 +141,22 @@
 
   function drawWallet() {
     $('wallet').innerHTML = me ? `${me.name} · ${coin}${me.coins} GOOD® COINS` : '<a href="account">SIGN IN</a> TO BUY AND SELL';
+    $('tradesBtn').hidden = !me;
     window.GoodNav?.update(me);
   }
 
   function drawListings() {
     const q = $('q').value.trim().toLowerCase();
+    const sort = $('sort').value;
+    const fl = $('filter');
+    fl.hidden = !only;
+    if (only) { fl.innerHTML = 'SHOWING <b></b> <button type="button" class="mk-clear mono">SHOW ALL</button>'; fl.querySelector('b').textContent = nameOf(only); fl.querySelector('button').onclick = () => { only = null; drawBook(); drawListings(); }; }
     const rows = listings.filter((l) => {
+      if (only && l.item !== only) return false;
       if (!q) return true;
       const it = items[l.item] || {};
       return `${it.name} ${it.color} ${l.seller} ${l.serial}`.toLowerCase().includes(q);
-    });
+    }).sort((a, b) => (sort === 'new' ? b.at.localeCompare(a.at) : sort === 'high' ? b.price - a.price : a.price - b.price));
     $('saleCount').textContent = `${listings.length} FOR SALE`;
     $('empty').hidden = listings.length > 0;
     $('listings').replaceChildren(...rows.map((l) => {
@@ -86,12 +195,14 @@
   // Your pieces: every serialized copy from every GOOD® CRATE can be listed (not the owner's GD-999 set).
   function drawDoubles() {
     if (!me) { $('sellNote').innerHTML = '<a class="foot-link" href="account">Sign in</a> to list your pieces.'; $('doubles').replaceChildren(); return; }
-    const count = {};
+    const count = {}, stats = Object.fromEntries(book().map((r) => [r.id, r]));
     for (const e of inventory) count[e.item] = (count[e.item] || 0) + 1;
     const spare = inventory.filter((e) => e.serial !== 'GD-999').sort((a, b) => a.item.localeCompare(b.item) || (+a.serial.slice(3) || 0) - (+b.serial.slice(3) || 0));
     if (!spare.length) { $('doubles').replaceChildren(Object.assign(document.createElement('p'), { className: 'mk-empty', textContent: 'Nothing to sell yet. Every piece you pull from a GOOD® CRATE shows up here.' })); return; }
     $('doubles').replaceChildren(...spare.map((e) => {
       const f = piece(items[e.item], count[e.item] < 2 ? `${e.serial} · YOUR ONLY COPY` : e.serial);
+      const b = stats[e.item];
+      if (b) { const h = document.createElement('span'); h.className = 'mk-hint mono'; h.innerHTML = `FLOOR ${c(b.floor)} · LAST ${c(b.last)}`; f.querySelector('.mk-meta').after(h); }
       const row = document.createElement('form'); row.className = 'mk-row';
       row.innerHTML = `<label class="mk-set mono">${coin}<input type="number" min="1" max="9999" step="1" required aria-label="Price in GOOD® COINS" placeholder="PRICE"></label><button type="submit" class="mk-btn mono">LIST</button>`;
       row.onsubmit = async (ev) => {
@@ -106,26 +217,44 @@
   }
 
   function drawSold() {
-    $('soldBlock').hidden = !sales.length;
-    $('sold').replaceChildren(...sales.map((s) => {
-      const it = items[s.item] || { name: s.item, color: '' };
-      const li = document.createElement('li');
-      li.innerHTML = `<span></span><span>${coin}${s.price}</span>`;
-      li.firstChild.textContent = `${it.name} ${it.color} · ${s.serial}`;
-      return li;
+    $('soldEmpty').hidden = sales.length > 0;
+    $('sold').replaceChildren(...sales.slice(0, 20).map((s) => {
+      const tr = document.createElement('tr');
+      tr.innerHTML = `<td class="mono"></td><td></td><td class="mono"></td><td class="num mono">${c(s.price)}</td>`;
+      tr.children[0].textContent = ago(s.at); tr.children[1].textContent = nameOf(s.item); tr.children[2].textContent = s.serial;
+      return tr;
     }));
   }
+
+  function drawAll() { drawWallet(); drawStats(); drawBook(); drawListings(); drawDoubles(); drawSold(); drawTrades(); }
+  const take = (m, mk) => { me = m.user; inventory = m.inventory || []; listings = mk.listings || []; sales = mk.sales || []; trades = mk.trades || []; };
 
   async function refresh() {
     const [m, mk] = await Promise.all([
       fetch('/api/me', { cache: 'no-store' }).then((r) => (r.ok ? r.json() : { user: null })).catch(() => ({ user: null })),
       fetch('api/crate?market=1', { cache: 'no-store' }).then((r) => r.json()).catch(() => ({ listings: [], sales: [] })),
     ]);
-    me = m.user; inventory = m.inventory || []; listings = mk.listings || []; sales = mk.sales || [];
-    drawWallet(); drawListings(); drawDoubles(); drawSold();
+    take(m, mk); drawAll();
   }
 
   $('q').addEventListener('input', drawListings);
+  $('sort').addEventListener('change', drawListings);
+  $('bookMore').onclick = () => { bookAll = !bookAll; drawBook(); };
+  document.querySelectorAll('.mk-book [data-sort]').forEach((b) => b.addEventListener('click', () => {
+    const k = b.dataset.sort;
+    bookSort = bookSort.key === k ? { key: k, dir: -bookSort.dir } : { key: k, dir: k === 'name' ? 1 : -1 };
+    drawBook();
+  }));
+  // MY TRADES: a window over the page.
+  const dlg = $('trades');
+  $('tradesBtn').onclick = () => { drawTrades(); dlg.showModal(); };
+  $('tradesClose').onclick = () => dlg.close();
+  dlg.addEventListener('click', (e) => { if (e.target === dlg) dlg.close(); });
+  $('tradeTabs').addEventListener('click', (e) => {
+    const t = e.target.closest('[data-t]'); if (!t) return;
+    $('tradeTabs').querySelectorAll('[data-t]').forEach((b) => b.setAttribute('aria-selected', String(b === t)));
+    drawTrades();
+  });
   Promise.all([
     fetch('api/crate').then((r) => r.json()).catch(() => ({ items: [] })),
     fetch('api/crate?crate=2').then((r) => r.json()).catch(() => ({ items: [] })),
@@ -133,7 +262,6 @@
     fetch('api/crate?market=1', { cache: 'no-store' }).then((r) => r.json()).catch(() => ({ listings: [], sales: [] })),
   ]).then(([c1, c2, m, mk]) => {
     for (const it of [...(c1.items || []), ...(c2.items || [])]) items[it.id] = it;
-    me = m.user; inventory = m.inventory || []; listings = mk.listings || []; sales = mk.sales || [];
-    drawWallet(); drawListings(); drawDoubles(); drawSold();
+    take(m, mk); drawAll();
   });
 })();

@@ -4,7 +4,7 @@
 //   GET  /api/crate                     -> { price, refund, goldOdds, items: [{ id, name, color, tier, pct, pulled }] }
 //   POST /api/crate { action: 'open' }  -> { roll: { id, item, serial, gold, dup }, coins }
 //   POST /api/crate { action: 'reset' } -> owner only: clears the owner's own pulls (testing; serials are never reused)
-//   GET  /api/crate?market=1           -> MARKET®: { listings: [{ lid, item, serial, price, seller, at, mine }], sales: [...] }
+//   GET  /api/crate?market=1           -> MARKET®: { listings: [{ lid, item, serial, price, seller, at, mine }], sales: [...], trades: [...yours] }
 //   POST /api/crate { action: 'list', entry, price } | { action: 'unlist', lid } | { action: 'buy', lid }
 // Signed in only. Opening costs 5 GOOD® COINS; the roll happens here, never on
 // the page. Every roll is serialized per item (GD-001, GD-002, ...) and added to
@@ -40,6 +40,11 @@ async function marketRows() {
 // Hold an account's coin lock (the same one opening a crate uses), so coins can't be spent twice.
 const lockUser = async (uid) => !!(await redis('SET', `crate:lock:${uid}`, 1, 'EX', 10, 'NX'));
 const unlockUser = (uid) => redis('DEL', `crate:lock:${uid}`);
+// MY TRADES: each account's own market history (newest first, last 200).
+async function logTrade(uid, row) {
+  await redis('LPUSH', `user:${uid}:trades`, JSON.stringify({ ...row, at: row.at || new Date().toISOString() }));
+  await redis('LTRIM', `user:${uid}:trades`, 0, 199);
+}
 async function market(me, body, res) {
   const action = body.action;
   if (action === 'list') {
@@ -59,6 +64,7 @@ async function market(me, body, res) {
       if (raws.filter((r) => JSON.parse(r).item === entry.item).length < 2) await redis('SREM', `user:${me.uid}:owned`, entry.item);
       const listing = { lid: crypto.randomBytes(8).toString('base64url'), uid: me.uid, seller: me.name || 'GOOD®', entry, price, at: new Date().toISOString() };
       await redis('HSET', 'market', listing.lid, JSON.stringify(listing));
+      await logTrade(me.uid, { type: 'list', item: entry.item, serial: entry.serial, price, at: listing.at });
       res.status(200).json({ ok: true, lid: listing.lid }); return;
     } finally { await unlockUser(me.uid); }
   }
@@ -70,6 +76,7 @@ async function market(me, body, res) {
     if (!(await redis('HDEL', 'market', listing.lid))) { res.status(410).json({ error: 'gone' }); return; }
     await redis('LPUSH', `user:${listing.uid}:inv`, JSON.stringify(listing.entry));
     await redis('SADD', `user:${listing.uid}:owned`, listing.entry.item);
+    await logTrade(listing.uid, { type: 'unlist', item: listing.entry.item, serial: listing.entry.serial, price: listing.price });
     res.status(200).json({ ok: true }); return;
   }
   if (action !== 'buy') { res.status(400).json({ error: 'action' }); return; }
@@ -91,6 +98,9 @@ async function market(me, body, res) {
     await redis('SADD', `user:${buyer.uid}:owned`, listing.entry.item);
     await redis('LPUSH', 'market:sales', JSON.stringify({ item: listing.entry.item, serial: listing.entry.serial, price: listing.price, at }));
     await redis('LTRIM', 'market:sales', 0, 99);
+    const t = { item: listing.entry.item, serial: listing.entry.serial, price: listing.price, at };
+    await logTrade(buyer.uid, { ...t, type: 'buy', with: listing.seller, balance: buyer.coins });
+    await logTrade(listing.uid, { ...t, type: 'sell', with: buyer.name || 'GOOD®', balance: seller ? seller.coins : undefined });
     res.status(200).json({ ok: true, coins: buyer.coins, entry: listing.entry });
   } finally { await unlockUser(me.uid); await unlockUser(listing.uid); }
 }
@@ -176,8 +186,10 @@ module.exports = async function handler(req, res) {
         who[uid] = { name: u.name, slug: slugOf(u.name), skin: !!(await redis('EXISTS', `user:${uid}:skin`)) };
       }
       const listings = rows.map((l) => ({ lid: l.lid, item: l.entry.item, serial: l.entry.serial, price: l.price, seller: (who[l.uid] && who[l.uid].name) || l.seller, sellerSlug: who[l.uid] && who[l.uid].slug, sellerSkin: !!(who[l.uid] && who[l.uid].skin), at: l.at, mine: !!me && l.uid === me.uid }));
-      const sales = ((await redis('LRANGE', 'market:sales', 0, 11)) || []).map((r) => JSON.parse(r));
-      res.status(200).json({ listings, sales }); return;
+      // The last 100 sales feed the tape, the floor/last/change columns and 24H volume.
+      const sales = ((await redis('LRANGE', 'market:sales', 0, 99)) || []).map((r) => JSON.parse(r));
+      const trades = me ? ((await redis('LRANGE', `user:${me.uid}:trades`, 0, 199)) || []).map((r) => JSON.parse(r)) : [];
+      res.status(200).json({ listings, sales, trades }); return;
     } catch { res.status(502).json({ error: 'storage' }); return; }
   }
   // GOOD® CRATE Nº002 (ART® IN MOTION): the pieces, odds and copies pulled, for /inmotion.
