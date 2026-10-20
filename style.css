@@ -1172,3 +1172,69 @@ body.st {
 .cp-card2 .cp-list b { color: #a8203a; }
 .cp-card2 .cp-close, .cp-card2 .cp-later { color: #1f2024; }
 .cp-card2 .cp-go { background: #1f2024; color: #fbfaf6; box-shadow: none; }
+
+/* ---------- MOBILE® REVAMPED® (js/mobile.js): phones keep the player on screen ---------- */
+.m-tabs, .m-stage, .m-bar, .m-done { display: none; }
+@media (max-width: 700px) {
+  :root { --mh: 58px; --sh: calc(50dvh - var(--mh)); }
+  body.m-open { --sh: calc(30dvh - var(--mh) + 40px); }
+  body.fall { height: 100dvh; overflow: hidden; }
+  .im-banner, .site-foot, .cp-crate { display: none !important; }
+  .site-header { position: fixed; top: 0; left: 0; right: 0; z-index: 40; }
+  .stage { display: block; padding: 0; min-height: 0; }
+
+  /* the stage: the player, always on screen */
+  .viewer-wrap { position: fixed; left: 0; right: 0; top: var(--mh); height: var(--sh); z-index: 5; transition: height 0.3s cubic-bezier(0.2, 0.8, 0.2, 1); }
+  #view3d { height: 100% !important; }
+  .viewer-wrap .viewer-bar, .viewer-wrap > .micro, .equipped { display: none !important; }
+  .m-stage { display: block; position: absolute; inset: 0; pointer-events: none; }
+  .m-stage > * { pointer-events: auto; position: absolute; }
+  .m-body { top: 10px; left: 12px; display: flex; gap: 3px; padding: 3px; border-radius: 999px; background: rgba(11, 21, 38, 0.28); border: 1px solid rgba(255, 255, 255, 0.5); backdrop-filter: blur(6px); }
+  .m-body button { border: 0; background: none; color: #fff; font: 700 0.6rem 'Space Mono', monospace; letter-spacing: 0.12em; padding: 6px 10px; border-radius: 999px; cursor: pointer; }
+  .m-body button[aria-checked="true"] { background: #fff; color: #0b1526; }
+  .m-skin { top: 10px; right: 12px; border: 1px solid rgba(255, 255, 255, 0.5); background: rgba(11, 21, 38, 0.28); backdrop-filter: blur(6px); color: #fff; font: 700 0.6rem 'Space Mono', monospace; letter-spacing: 0.12em; padding: 9px 12px; border-radius: 999px; cursor: pointer; }
+  .m-dl { right: 12px; bottom: 30px; width: 50px; height: 50px; border-radius: 50%; border: 0; background: #0000ff; color: #fff; font: 800 1.3rem 'Inter', sans-serif; box-shadow: 0 8px 20px rgba(0, 0, 80, 0.35); cursor: pointer; }
+  body.m-open .m-dl { width: 40px; height: 40px; font-size: 1.05rem; bottom: 26px; }
+
+  /* the panel: tabs, one section at a time, the bar under your thumb */
+  .right-col { position: fixed; left: 0; right: 0; bottom: 0; top: calc(var(--mh) + var(--sh) - 16px); z-index: 20; display: flex; flex-direction: column; gap: 0; background: rgba(250, 248, 243, 0.95); backdrop-filter: blur(14px); border-radius: 22px 22px 0 0; box-shadow: 0 -10px 30px rgba(60, 30, 0, 0.18); transition: top 0.3s cubic-bezier(0.2, 0.8, 0.2, 1); color: var(--ink); }
+  .right-col > .panel.right { flex: 1; min-height: 0; overflow-y: auto; overscroll-behavior: contain; background: none; border: 0; box-shadow: none; backdrop-filter: none; animation: none !important; transform: none !important; padding: 2px 16px 12px; border-radius: 0; }
+  #download, #downloadHint, #mcStand, .panel.right .texture { display: none !important; }
+  .m-tabs { display: flex; align-items: center; gap: 4px; padding: 16px 12px 10px; border-bottom: 1px solid rgba(11, 21, 38, 0.08); position: relative; touch-action: none; }
+  .m-handle { position: absolute; top: 6px; left: 50%; width: 40px; height: 4px; margin-left: -20px; border-radius: 2px; background: rgba(11, 21, 38, 0.22); }
+  .m-tablist { display: flex; gap: 4px; flex: 1; }
+  .m-tabs button { border: 0; background: none; cursor: pointer; font: 700 0.62rem 'Space Mono', monospace; letter-spacing: 0.12em; color: var(--ink-soft); padding: 8px 11px; border-radius: 999px; }
+  .m-tabs [aria-selected="true"] { background: #0000ff; color: #fff; }
+  .m-tabs button[hidden] { display: none; }
+  .m-grow { font-size: 0.9rem !important; padding: 6px 12px !important; border: 1px solid rgba(11, 21, 38, 0.2) !important; transition: transform 0.3s; }
+  body.m-open .m-grow { transform: rotate(180deg); }
+  .m-bar { display: flex; gap: 10px; padding: 10px 16px calc(12px + env(safe-area-inset-bottom)); border-top: 1px solid rgba(11, 21, 38, 0.08); }
+  .m-bar #saveLook { flex: 1; margin: 0; border-radius: 999px; background: #0000ff; color: #fff; border: 0; padding: 11px 12px; }
+  .m-bar #saveLook:hover { background: #0000ff; color: #fff; }
+  .m-share { flex: none; width: 48px; border-radius: 999px; border: 1.5px solid var(--ink); background: none; color: var(--ink); font: 800 1rem 'Inter', sans-serif; cursor: pointer; }
+
+  /* one tab at a time */
+  .fit-cols { display: block; }
+  .fit-col { display: block !important; }
+  .section-tag { margin: 14px 0 10px !important; }
+  body:not([data-mtab="shirt"]) #line { display: none; }
+  body[data-mtab="shirt"] .fit-col:nth-child(2), body[data-mtab="shirt"] #accSection { display: none !important; }
+  body[data-mtab="pants"] .fit-col:first-child, body[data-mtab="pants"] #shoeSection { display: none !important; }
+  body[data-mtab="shoe"] .fit-col:first-child, body[data-mtab="shoe"] #pantsSection > :not(#shoeSection) { display: none !important; }
+  body[data-mtab="acc"] .fit-col:nth-child(2), body[data-mtab="acc"] .fit-col:first-child > :not(#accSection) { display: none !important; }
+  #sleeveSection, #tuckSection { display: inline-block; vertical-align: top; width: calc(50% - 6px); }
+  #sleeveSection { margin-right: 8px; }
+  #sleeveSection[hidden], #tuckSection[hidden] { display: none; }
+
+  /* the strip: one row, swipe sideways; pulled up: a grid */
+  .outfit-carousel .carousel-btn { display: none !important; }
+  .outfits { --rows: 1; grid-auto-columns: 29%; gap: 10px; }
+  body.m-open .outfits { grid-auto-flow: row; grid-template-rows: none; grid-template-columns: repeat(3, minmax(0, 1fr)); grid-auto-columns: auto; overflow: visible; scroll-snap-type: none; }
+  .shoe-cards { flex-wrap: nowrap; overflow-x: auto; scrollbar-width: none; }
+  body.m-open .shoe-cards { flex-wrap: wrap; }
+
+  /* YOUR SKIN: a sheet over everything */
+  .panel.left { display: none; }
+  body.m-you .panel.left { display: block; position: fixed; left: 0; right: 0; bottom: 0; top: calc(var(--mh) + 20px); z-index: 60; overflow-y: auto; border-radius: 22px 22px 0 0; animation: none !important; transform: none !important; background: rgba(250, 248, 243, 0.98); color: var(--ink); padding: 18px 18px 40px; box-shadow: 0 -10px 40px rgba(0, 0, 0, 0.3); }
+  body.m-you .panel.left .m-done { display: block; position: sticky; top: 0; margin: 0 0 6px auto; z-index: 2; border: 0; border-radius: 999px; background: #0000ff; color: #fff; font: 700 0.62rem 'Space Mono', monospace; letter-spacing: 0.14em; padding: 9px 16px; cursor: pointer; }
+}
