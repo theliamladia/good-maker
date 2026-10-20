@@ -1475,11 +1475,11 @@
     await bootDone; addDrop(cat, { filter: 'gud', label: 'GUD™' });
   }).catch(() => {});
 
-  // The ACCESSORY row, under the pants.
+  // The ACCESSORY row: at the foot of the shirt column, across from the shoes.
   if (ACCS.length && !$('accSection')) {
     const sec = document.createElement('div'); sec.id = 'accSection';
     sec.innerHTML = '<div class="section-tag mono">ACCESSORY</div><div class="acc-list"></div>';
-    $('pantsSection').after(sec);
+    ($('tuckSection').closest('.fit-col') || $('pantsSection').parentNode).append(sec);
     drawAccessories();
   }
 
