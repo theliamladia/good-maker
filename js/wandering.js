@@ -235,9 +235,12 @@
   requestAnimationFrame(tick);
 
   // ---------- the looks: scrambled, straight to canvas ----------
-  const scrambled = async (id) => {
-    const r = await fetch(`api/outfit?id=${id}`, { cache: 'no-store' });
-    if (!r.ok) throw new Error('unavailable');
+  const scrambled = async (id, tries = 3) => {
+    const r = await fetch(`api/outfit?id=${id}`, { cache: 'no-store' }).catch(() => null);
+    if (!r || !r.ok) {
+      if (tries > 1 && (!r || r.status >= 500)) { await new Promise((ok) => setTimeout(ok, 800)); return scrambled(id, tries - 1); }
+      throw new Error('unavailable');
+    }
     const { k, d } = await r.json();
     const kb = Uint8Array.from(atob(k), (ch) => ch.charCodeAt(0));
     return createImageBitmap(new Blob([Uint8Array.from(atob(d), (ch, i) => ch.charCodeAt(0) ^ kb[i % kb.length])]));
@@ -257,28 +260,40 @@
   const turntable = (cvs, id) => {
     if (cvs.dataset.asked) return; cvs.dataset.asked = '1';
     scrambled(id.replace(/^wnd-/, 'wnd-spin-')).then((sheet) => {
-      cvs.dataset.spin = '1'; cvs.width = FW; cvs.height = FH;
-      spinners.push({ cvs, sheet, off: spinners.length * 3 });
+      cvs.dataset.spin = '1';
+      spinners.push({ cvs, sheet, off: spinners.length * 3, drag: 0, drawn: -1 });
     }).catch(() => {});
   };
   const near = new IntersectionObserver((es) => es.forEach((e) => {
     const cvs = e.target;
     if (e.isIntersecting) { shown.add(cvs); turntable(cvs, cvs.dataset.look); } else shown.delete(cvs);
   }), { rootMargin: '600px 0px' });
-  let spinLast = -1;
+  // Each spinner remembers the frame it last drew, so a turntable that arrives late (or
+  // with reduced motion on, when nothing turns by itself) is drawn straight away.
   const spinLoop = (now) => {
-    const f = reduce ? 0 : Math.floor(now / STEP);
-    if (f !== spinLast) {
-      spinLast = f;
-      for (const s of spinners) {
-        if (!shown.has(s.cvs) || s.cvs.hidden) continue;
-        const k = (f + s.off) % FRAMES, c = s.cvs.getContext('2d');
-        c.clearRect(0, 0, FW, FH); c.drawImage(s.sheet, k * FW, 0, FW, FH, 0, 0, FW, FH);
-      }
+    const auto = reduce ? 0 : Math.floor(now / STEP);
+    for (const s of spinners) {
+      if (!shown.has(s.cvs) || s.cvs.hidden) continue;
+      const k = (((auto + s.off + s.drag) % FRAMES) + FRAMES) % FRAMES;
+      if (k === s.drawn) continue;
+      s.drawn = k;
+      const c = s.cvs.getContext('2d');
+      c.clearRect(0, 0, FW, FH); c.drawImage(s.sheet, k * FW, 0, FW, FH, 0, 0, FW, FH);
     }
     requestAnimationFrame(spinLoop);
   };
   requestAnimationFrame(spinLoop);
+  // Drag a look to turn it by hand.
+  document.querySelectorAll('.wd-looks figure').forEach((fig) => {
+    let x0 = null, d0 = 0, sp = null;
+    fig.addEventListener('pointerdown', (e) => {
+      sp = spinners.find((s) => s.cvs.parentNode === fig && !s.cvs.hidden); if (!sp) return;
+      x0 = e.clientX; d0 = sp.drag; fig.setPointerCapture(e.pointerId); fig.classList.add('turning');
+    });
+    fig.addEventListener('pointermove', (e) => { if (x0 !== null && sp) sp.drag = d0 + Math.round((e.clientX - x0) / 10); });
+    const up = () => { x0 = null; fig.classList.remove('turning'); };
+    fig.addEventListener('pointerup', up); fig.addEventListener('pointercancel', up);
+  });
   document.querySelectorAll('.wd-looks figure').forEach((f) => {
     const [a, b] = f.querySelectorAll('canvas');
     a.dataset.look = f.dataset.id; still(a, f.dataset.id); near.observe(a);

@@ -62,7 +62,8 @@ a { color: inherit; }
 .wd-col h2 sup { font-size: 0.45em; vertical-align: 0.9em; }
 .wd-copy { font-family: var(--serif); font-style: italic; font-size: clamp(19px, 2vw, 26px); color: #5a5044; margin: 14px 0 8px; max-width: 46ch; }
 .wd-looks { display: grid; grid-template-columns: repeat(3, 1fr); gap: clamp(8px, 2vw, 28px); margin-top: 18px; }
-.wd-looks figure { margin: 0; text-align: center; -webkit-user-select: none; user-select: none; }
+.wd-looks figure { margin: 0; text-align: center; -webkit-user-select: none; user-select: none; cursor: grab; touch-action: pan-y; }
+.wd-looks figure.turning { cursor: grabbing; }
 .wd-looks canvas { width: 100%; max-width: 260px; aspect-ratio: 202 / 407; display: block; margin: 0 auto; image-rendering: auto; pointer-events: none; }
 .wd-looks canvas[hidden] { display: none; }
 .wd-looks figcaption { font-size: 12px; font-weight: 700; letter-spacing: 0.04em; margin-top: 10px; }
