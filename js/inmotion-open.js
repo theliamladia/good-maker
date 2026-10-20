@@ -97,7 +97,7 @@
     if ((j.achievements || []).length) $('gotMeta').innerHTML += j.achievements.map((a) => `<br><b class="im-ach">★ ACHIEVEMENT UNLOCKED: ${a.name}</b>`).join('');
     $('got').hidden = false;
     me.coins = j.coins;
-    document.querySelectorAll('[data-acct]').forEach((a) => { a.innerHTML = `${me.name} · ${coin}${me.coins}`; });
+    window.GoodNav?.update(me);
     state = 'idle'; drawButton(); again.disabled = false;
     again.textContent = me.coins >= price ? `OPEN ANOTHER · ${price} GOOD® COINS` : `NEED ${price} GOOD® COINS`;
     again.disabled = me.coins < price;

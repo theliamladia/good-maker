@@ -12,9 +12,7 @@
   const coin = '<span class="coin" aria-hidden="true"></span>';
 
   function drawNav() {
-    document.querySelectorAll('[data-acct]').forEach((a) => {
-      a.innerHTML = me ? `${me.name} · ${coin}${me.coins}` : 'SIGN IN';
-    });
+    window.GoodNav?.update(me);
   }
   function drawButton() {
     clearTimeout(sureT);

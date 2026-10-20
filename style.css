@@ -457,6 +457,12 @@ body.fall .site-header { background: #4f6b45; }
 @keyframes fade { from { opacity: 0; } }
 @keyframes pop { from { opacity: 0; transform: scale(0.94) translateY(8px); } }
 
+/* ---------- ACCOUNT avatar in the nav ---------- */
+.nav-avatar, .nav-link.nav-avatar { display: inline-grid; place-items: center; width: 30px; height: 30px; padding: 0; vertical-align: middle; }
+.nav-avatar svg { width: 26px; height: 26px; }
+.nav-avatar canvas { width: 26px; height: 26px; image-rendering: pixelated; outline: 1.5px solid currentColor; outline-offset: 1px; }
+.site-nav .nav-link.nav-avatar:hover, .site-nav .nav-link.nav-avatar:focus-visible { opacity: 0.75; }
+
 /* ---------- CRT ---------- */
 .crt-scanlines, .crt-vignette { position: fixed; inset: 0; pointer-events: none; z-index: 1000; }
 .crt-scanlines {

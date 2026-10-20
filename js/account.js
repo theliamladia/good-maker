@@ -21,8 +21,7 @@
     clearTimeout(toastT); toastT = setTimeout(() => { t.hidden = true; }, 2600);
   }
   function draw() {
-    $('acctBtn').innerHTML = me ? `${esc(me.name)} · <span class="coin" aria-hidden="true"></span>${me.coins}` : 'SIGN IN';
-    $('acctBtn').setAttribute('aria-label', me ? `${me.name}, ${me.coins} GOOD® COINS` : 'Sign in');
+    window.GoodNav?.update(me);
     $('homeSkin').hidden = !me;
     if (me) $('homeUse').hidden = !me.hasSkin;
   }
@@ -38,7 +37,7 @@
   $('homeSave').onclick = async () => {
     const png = skinPng();
     if (!png) { toast('LOAD YOUR SKIN FIRST (UPLOAD OR USERNAME).'); return; }
-    try { await post('api/me', { action: 'skin', png }); me.hasSkin = true; draw(); toast('HOME SKIN SAVED. IT LOADS EVERY TIME YOU VISIT.'); }
+    try { await post('api/me', { action: 'skin', png }); me.hasSkin = true; draw(); window.GoodNav?.update(me, true); toast('HOME SKIN SAVED. IT LOADS EVERY TIME YOU VISIT.'); }
     catch { toast('COULDN’T SAVE YOUR SKIN. TRY AGAIN.'); }
   };
   async function useHome() {
