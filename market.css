@@ -1,0 +1,44 @@
+/* MARKET® (/market): GOOD® BLUE, pieces in a soft spotlight, lots of air. */
+.mk-page .co-title { font-weight: 600; letter-spacing: -0.045em; }
+.mk-page .co-head h2 { font-weight: 700; }
+.mk-wallet { margin: 40px 0 0; font-size: 0.7rem; letter-spacing: 0.2em; opacity: 0.9; }
+.mk-wallet a { color: inherit; }
+
+.mk-q { width: 100%; max-width: 420px; margin: 0 0 clamp(40px, 6vh, 64px); padding: 12px 14px; border: 1px solid rgba(255, 255, 255, 0.6); background: transparent; color: #fff; font-size: 0.7rem; letter-spacing: 0.16em; outline: none; }
+.mk-q::placeholder { color: rgba(255, 255, 255, 0.6); }
+.mk-q:focus { border-color: #fff; }
+
+.mk-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: clamp(40px, 6vh, 72px) clamp(28px, 4vw, 56px); }
+@media (max-width: 900px) { .mk-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+@media (max-width: 520px) { .mk-grid { grid-template-columns: 1fr; } }
+
+.mk-card { margin: 0; text-align: center; }
+.mk-spot { display: grid; place-items: center; aspect-ratio: 1 / 1; background: radial-gradient(closest-side, rgba(255, 255, 255, 0.55), rgba(255, 255, 255, 0.12) 60%, transparent 100%); }
+.mk-spot canvas.mk-bottom { width: 34%; }
+.mk-spot canvas.mk-tall { width: 24%; }
+.mk-spot canvas { width: 46%; height: auto; image-rendering: pixelated; -webkit-user-select: none; user-select: none; }
+.mk-card figcaption { margin-top: 18px; display: grid; justify-items: center; gap: 10px; }
+.mk-name { font-weight: 500; font-size: 1.05rem; letter-spacing: -0.01em; }
+.mk-cw { display: inline-flex; align-items: center; gap: 10px; font: 400 0.62rem 'Space Mono', monospace; letter-spacing: 0.2em; }
+.mk-dots { display: inline-flex; gap: 5px; }
+.mk-dots i { width: 12px; height: 12px; border-radius: 50%; box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.8); }
+.mk-meta { font-size: 0.6rem; letter-spacing: 0.2em; opacity: 0.7; }
+
+.mk-row { display: flex; align-items: center; justify-content: center; gap: 14px; margin-top: 6px; }
+.mk-price { font-size: 0.85rem; letter-spacing: 0.08em; }
+.mk-btn { border: 1px solid #fff; background: transparent; color: #fff; font-size: 0.64rem; letter-spacing: 0.2em; padding: 10px 16px; cursor: pointer; }
+.mk-btn:hover:not(:disabled), .mk-btn:focus-visible { background: #fff; color: #0000ff; outline: none; }
+.mk-btn.mk-sure { background: #fff; color: #0000ff; }
+.mk-btn:disabled { opacity: 0.5; cursor: default; }
+.mk-set { display: inline-flex; align-items: center; gap: 2px; border-bottom: 1px solid rgba(255, 255, 255, 0.7); padding: 4px 2px; }
+.mk-set input { width: 70px; border: 0; background: transparent; color: #fff; font: 400 0.85rem 'Space Mono', monospace; outline: none; -moz-appearance: textfield; }
+.mk-set input::placeholder { color: rgba(255, 255, 255, 0.55); font-size: 0.62rem; letter-spacing: 0.18em; }
+.mk-set input::-webkit-inner-spin-button { -webkit-appearance: none; }
+
+.mk-note, .mk-empty { max-width: 38em; line-height: 1.65; font-weight: 300; opacity: 0.92; margin: 0 0 clamp(40px, 6vh, 60px); }
+.mk-empty a, .mk-note a { color: inherit; }
+.mk-sold { list-style: none; margin: 0; padding: 0; max-width: 720px; }
+.mk-sold li { display: flex; justify-content: space-between; gap: 20px; padding: 14px 0; border-bottom: 1px solid rgba(255, 255, 255, 0.25); font-size: 0.66rem; letter-spacing: 0.16em; }
+
+.mk-toast { position: fixed; left: 50%; bottom: 28px; transform: translateX(-50%); z-index: 960; background: #fff; color: #0000ff; padding: 12px 20px; font-size: 0.68rem; font-weight: 700; letter-spacing: 0.16em; box-shadow: 0 10px 30px rgba(0, 0, 40, 0.35); max-width: calc(100vw - 32px); text-align: center; }
+.mk-toast[hidden] { display: none; }

@@ -4,6 +4,8 @@
 //   GET  /api/crate                     -> { price, refund, goldOdds, items: [{ id, name, color, tier, pct, pulled }] }
 //   POST /api/crate { action: 'open' }  -> { roll: { id, item, serial, gold, dup }, coins }
 //   POST /api/crate { action: 'reset' } -> owner only: clears the owner's own pulls (testing; serials are never reused)
+//   GET  /api/crate?market=1           -> MARKET®: { listings: [{ lid, item, serial, price, seller, at, mine }], sales: [...] }
+//   POST /api/crate { action: 'list', entry, price } | { action: 'unlist', lid } | { action: 'buy', lid }
 // Signed in only. Opening costs 5 GOOD® COINS; the roll happens here, never on
 // the page. Every roll is serialized per item (GD-001, GD-002, ...) and added to
 // the account's inventory (user:<uid>:inv). A piece you already had refunds 2.
@@ -22,6 +24,74 @@ function pick(odds) {
   return odds[odds.length - 1][0];
 }
 const serialOf = (n) => `GD-${String(n).padStart(3, '0')}`;
+
+// MARKET®: spare copies listed for GOOD® COINS. Listing moves the copy out of the seller's
+// inventory into the market (hash market: lid -> { lid, uid, seller, entry, price, at });
+// buying moves it, serial and all, into the buyer's inventory and the coins to the seller.
+// A seller always keeps at least one copy of a piece, and the owner's GD-999 set never trades.
+const MARKET_MAX_PRICE = 9999, MARKET_MAX_LISTINGS = 20;
+async function marketRows() {
+  const flat = (await redis('HGETALL', 'market')) || [];
+  const rows = [];
+  for (let i = 0; i < flat.length; i += 2) { try { rows.push(JSON.parse(flat[i + 1])); } catch {} }
+  return rows.sort((a, b) => b.at.localeCompare(a.at));
+}
+// Hold an account's coin lock (the same one opening a crate uses), so coins can't be spent twice.
+const lockUser = async (uid) => !!(await redis('SET', `crate:lock:${uid}`, 1, 'EX', 10, 'NX'));
+const unlockUser = (uid) => redis('DEL', `crate:lock:${uid}`);
+async function market(me, body, res) {
+  const action = body.action;
+  if (action === 'list') {
+    const price = Math.floor(+body.price);
+    if (!(price >= 1 && price <= MARKET_MAX_PRICE)) { res.status(400).json({ error: 'price' }); return; }
+    if (!(await lockUser(me.uid))) { res.status(409).json({ error: 'busy' }); return; }
+    try {
+      const mine = (await marketRows()).filter((l) => l.uid === me.uid);
+      if (mine.length >= MARKET_MAX_LISTINGS) { res.status(400).json({ error: 'too_many' }); return; }
+      const raws = (await redis('LRANGE', `user:${me.uid}:inv`, 0, -1)) || [];
+      const raw = raws.find((r) => JSON.parse(r).id === body.entry);
+      if (!raw) { res.status(404).json({ error: 'not_found' }); return; }
+      const entry = JSON.parse(raw);
+      if (entry.serial === 'GD-999') { res.status(400).json({ error: 'not_tradable' }); return; }
+      if (raws.filter((r) => JSON.parse(r).item === entry.item).length < 2) { res.status(400).json({ error: 'last_copy' }); return; }
+      if (!(await redis('LREM', `user:${me.uid}:inv`, 1, raw))) { res.status(409).json({ error: 'busy' }); return; }
+      const listing = { lid: crypto.randomBytes(8).toString('base64url'), uid: me.uid, seller: me.name || 'GOOD®', entry, price, at: new Date().toISOString() };
+      await redis('HSET', 'market', listing.lid, JSON.stringify(listing));
+      res.status(200).json({ ok: true, lid: listing.lid }); return;
+    } finally { await unlockUser(me.uid); }
+  }
+  const raw = await redis('HGET', 'market', String(body.lid || ''));
+  if (!raw) { res.status(410).json({ error: 'gone' }); return; }
+  const listing = JSON.parse(raw);
+  if (action === 'unlist') {
+    if (listing.uid !== me.uid && !isOwner(me)) { res.status(403).json({ error: 'not_yours' }); return; }
+    if (!(await redis('HDEL', 'market', listing.lid))) { res.status(410).json({ error: 'gone' }); return; }
+    await redis('LPUSH', `user:${listing.uid}:inv`, JSON.stringify(listing.entry));
+    await redis('SADD', `user:${listing.uid}:owned`, listing.entry.item);
+    res.status(200).json({ ok: true }); return;
+  }
+  if (action !== 'buy') { res.status(400).json({ error: 'action' }); return; }
+  if (listing.uid === me.uid) { res.status(400).json({ error: 'own_listing' }); return; }
+  if (!(await lockUser(me.uid))) { res.status(409).json({ error: 'busy' }); return; }
+  if (!(await lockUser(listing.uid))) { await unlockUser(me.uid); res.status(409).json({ error: 'busy' }); return; }
+  try {
+    const buyer = JSON.parse((await redis('GET', `user:${me.uid}`)) || 'null');
+    if (!buyer) { res.status(401).json({ error: 'signed_out' }); return; }
+    if ((buyer.coins || 0) < listing.price) { res.status(402).json({ error: 'coins', coins: buyer.coins || 0 }); return; }
+    // Claim the listing first: only one buyer can ever remove it.
+    if (!(await redis('HDEL', 'market', listing.lid))) { res.status(410).json({ error: 'gone' }); return; }
+    buyer.coins = (buyer.coins || 0) - listing.price;
+    await saveUser(buyer);
+    const seller = JSON.parse((await redis('GET', `user:${listing.uid}`)) || 'null');
+    if (seller) { seller.coins = (seller.coins || 0) + listing.price; await saveUser(seller); }
+    const at = new Date().toISOString();
+    await redis('LPUSH', `user:${buyer.uid}:inv`, JSON.stringify({ ...listing.entry, bought: at }));
+    await redis('SADD', `user:${buyer.uid}:owned`, listing.entry.item);
+    await redis('LPUSH', 'market:sales', JSON.stringify({ item: listing.entry.item, serial: listing.entry.serial, price: listing.price, at }));
+    await redis('LTRIM', 'market:sales', 0, 99);
+    res.status(200).json({ ok: true, coins: buyer.coins, entry: listing.entry });
+  } finally { await unlockUser(me.uid); await unlockUser(listing.uid); }
+}
 
 // One-time repair: no two copies of a piece may share a serial. The earliest
 // pull keeps it; later ones move to the next free number. Every counter then
@@ -91,6 +161,16 @@ module.exports = async function handler(req, res) {
       res.status(200).json({ rows }); return;
     } catch { res.status(502).json({ error: 'storage' }); return; }
   }
+  // MARKET®: what's for sale (seller names only, never account ids) and the latest sales.
+  if (req.method === 'GET' && req.query && req.query.market) {
+    try {
+      if (!configured()) { res.status(200).json({ listings: [], sales: [] }); return; }
+      const me = await currentUser(req).catch(() => null);
+      const listings = (await marketRows()).map((l) => ({ lid: l.lid, item: l.entry.item, serial: l.entry.serial, price: l.price, seller: l.seller, at: l.at, mine: !!me && l.uid === me.uid }));
+      const sales = ((await redis('LRANGE', 'market:sales', 0, 11)) || []).map((r) => JSON.parse(r));
+      res.status(200).json({ listings, sales }); return;
+    } catch { res.status(502).json({ error: 'storage' }); return; }
+  }
   // GOOD® CRATE Nº002 (ART® IN MOTION): the pieces, odds and copies pulled, for /inmotion.
   if (req.method === 'GET' && req.query && req.query.crate === '2') {
     let pulled = {};
@@ -126,6 +206,10 @@ module.exports = async function handler(req, res) {
       for (const f of ['weewy-sowwy', 'en-plein-air']) if ((await redis('GET', `ach:${f}:first`)) === me.uid) await redis('DEL', `ach:${f}:first`);
       for (const a of ['weewy-sowwy', 'im-sowwy', 'scarfin-it-down', 'en-plein-air', 'creatif']) { await redis('SREM', `user:${me.uid}:ach`, a); await redis('SREM', `ach:${a}`, me.uid); }
       res.status(200).json({ ok: true }); return;
+    }
+    if (['list', 'unlist', 'buy'].includes(action)) {
+      if (await overLimit(req, `market:${me.uid}`, 60)) { res.status(429).json({ error: 'slow_down' }); return; }
+      await market(me, body, res); return;
     }
     if (action !== 'open') { res.status(400).json({ error: 'action' }); return; }
     await dedupeSerials();

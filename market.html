@@ -1,0 +1,77 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>MARKET® · GOOD®</title>
+  <meta name="description" content="MARKET®: trade your spare GOOD® pieces for GOOD® COINS. Every copy keeps its serial.">
+  <link rel="canonical" href="https://good.leems.me/market">
+  <meta name="theme-color" content="#0000ff">
+  <meta property="og:site_name" content="GOOD®">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://good.leems.me/market">
+  <meta property="og:title" content="MARKET® · GOOD®">
+  <meta property="og:description" content="Trade your spare GOOD® pieces for GOOD® COINS. Every copy keeps its serial.">
+  <meta property="og:image" content="https://good.leems.me/assets/og-site.png?v=2">
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+  <link rel="icon" href="/favicon-32.png" sizes="32x32" type="image/png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="collab.css">
+  <link rel="stylesheet" href="market.css">
+</head>
+<body class="co-page mk-page">
+
+<header class="site-header">
+  <a class="wordmark" href="./">GOOD®</a>
+  <nav class="site-nav" aria-label="Main">
+    <a class="nav-link mono" href="./">MAKER®</a>
+    <a class="nav-link mono" href="releases">RELEASES®</a>
+    <a class="nav-link mono" href="market" aria-current="page">MARKET®</a>
+    <a class="nav-link mono" href="colors">COLORS®</a>
+    <a class="nav-link mono" href="study">STUDY®</a>
+    <a class="nav-link mono" href="members">MEMBERS®</a>
+    <a class="nav-link mono" href="collaborations">COLLABORATIONS®</a>
+    <a class="nav-link mono" href="account" data-acct>ACCOUNT</a>
+  </nav>
+</header>
+
+<main class="co-main">
+  <section class="co-hero">
+    <p class="co-tag mono">GOOD® · MARKET®</p>
+    <h1 class="co-title">MARKET<span>®</span></h1>
+    <p class="co-lede">A second pull, a spare copy, a piece someone else is still chasing. List your doubles for GOOD® COINS, or find the one you're missing. Every copy keeps its serial.</p>
+    <p class="mk-wallet mono" id="wallet" aria-live="polite">&nbsp;</p>
+  </section>
+
+  <section class="co-block" aria-labelledby="saleTitle">
+    <header class="co-head"><p class="co-tag mono" id="saleCount">FOR SALE</p><h2 id="saleTitle">For sale</h2></header>
+    <input type="search" class="mk-q mono" id="q" placeholder="SEARCH A PIECE OR A SELLER" aria-label="Search the market" autocomplete="off" spellcheck="false">
+    <div class="mk-grid" id="listings"></div>
+    <p class="mk-empty" id="empty" hidden>Nothing for sale right now. Open a <a class="foot-link" href="inmotion">GOOD® CRATE</a>; your doubles can be listed here.</p>
+  </section>
+
+  <section class="co-block" aria-labelledby="sellTitle" id="sell">
+    <header class="co-head"><p class="co-tag mono">YOUR DOUBLES</p><h2 id="sellTitle">Sell</h2></header>
+    <p class="mk-note" id="sellNote">You can list any copy beyond your first, so you always keep one. Set a price in GOOD® COINS; the coins are yours the moment someone buys it.</p>
+    <div class="mk-grid" id="doubles"></div>
+  </section>
+
+  <section class="co-block" aria-labelledby="soldTitle" id="soldBlock" hidden>
+    <header class="co-head"><p class="co-tag mono">LATEST</p><h2 id="soldTitle">Recently sold</h2></header>
+    <ul class="mk-sold mono" id="sold"></ul>
+  </section>
+</main>
+
+<div class="mk-toast mono" id="toast" hidden></div>
+<footer class="site-foot mono">© 2026 GOOD®. All rights reserved. · <a class="foot-link" href="/privacy">PRIVACY</a></footer>
+
+<script src="js/skin.js"></script>
+<script src="js/colors.js"></script>
+<script src="js/gooditems.js"></script>
+<script src="js/market.js"></script>
+<script src="js/nav.js"></script>
+</body>
+</html>
