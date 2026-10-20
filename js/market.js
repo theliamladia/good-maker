@@ -51,7 +51,15 @@
     $('saleCount').textContent = `${listings.length} FOR SALE`;
     $('empty').hidden = listings.length > 0;
     $('listings').replaceChildren(...rows.map((l) => {
-      const f = piece(items[l.item], `${l.serial} · ${l.seller}`);
+      const f = piece(items[l.item], l.serial);
+      // The seller: their player head and name, linking to their profile.
+      const who = document.createElement(l.sellerSlug ? 'a' : 'span');
+      who.className = 'mk-seller mono';
+      if (l.sellerSlug) who.href = `/profiles/${encodeURIComponent(l.sellerSlug)}`;
+      const av = document.createElement('canvas'); av.className = 'mk-av'; av.setAttribute('aria-hidden', 'true');
+      who.append(av, l.seller || 'GOOD®');
+      GoodHeads.draw(av, l.sellerSkin && l.sellerSlug ? `api/profile?name=${encodeURIComponent(l.sellerSlug)}&skin=1` : null);
+      f.querySelector('.mk-meta').after(who);
       const row = document.createElement('div'); row.className = 'mk-row';
       row.innerHTML = `<span class="mk-price mono">${coin}${l.price}</span>`;
       const b = document.createElement('button'); b.type = 'button'; b.className = 'mk-btn mono';
@@ -75,12 +83,12 @@
     }));
   }
 
-  // Your pieces: every serialized copy can be listed (not the owner's GD-999 set).
+  // Your pieces: every serialized copy from every GOOD® CRATE can be listed.
   function drawDoubles() {
     if (!me) { $('sellNote').innerHTML = '<a class="foot-link" href="account">Sign in</a> to list your pieces.'; $('doubles').replaceChildren(); return; }
     const count = {};
     for (const e of inventory) count[e.item] = (count[e.item] || 0) + 1;
-    const spare = inventory.filter((e) => e.serial !== 'GD-999').sort((a, b) => a.item.localeCompare(b.item) || (+a.serial.slice(3) || 0) - (+b.serial.slice(3) || 0));
+    const spare = [...inventory].sort((a, b) => a.item.localeCompare(b.item) || (+a.serial.slice(3) || 0) - (+b.serial.slice(3) || 0));
     if (!spare.length) { $('doubles').replaceChildren(Object.assign(document.createElement('p'), { className: 'mk-empty', textContent: 'Nothing to sell yet. Every piece you pull from a GOOD® CRATE shows up here.' })); return; }
     $('doubles').replaceChildren(...spare.map((e) => {
       const f = piece(items[e.item], count[e.item] < 2 ? `${e.serial} · YOUR ONLY COPY` : e.serial);
