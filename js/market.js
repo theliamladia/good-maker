@@ -1,6 +1,6 @@
 // MARKET® (/market): spare serialized copies listed for GOOD® COINS. The server does every
 // check and moves the coins and the copy (POST /api/crate { action: 'list' | 'unlist' | 'buy' });
-// this page shows the listings, your doubles, and asks ARE YOU SURE? before a purchase.
+// this page shows the listings, your pieces, and asks ARE YOU SURE? before a purchase.
 (() => {
   const $ = (id) => document.getElementById(id);
   const coin = '<span class="coin" aria-hidden="true"></span>';
@@ -20,7 +20,7 @@
     if (!r.ok) { const e = new Error(j.error || 'failed'); e.code = j.error; e.coins = j.coins; throw e; }
     return j;
   }
-  const ERR = { coins: 'NOT ENOUGH GOOD® COINS.', gone: 'SOMEONE GOT THERE FIRST.', busy: 'ONE MOMENT. TRY AGAIN.', last_copy: 'YOU ALWAYS KEEP ONE COPY.', price: 'PRICE: 1 TO 9999 GOOD® COINS.', too_many: 'TWENTY LISTINGS AT A TIME.', own_listing: 'THAT ONE IS YOURS.', slow_down: 'SLOW DOWN A LITTLE.', signed_out: 'SIGN IN FIRST.' };
+  const ERR = { coins: 'NOT ENOUGH GOOD® COINS.', gone: 'SOMEONE GOT THERE FIRST.', busy: 'ONE MOMENT. TRY AGAIN.', price: 'PRICE: 1 TO 9999 GOOD® COINS.', too_many: 'TWENTY LISTINGS AT A TIME.', own_listing: 'THAT ONE IS YOURS.', slow_down: 'SLOW DOWN A LITTLE.', signed_out: 'SIGN IN FIRST.' };
 
   function piece(it, serial) {
     const f = document.createElement('figure');
@@ -75,21 +75,21 @@
     }));
   }
 
-  // Your doubles: every copy beyond the first of a piece (the lowest serial stays with you).
+  // Your pieces: every serialized copy can be listed (not the owner's GD-999 set).
   function drawDoubles() {
-    if (!me) { $('sellNote').innerHTML = '<a class="foot-link" href="account">Sign in</a> to list your doubles.'; $('doubles').replaceChildren(); return; }
-    const by = {};
-    for (const e of inventory) if (e.serial !== 'GD-999') (by[e.item] ||= []).push(e);
-    const spare = Object.values(by).flatMap((list) => list.sort((a, b) => (+a.serial.slice(3) || 0) - (+b.serial.slice(3) || 0)).slice(1));
-    if (!spare.length) { $('doubles').replaceChildren(Object.assign(document.createElement('p'), { className: 'mk-empty', textContent: 'No doubles yet. Every piece you pull twice shows up here.' })); return; }
+    if (!me) { $('sellNote').innerHTML = '<a class="foot-link" href="account">Sign in</a> to list your pieces.'; $('doubles').replaceChildren(); return; }
+    const count = {};
+    for (const e of inventory) count[e.item] = (count[e.item] || 0) + 1;
+    const spare = inventory.filter((e) => e.serial !== 'GD-999').sort((a, b) => a.item.localeCompare(b.item) || (+a.serial.slice(3) || 0) - (+b.serial.slice(3) || 0));
+    if (!spare.length) { $('doubles').replaceChildren(Object.assign(document.createElement('p'), { className: 'mk-empty', textContent: 'Nothing to sell yet. Every piece you pull from a GOOD® CRATE shows up here.' })); return; }
     $('doubles').replaceChildren(...spare.map((e) => {
-      const f = piece(items[e.item], e.serial);
+      const f = piece(items[e.item], count[e.item] < 2 ? `${e.serial} · YOUR ONLY COPY` : e.serial);
       const row = document.createElement('form'); row.className = 'mk-row';
       row.innerHTML = `<label class="mk-set mono">${coin}<input type="number" min="1" max="9999" step="1" required aria-label="Price in GOOD® COINS" placeholder="PRICE"></label><button type="submit" class="mk-btn mono">LIST</button>`;
       row.onsubmit = async (ev) => {
         ev.preventDefault();
         const b = row.querySelector('button'); b.disabled = true;
-        try { await post({ action: 'list', entry: e.id, price: +row.querySelector('input').value }); toast(`LISTED: ${e.serial}.`); await refresh(); }
+        try { await post({ action: 'list', entry: e.id, price: +row.querySelector('input').value }); toast(count[e.item] < 2 ? `LISTED: ${e.serial}. IT LOCKS IN MAKER® UNTIL IT SELLS OR YOU UNLIST IT.` : `LISTED: ${e.serial}.`); await refresh(); }
         catch (err) { toast(ERR[err.code] || 'COULDN’T LIST IT. TRY AGAIN.'); b.disabled = false; }
       };
       f.querySelector('figcaption').append(row);
