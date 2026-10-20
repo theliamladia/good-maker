@@ -19,7 +19,7 @@ a { color: inherit; }
 .wd-hero { min-height: 100vh; min-height: 100svh; display: flex; flex-direction: column; justify-content: flex-start;
   padding: clamp(84px, 14vh, 160px) clamp(16px, 6vw, 96px) 0; }
 .wd-title { margin: 0; font-family: var(--pixel); font-weight: 400; line-height: 1.15; color: var(--duck);
-  text-shadow: 4px 4px 0 #1a0f08, 0 0 24px rgba(226, 103, 42, 0.35); }
+  text-shadow: none; }
 .wd-title sup { font-size: 0.42em; vertical-align: 0.9em; }
 .wd-by { display: block; font-size: clamp(22px, 5.2vw, 72px); }
 .wd-name { display: block; font-size: clamp(34px, 9vw, 132px); margin-top: 0.12em; }
