@@ -6,7 +6,7 @@
 
 .co-hero { padding: clamp(72px, 14vh, 160px) 0 clamp(80px, 14vh, 150px); }
 .co-title {
-  font-weight: 800; letter-spacing: -0.05em; line-height: 0.95; margin: 0 0 36px;
+  font-weight: var(--w-head); letter-spacing: -0.05em; line-height: 0.95; margin: 0 0 36px;
   font-size: clamp(2.8rem, 8vw, 6.6rem); max-width: 11ch; text-wrap: balance;
 }
 .co-title span, .co-cta h2 span { font-weight: 400; font-size: 0.45em; vertical-align: 0.9em; letter-spacing: 0; }
@@ -29,7 +29,7 @@
 
 .co-cta { border-top: var(--rule); padding: 28px 0 clamp(100px, 16vh, 180px); }
 .co-cta h2 {
-  font-weight: 800; letter-spacing: -0.05em; line-height: 0.95; margin: clamp(40px, 8vh, 90px) 0 28px;
+  font-weight: var(--w-head); letter-spacing: -0.05em; line-height: 0.95; margin: clamp(40px, 8vh, 90px) 0 28px;
   font-size: clamp(2.4rem, 6.4vw, 5.4rem); max-width: 14ch; text-wrap: balance;
 }
 .co-discord {
@@ -37,7 +37,7 @@
   border: var(--rule); padding: 22px 26px; max-width: 34em; box-sizing: border-box;
 }
 .co-label { font-size: var(--label-size); font-weight: 700; letter-spacing: var(--label-track); }
-.co-handle { font-size: clamp(1.4rem, 3vw, 2rem); font-weight: 800; letter-spacing: -0.03em; flex: 1 1 auto; }
+.co-handle { font-size: clamp(1.4rem, 3vw, 2rem); font-weight: var(--w-head); letter-spacing: -0.03em; flex: 1 1 auto; }
 .co-copy {
   background: #fff; color: var(--good-blue); border: var(--rule); cursor: pointer;
   font-size: 0.75rem; font-weight: 700; letter-spacing: 0.18em; padding: 10px 18px;
@@ -51,13 +51,13 @@
 .co-stats { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 24px; margin: clamp(48px, 8vh, 80px) 0 0; border-top: var(--rule); padding-top: 22px; }
 .co-stats div { margin: 0; }
 .co-stats dt { font-size: 0.62rem; letter-spacing: 0.18em; opacity: 0.85; }
-.co-stats dd { margin: 8px 0 0; font-size: clamp(2rem, 5vw, 3.6rem); font-weight: 800; letter-spacing: -0.05em; line-height: 1; }
+.co-stats dd { margin: 8px 0 0; font-size: clamp(2rem, 5vw, 3.6rem); font-weight: var(--w-head); letter-spacing: -0.05em; line-height: 1; }
 @media (max-width: 700px) { .co-stats { grid-template-columns: repeat(2, minmax(0, 1fr)); row-gap: 28px; } }
 
 /* Blocks */
 .co-block { border-top: var(--rule); padding: 28px 0 clamp(80px, 12vh, 140px); }
 .co-services { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: clamp(28px, 4vw, 48px) clamp(20px, 3vw, 40px); }
-.co-services h3, .co-steps h3, .co-case h3 { margin: 0 0 10px; font-size: clamp(1.15rem, 1.8vw, 1.45rem); font-weight: 800; letter-spacing: -0.03em; }
+.co-services h3, .co-steps h3, .co-case h3 { margin: 0 0 10px; font-size: clamp(1.15rem, 1.8vw, 1.45rem); font-weight: var(--w-head); letter-spacing: -0.03em; }
 .co-services p, .co-steps p, .co-case-text p:not(.co-tag) { margin: 0; line-height: 1.6; opacity: 0.92; }
 @media (max-width: 860px) { .co-services { grid-template-columns: 1fr 1fr; } }
 @media (max-width: 560px) { .co-services { grid-template-columns: 1fr; } }
@@ -87,7 +87,7 @@
 /* Services: &Great®, GREAT®, GOOD® */
 .co-tiers { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: clamp(16px, 2.4vw, 28px); align-items: stretch; }
 .co-tier { border: var(--rule); padding: clamp(22px, 3vw, 34px); display: flex; flex-direction: column; }
-.co-tier h3 { margin: 0 0 14px; font-size: clamp(1.8rem, 3.6vw, 2.8rem); font-weight: 800; letter-spacing: -0.05em; line-height: 1; }
+.co-tier h3 { margin: 0 0 14px; font-size: clamp(1.8rem, 3.6vw, 2.8rem); font-weight: var(--w-head); letter-spacing: -0.05em; line-height: 1; }
 .co-tier h3 span { font-weight: 400; font-size: 0.45em; vertical-align: 0.9em; letter-spacing: 0; }
 .co-tier-sub { margin: 0 0 22px; line-height: 1.55; opacity: 0.92; }
 .co-tier ol { margin: 0; padding: 0; list-style: none; counter-reset: t; border-top: 1px solid rgba(255, 255, 255, 0.45); }
@@ -102,7 +102,7 @@
 .co-process { margin-bottom: clamp(64px, 10vh, 110px); }
 .co-step { margin-bottom: clamp(56px, 9vh, 96px); }
 .co-step > p:not(.co-tag) { max-width: 38em; line-height: 1.6; margin: 0 0 26px; opacity: 0.92; }
-.co-step h3 { margin: 0 0 12px; font-size: clamp(1.4rem, 2.6vw, 2.1rem); font-weight: 800; letter-spacing: -0.04em; }
+.co-step h3 { margin: 0 0 12px; font-size: clamp(1.4rem, 2.6vw, 2.1rem); font-weight: var(--w-head); letter-spacing: -0.04em; }
 .co-step .co-wide img, .co-pair img { background: none; padding: 0; border: 1px solid rgba(255, 255, 255, 0.6); }
 .co-pair { display: grid; grid-template-columns: 1fr 1fr; gap: clamp(12px, 2vw, 24px); align-items: start; }
 .co-pair figure { margin: 0; }

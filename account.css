@@ -3,7 +3,7 @@
 .ac-page ::selection { background: #fff; color: var(--good-blue); }
 .ac-main { max-width: 1120px; margin: 0 auto; padding: 0 var(--gutter) 60px; }
 .ac-tag { margin: 0 0 18px; font-size: var(--label-size); font-weight: 700; letter-spacing: var(--label-track); }
-.ac-title { margin: 0; font-weight: 800; letter-spacing: -0.05em; line-height: 0.95; font-size: clamp(2.8rem, 8vw, 6rem); overflow-wrap: anywhere; }
+.ac-title { margin: 0; font-weight: var(--w-head); letter-spacing: -0.05em; line-height: 0.95; font-size: clamp(2.8rem, 8vw, 6rem); overflow-wrap: anywhere; }
 .ac-lede { line-height: 1.6; max-width: 34em; margin: 26px 0 0; opacity: 0.92; }
 .ac-out { padding: clamp(80px, 15vh, 170px) 0; }
 .ac-form { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 36px; max-width: 34em; }
@@ -16,7 +16,7 @@
 .ac-in { padding-top: clamp(60px, 11vh, 120px); }
 .ac-head { display: flex; justify-content: space-between; align-items: flex-end; gap: 32px; flex-wrap: wrap; }
 .ac-coins { margin: 22px 0 0; }
-.ac-coins strong { font-size: clamp(2.4rem, 5vw, 3.6rem); font-weight: 800; letter-spacing: -0.05em; }
+.ac-coins strong { font-size: clamp(2.4rem, 5vw, 3.6rem); font-weight: var(--w-head); letter-spacing: -0.05em; }
 .ac-coins span { font-size: var(--label-size); letter-spacing: var(--label-track); }
 .ac-actions { display: flex; gap: 24px; margin-top: 18px; }
 .ac-home { margin: 0; text-align: center; }
@@ -54,7 +54,7 @@
 .ac-note { font-size: 0.62rem; letter-spacing: 0.16em; line-height: 1.7; margin-top: 10px; opacity: 0.75; max-width: 40em; }
 .pv-main { padding-top: clamp(60px, 12vh, 140px); }
 .pv-sec { border-top: 1px solid rgba(255, 255, 255, 0.5); margin-top: clamp(40px, 7vh, 64px); padding-top: 20px; max-width: 44em; }
-.pv-sec h2 { margin: 0 0 14px; font-size: clamp(1.2rem, 2.4vw, 1.6rem); font-weight: 800; letter-spacing: -0.03em; }
+.pv-sec h2 { margin: 0 0 14px; font-size: clamp(1.2rem, 2.4vw, 1.6rem); font-weight: var(--w-head); letter-spacing: -0.03em; }
 .pv-sec p, .pv-sec li { line-height: 1.65; opacity: 0.94; }
 .pv-sec ul { padding-left: 1.1em; margin: 0; }
 .pv-sec li { margin-bottom: 8px; }
@@ -85,7 +85,7 @@
 .ac-ach-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 14px; }
 .ac-ach-card { display: grid; grid-template-columns: 72px 1fr; gap: 14px; align-items: center; padding: 14px; background: #fff; color: var(--good-blue); }
 .ac-ach-card img { width: 72px; height: 72px; object-fit: contain; image-rendering: pixelated; }
-.ac-ach-n { display: block; font-weight: 800; font-size: 1rem; letter-spacing: -0.02em; }
+.ac-ach-n { display: block; font-weight: var(--w-head); font-size: 1rem; letter-spacing: -0.02em; }
 .ac-ach-d { display: block; margin-top: 3px; font-size: 0.8rem; line-height: 1.35; opacity: 0.85; }
 .ac-ach-p { display: block; margin-top: 8px; font-size: 0.56rem; letter-spacing: 0.1em; line-height: 1.6; }
 .ac-ach-p span { display: block; white-space: nowrap; }
@@ -98,13 +98,13 @@
 .mb-card:hover, .mb-card:focus-visible { transform: translateY(-3px); outline: none; }
 .mb-head { width: 64px; height: 64px; flex: 0 0 64px; image-rendering: pixelated; box-shadow: 0 0 0 1px rgba(0, 0, 60, 0.15); }
 .mb-meta { min-width: 0; }
-.mb-name { display: flex; align-items: center; flex-wrap: wrap; gap: 8px; font-weight: 800; font-size: 1.05rem; letter-spacing: -0.02em; overflow-wrap: anywhere; }
+.mb-name { display: flex; align-items: center; flex-wrap: wrap; gap: 8px; font-weight: var(--w-head); font-size: 1.05rem; letter-spacing: -0.02em; overflow-wrap: anywhere; }
 .mb-stats { display: block; margin-top: 6px; font-size: 0.6rem; letter-spacing: 0.14em; }
 .mb-admin { display: inline-block; padding: 3px 7px; background: var(--good-blue); color: #fff; font-size: 0.56rem; font-weight: 700; letter-spacing: 0.18em; }
 .ac-title .mb-admin { vertical-align: middle; font-size: 0.8rem; padding: 6px 10px; margin-left: 14px; background: #fff; color: var(--good-blue); letter-spacing: 0.2em; }
 .mb-admin.mb-tag, .ac-title .mb-admin.mb-tag { background: #ffd400; color: var(--good-blue); }
 .pf-head { width: 96px; height: 96px; image-rendering: pixelated; display: block; margin-bottom: 18px; box-shadow: 0 0 0 2px #fff; }
-.ac-fit-title { display: block; font-weight: 800; font-size: 0.92rem; letter-spacing: -0.02em; margin-bottom: 2px; }
+.ac-fit-title { display: block; font-weight: var(--w-head); font-size: 0.92rem; letter-spacing: -0.02em; margin-bottom: 2px; }
 .ac-rename { position: absolute; top: 6px; left: 8px; border: 0; background: var(--good-blue); color: #fff; font-size: 0.52rem; letter-spacing: 0.14em; padding: 4px 6px; cursor: pointer; opacity: 0; transition: opacity 0.15s; }
 .ac-card:hover .ac-rename, .ac-rename:focus-visible { opacity: 1; }
 @media (hover: none) { .ac-rename { opacity: 0.85; } }

@@ -5,7 +5,7 @@
   background: repeating-conic-gradient(rgba(120, 140, 255, 0.55) 0deg 6deg, transparent 6deg 18deg); -webkit-mask: radial-gradient(circle, #000 0, transparent 55%); mask: radial-gradient(circle, #000 0, transparent 55%); animation: cr-spin 60s linear infinite; }
 .gc-art { position: relative; display: block; width: clamp(150px, 22vw, 240px); margin: 0 auto 30px; image-rendering: pixelated; filter: drop-shadow(0 24px 40px rgba(0, 0, 0, 0.55)); animation: cp-bob 3.2s ease-in-out infinite; }
 .gc-kicker { position: relative; margin: 0 0 14px; font-size: 0.7rem; font-weight: 700; letter-spacing: 0.26em; color: #b9c2ff; }
-.gc-title { position: relative; margin: 0; font-weight: 800; letter-spacing: -0.055em; line-height: 0.92; font-size: clamp(2.6rem, 7.5vw, 6rem); }
+.gc-title { position: relative; margin: 0; font-weight: var(--w-head); letter-spacing: -0.055em; line-height: 0.92; font-size: clamp(2.6rem, 7.5vw, 6rem); }
 .gc-title-sm { font-size: clamp(2.2rem, 6vw, 4.4rem); }
 .gc-lede { position: relative; max-width: 36em; margin: 24px auto 0; line-height: 1.6; opacity: 0.9; }
 .gc-cta { position: relative; display: inline-block; margin-top: 32px; padding: 17px 28px; text-decoration: none; font-size: 0.8rem; font-weight: 700; letter-spacing: var(--label-track); color: var(--good-blue);
@@ -14,9 +14,9 @@
 .gc-block { position: relative; border-top: 1px solid rgba(255, 255, 255, 0.4); padding-top: 22px; margin-top: clamp(40px, 7vh, 80px); }
 .gc-steps { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(auto-fit, minmax(190px, 1fr)); gap: 16px; }
 .gc-steps li { padding: 18px 16px; line-height: 1.5; font-size: 0.92rem; background: rgba(255, 255, 255, 0.06); border: 1px solid rgba(255, 255, 255, 0.2); }
-.gc-steps b { display: block; margin-bottom: 6px; font-weight: 800; letter-spacing: -0.02em; font-size: 1.05rem; }
+.gc-steps b { display: block; margin-bottom: 6px; font-weight: var(--w-head); letter-spacing: -0.02em; font-size: 1.05rem; }
 .gc-n { display: block; margin-bottom: 14px; font-size: 0.66rem; letter-spacing: 0.2em; color: #ffd23f; }
-.gc-h { margin: 0 0 14px; font-weight: 800; letter-spacing: -0.045em; line-height: 1; font-size: clamp(1.8rem, 4.4vw, 3rem); }
+.gc-h { margin: 0 0 14px; font-weight: var(--w-head); letter-spacing: -0.045em; line-height: 1; font-size: clamp(1.8rem, 4.4vw, 3rem); }
 .gc-chase { display: grid; grid-template-columns: 1.2fr 0.8fr; align-items: center; gap: clamp(20px, 5vw, 60px); padding: 30px clamp(20px, 4vw, 40px); border: 1px solid #f2c14e;
   background: linear-gradient(135deg, rgba(247, 202, 201, 0.16), rgba(146, 168, 209, 0.12)); box-shadow: 0 0 60px rgba(242, 193, 78, 0.25); }
 .gc-chase p { line-height: 1.6; margin: 0 0 12px; opacity: 0.92; }

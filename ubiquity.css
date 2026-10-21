@@ -3,7 +3,7 @@
 .ub-page ::selection { background: #fff; color: var(--good-blue); }
 .ub-main { max-width: 980px; margin: 0 auto; padding: 0 var(--gutter) 80px; }
 .ub-tag { margin: 0 0 18px; font-size: var(--label-size); font-weight: 700; letter-spacing: var(--label-track); }
-.ub-title { margin: 0; font-weight: 800; letter-spacing: -0.05em; line-height: 0.95; font-size: clamp(2.8rem, 9vw, 6.4rem); }
+.ub-title { margin: 0; font-weight: var(--w-head); letter-spacing: -0.05em; line-height: 0.95; font-size: clamp(2.8rem, 9vw, 6.4rem); }
 .ub-lock { padding: clamp(80px, 16vh, 180px) 0; max-width: 28em; }
 .ub-field { display: grid; gap: 10px; margin-top: 44px; font-size: var(--label-size); letter-spacing: var(--label-track); }
 .ub-field input { font: 600 1.2rem var(--font-mono); letter-spacing: 0.2em; padding: 14px 16px; border: var(--rule); background: transparent; color: #fff; outline: none; }
@@ -15,7 +15,7 @@
 .ub-doc { padding: clamp(60px, 12vh, 140px) 0 0; }
 .ub-date { font-size: 0.68rem; letter-spacing: 0.2em; margin: 22px 0 0; opacity: 0.8; }
 .ub-sec { border-top: var(--rule); margin-top: clamp(56px, 9vh, 96px); padding-top: 24px; }
-.ub-sec h2 { margin: 0 0 22px; font-size: clamp(1.4rem, 3vw, 2rem); font-weight: 800; letter-spacing: -0.03em; }
+.ub-sec h2 { margin: 0 0 22px; font-size: clamp(1.4rem, 3vw, 2rem); font-weight: var(--w-head); letter-spacing: -0.03em; }
 .ub-p { line-height: 1.6; max-width: 40em; margin: 0 0 14px; }
 .ub-list { margin: 0 0 18px; padding-left: 1.1em; line-height: 1.6; max-width: 46em; }
 .ub-list li { margin-bottom: 8px; }

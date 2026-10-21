@@ -12,7 +12,7 @@
 
 .cx-hero { padding: clamp(80px, 16vh, 180px) 0 clamp(64px, 11vh, 120px); }
 .cx-hero .cx-tag { margin-bottom: 28px; color: var(--good-blue); }
-.cx-title { margin: 0; font-weight: 800; letter-spacing: -0.06em; line-height: 0.88; font-size: clamp(3.4rem, 12vw, 11rem); color: var(--good-blue); }
+.cx-title { margin: 0; font-weight: var(--w-head); letter-spacing: -0.06em; line-height: 0.88; font-size: clamp(3.4rem, 12vw, 11rem); color: var(--good-blue); }
 .cx-title span { font-weight: 400; font-size: 0.32em; vertical-align: 2.1em; margin-left: 0.08em; letter-spacing: 0; color: #0b1526; }
 .cx-copy { margin: 40px 0 0; max-width: 32em; font-size: clamp(1rem, 1.4vw, 1.2rem); line-height: 1.6; }
 
@@ -37,7 +37,7 @@
 .cx-chip:focus-visible .cx-cn { text-decoration: underline; text-underline-offset: 4px; }
 .cx-meta { display: grid; gap: 4px; padding-top: 16px; }
 .cx-n { font-size: 0.62rem; letter-spacing: 0.18em; opacity: 0.5; }
-.cx-cn { font-weight: 800; font-size: 0.98rem; letter-spacing: -0.02em; line-height: 1.15; }
+.cx-cn { font-weight: var(--w-head); font-size: 0.98rem; letter-spacing: -0.02em; line-height: 1.15; }
 .cx-ch { font-size: 0.62rem; letter-spacing: 0.12em; opacity: 0.6; }
 .cx-pt { font-size: 0.56rem; letter-spacing: 0.16em; color: var(--good-blue); }
 
@@ -54,7 +54,7 @@
 .cx-close:focus-visible, .cx-step:focus-visible { outline: none; text-decoration-thickness: 3px; text-decoration-line: underline; }
 .cx-close { border: 0; background: none; color: inherit; cursor: pointer; font-size: var(--label-size); font-weight: 700; letter-spacing: 0.2em; padding: 6px 0; text-decoration: underline; text-underline-offset: 6px; text-decoration-thickness: 1px; }
 .cx-room-body { flex: 1; min-height: 0; display: grid; grid-template-columns: 1.25fr 1fr; gap: clamp(32px, 6vw, 96px); align-items: end; padding: 32px 0; overflow-y: auto; }
-.cx-name { margin: 0; font-weight: 800; letter-spacing: -0.055em; line-height: 0.9; font-size: clamp(2.8rem, 8.5vw, 8.4rem); text-wrap: balance; }
+.cx-name { margin: 0; font-weight: var(--w-head); letter-spacing: -0.055em; line-height: 0.9; font-size: clamp(2.8rem, 8.5vw, 8.4rem); text-wrap: balance; }
 .cx-hex { margin: 22px 0 0; font-size: 0.8rem; letter-spacing: 0.2em; }
 .cx-room-text { max-width: 30em; }
 .cx-desc { margin: 0; font-size: clamp(1.02rem, 1.5vw, 1.25rem); line-height: 1.55; }
