@@ -41,8 +41,8 @@
   const cv = $('card'), cx = cv.getContext('2d');
   const FONT = '"Noto Serif JP", "Times New Roman", serif';
   function card(word, mark) {
-    const dpr = Math.min(2, devicePixelRatio || 1), W = innerWidth, H = innerHeight;
-    cv.width = W * dpr; cv.height = H * dpr; cx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    const dpr = 0.2, W = innerWidth, H = innerHeight;   // a fifth of the resolution: the card shows as bitmap
+    cv.width = Math.ceil(W * dpr); cv.height = Math.ceil(H * dpr); cx.setTransform(dpr, 0, 0, dpr, 0, 0); cx.imageSmoothingEnabled = false;
     cx.fillStyle = '#000'; cx.fillRect(0, 0, W, H);
     cx.font = `900 100px ${FONT}`; cx.textBaseline = 'alphabetic';
     const m = cx.measureText(word), ink = m.actualBoundingBoxAscent + m.actualBoundingBoxDescent;
@@ -55,6 +55,10 @@
     cx.save(); cx.translate(x0 + m.actualBoundingBoxLeft * s * sx, m.actualBoundingBoxAscent * s); cx.scale(s * sx, s);
     cx.fillStyle = '#fff'; cx.fillText(word, 0, 0); cx.restore();
     if (mark) { cx.font = `900 ${Math.round(H * 0.16)}px ${FONT}`; cx.fillStyle = '#fff'; cx.textBaseline = 'top'; cx.fillText('®', x0 + w + 8, 0); }
+    // hard edges: every pixel either ink or black
+    const img = cx.getImageData(0, 0, cv.width, cv.height), a = img.data;
+    for (let i = 0; i < a.length; i += 4) { const v = a[i] > 110 ? 255 : 0; a[i] = a[i + 1] = a[i + 2] = v; }
+    cx.putImageData(img, 0, 0);
   }
   async function cards() {
     await Promise.race([document.fonts.load(`900 100px ${FONT}`, 'GOODANDROYALS'), wait(1500)]).catch(() => {});

@@ -19,7 +19,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+JP:wght@900&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="q.css?v=1">
+  <link rel="stylesheet" href="q.css?v=2">
 </head>
 <body class="qg booting">
 
@@ -67,10 +67,27 @@
   <p>© 2026 GOOD®. Q&amp;G® is a collaboration between GOOD® and ROYALS.</p>
 </footer>
 
+<!-- Degraded type: #px-l / #px-m sample one pixel per block and grow it (a mosaic), then cut the
+     edges hard; #crisp only cuts the edges (no anti-aliasing), so small text stays readable. -->
+<svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
+  <filter id="px-l" x="0" y="0" width="100%" height="100%" color-interpolation-filters="sRGB">
+    <feFlood x="3" y="3" width="1" height="1"/><feComposite width="7" height="7"/><feTile result="t"/>
+    <feComposite in="SourceGraphic" in2="t" operator="in"/><feMorphology operator="dilate" radius="3.5"/>
+    <feComponentTransfer><feFuncA type="discrete" tableValues="0 1 1 1"/></feComponentTransfer>
+  </filter>
+  <filter id="px-m" x="0" y="0" width="100%" height="100%" color-interpolation-filters="sRGB">
+    <feFlood x="1" y="1" width="1" height="1"/><feComposite width="3" height="3"/><feTile result="t"/>
+    <feComposite in="SourceGraphic" in2="t" operator="in"/><feMorphology operator="dilate" radius="1.5"/>
+    <feComponentTransfer><feFuncA type="discrete" tableValues="0 1 1 1"/></feComponentTransfer>
+  </filter>
+  <filter id="crisp" color-interpolation-filters="sRGB">
+    <feComponentTransfer><feFuncA type="discrete" tableValues="0 0 1 1"/></feComponentTransfer>
+  </filter>
+</svg>
 <div class="crt-noise" aria-hidden="true"></div>
 <div class="crt-scanlines" aria-hidden="true"></div>
 <div class="crt-vignette" aria-hidden="true"></div>
 
-<script src="js/q.js?v=1"></script>
+<script src="js/q.js?v=2"></script>
 </body>
 </html>
