@@ -731,7 +731,7 @@ body.st {
 .st-wordmark span { font-weight: 400; color: #111; }
 .st-nav { display: flex; gap: 22px; font: 600 0.7rem var(--st-sans); letter-spacing: 0.14em; }
 .st-nav a { text-decoration: none; }
-.st-nav a:hover { color: var(--good-blue); }
+.st-nav a:hover, .st-nav a[aria-current="page"] { color: var(--good-blue); }
 .st-rubric { margin: 0; font: 600 0.72rem var(--st-sans); letter-spacing: 0.16em; text-transform: uppercase; color: var(--good-blue); }
 .st-dek { margin: 0; font-style: italic; }
 .st-byline { margin: 0; font: 400 0.72rem var(--st-sans); letter-spacing: 0.1em; text-transform: uppercase; color: var(--st-grey); }
