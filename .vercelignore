@@ -1,0 +1,5 @@
+# Repo internals: not part of the site
+/tools
+/.claude
+/CLAUDE.md
+/.gitignore
