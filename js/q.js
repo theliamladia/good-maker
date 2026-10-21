@@ -83,11 +83,11 @@
 
   // ---------- the looks: sealed, scrambled, straight to canvas ----------
   const LOOKS = [
-    ['FENCING JACKET® · FENCING TROUSER®', 'ONYX™/SILVER™'],
-    ['FENCING JACKET® · FENCING TROUSER®', 'ROYAL™/SILVER™'],
+    ['FENCING JACKET® · FENCING PANT®', 'ONYX™/SILVER™'],
+    ['FENCING JACKET® · FENCING PANT®', 'ROYAL™/SILVER™'],
     ['CLASP JACKET® · BIKER PANT®', 'PEARL™/GOLD™'],
     ['CLASP JACKET® · STUDDED BIKER PANT®', 'ONYX™/SILVER™'],
-    ['BABY® CROPPED JACKET · FENCING TROUSER®', 'ONYX™/PEARL™'],
+    ['BABY® CROPPED JACKET · FENCING PANT®', 'ONYX™/PEARL™'],
     ['BABY® CROPPED JACKET · BIKER PANT®', 'PEARL™/ONYX™'],
   ];
   $('looks').replaceChildren(...LOOKS.map(([pieces, cw], i) => {
@@ -100,7 +100,7 @@
   }));
   const PIECES = [
     ['FENCING JACKET®', ['ONYX™/SILVER™', 'ROYAL™/SILVER™', 'PEARL™/GOLD™']],
-    ['FENCING TROUSER®', ['ONYX™/SILVER™', 'ROYAL™/SILVER™', 'GRAPHITE™/SILVER™']],
+    ['FENCING PANT®', ['ONYX™/SILVER™', 'ROYAL™/SILVER™', 'GRAPHITE™/SILVER™']],
     ['CLASP JACKET®', ['ONYX™/SILVER™', 'ROYAL™/SILVER™', 'PEARL™/GOLD™']],
     ['BABY® CROPPED JACKET', ['ONYX™/PEARL™', 'PEARL™/ONYX™']],
     ['BIKER PANT®', ['ONYX™/GRAPHITE™', 'GRAPHITE™/ASH™']],
