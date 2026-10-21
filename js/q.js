@@ -105,8 +105,6 @@
     ['BABY® CROPPED JACKET', ['ONYX™/PEARL™', 'PEARL™/ONYX™']],
     ['BIKER PANT®', ['ONYX™/GRAPHITE™', 'GRAPHITE™/ASH™', 'ROYAL™/ASH™']],
     ['STUDDED BIKER PANT®', ['ONYX™/SILVER™', 'GRAPHITE™/SILVER™', 'ROYAL™/SILVER™']],
-    ['G PENDANT®', ['SILVER™']],
-    ['WALLET CHAIN®', ['SILVER™']],
   ];
   $('pieces').replaceChildren(...PIECES.map(([name, cws], i) => {
     const tr = document.createElement('tr');
