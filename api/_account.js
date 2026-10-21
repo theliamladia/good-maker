@@ -59,7 +59,7 @@ async function unlocksFor(user) {
 
 // Profile URL from a GOOD® name: LEEEEEMS -> leeeeems, BIG G. -> big-g
 // Profile tags shown next to a member's name (by profile slug), beside ADMIN.
-const TAGS = { mova_tv: ['STREAMER'] };
+const TAGS = { mova: ['STREAMER'], mova_tv: ['STREAMER'] };
 const tagsOf = (name) => TAGS[slugOf(name)] || [];
 const slugOf = (name) => String(name || '').toLowerCase().replace(/[^a-z0-9_]+/g, '-').replace(/^-+|-+$/g, '');
 // Claim the profile URL for this name if it's free; returns the slug if it's the account's.
