@@ -1,13 +1,12 @@
 // MARKET® (/market): spare serialized copies listed for GOOD® COINS. The server does every
 // check and moves the coins and the copy (POST /api/crate { action: 'list' | 'unlist' | 'buy' });
-// this page shows the tape, the book (every piece: asks, floor, last, change, 24H volume), the asks,
+// this page shows the tape, the stats, the asks,
 // your pieces, and MY TRADES (your own history), and asks ARE YOU SURE? before a purchase.
 (() => {
   const $ = (id) => document.getElementById(id);
   const coin = '<span class="coin" aria-hidden="true"></span>';
   const meOnce = () => (window.__goodMe ||= fetch('/api/me').then((r) => (r.ok ? r.json() : { user: null })).catch(() => ({ user: null })));
   let me = null, inventory = [], items = {}, listings = [], sales = [], trades = [];
-  let only = null, bookAll = false, bookSort = { key: 'asks', dir: -1 };
 
   // Colour dots: each colour in the colourway, looked up by name in COLORS®.
   const HEX = Object.fromEntries((window.GOOD_COLORS || []).map((c) => [c.name.toUpperCase(), [].concat(c.hex)[0]]));
@@ -33,20 +32,13 @@
   };
   const when = (iso) => new Date(iso).toLocaleString('en-US', { month: 'short', day: 'numeric', hour: 'numeric', minute: '2-digit' }).toUpperCase();
   const c = (n) => (n == null ? '—' : `${coin}${n}`);
-  const pct = (v) => (v == null ? '—' : v === 0 ? '0%' : `${v > 0 ? '▲' : '▼'} ${Math.abs(v)}%`);
 
-  // Per piece: asks, floor (lowest ask), last sale, change against the sale before it, 24H volume.
+  // Per piece: asks, floor (lowest ask), last sale (the FLOOR/LAST hint when you sell).
   function book() {
     const rows = {};
-    const row = (id) => (rows[id] ||= { id, asks: 0, floor: null, last: null, prev: null, vol: 0 });
-    for (const id of Object.keys(items)) row(id);
+    const row = (id) => (rows[id] ||= { id, asks: 0, floor: null, last: null });
     for (const l of listings) { const r = row(l.item); r.asks++; if (r.floor == null || l.price < r.floor) r.floor = l.price; }
-    for (const s of sales) {   // newest first
-      const r = row(s.item);
-      if (r.last == null) r.last = s.price; else if (r.prev == null) r.prev = s.price;
-      if (Date.now() - Date.parse(s.at) < DAY) r.vol += s.price;
-    }
-    for (const r of Object.values(rows)) r.chg = r.last != null && r.prev ? Math.round(((r.last - r.prev) / r.prev) * 100) : null;
+    for (const s of sales) { const r = row(s.item); if (r.last == null) r.last = s.price; }   // newest first
     return Object.values(rows);
   }
 
@@ -65,44 +57,6 @@
     tape.innerHTML = bits.join('') + bits.join('');
     tape.querySelectorAll('b').forEach((b, i) => { const s = sales[i % bits.length]; b.textContent = nameOf(s.item); });
     tape.style.animationDuration = `${Math.max(20, bits.length * 6)}s`;
-  }
-
-  function drawBook() {
-    const every = book(), active = every.filter((r) => r.asks || r.last != null);
-    // Active pieces (asks or trades) by default; every piece on request, or when nothing trades yet.
-    const rows = bookAll || !active.length ? every : active;
-    const more = $('bookMore');
-    more.hidden = !active.length || active.length === every.length;
-    more.textContent = bookAll ? 'SHOW ACTIVE PIECES ONLY' : `SHOW ALL ${every.length} PIECES`;
-    const k = bookSort.key, d = bookSort.dir;
-    const val = (r) => (k === 'name' ? nameOf(r.id) : r[k]);
-    rows.sort((a, b) => {
-      const x = val(a), y = val(b);
-      if (x == null && y == null) return nameOf(a.id).localeCompare(nameOf(b.id));
-      if (x == null) return 1; if (y == null) return -1;
-      return (typeof x === 'string' ? x.localeCompare(y) : x - y) * d || nameOf(a.id).localeCompare(nameOf(b.id));
-    });
-    $('bookCount').textContent = `${every.length} PIECES · ${every.filter((r) => r.asks).length} WITH ASKS`;
-    document.querySelectorAll('.mk-book [data-sort]').forEach((b) => b.setAttribute('aria-sort', b.dataset.sort === k ? (d > 0 ? 'ascending' : 'descending') : 'none'));
-    $('book').replaceChildren(...rows.map((r) => {
-      const it = items[r.id] || {};
-      const tr = document.createElement('tr');
-      if (only === r.id) tr.className = 'on';
-      tr.innerHTML = `<td><span class="mk-pc"><canvas aria-hidden="true"></canvas><span><b></b><span class="mk-cw"><span class="mk-dots">${dots(it.color)}</span><span class="mono"></span></span></span></span></td>`
-        + `<td class="num mono" data-l="ASKS"><span>${r.asks || '—'}</span></td><td class="num mono" data-l="FLOOR"><span>${c(r.floor)}</span></td><td class="num mono" data-l="LAST"><span>${c(r.last)}</span></td>`
-        + `<td class="num mono mk-chg" data-l="CHANGE"><span>${pct(r.chg)}</span></td><td class="num mono" data-l="24H VOL"><span>${r.vol ? c(r.vol) : '—'}</span></td><td class="mk-go"></td>`;
-      tr.querySelector('b').textContent = it.name || r.id;
-      tr.querySelector('.mk-cw .mono').textContent = it.color || '';
-      const cv = tr.querySelector('canvas');
-      if (items[r.id]) { if (it.accessory) cv.className = 'mk-tall'; GoodItems.draw(it, cv).catch(() => {}); }
-      cv.addEventListener('contextmenu', (e) => e.preventDefault());
-      if (r.asks) {
-        const b = document.createElement('button'); b.type = 'button'; b.className = 'mk-btn mono'; b.textContent = only === r.id ? 'ALL ASKS' : 'VIEW ASKS';
-        b.onclick = () => { only = only === r.id ? null : r.id; drawBook(); drawListings(); if (only) $('asks').scrollIntoView({ behavior: 'smooth' }); };
-        tr.querySelector('.mk-go').append(b);
-      }
-      return tr;
-    }));
   }
 
   function drawTrades() {
@@ -148,11 +102,7 @@
   function drawListings() {
     const q = $('q').value.trim().toLowerCase();
     const sort = $('sort').value;
-    const fl = $('filter');
-    fl.hidden = !only;
-    if (only) { fl.innerHTML = 'SHOWING <b></b> <button type="button" class="mk-clear mono">SHOW ALL</button>'; fl.querySelector('b').textContent = nameOf(only); fl.querySelector('button').onclick = () => { only = null; drawBook(); drawListings(); }; }
     const rows = listings.filter((l) => {
-      if (only && l.item !== only) return false;
       if (!q) return true;
       const it = items[l.item] || {};
       return `${it.name} ${it.color} ${l.seller} ${l.serial}`.toLowerCase().includes(q);
@@ -226,7 +176,7 @@
     }));
   }
 
-  function drawAll() { drawWallet(); drawStats(); drawBook(); drawListings(); drawDoubles(); drawSold(); drawTrades(); }
+  function drawAll() { drawWallet(); drawStats(); drawListings(); drawDoubles(); drawSold(); drawTrades(); }
   const take = (m, mk) => { me = m.user; inventory = m.inventory || []; listings = mk.listings || []; sales = mk.sales || []; trades = mk.trades || []; };
 
   async function refresh() {
@@ -239,12 +189,6 @@
 
   $('q').addEventListener('input', drawListings);
   $('sort').addEventListener('change', drawListings);
-  $('bookMore').onclick = () => { bookAll = !bookAll; drawBook(); };
-  document.querySelectorAll('.mk-book [data-sort]').forEach((b) => b.addEventListener('click', () => {
-    const k = b.dataset.sort;
-    bookSort = bookSort.key === k ? { key: k, dir: -bookSort.dir } : { key: k, dir: k === 'name' ? 1 : -1 };
-    drawBook();
-  }));
   // MY TRADES: a window over the page.
   const dlg = $('trades');
   $('tradesBtn').onclick = () => { drawTrades(); dlg.showModal(); };

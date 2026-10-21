@@ -59,25 +59,6 @@
     <div><dt>24H TRADES</dt><dd id="stTrades">0</dd></div>
   </dl>
 
-  <section class="co-block" aria-labelledby="bookTitle">
-    <header class="co-head"><p class="co-tag mono" id="bookCount">EVERY PIECE</p><h2 id="bookTitle">The book</h2></header>
-    <div class="mk-scroll">
-      <table class="mk-table mk-book">
-        <thead class="mono"><tr>
-          <th scope="col"><button type="button" data-sort="name">PIECE</button></th>
-          <th scope="col" class="num"><button type="button" data-sort="asks">ASKS</button></th>
-          <th scope="col" class="num"><button type="button" data-sort="floor">FLOOR</button></th>
-          <th scope="col" class="num"><button type="button" data-sort="last">LAST</button></th>
-          <th scope="col" class="num"><button type="button" data-sort="chg">CHANGE</button></th>
-          <th scope="col" class="num"><button type="button" data-sort="vol">24H VOL</button></th>
-          <th scope="col"><span class="sr-only">Asks</span></th>
-        </tr></thead>
-        <tbody id="book"></tbody>
-      </table>
-    </div>
-    <button type="button" class="mk-clear mk-more mono" id="bookMore" hidden></button>
-  </section>
-
   <section class="co-block" aria-labelledby="saleTitle" id="asks">
     <header class="co-head"><p class="co-tag mono" id="saleCount">FOR SALE</p><h2 id="saleTitle">Asks</h2></header>
     <div class="mk-tools">
@@ -86,7 +67,6 @@
         <select id="sort"><option value="low">PRICE: LOW TO HIGH</option><option value="high">PRICE: HIGH TO LOW</option><option value="new">NEWEST</option></select>
       </label>
     </div>
-    <p class="mk-filter mono" id="filter" hidden></p>
     <div class="mk-grid" id="listings"></div>
     <p class="mk-empty" id="empty" hidden>Nothing for sale right now. Open a <a class="foot-link" href="inmotion">GOOD® CRATE</a>; anything you pull can be listed here.</p>
   </section>

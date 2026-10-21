@@ -75,27 +75,13 @@ a.mk-seller:hover .mk-av, a.mk-seller:focus-visible .mk-av { outline-color: #fff
   .mk-stats > div:nth-child(odd) { border-left: 0; padding-left: 0; }
 }
 
-/* Tables: the book, the tape, MY TRADES. */
+/* Tables: the tape, MY TRADES. */
 .mk-scroll { overflow-x: auto; -webkit-overflow-scrolling: touch; }
 .mk-table { width: 100%; border-collapse: collapse; }
 .mk-table th { text-align: left; font-size: 0.6rem; letter-spacing: 0.22em; font-weight: 400; opacity: 0.75; padding: 0 16px 14px 0; border-bottom: 1px solid #fff; white-space: nowrap; }
-.mk-table th button { all: unset; cursor: pointer; }
-.mk-table th button[aria-sort="ascending"]::after { content: ' ▲'; }
-.mk-table th button[aria-sort="descending"]::after { content: ' ▼'; }
-.mk-table th button:focus-visible { outline: 1px solid #fff; outline-offset: 4px; }
 .mk-table td { padding: 16px 16px 16px 0; border-bottom: 1px solid rgba(255, 255, 255, 0.22); font-size: 0.95rem; font-weight: 300; vertical-align: middle; white-space: nowrap; }
 .mk-table td.mono { font-size: 0.7rem; letter-spacing: 0.14em; }
 .mk-table .num { text-align: right; }
-.mk-book tr.on td { background: rgba(255, 255, 255, 0.08); }
-.mk-pc { display: inline-flex; align-items: center; gap: 18px; }
-.mk-pc canvas { width: 34px; height: auto; image-rendering: pixelated; filter: drop-shadow(0 0 10px rgba(255, 255, 255, 0.55)); }
-.mk-pc canvas.mk-tall { width: 18px; margin: 0 8px; }
-.mk-pc > span { display: grid; gap: 6px; }
-.mk-pc b { font-weight: 500; font-size: 0.98rem; letter-spacing: -0.01em; }
-.mk-pc .mk-cw { font-size: 0.56rem; }
-.mk-pc .mk-dots i { width: 9px; height: 9px; }
-.mk-go { text-align: right; padding-right: 0 !important; }
-.mk-go .mk-btn { padding: 8px 12px; font-size: 0.58rem; }
 .mk-table td:last-child, .mk-table th:last-child { padding-right: 0; }
 
 .mk-tools { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 16px 24px; margin: 0 0 clamp(40px, 6vh, 64px); }
@@ -103,10 +89,6 @@ a.mk-seller:hover .mk-av, a.mk-seller:focus-visible .mk-av { outline-color: #fff
 .mk-sort { display: inline-flex; align-items: center; gap: 12px; font-size: 0.6rem; letter-spacing: 0.22em; }
 .mk-sort select { appearance: none; border: 0; border-bottom: 1px solid rgba(255, 255, 255, 0.7); background: transparent; color: #fff; font: 400 0.64rem 'Space Mono', monospace; letter-spacing: 0.16em; padding: 6px 4px; cursor: pointer; }
 .mk-sort select option { color: #0000ff; }
-.mk-filter { font-size: 0.64rem; letter-spacing: 0.18em; margin: -24px 0 40px; display: flex; flex-wrap: wrap; align-items: center; gap: 14px; }
-.mk-filter[hidden] { display: none; }
-.mk-filter b { font-weight: 700; }
-.mk-clear { border: 0; background: none; color: #fff; text-decoration: underline; text-underline-offset: 4px; font-size: 0.6rem; letter-spacing: 0.18em; cursor: pointer; padding: 0; }
 .mk-hint { font-size: 0.58rem; letter-spacing: 0.18em; opacity: 0.75; display: inline-flex; align-items: center; gap: 4px; }
 
 /* MY TRADES: a window on GOOD® BLUE. */
@@ -128,21 +110,13 @@ a.mk-seller:hover .mk-av, a.mk-seller:focus-visible .mk-av { outline-color: #fff
 .mk-type { display: inline-block; padding: 4px 8px; border: 1px solid rgba(255, 255, 255, 0.6); font-size: 0.56rem; letter-spacing: 0.2em; }
 .mk-t-buy .mk-type, .mk-t-sell .mk-type { background: #fff; color: #0000ff; border-color: #fff; }
 .mk-dim { opacity: 0.55; }
-.mk-more { margin-top: 26px; }
-.mk-more[hidden] { display: none; }
 
 /* Phones: tables become stacked rows (no sideways scrolling). */
 @media (max-width: 640px) {
   .mk-table thead { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); }
   .mk-table, .mk-table tbody { display: block; }
   .mk-table td { border: 0; padding: 0; white-space: normal; }
-  .mk-book tr { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 14px 8px; padding: 20px 0; border-bottom: 1px solid rgba(255, 255, 255, 0.22); }
-  .mk-book td:first-child { grid-column: 1 / -1; }
-  .mk-book td.num { text-align: left; display: grid; gap: 6px; font-size: 0.64rem; letter-spacing: 0.08em; }
-  .mk-book td.num::before { content: attr(data-l); font-size: 0.5rem; letter-spacing: 0.18em; opacity: 0.65; }
-  .mk-book .mk-go { grid-column: 1 / -1; text-align: left; }
-  .mk-book .mk-go:empty { display: none; }
-  .mk-tapetable tr, .mk-mine tr { display: grid; grid-template-columns: 1fr auto; gap: 8px 16px; padding: 16px 0; border-bottom: 1px solid rgba(255, 255, 255, 0.22); }
+              .mk-tapetable tr, .mk-mine tr { display: grid; grid-template-columns: 1fr auto; gap: 8px 16px; padding: 16px 0; border-bottom: 1px solid rgba(255, 255, 255, 0.22); }
   .mk-tapetable td:nth-child(1) { grid-column: 1; grid-row: 2; font-size: 0.58rem; opacity: 0.7; }
   .mk-tapetable td:nth-child(2) { grid-column: 1; grid-row: 1; }
   .mk-tapetable td:nth-child(3) { grid-column: 2; grid-row: 2; font-size: 0.58rem; opacity: 0.7; text-align: right; }
