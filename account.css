@@ -102,6 +102,7 @@
 .mb-stats { display: block; margin-top: 6px; font-size: 0.6rem; letter-spacing: 0.14em; }
 .mb-admin { display: inline-block; padding: 3px 7px; background: #0000ff; color: #fff; font-size: 0.56rem; font-weight: 700; letter-spacing: 0.18em; }
 .ac-title .mb-admin { vertical-align: middle; font-size: 0.8rem; padding: 6px 10px; margin-left: 14px; background: #fff; color: #0000ff; letter-spacing: 0.2em; }
+.mb-admin.mb-tag, .ac-title .mb-admin.mb-tag { background: #ffd400; color: #0000ff; }
 .pf-head { width: 96px; height: 96px; image-rendering: pixelated; display: block; margin-bottom: 18px; box-shadow: 0 0 0 2px #fff; }
 .ac-fit-title { display: block; font-weight: 800; font-size: 0.92rem; letter-spacing: -0.02em; margin-bottom: 2px; }
 .ac-rename { position: absolute; top: 6px; left: 8px; border: 0; background: #0000ff; color: #fff; font-size: 0.52rem; letter-spacing: 0.14em; padding: 4px 6px; cursor: pointer; opacity: 0; transition: opacity 0.15s; }

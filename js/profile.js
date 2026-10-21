@@ -32,6 +32,7 @@
     document.title = `${p.name} · GOOD® PROFILE`;
     $('name').textContent = p.name;
     if (p.admin) { const b = document.createElement('span'); b.className = 'mb-admin mono'; b.textContent = 'ADMIN'; $('name').append(b); }
+    for (const t of p.tags || []) { const b = document.createElement('span'); b.className = 'mb-admin mb-tag mono'; b.textContent = t; $('name').append(b); }
     $('coins').textContent = p.coins;
     GoodHeads.draw($('head'), p.hasSkin ? `api/profile?name=${key}&skin=1` : null);
     $('since').textContent = p.since ? `GOOD® MEMBER SINCE ${p.since}` : 'GOOD® MEMBER';

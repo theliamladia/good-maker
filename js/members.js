@@ -9,6 +9,7 @@
       a.innerHTML = '<canvas class="mb-head" aria-hidden="true"></canvas><span class="mb-meta"><span class="mb-name"></span><span class="mb-stats mono"></span></span>';
       const n = a.querySelector('.mb-name'); n.textContent = m.name;
       if (m.admin) { const b = document.createElement('span'); b.className = 'mb-admin mono'; b.textContent = 'ADMIN'; n.append(b); }
+      for (const t of m.tags || []) { const b = document.createElement('span'); b.className = 'mb-admin mb-tag mono'; b.textContent = t; n.append(b); }
       a.querySelector('.mb-stats').innerHTML = `<span class="coin" aria-hidden="true"></span>${m.coins} · ${m.achievements} ${m.achievements === 1 ? 'ACHIEVEMENT' : 'ACHIEVEMENTS'}`;
       GoodHeads.draw(a.querySelector('canvas'), m.hasSkin ? `api/profile?name=${encodeURIComponent(m.slug)}&skin=1` : null);
       return a;

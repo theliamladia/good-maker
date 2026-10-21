@@ -1,8 +1,8 @@
 // Vercel serverless function: GET /api/members -> every public GOOD® profile.
-//   [{ name, slug, admin, coins, achievements, since, hasSkin }]
+//   [{ name, slug, admin, tags, coins, achievements, since, hasSkin }]
 // Never emails. Heads are drawn on the page from /api/profile?name=<slug>&skin=1.
 const { redis, configured } = require('./_redis');
-const { isOwner, claimProfile } = require('./_account');
+const { isOwner, claimProfile, tagsOf } = require('./_account');
 
 module.exports = async function handler(req, res) {
   res.setHeader('Cache-Control', 'no-store');
@@ -21,7 +21,7 @@ module.exports = async function handler(req, res) {
       const slug = await claimProfile(u);
       if (!slug) continue;
       members.push({
-        name: u.name, slug, admin: isOwner(u), coins: u.coins || 0,
+        name: u.name, slug, admin: isOwner(u), tags: tagsOf(u.name), coins: u.coins || 0,
         achievements: Math.max(1, (await redis('SCARD', `user:${u.uid}:ach`)) || 0), since: (u.created || '').slice(0, 10),
         hasSkin: !!(await redis('EXISTS', `user:${u.uid}:skin`)),
       });

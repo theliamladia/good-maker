@@ -58,6 +58,9 @@ async function unlocksFor(user) {
 }
 
 // Profile URL from a GOOD® name: LEEEEEMS -> leeeeems, BIG G. -> big-g
+// Profile tags shown next to a member's name (by profile slug), beside ADMIN.
+const TAGS = { mova_tv: ['STREAMER'] };
+const tagsOf = (name) => TAGS[slugOf(name)] || [];
 const slugOf = (name) => String(name || '').toLowerCase().replace(/[^a-z0-9_]+/g, '-').replace(/^-+|-+$/g, '');
 // Claim the profile URL for this name if it's free; returns the slug if it's the account's.
 async function claimProfile(user) {
@@ -67,4 +70,4 @@ async function claimProfile(user) {
   return (await redis('GET', `profile:${slug}`)) === user.uid ? slug : null;
 }
 
-module.exports = { sha, currentUser, startSession, endSession, saveUser, unlocksFor, isOwner, slugOf, claimProfile };
+module.exports = { sha, currentUser, startSession, endSession, saveUser, unlocksFor, isOwner, slugOf, tagsOf, claimProfile };
