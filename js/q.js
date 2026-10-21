@@ -1,5 +1,5 @@
-// Q&G® (/q): GOOD® AND ROYALS. A fake break-in on black, then the title cards (GOOD®, AND,
-// ROYALS) filling the screen top to bottom, then the page. The looks come sealed from
+// Q&G® (/q): ROYALS & GOOD®. A fake break-in on black, then the title cards (ROYALS, AND,
+// GOOD®) filling the screen top to bottom, then the page. The looks come sealed from
 // /api/outfit and are drawn straight to canvas as turntables, like WANDERING®.
 (() => {
   const $ = (id) => document.getElementById(id);
@@ -64,7 +64,7 @@
     await Promise.race([document.fonts.load(`900 100px ${FONT}`, 'GOODANDROYALS'), wait(1500)]).catch(() => {});
     cv.classList.add('on');
     const flash = async () => { cv.classList.add('flash'); cx.clearRect(0, 0, cv.width, cv.height); await wait(60); cv.classList.remove('flash'); };
-    for (const [w, mark, ms] of [['GOOD', true, 1000], ['AND', false, 520], ['ROYALS', false, 1000]]) {
+    for (const [w, mark, ms] of [['ROYALS', false, 1000], ['AND', false, 520], ['GOOD', true, 1000]]) {
       if (skipped) return;
       await flash(); card(w, mark); await wait(ms);
     }
