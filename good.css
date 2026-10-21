@@ -1,0 +1,43 @@
+/* GOOD® tokens. Loaded first on every core page (not the collab worlds), so page
+   stylesheets can share one blue, one type system and one rhythm. Tokens and
+   opt-in classes only: nothing here styles an element by itself. */
+:root {
+  /* Colour */
+  --good-blue: #0000ff;                         /* GOOD® BLUE */
+  --white: #ffffff;
+  --ink: #0b1526;
+
+  /* Type */
+  --font-sans: 'Inter', system-ui, sans-serif;
+  --font-mono: 'Space Mono', ui-monospace, monospace;
+  --w-light: 300;
+  --w-copy: 400;
+  --w-head: 600;                                /* headlines: never the heaviest */
+  --lh-copy: 1.55;
+
+  /* The small tracked label */
+  --label-size: 0.72rem;
+  --label-track: 0.22em;
+
+  /* Rules */
+  --rule: 1px solid var(--white);
+  --rule-soft: 1px solid rgba(255, 255, 255, 0.45);
+
+  /* Layout and spacing */
+  --gutter: clamp(16px, 5vw, 48px);             /* 16px minimum side gutter */
+  --max: 1120px;
+  --measure: 34em;
+  --space-1: 8px;
+  --space-2: 16px;
+  --space-3: 28px;
+  --space-4: 48px;
+  --space-5: clamp(72px, 12vh, 140px);
+
+  /* A piece on GOOD® BLUE sits in a spotlight */
+  --spot: radial-gradient(closest-side, rgba(255, 255, 255, 0.55), rgba(255, 255, 255, 0.12) 60%, transparent);
+}
+
+/* Opt-in helpers */
+.good-label { font-family: var(--font-mono); font-size: var(--label-size); letter-spacing: var(--label-track); text-transform: uppercase; }
+.good-rule { border: 0; border-top: var(--rule); margin: 0; }
+.good-spot { background: var(--spot); }

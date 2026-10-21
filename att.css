@@ -89,21 +89,21 @@ html.att-falling, html.att-falling body { overflow: hidden; }
 .att-cw h3 { margin: 0 0 30px; font: 400 1.65rem/1.15 'Libre Caslon Display', Georgia, serif; }
 .att-chip { margin: 0 0 26px; max-width: 18rem; }
 .att-chip i { display: inline-block; width: 10px; height: 10px; border-radius: 50%; vertical-align: 1px; margin-right: 10px; box-shadow: 0 0 0 1px rgba(255, 244, 226, 0.7); }
-.att-chip strong { font: 400 0.68rem 'Space Mono', monospace; letter-spacing: 0.2em; }
+.att-chip strong { font: 400 0.68rem var(--font-mono); letter-spacing: 0.2em; }
 .att-chip span { display: block; margin: 12px 0 10px; font: italic 400 0.98rem/1.6 'Libre Caslon Text', Georgia, serif; opacity: 0.92; }
-.att-chip small { font: 400 0.62rem 'Space Mono', monospace; letter-spacing: 0.2em; opacity: 0.6; }
+.att-chip small { font: 400 0.62rem var(--font-mono); letter-spacing: 0.2em; opacity: 0.6; }
 
 /* Looks */
 .att-switch { display: flex; justify-content: center; flex-wrap: wrap; gap: 8px 36px; margin: -24px 0 clamp(72px, 9vw, 120px); }
 .att-switch button {
   display: inline-flex; align-items: center; gap: 12px; padding: 0 0 10px; cursor: pointer; background: none; border: 0;
   border-bottom: 1px solid transparent; color: var(--att-cream); opacity: 0.6;
-  font: 400 0.68rem 'Space Mono', monospace; letter-spacing: 0.2em; transition: opacity 0.3s, border-color 0.3s;
+  font: 400 0.68rem var(--font-mono); letter-spacing: 0.2em; transition: opacity 0.3s, border-color 0.3s;
 }
 .att-switch button:hover { opacity: 0.9; }
 .att-switch button i { width: 12px; height: 12px; border-radius: 50%; box-shadow: 0 0 0 1px rgba(255, 244, 226, 0.7); }
 .att-switch button[aria-checked="true"] { opacity: 1; border-bottom-color: var(--att-cream); }
-.att-line { display: flex; align-items: center; gap: 24px; font: 400 0.66rem 'Space Mono', monospace; letter-spacing: 0.32em; margin: 0 0 clamp(40px, 5vw, 64px); opacity: 0.8; }
+.att-line { display: flex; align-items: center; gap: 24px; font: 400 0.66rem var(--font-mono); letter-spacing: 0.32em; margin: 0 0 clamp(40px, 5vw, 64px); opacity: 0.8; }
 .att-line::before, .att-line::after { content: ''; flex: 1; height: 1px; background: var(--att-line); }
 .att-looks + .att-line { margin-top: clamp(96px, 11vw, 150px); }
 .att-looks { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: clamp(32px, 5vw, 72px); }
@@ -119,14 +119,14 @@ html.att-falling, html.att-falling body { overflow: hidden; }
   -webkit-user-drag: none; user-select: none;
 }
 .att-look figcaption { margin-top: 30px; }
-.att-look .who { font: 400 0.64rem 'Space Mono', monospace; letter-spacing: 0.22em; opacity: 0.7; }
+.att-look .who { font: 400 0.64rem var(--font-mono); letter-spacing: var(--label-track); opacity: 0.7; }
 .att-look .what { font: 400 1.45rem/1.2 'Libre Caslon Display', Georgia, serif; margin-top: 12px; }
 .att-look .cw { font: italic 400 0.9rem/1.55 'Libre Caslon Text', Georgia, serif; opacity: 0.8; margin-top: 10px; }
 
 /* Pieces: four columns under a hairline */
 .att-pieces { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: clamp(32px, 4vw, 56px); }
 .att-group { min-width: 0; padding-top: 28px; border-top: 1px solid var(--att-line); }
-.att-group h3 { margin: 0 0 36px; font: 400 0.64rem 'Space Mono', monospace; letter-spacing: 0.3em; opacity: 0.75; }
+.att-group h3 { margin: 0 0 36px; font: 400 0.64rem var(--font-mono); letter-spacing: 0.3em; opacity: 0.75; }
 .att-group ul { list-style: none; margin: 0; padding: 0; display: grid; gap: 34px; }
 .att-group ul { gap: 56px; }
 .att-ghost {   /* a cream product tile; the garment hangs in it, drifting, its shadow on the floor */
@@ -159,7 +159,7 @@ html.att-falling, html.att-falling body { overflow: hidden; }
   border-radius: 50%; background: radial-gradient(closest-side, rgba(255, 214, 150, 0.26), rgba(255, 214, 150, 0));
 }
 .att-feature-fig img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: contain; filter: drop-shadow(0 18px 20px rgba(40, 12, 0, 0.3)); -webkit-user-drag: none; user-select: none; }
-.att-feature-fig figcaption { margin-top: 26px; font-size: 0.64rem; letter-spacing: 0.22em; opacity: 0.7; }
+.att-feature-fig figcaption { margin-top: 26px; font-size: 0.64rem; letter-spacing: var(--label-track); opacity: 0.7; }
 .att-feature-text h2 { margin: 0; font: 400 clamp(3rem, 7vw, 5.6rem)/1 'Libre Caslon Display', Georgia, serif; }
 .att-feature-text h2 span { font-size: 0.32em; vertical-align: 1.5em; }
 .att-feature-cw { margin: 18px 0 0; font-size: 0.7rem; letter-spacing: 0.24em; }

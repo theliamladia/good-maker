@@ -1,8 +1,8 @@
 /* COLLABORATIONS®: GOOD® BLUE and white only. */
-.co-page { background: #0000ff; color: #fff; min-height: 100vh; margin: 0; }
-.co-page ::selection { background: #fff; color: #0000ff; }
-.co-main { max-width: 1120px; margin: 0 auto; padding: 0 clamp(16px, 5vw, 48px); }
-.co-tag { font-size: 0.72rem; font-weight: 700; letter-spacing: 0.22em; margin: 0 0 18px; }
+.co-page { background: var(--good-blue); color: #fff; min-height: 100vh; margin: 0; }
+.co-page ::selection { background: #fff; color: var(--good-blue); }
+.co-main { max-width: 1120px; margin: 0 auto; padding: 0 var(--gutter); }
+.co-tag { font-size: var(--label-size); font-weight: 700; letter-spacing: var(--label-track); margin: 0 0 18px; }
 
 .co-hero { padding: clamp(72px, 14vh, 160px) 0 clamp(80px, 14vh, 150px); }
 .co-title {
@@ -12,10 +12,10 @@
 .co-title span, .co-cta h2 span { font-weight: 400; font-size: 0.45em; vertical-align: 0.9em; letter-spacing: 0; }
 .co-lede { font-size: clamp(1.05rem, 1.6vw, 1.35rem); line-height: 1.55; max-width: 34em; margin: 0; }
 
-.co-work { border-top: 1px solid #fff; padding: 28px 0 clamp(80px, 12vh, 140px); }
+.co-work { border-top: var(--rule); padding: 28px 0 clamp(80px, 12vh, 140px); }
 .co-head { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 40px; }
 .co-head .co-tag { margin: 0; }
-.co-head h2 { font-size: 0.72rem; font-weight: 700; letter-spacing: 0.22em; text-transform: uppercase; margin: 0; font-family: 'Space Mono', monospace; }
+.co-head h2 { font-size: var(--label-size); font-weight: 700; letter-spacing: var(--label-track); text-transform: uppercase; margin: 0; font-family: var(--font-mono); }
 
 .co-work figure { margin: 0; }
 .co-work img { display: block; width: 100%; height: auto; user-select: none; -webkit-user-drag: none; }
@@ -27,35 +27,35 @@
 .co-grid figure:hover img { transform: translateY(-4px); }
 @media (max-width: 820px) { .co-grid { grid-template-columns: repeat(2, 1fr); } }
 
-.co-cta { border-top: 1px solid #fff; padding: 28px 0 clamp(100px, 16vh, 180px); }
+.co-cta { border-top: var(--rule); padding: 28px 0 clamp(100px, 16vh, 180px); }
 .co-cta h2 {
   font-weight: 800; letter-spacing: -0.05em; line-height: 0.95; margin: clamp(40px, 8vh, 90px) 0 28px;
   font-size: clamp(2.4rem, 6.4vw, 5.4rem); max-width: 14ch; text-wrap: balance;
 }
 .co-discord {
   display: flex; flex-wrap: wrap; align-items: center; gap: 14px 22px; margin-top: 44px;
-  border: 1px solid #fff; padding: 22px 26px; max-width: 34em; box-sizing: border-box;
+  border: var(--rule); padding: 22px 26px; max-width: 34em; box-sizing: border-box;
 }
-.co-label { font-size: 0.72rem; font-weight: 700; letter-spacing: 0.22em; }
+.co-label { font-size: var(--label-size); font-weight: 700; letter-spacing: var(--label-track); }
 .co-handle { font-size: clamp(1.4rem, 3vw, 2rem); font-weight: 800; letter-spacing: -0.03em; flex: 1 1 auto; }
 .co-copy {
-  background: #fff; color: #0000ff; border: 1px solid #fff; cursor: pointer;
+  background: #fff; color: var(--good-blue); border: var(--rule); cursor: pointer;
   font-size: 0.75rem; font-weight: 700; letter-spacing: 0.18em; padding: 10px 18px;
 }
-.co-copy:hover, .co-copy:focus-visible { background: #0000ff; color: #fff; }
+.co-copy:hover, .co-copy:focus-visible { background: var(--good-blue); color: #fff; }
 
-.co-foot { border-top: 1px solid #fff; margin: 0 clamp(16px, 5vw, 48px); padding: 22px 0 40px; font-size: 0.68rem; letter-spacing: 0.18em; text-align: center; }
+.co-foot { border-top: var(--rule); margin: 0 var(--gutter); padding: 22px 0 40px; font-size: 0.68rem; letter-spacing: 0.18em; text-align: center; }
 .co-page .site-nav .nav-link[aria-current="page"] { text-decoration-thickness: 2px; }
 
 /* Stats */
-.co-stats { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 24px; margin: clamp(48px, 8vh, 80px) 0 0; border-top: 1px solid #fff; padding-top: 22px; }
+.co-stats { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 24px; margin: clamp(48px, 8vh, 80px) 0 0; border-top: var(--rule); padding-top: 22px; }
 .co-stats div { margin: 0; }
 .co-stats dt { font-size: 0.62rem; letter-spacing: 0.18em; opacity: 0.85; }
 .co-stats dd { margin: 8px 0 0; font-size: clamp(2rem, 5vw, 3.6rem); font-weight: 800; letter-spacing: -0.05em; line-height: 1; }
 @media (max-width: 700px) { .co-stats { grid-template-columns: repeat(2, minmax(0, 1fr)); row-gap: 28px; } }
 
 /* Blocks */
-.co-block { border-top: 1px solid #fff; padding: 28px 0 clamp(80px, 12vh, 140px); }
+.co-block { border-top: var(--rule); padding: 28px 0 clamp(80px, 12vh, 140px); }
 .co-services { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: clamp(28px, 4vw, 48px) clamp(20px, 3vw, 40px); }
 .co-services h3, .co-steps h3, .co-case h3 { margin: 0 0 10px; font-size: clamp(1.15rem, 1.8vw, 1.45rem); font-weight: 800; letter-spacing: -0.03em; }
 .co-services p, .co-steps p, .co-case-text p:not(.co-tag) { margin: 0; line-height: 1.6; opacity: 0.92; }
@@ -86,14 +86,14 @@
 
 /* Services: &Great®, GREAT®, GOOD® */
 .co-tiers { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: clamp(16px, 2.4vw, 28px); align-items: stretch; }
-.co-tier { border: 1px solid #fff; padding: clamp(22px, 3vw, 34px); display: flex; flex-direction: column; }
+.co-tier { border: var(--rule); padding: clamp(22px, 3vw, 34px); display: flex; flex-direction: column; }
 .co-tier h3 { margin: 0 0 14px; font-size: clamp(1.8rem, 3.6vw, 2.8rem); font-weight: 800; letter-spacing: -0.05em; line-height: 1; }
 .co-tier h3 span { font-weight: 400; font-size: 0.45em; vertical-align: 0.9em; letter-spacing: 0; }
 .co-tier-sub { margin: 0 0 22px; line-height: 1.55; opacity: 0.92; }
 .co-tier ol { margin: 0; padding: 0; list-style: none; counter-reset: t; border-top: 1px solid rgba(255, 255, 255, 0.45); }
 .co-tier li { counter-increment: t; display: grid; grid-template-columns: 2.2em 1fr; padding: 12px 0; border-bottom: 1px solid rgba(255, 255, 255, 0.25); line-height: 1.45; }
-.co-tier li::before { content: counter(t, decimal-leading-zero); font: 700 0.68rem 'Space Mono', monospace; letter-spacing: 0.12em; padding-top: 3px; }
-.co-tier-top { background: #fff; color: #0000ff; }
+.co-tier li::before { content: counter(t, decimal-leading-zero); font: 700 0.68rem var(--font-mono); letter-spacing: 0.12em; padding-top: 3px; }
+.co-tier-top { background: #fff; color: var(--good-blue); }
 .co-tier-top ol, .co-tier-top li { border-color: rgba(0, 0, 255, 0.25); }
 @media (max-width: 860px) { .co-tiers { grid-template-columns: 1fr; } }
 .co-srv-lede { margin: 0 0 clamp(36px, 6vh, 56px); }
