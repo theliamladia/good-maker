@@ -1,0 +1,66 @@
+<!doctype html><meta charset="utf-8"><body style="margin:0;background:transparent">
+<script src="vendor/skinview3d.bundle.js"></script><script src="/js/skin.js"></script>
+<script>
+// The GOOD® render studio: one entry of a set per page load.
+//   ?mode=shoot&set=<name>&i=<n>  a player model wearing a top + pants (+ accessory/neck file)
+//   ?mode=raw&set=<name>&i=<n>    a player model with a raw texture laid straight over the skin
+//   ?mode=ghost&f=<texture>&kind=top|bottom|topback  the garment alone, no body (concept sheets)
+// Every mode exposes window.spin(deg) -> PNG data URL, for turntables.
+const q = new URLSearchParams(location.search), d = Math.PI / 180;
+const load = (s) => new Promise((r, j) => { const i = new Image(); i.onload = () => { const c = document.createElement('canvas'); c.width = i.width; c.height = i.height; const x = c.getContext('2d'); x.drawImage(i, 0, 0); r(x.getImageData(0, 0, i.width, i.height)); }; i.onerror = () => j(new Error('missing ' + s)); i.src = s + '?' + Date.now(); });
+const viewer = (W, H) => {
+  const v = new skinview3d.SkinViewer({ canvas: document.createElement('canvas'), width: W, height: H, preserveDrawingBuffer: true, alpha: true });
+  v.renderer.setClearColor(0x000000, 0); document.body.appendChild(v.canvas); v.animation = null;
+  if (v.controls) v.controls.enabled = false;
+  return v;
+};
+const pose = (v, p = {}) => {
+  const P = v.playerObject, s = P.skin;
+  P.rotation.y = (p.turn || 0) * d; P.rotation.z = (p.lean || 0) * d; P.rotation.x = (p.tilt || 0) * d; P.position.y = p.y || 0;
+  for (const [part, key] of [['head', 'head'], ['body', 'body'], ['rightArm', 'ra'], ['leftArm', 'la'], ['rightLeg', 'rl'], ['leftLeg', 'll']]) {
+    const r = p[key]; if (r) { s[part].rotation.x = (r[0] || 0) * d; s[part].rotation.y = (r[1] || 0) * d; s[part].rotation.z = (r[2] || 0) * d; }
+  }
+};
+const finish = (v, slim) => { const P = v.playerObject; v.render(); window.spin = (deg) => { P.rotation.y = deg * d; v.render(); return v.canvas.toDataURL(); }; window.done = { slim }; };
+(async () => {
+  const mode = q.get('mode') || 'shoot';
+  if (mode === 'ghost') {
+    const kind = q.get('kind') || 'top', top = kind !== 'bottom';
+    const W = +(q.get('w') || 700), H = +(q.get('h') || 700);
+    const v = viewer(W, H);
+    await v.loadSkin(q.get('f') + '?' + Date.now(), { model: q.get('slim') === '1' ? 'slim' : 'default' });
+    v.fov = 30; v.zoom = top ? 1.6 : 1.7;
+    const P = v.playerObject, s = P.skin;
+    P.rotation.y = (kind === 'topback' ? 180 : +(q.get('turn') || 0)) * d;
+    P.position.y = top ? -1 : 12;
+    s.rightArm.rotation.z = 0.12; s.leftArm.rotation.z = -0.12;      // sleeves eased off the body
+    s.rightLeg.rotation.z = top ? 0.04 : 0.1; s.leftLeg.rotation.z = top ? -0.04 : -0.1;
+    s.head.visible = false;
+    P.traverse((o) => { if (o.material) for (const m of [].concat(o.material)) { m.transparent = true; m.alphaTest = 0.1; m.needsUpdate = true; } });
+    finish(v, false); return;
+  }
+  const L = (await (await fetch(`work/${q.get('set')}.json?${Date.now()}`)).json())[+q.get('i')];
+  const user = await load('models/' + L.skin + '.png');
+  const slim = SkinLib.detectSlim(user);
+  let m;
+  if (mode === 'raw') {
+    const top = L.rawFile ? await load(L.rawFile) : null;
+    m = { data: new Uint8ClampedArray(user.data) };
+    if (top) for (let i = 0; i < m.data.length; i += 4) if (top.data[i + 3] > 0) for (let k = 0; k < 4; k++) m.data[i + k] = top.data[i + k];
+  } else {
+    const tone = L.tone || SkinLib.sampleSkinTone(user);
+    const top = await load(L.topFile || 'empty.png');
+    const pants = await load(L.pantsFile || 'empty.png');
+    const o = SkinLib.combineOutfit(top, pants, !L.untucked);
+    const hairRows = slim ? SkinLib.estimateHairRows(user, tone) : 0;
+    m = SkinLib.mergeSkin(user, o, tone, slim, hairRows, null, 'keep');
+    if (L.accFile) { const a = await load(L.accFile); for (let i = 0; i < a.data.length; i += 4) if (a.data[i + 3]) for (let k = 0; k < 4; k++) m.data[i + k] = a.data[i + k]; }
+  }
+  const c = document.createElement('canvas'); c.width = c.height = 64; c.getContext('2d').putImageData(new ImageData(m.data, 64, 64), 0, 0);
+  const v = viewer(+(L.w || 420), +(L.h || 640));
+  await v.loadSkin(c, { model: slim ? 'slim' : 'default' });
+  v.zoom = L.zoom || 0.8; v.fov = 40;
+  pose(v, L.pose);
+  finish(v, slim);
+})().catch((e) => { window.done = { error: e.message }; });
+</script>

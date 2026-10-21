@@ -1,0 +1,6 @@
+
+# GOOD® studio: downloads and renders stay local (previews must never be committed)
+tools/studio/vendor/
+tools/studio/work/
+tools/studio/models/*
+!tools/studio/models/mannequin-*.png
