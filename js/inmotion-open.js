@@ -6,8 +6,7 @@
   const meOnce = () => (window.__goodMe ||= fetch('/api/me').then((r) => (r.ok ? r.json() : { user: null })).catch(() => ({ user: null })));
   const $ = (id) => document.getElementById(id);
   const btn = $('open'), again = $('again'), wallet = $('wallet'), drop = $('drop');
-  const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
-  const wait = (ms) => new Promise((r) => setTimeout(r, reduce ? 0 : ms));
+  const wait = (ms) => new Promise((r) => setTimeout(r, ms));   // the unboxing plays for everyone
   const coin = '<span class="coin" aria-hidden="true"></span>';
   const TIER = { chase: 'THE CHASE', rare: 'RARE', core: 'THE COLLECTION' };
   const pct = (p) => `${String(p).replace(/\.0$/, '')}%`;
@@ -57,7 +56,7 @@
     const jitter = (Math.random() - 0.5) * card.offsetWidth * 0.7;
     const x = -(card.offsetLeft + card.offsetWidth / 2 - reel.clientWidth / 2 + jitter);
     const anim = strip.animate([{ transform: 'translateX(0)' }, { transform: `translateX(${x}px)` }],
-      { duration: reduce ? 1 : 6200, easing: 'cubic-bezier(0.1, 0.55, 0.08, 1)', fill: 'forwards' });
+      { duration: 6200, easing: 'cubic-bezier(0.1, 0.55, 0.08, 1)', fill: 'forwards' });
     let lastIdx = -1;
     const tick = () => {
       if (anim.playState !== 'running') return;

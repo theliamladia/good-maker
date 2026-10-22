@@ -125,9 +125,6 @@ body.im { background: var(--paper); color: var(--ink); font-family: var(--sans);
   .im-steps li { grid-template-columns: 3em 1fr; }
   .im-title { letter-spacing: 0.03em; }
 }
-@media (prefers-reduced-motion: reduce) {
-  .im-hero > * { transition: none; }
-}
 
 /* The unboxing: a paper card over the page, the reel, then the piece. */
 .im-open:not(:disabled) { color: var(--ink); border-color: var(--ink); cursor: pointer; }

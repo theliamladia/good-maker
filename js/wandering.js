@@ -6,7 +6,6 @@
 (() => {
   const cv = document.getElementById('scene'), ctx = cv.getContext('2d');
   const main = document.getElementById('main');
-  const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
   const W = 160;
   const hex = (h) => [1, 3, 5].map((i) => parseInt(h.slice(i, i + 2), 16));
   const lerp = (a, b, t) => a + (b - a) * t;
@@ -203,12 +202,12 @@
     if (start === null) start = now;
     const e = now - start;
     if (sun < 1) {
-      sun = reduce ? 1 : clamp((e - 700) / 5200, 0, 1);
+      sun = clamp((e - 700) / 5200, 0, 1);   // the sunrise plays for everyone (reduced motion included: it's the intro)
       draw(0, Math.min(H, Math.ceil(HOR + 12 * S)));
       if (sun > 0.55) document.body.classList.add('risen');
       if (sun >= 1) draw(0, H);
       else lightValley();
-    } else if (!reduce && now - last > 140) {
+    } else if (now - last > 140) {
       last = now; frame++;
       const viewBot = (scrollY + innerHeight) / cell;
       if (fire && viewBot > fire.y - 40) draw(Math.max(0, fire.y - 30), Math.min(H, fire.y + 24));
@@ -231,7 +230,6 @@
   new ResizeObserver(() => { clearTimeout(rt); rt = setTimeout(relayout, 120); }).observe(main);
   addEventListener('resize', () => { clearTimeout(rt); rt = setTimeout(relayout, 120); });
   relayout();
-  if (reduce) { sun = 1; draw(0, H); document.body.classList.add('risen'); }
   requestAnimationFrame(tick);
 
   // ---------- the looks: scrambled, straight to canvas ----------

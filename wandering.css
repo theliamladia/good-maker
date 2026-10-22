@@ -107,5 +107,4 @@ body { text-shadow: 1px 0 rgba(255, 0, 60, 0.35), -1px 0 rgba(0, 190, 255, 0.35)
 }
 @media (prefers-reduced-motion: reduce) {
   .crt-scanlines, .crt-scanlines::after, .wd-down { animation: none; }
-  .wd-hero > * { transition: none; }
 }

@@ -2,7 +2,6 @@
 // DOOM fire, at 8-bit size), then reveal the title and count down.
 (() => {
   const $ = (id) => document.getElementById(id);
-  const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
   const world = $('world'), title = $('title'), skip = $('skip');
   // Drop day: released 19 October 2026 (the server's gate is api/_drop.js).
   const DROP = Date.parse('2026-10-19T00:00:00-04:00');
@@ -16,10 +15,9 @@
     world.style.transform = 'translateY(-300vh)';
     document.body.classList.add('arrived');
     skip.classList.add('gone');
-    setTimeout(() => title.classList.add('on'), reduce ? 0 : 350);
+    setTimeout(() => title.classList.add('on'), 350);
   }
-  if (reduce) arrive();
-  else {
+  {   // the descent plays for everyone (reduced motion included: it's the intro); SKIP is always there
     anim = world.animate([{ transform: 'translateY(0)' }, { transform: 'translateY(-300vh)' }],
       { duration: 6500, delay: 900, easing: 'cubic-bezier(0.55, 0, 0.25, 1)', fill: 'forwards' });
     anim.finished.then(arrive).catch(() => {});
@@ -67,13 +65,12 @@
   let last = 0;
   (function loop(t) {
     if (t - last > 45) { step(); last = t; } // ~22fps: chunky, like the old games
-    if (!reduce) requestAnimationFrame(loop);
+    requestAnimationFrame(loop);
   })(0);
-  if (reduce) for (let i = 0; i < 80; i++) step();
 
   // ---------- Embers ----------
   const embers = $('embers');
-  if (!reduce) setInterval(() => {
+  setInterval(() => {
     if (!arrived || document.hidden) return;
     const e = document.createElement('i');
     e.className = 'gd-ember';
@@ -98,7 +95,7 @@
   ];
   const latin = $('latin');
   let li = 0;
-  if (!reduce) setInterval(() => {
+  setInterval(() => {
     latin.classList.add('out');
     setTimeout(() => { li = (li + 1) % LATIN.length; latin.textContent = LATIN[li]; latin.classList.remove('out'); }, 380);
   }, 3600);

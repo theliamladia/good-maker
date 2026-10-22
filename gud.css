@@ -115,7 +115,7 @@ body.gd { overflow: hidden; background: #1a0000; color: #ff2a1a; font-family: 'P
   .gd-count div { min-width: 0; padding: 10px 6px 8px; border-width: 2px; }
 }
 @media (prefers-reduced-motion: reduce) {
-  .gd-cloud, .gd-crt, .gd-crt::after, .gd-logo canvas, .gd-mask, .gd-title.on { animation: none; }
+  .gd-crt, .gd-crt::after, .gd-logo canvas, .gd-mask { animation: none; }   /* flicker only: the descent and title still play */
 }
 
 /* After the drop: two ways in. */

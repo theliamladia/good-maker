@@ -5,7 +5,6 @@
 (() => {
   const cv = document.getElementById('paint');
   const ctx = cv.getContext('2d');
-  const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
   const PAPER = '#fbfaf6';
   const PAINTS = ['#f3d88a', '#2e7d6b', '#a8203a', '#4a5560', '#9b4f96', '#3fb0c4'];
   const rgb = (h) => [1, 3, 5].map((i) => parseInt(h.slice(i, i + 2), 16));
@@ -118,12 +117,6 @@
   }
 
   const show = () => document.body.classList.add('shown');
-  if (reduce) {
-    // One still composition, no motion.
-    for (let i = 0; i < 520; i++) step(i * 16);
-    show();
-    return;
-  }
   setTimeout(show, 2200);
   let running = true;
   function loop(t) { if (running) step(t); requestAnimationFrame(loop); }
