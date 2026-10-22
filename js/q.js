@@ -63,7 +63,8 @@
   async function cards() {
     await Promise.race([document.fonts.load(`900 100px ${FONT}`, 'GOODANDROYALS'), wait(1500)]).catch(() => {});
     cv.classList.add('on');
-    const flash = async () => { cv.classList.add('flash'); cx.clearRect(0, 0, cv.width, cv.height); await wait(60); cv.classList.remove('flash'); };
+    // reduced motion (Windows with animation effects off, for one) still gets the cutscene, just no white flashes
+    const flash = async () => { if (!reduce) cv.classList.add('flash'); cx.clearRect(0, 0, cv.width, cv.height); await wait(reduce ? 120 : 60); cv.classList.remove('flash'); };
     for (const [w, mark, ms] of [['ROYALS', false, 1000], ['AND', false, 520], ['GOOD', true, 1000]]) {
       if (skipped) return;
       await flash(); card(w, mark); await wait(ms);
@@ -78,8 +79,7 @@
   $('skip').onclick = skip;
   addEventListener('keydown', (e) => { if (e.key === 'Escape' || e.key === 'Enter' || e.key === ' ') skip(); });
   cv.addEventListener('click', skip);
-  if (reduce) done();
-  else (async () => { await boot(); if (!skipped) await cards(); if (!skipped) done(); skipped = true; })();
+  (async () => { await boot(); if (!skipped) await cards(); if (!skipped) done(); skipped = true; })();
 
   // ---------- the looks: sealed, scrambled, straight to canvas ----------
   const LOOKS = [
