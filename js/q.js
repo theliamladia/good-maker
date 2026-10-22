@@ -114,7 +114,7 @@
   }));
 
   const scrambled = async (id, tries = 3) => {
-    const r = await fetch(`api/outfit?id=${id}`, { cache: 'no-store' }).catch(() => null);
+    const r = await fetch(`/api/outfit?id=${id}`, { cache: 'no-store' }).catch(() => null);
     if (!r || !r.ok) {
       if (tries > 1 && (!r || r.status >= 500)) { await wait(800); return scrambled(id, tries - 1); }
       throw new Error('unavailable');

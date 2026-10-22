@@ -30,7 +30,7 @@ const res2 = (res) => ({ setHeader(k, v) { res.setHeader(k, v); }, status(c) { t
       });
       return;
     }
-    let f = path.join(R, decodeURIComponent(u === '/' ? '/index.html' : u));
+    let f = path.join(R, decodeURIComponent(u === '/' ? '/index.html' : u.replace(/(.)\/$/, '$1')));   // /q/ serves q.html, like Vercel
     if (u.startsWith('/profiles/')) f = path.join(R, 'profile.html');
     if (!fs.existsSync(f) && fs.existsSync(f + '.html')) f += '.html';
     if (!f.startsWith(R)) { res.writeHead(403); return res.end(); }
