@@ -33,5 +33,5 @@ When in doubt: remove something, and add space.
 
 ## Tools and skills
 
-- Project skills in `.claude/skills/`: good-studio (paint and render pieces), good-sheets (concept/look/press sheets, the drop calendar), good-seal (sealed previews), good-collab-page (collab landing pages), good-dev-check (local site + QA), good-ship (push to main and confirm the Vercel deploy).
+- Project skills in `.claude/skills/`: good-studio (paint and render pieces), good-sheets (concept/look/press sheets, the drop calendar), good-seal (sealed previews), good-collab-page (collab landing pages), good-dev-check (local site + QA), good-ship (push to main and confirm the Vercel deploy), good-lessons (hard rules from past mistakes: read before saying anything is done).
 - `tools/studio/` is the render studio, `tools/dev/` the local site (fake Redis) and page checker. Renders and downloads go in `tools/studio/work/` (gitignored).

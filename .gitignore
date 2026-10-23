@@ -4,3 +4,4 @@ tools/studio/vendor/
 tools/studio/work/
 tools/studio/models/*
 !tools/studio/models/mannequin-*.png
+__pycache__/
