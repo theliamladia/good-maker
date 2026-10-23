@@ -21,6 +21,7 @@ const { applySeeds } = require('./_seeds');
 const { privateIds } = require('./_private');
 const { dropIds } = require('./_drop');
 
+const privateWho = async (user) => (isOwner(user) ? 'owner' : (await seesPrivate(user)) ? 'guest' : null);
 const COINS_PER_SAVE = 10;
 const SAVES_PER_DAY = 4;
 const MAX_LOOKS = 60;
@@ -33,10 +34,10 @@ const ACCS = new Set();   // ACCESSORIES: all locked until owned
 for (const k of win.ACCESSORIES || []) for (const c of k.colors || [k]) { ACCS.add(c.id); if (k.locked || c.locked) LOCKED.set(c.id, k.id); }
 
 // Locked tops only for accounts that own them (by colour id or kind id).
-function cleanLook(L, unlocks = [], owner = false) {
+function cleanLook(L, unlocks = [], who = null) {   // who: 'owner' | 'guest' (private pieces) | null
   L = L || {};
   const out = {};
-  const priv = owner ? privateIds() : null;   // the private pieces (api/_private.js), for the owner and guests
+  const priv = who ? privateIds(who) : null;   // the private pieces (api/_private.js), for the owner and guests
   const gud = dropIds();                       // GUD™, WANDERING®…, once they're live (api/_drop.js)
   const owns = (id) => LOCKED.has(id) && (unlocks.includes(id) || unlocks.includes(LOCKED.get(id)));
   if (L.top) { if (!TOPS.has(String(L.top)) && !owns(String(L.top)) && !(priv && priv.tops.has(String(L.top))) && !gud.tops.has(String(L.top))) return null; out.top = String(L.top); }
@@ -70,11 +71,11 @@ function cleanFt(F) {
   return Object.keys(out).length ? out : null;
 }
 // MAKER® preferences: a look recipe that may be empty (a blank canvas), plus body, MY SKIN and tone.
-function cleanPrefs(P, unlocks, owner = false) {
+function cleanPrefs(P, unlocks, who = null) {
   P = P || {};
   const out = {};
   const L = P.look || {};
-  const look = (L.top || L.bottom) ? cleanLook(L, unlocks, owner) : {};
+  const look = (L.top || L.bottom) ? cleanLook(L, unlocks, who) : {};
   if (look) { if (L.feet === 'bare') look.feet = 'bare'; out.look = look; }
   if (['classic', 'slim'].includes(P.body)) out.body = P.body;
   if (typeof P.keepSkin === 'boolean') out.keepSkin = P.keepSkin;
@@ -157,7 +158,7 @@ module.exports = async function handler(req, res) {
       res.status(200).json({ ok: true }); return;
     }
     if (body.action === 'save') {
-      const look = cleanLook(body.look, await unlocksFor(user), await seesPrivate(user));
+      const look = cleanLook(body.look, await unlocksFor(user), await privateWho(user));
       if (!look) { res.status(400).json({ error: 'look' }); return; }
       const key = `user:${user.uid}:wardrobe`;
       const rows = ((await redis('LRANGE', key, 0, MAX_LOOKS - 1)) || []).map((r) => JSON.parse(r));
@@ -181,7 +182,7 @@ module.exports = async function handler(req, res) {
       res.status(200).json({ ok: true, item, coins: user.coins || 0, earned: earned ? COINS_PER_SAVE : 0, capped: !!(fresh && !earned), daily: await dailyOf(user.uid) }); return;
     }
     if (body.action === 'prefs') {
-      user.prefs = cleanPrefs(body.prefs, await unlocksFor(user), await seesPrivate(user));
+      user.prefs = cleanPrefs(body.prefs, await unlocksFor(user), await privateWho(user));
       await saveUser(user);
       res.status(200).json({ ok: true }); return;
     }

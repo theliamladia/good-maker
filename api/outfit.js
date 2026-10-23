@@ -68,11 +68,13 @@ module.exports = async function handler(req, res) {
   }
   const wantsPrivate = req.query && req.query.private === '1';
   if (wantsPrivate || PRIVATE.has(id)) {
-    if (!(await privateOk(req))) { unknown(); return; }
+    // The catalogue (what can be worn) is for the owner and guests; a piece's own file is
+    // there for anyone to see on a profile, scrambled like every preview.
+    if (wantsPrivate && !(await privateOk(req))) { unknown(); return; }
     let buf = null;
     try { buf = unsealFile(path.join(__dirname, '_private', wantsPrivate ? 'index.enc' : `${id}.enc`)); } catch { buf = null; }
     if (!buf) { unknown(); return; }
-    if (wantsPrivate) { res.status(200).json(JSON.parse(buf.toString('utf8'))); return; }
+    if (wantsPrivate) { res.status(200).json(require('./_private').forViewer((await ownerOnly(req)) ? 'owner' : 'guest')); return; }
     const key = crypto.randomBytes(32);
     const data = Buffer.alloc(buf.length);
     for (let i = 0; i < buf.length; i++) data[i] = buf[i] ^ key[i % key.length];

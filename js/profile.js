@@ -25,6 +25,7 @@
     Promise.all(['gud=1', 'drop=wandering'].map((q) => fetch(`api/outfit?${q}`, { cache: 'no-store' }).then((r) => (r.ok ? r.json() : null)).catch(() => null))),
   ]).then(async ([p, c, m, drops]) => {
     if (window.GoodCompose) for (const cat of drops) if (cat) GoodCompose.addPrivate(cat);
+    if (p && p.pieces && window.GoodCompose) GoodCompose.addPrivate(p.pieces);   // private pieces in these fits: to see, not to wear
     const viewer = m.user;
     const mine = !!viewer && viewer.profile === slug.toLowerCase();
     if (!p) { $('missing').hidden = false; document.title = 'NOT FOUND · GOOD®'; return; }

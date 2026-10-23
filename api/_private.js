@@ -1,27 +1,47 @@
-// The owner-only pieces' ids (tools/private-seal.js), read from the sealed catalogue.
-// Not a route. Used to let the owner save fits with them (api/me.js) and to keep those
-// fits out of anything other people can see (api/profile.js).
+// The private pieces (tools/private-seal.js), read from the sealed catalogue. Not a route.
+// The owner and the private guests (api/_account.js) wear them; colours marked only: 'owner'
+// are the owner's alone. Anyone may see them on a profile (drawn from scrambled data), never
+// equip them: MAKER® only gets the catalogue for the owner and guests (?private=1).
 const fs = require('fs');
 const path = require('path');
 const crypto = require('crypto');
 
-let cached = null;
-function privateIds() {
-  if (cached) return cached;
-  const ids = { tops: new Set(), bottoms: new Map(), accs: new Set() };
+let cat = null;
+function catalogue() {
+  if (cat) return cat;
   try {
     const key = Buffer.from(process.env.GOOD_LOCK_KEY || '', 'base64');
-    if (key.length !== 32) return ids;
+    if (key.length !== 32) return { tops: [], pants: [], accessories: [] };
     const { iv, tag, data } = JSON.parse(fs.readFileSync(path.join(__dirname, '_private', 'index.enc'), 'utf8'));
     const d = crypto.createDecipheriv('aes-256-gcm', key, Buffer.from(iv, 'base64'));
     d.setAuthTag(Buffer.from(tag, 'base64'));
-    const cat = JSON.parse(Buffer.concat([d.update(Buffer.from(data, 'base64')), d.final()]).toString('utf8'));
-    for (const k of cat.tops || []) for (const c of k.colors) ids.tops.add(c.id);
-    for (const k of cat.pants || []) for (const c of k.colors) ids.bottoms.set(c.id, Object.keys(c.shoes || k.shoes || {}));
-    for (const k of cat.accessories || []) for (const c of k.colors) ids.accs.add(c.id);
-  } catch { /* no catalogue: nothing private */ }
-  return (cached = ids);
+    cat = JSON.parse(Buffer.concat([d.update(Buffer.from(data, 'base64')), d.final()]).toString('utf8'));
+  } catch { cat = { tops: [], pants: [], accessories: [] }; }
+  return cat;
 }
-const isPrivateLook = (L) => { const p = privateIds(); return !!L && (p.tops.has(String(L.top)) || p.bottoms.has(String(L.bottom)) || p.accs.has(String(L.acc))); };
+// The catalogue cut down: to what this viewer may wear ('owner' | 'guest'), or to the colours a
+// set of looks uses (a profile's fits).
+function cut(keep) {
+  const c = catalogue(), out = {};
+  for (const part of ['tops', 'pants', 'accessories']) {
+    out[part] = (c[part] || []).map((k) => ({ ...k, colors: k.colors.filter(keep) })).filter((k) => k.colors.length);
+  }
+  return out;
+}
+const forViewer = (who) => cut((c) => who === 'owner' || c.only !== 'owner');
+function forLooks(looks) {
+  const used = new Set(looks.flatMap((L) => [L.top, L.bottom, L.acc].filter(Boolean).map(String)));
+  return cut((c) => used.has(c.id));
+}
+const cache = {};
+function privateIds(who = 'owner') {
+  if (cache[who]) return cache[who];
+  const ids = { tops: new Set(), bottoms: new Map(), accs: new Set() };
+  const c = forViewer(who);
+  for (const k of c.tops) for (const x of k.colors) ids.tops.add(x.id);
+  for (const k of c.pants) for (const x of k.colors) ids.bottoms.set(x.id, Object.keys(x.shoes || k.shoes || {}));
+  for (const k of c.accessories) for (const x of k.colors) ids.accs.add(x.id);
+  return (cache[who] = ids);
+}
 
-module.exports = { privateIds, isPrivateLook };
+module.exports = { privateIds, forViewer, forLooks };

@@ -133,14 +133,17 @@ if __name__ == '__main__' and '--drops' not in sys.argv: main()
 # shape, so it's the MAHOGANY™ loafer's pixels (where the black and brown files differ)
 # recoloured, shading kept.
 MARSH = (0xf7, 0xf2, 0xea)
+# The MAHOGANY™ loafer's own colours (from the JEAN® template), so only loafer pixels change.
+_b, _n = load(os.path.join(R, 'good-jean-black.png')).load(), load(os.path.join(R, 'good-jean-brown.png')).load()
+LOAFER = {_n[x, y] for x in range(64) for y in range(64) if _b[x, y] != _n[x, y] and _n[x, y][3] and not isdenim(_n[x, y])}
 def marshmallow(black, brown):
     lum = lambda p: 0.299 * p[0] + 0.587 * p[1] + 0.114 * p[2]
-    out = brown.copy(); a, b, o = black.load(), brown.load(), out.load()
+    out = brown.copy(); b, o = brown.load(), out.load()
     L0 = lum((66, 16, 18))                 # the MAHOGANY™ loafer's main tone
     for x in range(64):
-        for y in range(64):
+        for y in range(16, 64):            # legs only
             p = b[x, y]
-            if a[x, y] != p and p[3] and not isdenim(p):
+            if p in LOAFER:
                 k = min(1.06, lum(p) / L0); o[x, y] = tuple(min(255, round(ch * k)) for ch in MARSH) + (p[3],)
     return out
 def unseal_json(i):
@@ -153,11 +156,10 @@ def drops():
         for k in cat['pants']:
             for c in k['colors']:
                 sh = c['shoes']
-                if 'marshmallow' in sh: continue
                 bl, _ = source(sh['black']); br, _ = source(sh['brown'])
                 fid = re.match(r'api/outfit\?id=(.+)-black$', sh['black']).group(1) + '-marshmallow'
                 seal(fid, marshmallow(bl, br))
-                c['shoes'] = {**{s: v for s, v in sh.items() if s in ('black', 'brown', 'tobacco')}, 'marshmallow': f'api/outfit?id={fid}', **sh}
+                c['shoes'] = {**{s: v for s, v in sh.items() if s in ('black', 'brown', 'tobacco')}, 'marshmallow': f'api/outfit?id={fid}', **{s: v for s, v in sh.items() if s != 'marshmallow'}}
                 print(idx, c['id'], '+marshmallow')
         seal_json(idx, cat)
 
