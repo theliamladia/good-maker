@@ -41,15 +41,7 @@
 
     // Achievements
     $('aCount').textContent = `${p.achievements.length}`;
-    $('ach').replaceChildren(...p.achievements.map((a) => {
-      const el = document.createElement('div'); el.className = 'ac-ach-card';
-      el.innerHTML = '<img alt="" draggable="false"><div><span class="ac-ach-n"></span><span class="ac-ach-d"></span><span class="ac-ach-p mono"></span></div>';
-      el.querySelector('img').src = a.icon;
-      el.querySelector('.ac-ach-n').textContent = a.name;
-      el.querySelector('.ac-ach-d').textContent = a.desc;
-      el.querySelector('.ac-ach-p').innerHTML = `<span>${a.pct}% OF PLAYERS HAVE THIS</span>${a.at ? `<span>EARNED ${a.at.slice(0, 10)}</span>` : ''}`;
-      return el;
-    }));
+    GoodAch.draw($('ach'), p.achievements);   // js/ach-row.js (a profile lists earned ones only)
 
     // Inventory
     const items = Object.fromEntries((c.items || []).map((i) => [i.id, i]));

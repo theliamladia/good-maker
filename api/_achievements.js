@@ -9,10 +9,10 @@ const { redis } = require('./_redis');
 
 const DEFS = [
   { id: 'signed-up', name: 'SIGNED UP!', desc: 'You registered an account.', icon: 'assets/ach/signed-up.svg' },
-  { id: 'weewy-sowwy', name: "I'M WEEWY SOWWY", desc: "Be the first to get the I'M SOWWY GOODIE®.", icon: 'assets/ach/weewy-sowwy.png' },
+  { id: 'weewy-sowwy', name: "I'M WEEWY SOWWY", desc: "Be the first to get the I'M SOWWY GOODIE®.", icon: 'assets/ach/weewy-sowwy.png', first: true },
   { id: 'im-sowwy', name: "I'M SOWWY", desc: "Get the rare I'M SOWWY drop on GOOD® CRATE Nº001.", icon: 'assets/ach/im-sowwy.png' },
   { id: 'scarfin-it-down', name: "SCARFIN' IT DOWN", desc: 'Get the SCARF® from GOOD® CRATE Nº002.', icon: 'assets/ach/scarfin-it-down.png' },
-  { id: 'en-plein-air', name: 'EN PLEIN AIR', desc: 'Be the first to get the JEAN® PAINTER SPLATTER.', icon: 'assets/ach/en-plein-air.png' },
+  { id: 'en-plein-air', name: 'EN PLEIN AIR', desc: 'Be the first to get the JEAN® PAINTER SPLATTER.', icon: 'assets/ach/en-plein-air.png', first: true },
   { id: 'creatif', name: 'CREATIF', desc: 'Get any chase from GOOD® CRATE Nº002.', icon: 'assets/ach/creatif.png' },
 ];
 
@@ -54,7 +54,8 @@ async function list(uid) {
   const out = [];
   for (const d of DEFS) {
     const n = (await redis('SCARD', `ach:${d.id}`)) || 0;
-    out.push({ ...d, earned: mine.has(d.id), at: mine.has(d.id) ? await redis('GET', `user:${uid}:ach:${d.id}`) : null, pct: Math.round((n / total) * 1000) / 10 });
+    // first: only one player can ever have it; gone: someone already does
+    out.push({ ...d, gone: !!d.first && n > 0, earned: mine.has(d.id), at: mine.has(d.id) ? await redis('GET', `user:${uid}:ach:${d.id}`) : null, pct: Math.round((n / total) * 1000) / 10 });
   }
   return out;
 }

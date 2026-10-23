@@ -107,17 +107,7 @@
   function drawAchievements() {
     const got = achievements.filter((a) => a.earned).length;
     $('aCount').textContent = `${got} / ${achievements.length}`;
-    const sorted = [...achievements].sort((a, b) => b.earned - a.earned);
-    $('ach').replaceChildren(...sorted.map((a) => {
-      const el = document.createElement('div');
-      el.className = `ac-ach-card${a.earned ? '' : ' locked'}`;
-      el.innerHTML = '<img alt="" draggable="false"><div><span class="ac-ach-n"></span><span class="ac-ach-d"></span><span class="ac-ach-p mono"></span></div>';
-      el.querySelector('img').src = a.icon;
-      el.querySelector('.ac-ach-n').textContent = a.name;
-      el.querySelector('.ac-ach-d').textContent = a.desc;
-      el.querySelector('.ac-ach-p').innerHTML = `<span>${a.pct}% OF PLAYERS HAVE THIS</span><span>${a.earned ? (a.at ? `EARNED ${a.at.slice(0, 10)}` : 'EARNED') : 'LOCKED'}</span>`;
-      return el;
-    }));
+    GoodAch.draw($('ach'), achievements.map((a) => ({ ...a, earned: !!a.earned })));   // js/ach-row.js
   }
 
   // Owner: the ledger of every serialized pull (not the GD-999 set), ten rows a page,

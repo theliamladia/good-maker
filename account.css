@@ -82,6 +82,22 @@
 
 /* ACHIEVEMENTS */
 .ac-ach .ac-ach-grid { margin-bottom: 4px; }
+/* ACHIEVEMENTS as icons (js/ach-row.js): five a page, the full card on hover / focus / tap */
+.ac-ach-row { display: grid; grid-template-columns: repeat(5, 92px); gap: 14px; }
+.ac-ach-icon { position: relative; aspect-ratio: 1; display: grid; place-items: center; padding: 0; border: 0; background: #fff; cursor: pointer; }
+.ac-ach-icon > img { width: 72%; height: 72%; object-fit: contain; image-rendering: pixelated; }
+.ac-ach-icon.locked { background: rgba(255, 255, 255, 0.12); }
+.ac-ach-icon.locked > img { filter: grayscale(1) brightness(0.55); opacity: 0.6; }
+.ac-ach-pop { display: none !important; position: absolute; top: calc(100% + 10px); left: 0; z-index: 20; width: 320px; text-align: left; box-shadow: 0 18px 40px rgba(0, 0, 40, 0.35); }
+.ac-ach-pop.ac-ach-card.locked { background: #2a2aff; }
+.ac-ach-icon.right .ac-ach-pop { left: auto; right: 0; }
+.ac-ach-icon:hover .ac-ach-pop, .ac-ach-icon:focus-visible .ac-ach-pop, .ac-ach-icon.open .ac-ach-pop { display: grid !important; }
+.ac-ach-wrap { display: flex; align-items: center; gap: 28px; flex-wrap: wrap; }
+.ac-ach-pager { display: flex; align-items: center; gap: 14px; font-size: 0.66rem; letter-spacing: 0.22em; }
+.ac-ach-pager[hidden] { display: none; }
+.ac-ach-pager button { width: 34px; height: 34px; border: 1px solid rgba(255, 255, 255, 0.6); border-radius: 50%; background: none; color: #fff; font-size: 1rem; cursor: pointer; }
+.ac-ach-pager button:disabled { opacity: 0.3; cursor: default; }
+@media (max-width: 600px) { .ac-ach-wrap { gap: 16px; } .ac-ach-row { flex: 1 1 100%; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 8px; } .ac-ach-pop { top: auto; bottom: calc(100% + 10px); width: min(300px, 84vw); } .ac-ach-icon:nth-child(n+3) .ac-ach-pop { left: auto; right: 0; } }
 .ac-ach-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 14px; }
 .ac-ach-card { display: grid; grid-template-columns: 72px 1fr; gap: 14px; align-items: center; padding: 14px; background: #fff; color: var(--good-blue); }
 .ac-ach-card img { width: 72px; height: 72px; object-fit: contain; image-rendering: pixelated; }
