@@ -1190,7 +1190,7 @@ body.st {
   body.m-maker .viewer-wrap { position: fixed; left: 0; right: 0; top: var(--mh); height: var(--sh); z-index: 5; transition: height 0.3s cubic-bezier(0.2, 0.8, 0.2, 1); }
   body.m-maker #view3d { height: 100% !important; }
   body.m-maker .viewer-wrap .viewer-bar, body.m-maker .viewer-wrap > .micro, body.m-maker .equipped { display: none !important; }
-  body.m-maker .m-stage { display: block; position: absolute; inset: 0; pointer-events: none; }
+  body.m-maker .m-stage { display: block; position: absolute; inset: 0; z-index: 2; pointer-events: none; }   /* over the 3D canvas (z-index 1) */
   body.m-maker .m-stage > * { pointer-events: auto; position: absolute; }
   body.m-maker .m-body { top: 10px; left: 12px; display: flex; gap: 3px; padding: 3px; border-radius: 999px; background: rgba(11, 21, 38, 0.28); border: 1px solid rgba(255, 255, 255, 0.5); backdrop-filter: blur(6px); }
   body.m-maker .m-body button { border: 0; background: none; color: #fff; font: 700 0.6rem var(--font-mono); letter-spacing: 0.12em; padding: 6px 10px; border-radius: 999px; cursor: pointer; }
