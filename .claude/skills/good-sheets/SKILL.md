@@ -36,12 +36,12 @@ Images taller than 8000px get scaled in chat — offer the original in a .zip if
 - **Every piece on grey mannequins**: same as look sheet, one section per piece, 3 per row.
 - **Press illustration / infographic**: 1200px wide, sections split by 1px rules, numbered tags
   (01, 02…), phones/product shots in a spotlight, ≤3 short steps per feature.
-- **Timeline / drop calendar**: `tools/studio/press/timeline/timeline.html` (1500×500, logos,
+- **Timeline / drop calendar**: `tools/studio/press/timeline/timeline.html` (1900×500, logos,
   dates, OUT NOW / NEXT WEEK / TBD / COMING SOON). Edit the items, then
-  `node tools/studio/sheet.js tools/studio/press/timeline/timeline.html good-timeline.png 1500 2 --clip=1500x500`.
-  Order so far: GOOD® CRATE Nº001 (Oct 9) · INMOTION® CRATE Nº002 (Oct 15) · GUD™ (Oct 19) ·
-  WANDERING® (week of Oct 26) · GOOD® CRATE Nº003 (week of Nov 2, TBD) · Q&G® (November) ·
-  UBIQUITY® (first week of December).
+  `node tools/studio/sheet.js tools/studio/press/timeline/timeline.html good-timeline.png 1900 2 --clip=1900x500`.
+  Drops land on Fridays. Order so far: GOOD® CRATE Nº001 (Oct 9) · INMOTION® CRATE Nº002 (Oct 15) ·
+  GUD™ (Oct 19) · WANDERING® (Fri Oct 30) · GOOD® CRATE Nº003 (Fri Nov 6) · Q&G® (Fri Nov 13) ·
+  GOOD® CRATE Nº004 (Fri Nov 20) · break: "WE NEED A BREAK!" (Fri Nov 27, Thanksgiving) · UBIQUITY® (Fri Dec 4).
 
 Collab sheets may follow the collab's own world when the owner asks (e.g. white BG look sheets);
 keep the GOOD® naming either way.
