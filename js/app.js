@@ -9,7 +9,7 @@
     return kinds.map((k) => {
       const kind = { id: k.id, name: k.name, line: k.line || 'good', season: k.season || 1, drop: k.drop };
       kind.colors = (k.colors || [k]).map((c) => ({
-        locked: k.locked, baseUnderHoles: k.baseUnderHoles, hat: k.hat, shoes: k.shoes, boxers: k.boxers, boxersExact: k.boxersExact, src: k.src, cropped: k.cropped, noTuck: k.noTuck, untucked: k.untucked, ...c, name: k.name, kind,
+        locked: k.locked, baseUnderHoles: k.baseUnderHoles, hat: k.hat, shoes: k.shoes, boxers: k.boxers, boxersExact: k.boxersExact, src: k.src, cropped: k.cropped, noTuck: k.noTuck, ...c, name: k.name, kind,
       }));
       kind.current = kind.colors[0];
       return kind;
@@ -534,9 +534,7 @@
   }
   // Tuck: tucked shows the pants' waistband; untucked lets the shirt hang over it.
   // Cropped tops and skirts (noTuck) have nothing to tuck: always tucked, control hidden.
-  // untucked: a top worn open (a jacket over a henley) never tucks, or the waistband shows in the opening.
-  const canTuck = () => !state.noTop && !state.noBottom && !state.outfit.cropped && !state.outfit.untucked && !state.pants.noTuck;
-  const tuckedNow = () => (canTuck() ? state.tucked : !(!state.noTop && state.outfit.untucked));
+  const canTuck = () => !state.noTop && !state.noBottom && !state.outfit.cropped && !state.pants.noTuck;
   const drawTuck = () => $('tuck').querySelectorAll('button').forEach((b) => b.setAttribute('aria-checked', (b.dataset.tuck === 'in') === state.tucked));
   drawTuck();
   $('tuck').onclick = (e) => {
@@ -998,7 +996,7 @@
         if (state.noBottom) pants = shoePart(pants, true);         // just the shoes
         else if (state.noShoes) pants = shoePart(pants, false);    // the pants, barefoot
       }
-      outfit = SkinLib.combineOutfit(outfit, pants, tuckedNow());
+      outfit = SkinLib.combineOutfit(outfit, pants, state.tucked || !canTuck());
       var accImg = state.acc ? await loadLocked(state.acc.src).catch(() => null) : null;
     } catch (err) {
       if (id !== renderId) return;

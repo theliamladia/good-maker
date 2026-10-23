@@ -5,7 +5,7 @@
 // decoded from /api/outfit's scrambled data straight to pixels.
 window.GoodCompose = (() => {
   const catalogue = (kinds) => kinds.flatMap((k) => (k.colors || [k]).map((c) => ({
-    baseUnderHoles: k.baseUnderHoles, hat: k.hat, shoes: k.shoes, boxers: k.boxers, boxersExact: k.boxersExact, src: k.src, cropped: k.cropped, noTuck: k.noTuck, untucked: k.untucked, locked: k.locked, ...c, name: k.name,
+    baseUnderHoles: k.baseUnderHoles, hat: k.hat, shoes: k.shoes, boxers: k.boxers, boxersExact: k.boxersExact, src: k.src, cropped: k.cropped, noTuck: k.noTuck, locked: k.locked, ...c, name: k.name,
   })));
   const TOPS = catalogue(window.OUTFITS), BOTTOMS = catalogue(window.PANTS);
   const cache = {};
@@ -48,7 +48,7 @@ window.GoodCompose = (() => {
       let pants = await (p.locked ? loadLocked(psrc) : load(psrc));
       if (p.boxers && L.boxer === 'tartan') pants = SkinLib.tartanBoxers(pants, !!p.boxersExact);
       pants = SkinLib.washPants(pants, p.wash);
-      outfit = SkinLib.combineOutfit(outfit, pants, !(o && o.untucked) && !!(L.tuck !== 'out' || (o && o.cropped) || p.noTuck));
+      outfit = SkinLib.combineOutfit(outfit, pants, !!(L.tuck !== 'out' || (o && o.cropped) || p.noTuck));
     }
     // FINE TUNING saved with the fit (L.ft): hair rows, erased pixels, hat layer, tone, MY SKIN.
     if (SkinLib.foldOverlay) user = SkinLib.foldOverlay(user);

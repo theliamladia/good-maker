@@ -536,7 +536,8 @@ function combineOutfit(shirt, pants, tucked = true) {
     const [base, outer] = TORSO_SIDES;
     for (let yy = base[1]; yy < base[1] + base[3]; yy++) for (let xx = base[0]; xx < base[0] + base[2]; xx++) {
       const i = idx(xx, yy), o = idx(xx, yy + 16);
-      if (pants.data[o + 3] > 0 && out.data[o + 3] === 0) { for (let c = 0; c < 4; c++) out.data[i + c] = pants.data[o + c]; continue; }
+      // (also under the shirt's outer layer, so a jacket worn open shows the tucked waistband all round)
+      if (pants.data[o + 3] > 0) { for (let c = 0; c < 4; c++) out.data[i + c] = pants.data[o + c]; continue; }
       if (pants.data[i + 3] > 0) put(xx, yy, pants);
     }
   }
