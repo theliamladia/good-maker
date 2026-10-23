@@ -424,7 +424,7 @@
   // Shoes are kinds with colourways, like tops and bottoms. Each colour's id is
   // the key of its file in a bottom's shoes map (js/outfits.js).
   const SHOE_KINDS = [
-    { id: 'loafer', name: 'LOAFER®', colors: [['black', 'TUXEDO™', '#1b1b1f'], ['brown', 'MAHOGANY™', '#5a1e14'], ['tobacco', 'TOBACCO™', '#b57a36']] },
+    { id: 'loafer', name: 'LOAFER®', colors: [['black', 'TUXEDO™', '#1b1b1f'], ['brown', 'MAHOGANY™', '#5a1e14'], ['tobacco', 'TOBACCO™', '#b57a36'], ['marshmallow', 'MARSHMALLOW™', '#f7f2ea']] },
     { id: 'sneak01', name: 'SNEAK01', colors: [['sneak01', 'COTTON™/GOOD® BLUE', ['#f4f4f2', '#0000ff']]] },
     { id: 'chelsea', name: 'CHELSEA®', colors: [['chelsea-tobacco', 'TOBACCO™', '#b57a36'], ['chelsea-tuxedo', 'TUXEDO™', '#1b1b1f'], ['chelsea-mahogany', 'MAHOGANY™', '#5a1e14']] },
     { id: 'workboot', name: 'WORKBOOT®', colors: [['workboot-wheat', 'WHEAT™', '#c8913f'], ['workboot-oxblood', 'OXBLOOD™', '#713a40'], ['workboot-tuxedo', 'TUXEDO™', '#1b1b1f']] },
