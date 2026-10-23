@@ -7,7 +7,7 @@
       "includeFiles": "api/{_locked,_private}/**"
     },
     "api/me.js": {
-      "includeFiles": "api/_private/index.enc"
+      "includeFiles": "api/{_private/index.enc,_locked/gud-index.enc,_locked/wdm-index.enc}"
     },
     "api/profile.js": {
       "includeFiles": "api/_private/index.enc"
