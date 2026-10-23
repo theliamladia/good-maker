@@ -294,6 +294,7 @@
   });
   document.querySelectorAll('.wd-looks figure').forEach((f) => {
     const [a, b] = f.querySelectorAll('canvas');
+    for (const c of [a, b]) if (c) { c.width = FW; c.height = FH; }   // the hood-down canvas too, or it draws into the default 300×150
     a.dataset.look = f.dataset.id; still(a, f.dataset.id); near.observe(a);
     if (b && f.dataset.down) { b.dataset.look = f.dataset.down; near.observe(b); }
   });
