@@ -31,7 +31,7 @@ function unseal(id) {
 }
 
 // Owner-only pieces (tools/private-seal.js): api/_private/<id>.enc and the catalogue,
-// index.enc (?private=1). For anyone but the owner's session they answer exactly like
+// index.enc (?private=1). For anyone but the owner's (or a private guest's) session they answer exactly like
 // an unknown id, so nothing shows they exist.
 const PRIVATE = { has: (id) => /^[0-9a-f]{16}$/.test(id) && fs.existsSync(path.join(__dirname, '_private', `${id}.enc`)) };
 function unsealFile(file) {
@@ -44,6 +44,9 @@ function unsealFile(file) {
 }
 async function ownerOnly(req) {
   try { const { currentUser, isOwner } = require('./_account'); return isOwner(await currentUser(req)); } catch { return false; }
+}
+async function privateOk(req) {   // the owner and the private guests (api/_account.js)
+  try { const { currentUser, seesPrivate } = require('./_account'); return await seesPrivate(await currentUser(req)); } catch { return false; }
 }
 
 module.exports = async function handler(req, res) {
@@ -65,7 +68,7 @@ module.exports = async function handler(req, res) {
   }
   const wantsPrivate = req.query && req.query.private === '1';
   if (wantsPrivate || PRIVATE.has(id)) {
-    if (!(await ownerOnly(req))) { unknown(); return; }
+    if (!(await privateOk(req))) { unknown(); return; }
     let buf = null;
     try { buf = unsealFile(path.join(__dirname, '_private', wantsPrivate ? 'index.enc' : `${id}.enc`)); } catch { buf = null; }
     if (!buf) { unknown(); return; }

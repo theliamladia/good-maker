@@ -36,7 +36,7 @@ const cat = JSON.parse(fs.readFileSync(path.join(dir, 'catalog.json'), 'utf8'));
 for (const k of [...cat.tops, ...cat.pants, ...(cat.accessories || [])]) {
   k.locked = true;   // served scrambled, like the other preview pieces
   for (const c of k.colors) {
-    for (const set of ['bodies', 'long']) if (c[set]) for (const b of Object.keys(c[set])) c[set][b] = ref(c[set][b]);
+    for (const set of ['bodies', 'long', 'hoodDown']) if (c[set]) for (const b of Object.keys(c[set])) c[set][b] = ref(c[set][b]);
     if (c.src) c.src = ref(c.src);
     if (c.shoes) for (const s of Object.keys(c.shoes)) c.shoes[s] = ref(c.shoes[s]);
   }

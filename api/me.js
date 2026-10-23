@@ -15,7 +15,7 @@ const path = require('path');
 const vm = require('vm');
 const crypto = require('crypto');
 const { redis, configured, overLimit, parseBody } = require('./_redis');
-const { sha, currentUser, endSession, saveUser, unlocksFor, isOwner, slugOf, claimProfile } = require('./_account');
+const { sha, currentUser, endSession, saveUser, unlocksFor, isOwner, seesPrivate, slugOf, claimProfile } = require('./_account');
 const ACH = require('./_achievements');
 const { applySeeds } = require('./_seeds');
 const { privateIds } = require('./_private');
@@ -36,7 +36,7 @@ for (const k of win.ACCESSORIES || []) for (const c of k.colors || [k]) { ACCS.a
 function cleanLook(L, unlocks = [], owner = false) {
   L = L || {};
   const out = {};
-  const priv = owner ? privateIds() : null;   // the owner's own pieces (api/_private.js)
+  const priv = owner ? privateIds() : null;   // the private pieces (api/_private.js), for the owner and guests
   const gud = dropIds();                       // GUD™, WANDERING®…, once they're live (api/_drop.js)
   const owns = (id) => LOCKED.has(id) && (unlocks.includes(id) || unlocks.includes(LOCKED.get(id)));
   if (L.top) { if (!TOPS.has(String(L.top)) && !owns(String(L.top)) && !(priv && priv.tops.has(String(L.top))) && !gud.tops.has(String(L.top))) return null; out.top = String(L.top); }
@@ -130,7 +130,7 @@ module.exports = async function handler(req, res) {
       await ACH.touch(user.uid);
       const achievements = await ACH.list(user.uid);
       const profile = await claimProfile(user);
-      res.status(200).json({ user: { name: user.name, coins: user.coins || 0, hasSkin, unlocks: await unlocksFor(user), owner: isOwner(user) || undefined, profile, prefs: user.prefs || null, daily: await dailyOf(user.uid) }, wardrobe: rows.map((r) => JSON.parse(r)), inventory: inv, achievements });
+      res.status(200).json({ user: { name: user.name, coins: user.coins || 0, hasSkin, unlocks: await unlocksFor(user), owner: isOwner(user) || undefined, private: (await seesPrivate(user)) || undefined, profile, prefs: user.prefs || null, daily: await dailyOf(user.uid) }, wardrobe: rows.map((r) => JSON.parse(r)), inventory: inv, achievements });
       return;
     }
     if (req.method !== 'POST') { res.status(405).json({ error: 'method' }); return; }
@@ -157,7 +157,7 @@ module.exports = async function handler(req, res) {
       res.status(200).json({ ok: true }); return;
     }
     if (body.action === 'save') {
-      const look = cleanLook(body.look, await unlocksFor(user), isOwner(user));
+      const look = cleanLook(body.look, await unlocksFor(user), await seesPrivate(user));
       if (!look) { res.status(400).json({ error: 'look' }); return; }
       const key = `user:${user.uid}:wardrobe`;
       const rows = ((await redis('LRANGE', key, 0, MAX_LOOKS - 1)) || []).map((r) => JSON.parse(r));
@@ -181,7 +181,7 @@ module.exports = async function handler(req, res) {
       res.status(200).json({ ok: true, item, coins: user.coins || 0, earned: earned ? COINS_PER_SAVE : 0, capped: !!(fresh && !earned), daily: await dailyOf(user.uid) }); return;
     }
     if (body.action === 'prefs') {
-      user.prefs = cleanPrefs(body.prefs, await unlocksFor(user), isOwner(user));
+      user.prefs = cleanPrefs(body.prefs, await unlocksFor(user), await seesPrivate(user));
       await saveUser(user);
       res.status(200).json({ ok: true }); return;
     }

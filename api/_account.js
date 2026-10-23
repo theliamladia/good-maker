@@ -42,6 +42,15 @@ const saveUser = (u) => redis('SET', `user:${u.uid}`, JSON.stringify(u));
 // sha256 of the account email (so no email sits in this public repo).
 const OWNER = '402fb6989f1b7e8cf49c604bd500e77fef3bc4fb340372fc7d5415ee09717511';
 const isOwner = (user) => !!user && sha(String(user.email).toLowerCase()) === OWNER;
+// Accounts besides the owner who see the private pieces (api/_private: MAKER® and their
+// wardrobe), by the profile slug their account holds.
+const PRIVATE_GUESTS = ['globohomo123'];
+async function seesPrivate(user) {
+  if (!user) return false;
+  if (isOwner(user)) return true;
+  for (const slug of PRIVATE_GUESTS) if ((await redis('GET', `profile:${slug}`)) === user.uid) return true;
+  return false;
+}
 const UNLOCKS = {
   // owner: plus every GOOD® CRATE Nº002 piece (kind ids), which the owner wore before it opened
   '402fb6989f1b7e8cf49c604bd500e77fef3bc4fb340372fc7d5415ee09717511': ['goodie-im-sowwy', 'goodie-black-chrome',
@@ -70,4 +79,4 @@ async function claimProfile(user) {
   return (await redis('GET', `profile:${slug}`)) === user.uid ? slug : null;
 }
 
-module.exports = { sha, currentUser, startSession, endSession, saveUser, unlocksFor, isOwner, slugOf, tagsOf, claimProfile };
+module.exports = { sha, currentUser, startSession, endSession, saveUser, unlocksFor, isOwner, seesPrivate, slugOf, tagsOf, claimProfile };

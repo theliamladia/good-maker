@@ -113,8 +113,8 @@
   meOnce().then(async (j) => {
     me = j.user; draw(); drawDaily();
     if (me && me.unlocks && me.unlocks.length && app()) app().unlock(me.unlocks);
-    // The owner's own pieces, before the saved settings (they may be wearing one).
-    if (me && me.owner && app() && app().addPrivate) {
+    // The private pieces (owner and guests), before the saved settings (they may be wearing one).
+    if (me && (me.owner || me.private) && app() && app().addPrivate) {
       const cat = await fetch('api/outfit?private=1', { cache: 'no-store' }).then((r) => (r.ok ? r.json() : null)).catch(() => null);
       if (cat) { await app().whenBooted(); await app().addPrivate(cat); }
     }

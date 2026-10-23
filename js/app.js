@@ -871,7 +871,7 @@
     // added to the lists with their own filter option, wearable and downloadable.
     // Pieces that arrive after boot: the owner's own (addPrivate) or a released drop like
     // GUD™ (addDrop). They join the lists with their own filter option.
-    addPrivate: (cat) => addDrop(cat, { filter: 'crate2-owner', label: 'GOOD® CRATE 2 · OWNER' }),
+    addPrivate: (cat) => addDrop(cat, { filter: 'private', label: 'PRIVATE' }),
     addDrop: (cat, opts) => addDrop(cat, opts),
     unlock: (ids) => {
       let any = false;
