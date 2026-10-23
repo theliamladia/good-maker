@@ -208,8 +208,8 @@
   if (signin) history.replaceState(null, '', location.pathname);
   meOnce().then(async (j) => {
     me = j.user; wardrobe = j.wardrobe || []; inventory = j.inventory || []; achievements = j.achievements || [];
-    // GUD™ (released pieces from the server), so saved fits with them draw.
-    { const gud = await fetch('api/outfit?gud=1', { cache: 'no-store' }).then((r) => (r.ok ? r.json() : null)).catch(() => null); if (gud) GoodCompose.addPrivate(gud); }
+    // The released drops' pieces (GUD™, WANDERING®) from the server, so saved fits with them draw.
+    for (const q of ['gud=1', 'drop=wandering']) { const cat = await fetch(`api/outfit?${q}`, { cache: 'no-store' }).then((r) => (r.ok ? r.json() : null)).catch(() => null); if (cat) GoodCompose.addPrivate(cat); }
     // The private pieces (owner and guests): loaded before the wardrobe draws, so fits with them show.
     if (me && (me.owner || me.private)) {
       const cat = await fetch('api/outfit?private=1', { cache: 'no-store' }).then((r) => (r.ok ? r.json() : null)).catch(() => null);

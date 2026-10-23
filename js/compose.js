@@ -80,8 +80,10 @@ window.GoodCompose = (() => {
     return c;
   }
   const label = (piece) => (piece ? `${piece.name}${piece.color ? ' ' + piece.color : ''}` : '');
-  // The owner's own pieces (/api/outfit?private=1), so their saved fits draw too.
+  // Pieces from the server (released drops, the private catalogue), so saved fits with them draw too.
   const ACCS = catalogue(window.ACCESSORIES || []);
-  const addPrivate = ({ tops = [], pants = [], accessories = [] } = {}) => { TOPS.push(...catalogue(tops)); BOTTOMS.push(...catalogue(pants)); ACCS.push(...catalogue(accessories)); };
+  // Every piece that arrives this way is sealed (drawn from /api/outfit's scrambled data).
+  const sealed = (kinds) => catalogue(kinds).map((c) => ({ ...c, locked: true }));
+  const addPrivate = ({ tops = [], pants = [], accessories = [] } = {}) => { TOPS.push(...sealed(tops)); BOTTOMS.push(...sealed(pants)); ACCS.push(...sealed(accessories)); };
   return { compose, front, load, label, addPrivate };
 })();
