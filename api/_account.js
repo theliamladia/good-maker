@@ -44,7 +44,7 @@ const OWNER = '402fb6989f1b7e8cf49c604bd500e77fef3bc4fb340372fc7d5415ee09717511'
 const isOwner = (user) => !!user && sha(String(user.email).toLowerCase()) === OWNER;
 // Accounts besides the owner who see the private pieces (api/_private: MAKER® and their
 // wardrobe), by the profile slug their account holds.
-const PRIVATE_GUESTS = ['globohomo123'];
+const PRIVATE_GUESTS = ['chinny'];   // CHINNY (globohomo123 in Minecraft)
 async function seesPrivate(user) {
   if (!user) return false;
   if (isOwner(user)) return true;
