@@ -29,6 +29,7 @@ When in doubt: remove something, and add space.
 ## Designing pieces
 
 - Follow "How we design a piece" in `.claude/skills/good-studio/SKILL.md` (start from the line, one idea then remove, shade don't recolour, quiet fabric, fit through layers, write the spec, show it the house way). The owner approved this approach on the UBIQUITY® HOODIE®.
+- **Seal every hood.** A hood (or anything on the head's outer layer) gets its bottom face filled too, shaded about 0.85, so there's no gap when the model is seen from below. Check the hat-layer underside (x 48–55, y 0–7) before sealing a piece.
 
 ## Tools and skills
 

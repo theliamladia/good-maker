@@ -51,6 +51,8 @@ im.save('tools/studio/work/x/jacket.png')
 - `neck(colour)` = a high collar on the head's outer layer (bottom rows, front corners only) —
   render it as the look's `accFile`.
 - `ng(...)` = the new G (4×4); the SHIRT® G sits at `ox=2, oy=2` on the torso front.
+- **Seal every hood.** On the head's outer layer, fill the bottom face (x 48–55, y 0–7) as well,
+  about 0.85 of the main colour, or you can see up into the hood from below. Owner's standing rule.
 - Textures are classic (4px arms). For slim players run `python3 tools/studio/toslim.py a.png`.
 - Fabric tricks that worked: corduroy = alternate columns ×1.0/×0.84; pleats = dark column per
   face (×0.55); studs = grey checkerboard (#8f9197/#3a3b40); padded knees = alternating rows on
