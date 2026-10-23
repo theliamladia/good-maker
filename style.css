@@ -48,6 +48,11 @@ body.fall .site-header { background: #4f6b45; }
 .cloud-2 { width: 180px; height: 46px; top: 36%; animation-duration: 120s; animation-delay: -70s; opacity: 0.8; }
 .cloud-3 { width: 320px; height: 78px; top: 62%; animation-duration: 105s; animation-delay: -45s; }
 .cloud-4 { width: 140px; height: 38px; top: 82%; animation-duration: 140s; animation-delay: -110s; opacity: 0.75; }
+/* MAKER®: the tag a collab shirt shows on the stage (js/app.js drawCollab) */
+.collab-tag { position: absolute; bottom: 10px; right: 10px; z-index: 3; padding: 7px 12px; border-radius: 999px; background: rgba(11, 21, 38, 0.55); color: #fff; font-size: 0.58rem; font-weight: 700; letter-spacing: 0.16em; text-decoration: none; backdrop-filter: blur(6px); animation: collab-in 0.4s ease both; }
+a.collab-tag:hover, a.collab-tag:focus-visible { background: #0000ff; }
+@keyframes collab-in { from { opacity: 0; transform: translateY(-4px); } }
+@media (max-width: 700px) { body.m-maker .collab-tag { right: auto; bottom: 30px; left: 12px; } }
 @keyframes drift { from { transform: translateX(-40vw); } to { transform: translateX(140vw); } }
 
 /* ---------- Header ---------- */

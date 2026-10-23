@@ -45,6 +45,33 @@ window.OUTFITS = [
         bodies: { classic: 'api/outfit?id=shirt-ii-im-sowwy-classic', slim: 'api/outfit?id=shirt-ii-im-sowwy-slim' },
         long: { classic: 'api/outfit?id=shirt-ii-im-sowwy-long-classic', slim: 'api/outfit?id=shirt-ii-im-sowwy-long-slim' },
       },
+      {
+        // made to celebrate GUD™: MAKER® shows a small banner when it's on (js/app.js)
+        id: 'shirt-ii-gud',
+        color: "GUD™/GOLDENROD™",
+        swatch: ['#3a012a', '#daa520'],
+        collab: { name: 'GUD™', href: '/gud' },
+        bodies: { classic: 'outfits/collab/shirt-ii-gud-classic.png', slim: 'outfits/collab/shirt-ii-gud-slim.png' },
+        long: { classic: 'outfits/collab/shirt-ii-gud-long-classic.png', slim: 'outfits/collab/shirt-ii-gud-long-slim.png' },
+      },
+      {
+        // made to celebrate WANDERING®: MAKER® shows a small banner when it's on (js/app.js)
+        id: 'shirt-ii-wandering',
+        color: "BISON™/SADDLE™",
+        swatch: ['#4a3326', '#a8743f'],
+        collab: { name: 'WANDERING®', href: '/wandering' },
+        bodies: { classic: 'outfits/collab/shirt-ii-wandering-classic.png', slim: 'outfits/collab/shirt-ii-wandering-slim.png' },
+        long: { classic: 'outfits/collab/shirt-ii-wandering-long-classic.png', slim: 'outfits/collab/shirt-ii-wandering-long-slim.png' },
+      },
+      {
+        // made to celebrate Q&G®: MAKER® shows a small banner when it's on (js/app.js)
+        id: 'shirt-ii-qg',
+        color: "ONYX™/GOOD® BLUE",
+        swatch: ['#17171a', '#0000ff'],
+        collab: { name: 'Q&G®', soon: true },
+        bodies: { classic: 'outfits/collab/shirt-ii-qg-classic.png', slim: 'outfits/collab/shirt-ii-qg-slim.png' },
+        long: { classic: 'outfits/collab/shirt-ii-qg-long-classic.png', slim: 'outfits/collab/shirt-ii-qg-long-slim.png' },
+      },
     ],
   },
   {

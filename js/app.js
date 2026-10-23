@@ -603,6 +603,23 @@
     el.querySelector('.sw-label').textContent = selected.color || '';
   }
 
+  // ---------- Collab shirts ----------
+  // A shirt made to celebrate a collaboration (colour.collab) shows a small tag on the stage
+  // while it's on: a link to the collab's page, or COMING SOON before it's out.
+  function drawCollab() {
+    const c = !state.noTop && state.outfit.collab;
+    const key = c ? `${c.name}|${c.href || ''}` : '';
+    let el = $('collabTag');
+    if (el && el.dataset.key === key) return;
+    if (el) el.remove();
+    if (!c) return;
+    el = document.createElement(c.href ? 'a' : 'span');
+    el.id = 'collabTag'; el.className = 'collab-tag mono'; el.dataset.key = key;
+    if (c.href) el.href = c.href;
+    el.textContent = c.href ? `MADE TO CELEBRATE ${c.name} →` : `${c.name} · COMING SOON`;
+    $('view3d').append(el);
+  }
+
   // ---------- Sleeve ----------
   function updateSleeveButtons() {
     const o = state.outfit;
@@ -1015,6 +1032,7 @@
     if (!noTop) lastGood = o;
     syncUrl();
     drawSlots();
+    drawCollab();
     const slim = state.body === 'slim';
     const args = [state.tone, slim, state.hair, state.erased, state.headwear, state.keepSkin];
     const merged = SkinLib.mergeSkin(state.user, outfit, ...args);
