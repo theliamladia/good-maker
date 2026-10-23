@@ -19,7 +19,7 @@ const { sha, currentUser, endSession, saveUser, unlocksFor, isOwner, slugOf, cla
 const ACH = require('./_achievements');
 const { applySeeds } = require('./_seeds');
 const { privateIds } = require('./_private');
-const { gudIds } = require('./_drop');
+const { dropIds } = require('./_drop');
 
 const COINS_PER_SAVE = 10;
 const SAVES_PER_DAY = 4;
@@ -37,7 +37,7 @@ function cleanLook(L, unlocks = [], owner = false) {
   L = L || {};
   const out = {};
   const priv = owner ? privateIds() : null;   // the owner's own pieces (api/_private.js)
-  const gud = gudIds();                        // GUD™, once it's live (api/_drop.js)
+  const gud = dropIds();                       // GUD™, WANDERING®…, once they're live (api/_drop.js)
   const owns = (id) => LOCKED.has(id) && (unlocks.includes(id) || unlocks.includes(LOCKED.get(id)));
   if (L.top) { if (!TOPS.has(String(L.top)) && !owns(String(L.top)) && !(priv && priv.tops.has(String(L.top))) && !gud.tops.has(String(L.top))) return null; out.top = String(L.top); }
   if (L.bottom) {

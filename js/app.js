@@ -1478,11 +1478,13 @@
     setBody(['classic', 'slim'].includes(L.body) ? L.body : state.body);
   }
 
-  // GUD™: released pieces come from the server (sealed until the drop; api/_drop.js).
-  fetch('api/outfit?gud=1', { cache: 'no-store' }).then((r) => (r.ok ? r.json() : null)).then(async (cat) => {
-    if (!cat) return;
-    await bootDone; addDrop(cat, { filter: 'gud', label: 'GUD™' });
-  }).catch(() => {});
+  // Drops (GUD™, WANDERING®): released pieces come from the server (sealed until the drop; api/_drop.js).
+  for (const [q, filter, label] of [['gud=1', 'gud', 'GUD™'], ['drop=wandering', 'wandering', 'WANDERING®']]) {
+    fetch(`api/outfit?${q}`, { cache: 'no-store' }).then((r) => (r.ok ? r.json() : null)).then(async (cat) => {
+      if (!cat) return;
+      await bootDone; addDrop(cat, { filter, label });
+    }).catch(() => {});
+  }
 
   // The ACCESSORY row: at the foot of the shirt column, across from the shoes.
   if (ACCS.length && !$('accSection')) {

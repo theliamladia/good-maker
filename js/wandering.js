@@ -316,4 +316,11 @@
     b.addEventListener('mouseenter', () => show(b)); b.addEventListener('focus', () => show(b)); b.addEventListener('click', () => show(b));
   });
   document.querySelector('.wd-strip').addEventListener('mouseleave', () => show(null));
+
+  // WEAR IT IN MAKER®: only once the drop is open (api/_drop.js); until then the catalogue is a 404
+  fetch('/api/outfit?drop=wandering', { cache: 'no-store' }).then((r) => {
+    if (!r.ok) return;
+    const a = Object.assign(document.createElement('a'), { className: 'wd-wear', href: '/?filter=wandering', textContent: 'WEAR IT IN MAKER® →' });
+    document.querySelector('.wd-three').after(a);
+  }).catch(() => {});
 })();

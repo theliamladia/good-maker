@@ -50,11 +50,14 @@ module.exports = async function handler(req, res) {
   let id = String((req.query && req.query.id) || '');
   res.setHeader('Cache-Control', 'no-store');
   const unknown = () => res.status(404).json({ error: 'unknown_outfit' });
-  // GUD™: nothing exists before the drop (api/_drop.js). ?gud=1 is its catalogue.
-  const { gudOpen } = require('./_drop');
+  // Gated drops (api/_drop.js): nothing exists before the drop, except to the owner, who can
+  // check it in MAKER® first. ?drop=<name> is its catalogue (?gud=1 for GUD™).
+  const { DROPS, isOpen, dropOf } = require('./_drop');
   if (req.query && req.query.gud === '1') id = 'gud-index';
-  if (/^gud-/.test(id) && !gudOpen()) { unknown(); return; }
-  if (id === 'gud-index') {
+  if (req.query && Object.hasOwn(DROPS, String(req.query.drop))) id = DROPS[String(req.query.drop)].index;
+  const drop = dropOf(id);
+  if (drop && !isOpen(drop) && !(await ownerOnly(req))) { unknown(); return; }
+  if (drop && id === DROPS[drop].index) {
     let buf = null;
     try { buf = unseal(id); } catch { buf = null; }
     if (!buf) { unknown(); return; }
