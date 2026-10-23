@@ -26,6 +26,10 @@ When in doubt: remove something, and add space.
 - Never store passwords or GOOD_LOCK_KEY in the repo.
 - Preview and locked pieces are sealed (tools/lock-seal.js) and drawn to canvas from scrambled data. Never publish their PNGs.
 
+## Designing pieces
+
+- Follow "How we design a piece" in `.claude/skills/good-studio/SKILL.md` (start from the line, one idea then remove, shade don't recolour, quiet fabric, fit through layers, write the spec, show it the house way). The owner approved this approach on the UBIQUITY® HOODIE®.
+
 ## Tools and skills
 
 - Project skills in `.claude/skills/`: good-studio (paint and render pieces), good-sheets (concept/look/press sheets, the drop calendar), good-seal (sealed previews), good-collab-page (collab landing pages), good-dev-check (local site + QA), good-ship (push to main and confirm the Vercel deploy).

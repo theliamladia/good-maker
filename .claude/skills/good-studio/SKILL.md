@@ -10,6 +10,31 @@ the skinview3d bundle and members' skins from their profiles into `models/`).
 Work files go in `tools/studio/work/` (gitignored). Unreleased renders never get committed —
 see **good-seal**.
 
+## 0. How we design a piece (the owner signed off on this approach: keep it)
+The UBIQUITY® HOODIE® and THE SHIRT® are the reference. Work this way every time:
+1. **Start from the line, not the piece.** Pull the line's colour story (names + hexes), its marks
+   (the narrow G `.## / #.. / #.# / .##` in GOOD® BLUE on the wearer's left chest, front u5-7
+   rows 3-6; the 2×1 GOOD® BLUE tag at the back) and its fit language. A new piece must look
+   like it belongs next to the others.
+2. **One idea, then remove.** Name the silhouette in one line ("a relaxed hoodie with nothing
+   extra"), then reduce every detail to its smallest pixel signal: a pocket is one seam, not a
+   patch; drawcords are tonal; a hood down is a fold, not a block. If a detail needs a second
+   colour, question it. When in doubt, take it out.
+3. **Shade, don't recolour.** Details are multipliers of the main colour, never new colours:
+   seams 0.9, a soft shadow 0.96, ribs alternating 0.94/0.98, openings and linings 0.72-0.86,
+   folds 0.84-0.92, highlights 1.04-1.1. Accent colour only for the line's marks.
+4. **Fabric is quiet.** Per-pixel variation about ±1%; a heather is ~12% of pixels at 1.05, never
+   blotches. Checks/twills only where the fabric really has them (JEAN #3).
+5. **Fit is layers.** Relaxed/boxy = the garment on both layers (it stands off the body); true to
+   size = layer 1; collars and hoods continue onto the head's outer layer (bottom rows at back and
+   sides, front corners only, face clear). Sleeves stop at the wrist; hems and cuffs are ribbed
+   with a shadow row above. Shoes and socks come from the shoe files, never baked in by accident.
+6. **Write the spec as you go**, in the project-file format: colour (name + hex), fit, every detail
+   with its rows/columns and shade, marks, texture + generator file names. That is the handoff.
+7. **Show it the house way:** on Leeeeems (slim: run toslim.py) front and back, paired with the
+   line's other pieces, on GOOD® BLUE in the spotlight, one colourway per row, ≤3 sentences of
+   copy and a three-column spec (FIT · DETAILS · MARKS). Then apply feedback exactly as said.
+
 ## 1. Paint the piece (Python + Pillow)
 ```python
 exec(open('/home/user/good-maker/tools/studio/lib.py').read())
