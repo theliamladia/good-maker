@@ -588,7 +588,7 @@
         const sw = Array.isArray(c.swatch)
           ? `linear-gradient(90deg, ${c.swatch[0]} 50%, ${c.swatch[1]} 50%)`
           : c.swatch || '#ccc';
-        b.innerHTML = `<span class="dot" style="background:${sw}"></span>`;
+        const dot = document.createElement('span'); dot.className = 'dot'; dot.style.background = sw; b.append(dot);   // (sw can be any CSS background, quotes and all)
         b.setAttribute('aria-label', c.color);
         b.title = c.color;
         b.onclick = () => onPick(c);
