@@ -34,7 +34,8 @@ window.GoodCompose = (() => {
     let outfit = EMPTY, slim = detected === 'slim';
     if (o) {
       const sleeve = sleeves(o).includes(L.sleeve) ? L.sleeve : sleeves(o)[0];
-      const set = sleeve === 'long' ? o.long : o.bodies;
+      const down = !!o.hoodDown && L.hood === 'down';   // a hooded top worn hood down
+      const set = down ? o.hoodDown : sleeve === 'long' ? o.long : o.bodies;
       const body = set[L.body] ? L.body : set[detected] ? detected : Object.keys(set)[0];
       slim = body === 'slim';
       outfit = await (o.locked ? loadLocked(set[body]) : load(set[body]));
@@ -61,7 +62,7 @@ window.GoodCompose = (() => {
       for (let i = 0; i < 4096; i++) if (bits[i >> 3] & (1 << (i & 7))) erased.add((i & 63) + ',' + (i >> 6));
     }
     const merged = SkinLib.mergeSkin(user, outfit, tone, slim, hair, erased, ft.hw || 'keep', !!ft.ks);
-    if (o && o.hat) for (let y = 0; y < 16; y++) { const i = (y * 64 + 32) * 4; merged.data.set(outfit.data.subarray(i, i + 32 * 4), i); }
+    if (o && o.hat && !(o.hoodDown && L.hood === 'down')) for (let y = 0; y < 16; y++) { const i = (y * 64 + 32) * 4; merged.data.set(outfit.data.subarray(i, i + 32 * 4), i); }
     const acc = L.acc && ACCS.find((c) => c.id === L.acc);   // an ACCESSORY, laid over everything
     if (acc) { const a = await loadLocked(acc.src).catch(() => null); if (a) for (let i = 0; i < a.data.length; i += 4) if (a.data[i + 3]) merged.data.set(a.data.subarray(i, i + 4), i); }
     return { merged, slim, top: o, bottom: p };

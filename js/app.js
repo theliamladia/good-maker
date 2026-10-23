@@ -51,6 +51,7 @@
     outfit: SHIRTS[0].current,
     body: 'classic',     // 'classic' | 'slim'
     sleeve: 'short',     // 'short' | 'long'
+    hood: 'up',          // 'up' | 'down', for tops that come both ways (hoodDown)
     pants: ALL_PANTS.find((p) => p.id === SHIRTS[0].current.pants) || PANTS[0].current, // the default top's pairing
     filter: 'all',       // the filter dropdown on the shirt and pants lists (FILTERS)
     pantsPicked: false,  // once the user picks pants, shirts stop changing them
@@ -119,7 +120,10 @@
   // user's choice if available, otherwise whatever the outfit has).
   const sleevesOf = (o) => ['short', 'long'].filter((k) => (k === 'long' ? o.long : o.bodies));
   const sleeveFor = (o, sleeve = state.sleeve) => (sleevesOf(o).includes(sleeve) ? sleeve : sleevesOf(o)[0]);
-  const setFor = (o, sleeve = state.sleeve) => (sleeveFor(o, sleeve) === 'long' ? o.long : o.bodies);
+  // Hooded tops (hoodDown: a second set of bodies) are worn up or down; down drops the hat layer.
+  const hoodDown = (o) => !!o.hoodDown && state.hood === 'down';
+  const hatFor = (o) => !!o.hat && !hoodDown(o);
+  const setFor = (o, sleeve = state.sleeve) => (hoodDown(o) ? o.hoodDown : sleeveFor(o, sleeve) === 'long' ? o.long : o.bodies);
   const loadOutfit = async (o, body, sleeve = state.sleeve) => {
     const src = setFor(o, sleeve)[body];
     const d = await (o.locked ? loadLocked(src) : loadData(src));
@@ -603,10 +607,22 @@
   function updateSleeveButtons() {
     const o = state.outfit;
     showOnly($('sleeve'), 'sleeve', sleevesOf(o));
+    // A hooded top takes the slot: HOOD, up or down, instead of the sleeve.
+    const hooded = !!o.hoodDown;
+    $('sleeveTag').textContent = hooded ? 'Nº007 / HOOD' : 'Nº007 / SLEEVE';
+    $('sleeve').style.display = hooded ? 'none' : ''; $('hood').style.display = hooded ? '' : 'none';   // (.segmented is a grid, so not [hidden])
     // Only one sleeve length? Nothing to choose, so hide the whole control.
-    $('sleeveSection').hidden = sleevesOf(o).length < 2 || state.noTop;
+    $('sleeveSection').hidden = (!hooded && sleevesOf(o).length < 2) || state.noTop;
     $('sleeve').querySelectorAll('button').forEach((b) => b.setAttribute('aria-checked', b.dataset.sleeve === sleeveFor(o)));
+    $('hood').querySelectorAll('button').forEach((b) => b.setAttribute('aria-checked', b.dataset.hood === state.hood));
   }
+  $('hood').onclick = (e) => {
+    const btn = e.target.closest('[data-hood]');
+    if (!btn) return;
+    state.hood = btn.dataset.hood;
+    updateSleeveButtons();
+    setBody(state.body);
+  };
   $('sleeve').onclick = (e) => {
     const btn = e.target.closest('[data-sleeve]');
     if (!btn) return;
@@ -1002,9 +1018,9 @@
     const slim = state.body === 'slim';
     const args = [state.tone, slim, state.hair, state.erased, state.headwear, state.keepSkin];
     const merged = SkinLib.mergeSkin(state.user, outfit, ...args);
-    state.stand = { outfit, hat: !noTop && !!o.hat, slim };
+    state.stand = { outfit, hat: !noTop && hatFor(o), slim };
     // Outfits that go over the head (CROPPIE®) replace the hat layer.
-    if (!noTop && o.hat) {
+    if (!noTop && hatFor(o)) {
       for (let y = 0; y < 16; y++) {
         const i = (y * 64 + 32) * 4;
         merged.data.set(outfit.data.subarray(i, i + 32 * 4), i);
@@ -1379,6 +1395,7 @@
     if (!state.noShoes && shoes.length > 1) L.shoe = shoes.includes(state.shoe) ? state.shoe : shoes[0];
     if (state.noShoes) L.feet = 'bare';
     if (!state.noTop && sleevesOf(o).length > 1) L.sleeve = sleeveFor(o);
+    if (!state.noTop && hoodDown(o)) L.hood = 'down';
     if (bodiesOf(o).length > 1) L.body = state.body;
     if (canTuck() && !state.tucked) L.tuck = 'out';
     if (!state.noBottom && p.boxers && state.boxer === 'tartan') L.boxer = 'tartan';
@@ -1436,7 +1453,7 @@
   function lookFromUrl() {
     const q = new URLSearchParams(location.search);
     if (!q.get('top') && !q.get('bottom')) return null;
-    return Object.fromEntries(['u', 'top', 'bottom', 'shoe', 'feet', 'sleeve', 'body', 'tuck', 'boxer', 'acc'].filter((k) => q.get(k)).map((k) => [k, q.get(k)]));
+    return Object.fromEntries(['u', 'top', 'bottom', 'shoe', 'feet', 'sleeve', 'hood', 'body', 'tuck', 'boxer', 'acc'].filter((k) => q.get(k)).map((k) => [k, q.get(k)]));
   }
   // The address bar's look as the page opened (before syncUrl rewrites it), for owner
   // pieces that only arrive after boot (addPrivate).
@@ -1447,6 +1464,7 @@
   async function applyLook(L, withSkin) {
     const top = topById(L.top), bottom = pantsById(L.bottom);
     if (['short', 'long'].includes(L.sleeve)) state.sleeve = L.sleeve;
+    state.hood = L.hood === 'down' ? 'down' : 'up';
     if (L.shoe in SHOE_SWATCH) state.shoe = L.shoe;
     state.boxer = L.boxer === 'tartan' ? 'tartan' : 'blue';
     state.tucked = L.tuck !== 'out';

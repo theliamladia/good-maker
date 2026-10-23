@@ -49,6 +49,7 @@ function cleanLook(L, unlocks = [], owner = false) {
   if (out.bottom && (BOTTOMS.get(out.bottom) || gud.bottoms.get(out.bottom) || (priv && priv.bottoms.get(out.bottom)) || []).includes(L.shoe)) out.shoe = L.shoe;
   if (L.feet === 'bare') out.feet = 'bare';
   if (['short', 'long'].includes(L.sleeve)) out.sleeve = L.sleeve;
+  if (L.hood === 'down') out.hood = 'down';
   if (['classic', 'slim'].includes(L.body)) out.body = L.body;
   if (L.tuck === 'out') out.tuck = 'out';
   if (L.boxer === 'tartan') out.boxer = 'tartan';

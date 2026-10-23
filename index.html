@@ -194,10 +194,14 @@
     <p class="micro mono" id="outfitHint" hidden></p>
 
     <div id="sleeveSection">
-      <div class="section-tag mono">Nº007 / SLEEVE</div>
+      <div class="section-tag mono" id="sleeveTag">Nº007 / SLEEVE</div>
       <div class="segmented small" id="sleeve" role="radiogroup" aria-label="Sleeve length">
         <button type="button" data-sleeve="short" role="radio">Short</button>
         <button type="button" data-sleeve="long" role="radio">Long</button>
+      </div>
+      <div class="segmented small" id="hood" role="radiogroup" aria-label="Hood" style="display:none">
+        <button type="button" data-hood="up" role="radio">Up</button>
+        <button type="button" data-hood="down" role="radio">Down</button>
       </div>
     </div>
 
@@ -257,7 +261,7 @@
 <script src="https://cdn.jsdelivr.net/npm/skinview3d@3.1.0/bundles/skinview3d.bundle.js"></script>
 <script src="js/skin.js"></script>
 <script src="js/outfits.js?v=2"></script>
-<script src="js/app.js?v=3"></script>
+<script src="js/app.js?v=4"></script>
 <script src="js/mobile.js"></script>
 <script src="js/help.js"></script>
 <script src="js/account.js"></script>
