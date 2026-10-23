@@ -574,8 +574,8 @@
     // name. A kind with one colour shows just its name (nothing to choose).
     const colors = selected.kind.colors;
     el.hidden = false;
-    if (el._kind !== selected.kind) {
-      el._kind = selected.kind;
+    if (el._kind !== selected.kind || el._n !== colors.length) {   // (a colourway can join a kind later: addDrop)
+      el._kind = selected.kind; el._n = colors.length;
       const dots = document.createElement('div');
       dots.className = 'sw-dots';
       dots.hidden = colors.length < 2;
@@ -871,7 +871,7 @@
     // added to the lists with their own filter option, wearable and downloadable.
     // Pieces that arrive after boot: the owner's own (addPrivate) or a released drop like
     // GUD™ (addDrop). They join the lists with their own filter option.
-    addPrivate: (cat) => addDrop(cat, { filter: 'private', label: 'PRIVATE' }),
+    addPrivate: (cat) => addDrop(cat, { filter: 'private', label: 'PRIVATE', extra: true }),
     addDrop: (cat, opts) => addDrop(cat, opts),
     unlock: (ids) => {
       let any = false;
@@ -1358,11 +1358,22 @@
   }
 
   // ---------- Drops that arrive after boot ----------
-  function addDrop({ tops = [], pants = [], accessories = [] } = {}, { filter, label, owned = true } = {}) {
+  function addDrop({ tops = [], pants = [], accessories = [] } = {}, { filter, label, owned = true, extra = false } = {}) {
     if (!filter || FILTERS[filter]) return;
     const T = catalogue(tops), P = catalogue(pants), A = catalogue(accessories);
-    for (const k of [...T, ...P, ...A]) for (const c of k.colors) { c.locked = true; if (owned) c.owned = true; }
-    SHIRTS.push(...T); PANTS.push(...P); ALL_PANTS.push(...P.flatMap((k) => k.colors)); ACCS.push(...A);
+    for (const k of [...T, ...P, ...A]) for (const c of k.colors) { c.locked = true; if (owned) c.owned = true; if (extra) c.extra = true; }
+    // A kind that's already listed (e.g. a private colourway of a WANDERING® piece) joins it as
+    // more colours, extra ones last, whichever arrives first.
+    const join = (list, kinds) => kinds.filter((k) => {
+      const have = list.find((o) => o.id === k.id);
+      if (!have) return true;
+      for (const c of k.colors) { c.kind = have; have.colors.push(c); }
+      have.colors.sort((a, b) => !!a.extra - !!b.extra);
+      if (have.current.extra) have.current = have.colors[0];
+      return false;
+    });
+    ALL_PANTS.push(...P.flatMap((k) => k.colors));
+    SHIRTS.push(...join(SHIRTS, T)); PANTS.push(...join(PANTS, P)); ACCS.push(...join(ACCS, A));
     const ids = new Set([...T, ...P, ...A].flatMap((k) => k.colors.map((c) => c.id)));
     FILTERS[filter] = (k) => k.colors.some((c) => ids.has(c.id));
     document.querySelectorAll('[data-filter]').forEach((sel) => {
@@ -1373,7 +1384,7 @@
     if (BOOT_FILTER === filter) { setFilter(filter); return; }
     // A link (e.g. a saved fit's OPEN) that names one of these pieces: put it on now.
     const L = BOOT_LOOK;
-    if (L && (ids.has(L.top) || ids.has(L.bottom) || ids.has(L.acc))) return applyLook(L, false).then(() => render());
+    if (L && (ids.has(L.top) || ids.has(L.bottom) || ids.has(L.acc))) return applyLook(L, false).then(() => { render(); drawOutfits(); });
     drawOutfits();
   }
 
