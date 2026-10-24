@@ -100,12 +100,12 @@
   }));
 
   // ---------- the fleet: a showroom. Each vehicle on its own stage, rolling (or flying) in when it
-  // comes into view; its angles cross-fade on their own, or pick one. Jets hover, cars sit. ----------
+  // comes into view, in side profile. Jets hover, cars sit. ----------
   const FLEET = [
-    { f: 'roadster01', n: 'GD® ROADSTER01', d: 'TWO-SEAT COUPE', price: '$50,000', air: false, specs: [['TOP SPEED', '105 mph'], ['POWER', 'Electric, 80 kWh'], ['SEATS', '2']], views: [['', 'FRONT'], ['-side', 'SIDE'], ['-rear', 'REAR']] },
-    { f: 'energy01', n: 'GD® ENERGY01', d: 'TWO-SEAT HYPERCAR', price: '$1,500,000', air: false, specs: [['TOP SPEED', '210 mph'], ['POWER', 'Electric, 120 kWh'], ['SEATS', '2']], views: [['', 'FRONT'], ['-side', 'SIDE']] },
-    { f: 'plane01', n: 'GD® PLANE01', d: 'PRIVATE JET, FLIES ITSELF', price: '$8,000,000', air: true, specs: [['TOP SPEED', '350 kt · TURBO 875 kt'], ['POWER', 'Fuel, 2,400 L'], ['SEATS', '4']], views: [['', 'ABOVE'], ['-side', 'SIDE']] },
-    { f: 'sprint01', n: 'GD® SPRINT01', d: 'SINGLE-SEAT JET', price: '$12,000,000', air: true, specs: [['TOP SPEED', '1,250 kt'], ['POWER', 'Fuel, 1,600 L'], ['SEATS', '1']], views: [['', 'ABOVE'], ['-side', 'SIDE']] },
+    { f: 'roadster01', n: 'GD® ROADSTER01', d: 'TWO-SEAT COUPE', price: '$50,000', air: false, specs: [['TOP SPEED', '105 mph'], ['POWER', 'Electric, 80 kWh'], ['SEATS', '2']], views: [['-side', 'SIDE']] },
+    { f: 'energy01', n: 'GD® ENERGY01', d: 'TWO-SEAT HYPERCAR', price: '$1,500,000', air: false, specs: [['TOP SPEED', '210 mph'], ['POWER', 'Electric, 120 kWh'], ['SEATS', '2']], views: [['-side', 'SIDE']] },
+    { f: 'plane01', n: 'GD® PLANE01', d: 'PRIVATE JET, FLIES ITSELF', price: '$8,000,000', air: true, specs: [['TOP SPEED', '350 kt · TURBO 875 kt'], ['POWER', 'Fuel, 2,400 L'], ['SEATS', '4']], views: [['-side', 'SIDE']] },
+    { f: 'sprint01', n: 'GD® SPRINT01', d: 'SINGLE-SEAT JET', price: '$12,000,000', air: true, specs: [['TOP SPEED', '1,250 kt'], ['POWER', 'Fuel, 1,600 L'], ['SEATS', '1']], views: [['-side', 'SIDE']] },
   ];
   const stages = FLEET.map((v, i) => {
     const el = document.createElement('article');
@@ -130,6 +130,7 @@
       chips.querySelectorAll('button').forEach((b, j) => b.setAttribute('aria-pressed', String(j === k)));
     };
     st.show = show;
+    if (imgs.length < 2) chips.remove();   // one angle: no picker
     $('fleet').append(el);
     return st;
   });
