@@ -120,3 +120,22 @@ body.intro { overflow: hidden; }
 .gd-white .gd-angles button { border-color: rgba(0, 0, 255, .4); color: #0000ff; }
 .gd-white .gd-angles button[aria-pressed="true"] { background: #0000ff; border-color: #0000ff; color: #fff; }
 .gd-white .gd-spec dl div { border-top-color: rgba(0, 0, 255, .25); }
+
+/* THE HOMEPOD (on the same white band as THE FLEET) */
+.gd-white + .gd-white { padding-top: 0; }
+.gd-white + .gd-white .gd-head { border-top: 1px solid rgba(0, 0, 255, .35); padding-top: 56px; }
+.gd-hp-top { display: grid; grid-template-columns: minmax(0, 1.5fr) minmax(0, 1fr); gap: 60px; align-items: center; }
+.gd-hp-art { position: relative; height: clamp(260px, 30vw, 400px); }
+.gd-hp-art .pad { position: absolute; right: 0; bottom: 0; width: 82%; max-height: 92%; object-fit: contain; filter: drop-shadow(0 18px 16px rgba(0, 0, 40, .18)); }
+.gd-hp-art .icon { position: absolute; left: 0; top: 0; width: 30%; max-width: 150px; image-rendering: pixelated; filter: drop-shadow(0 10px 12px rgba(0, 0, 40, .2)); }
+.gd-hp-h { font: 400 clamp(20px, 2vw, 26px)/1.35 var(--sans); letter-spacing: -.01em; margin: 0; }
+.gd-hp-pr { font: 500 34px var(--sans); letter-spacing: -.02em; margin: 26px 0 0; }
+.gd-hp-sub { font: 400 10.5px var(--mono); letter-spacing: .2em; opacity: .8; margin: 8px 0 0; }
+.gd-hp-steps { list-style: none; margin: 70px 0 0; padding: 0; display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 28px; counter-reset: s; }
+.gd-hp-steps li { border-top: 1px solid rgba(0, 0, 255, .35); padding-top: 14px; counter-increment: s; }
+.gd-hp-steps b { display: block; font: 400 15px var(--wide); letter-spacing: .04em; margin-bottom: 10px; }
+.gd-hp-steps b::before { content: '0' counter(s) ' '; font: 400 10px var(--mono); letter-spacing: .2em; opacity: .7; margin-right: 6px; }
+.gd-hp-steps span { display: block; font: 300 14px/1.6 var(--sans); }
+.gd-hp-steps code { font: 400 12px var(--mono); background: rgba(0, 0, 255, .08); padding: 1px 5px; }
+@media (max-width: 1000px) { .gd-hp-steps { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+@media (max-width: 600px) { .gd-hp-top { grid-template-columns: minmax(0, 1fr); gap: 30px; } .gd-hp-steps { grid-template-columns: minmax(0, 1fr); } }
