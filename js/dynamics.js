@@ -134,12 +134,12 @@
     return st;
   });
   // In view: roll in once, then turn through the angles every few seconds (until someone picks one)
-  const bays = new IntersectionObserver((es) => es.forEach((e) => {
-    const st = stages.find((s) => s.el === e.target); if (!st) return;
+  const bays = new IntersectionObserver((es) => es.forEach((e) => {   // watch the stage, not the whole bay (tall on phones)
+    const st = stages.find((s) => s.stage === e.target); if (!st) return;
     st.seen = e.isIntersecting;
-    if (e.isIntersecting) e.target.classList.add('in');
-  }), { threshold: 0.35 });
-  stages.forEach((s) => bays.observe(s.el));
+    if (e.isIntersecting) st.el.classList.add('in');
+  }), { threshold: 0.4 });
+  stages.forEach((s) => { s.stage = s.el.querySelector('.gd-stage'); bays.observe(s.stage); });
   setInterval(() => stages.forEach((s) => { if (s.seen && !s.hold && s.n > 1) s.show((s.k + 1) % s.n); }), 3200);
 
   // ---------- sealed turntables (from js/wandering.js) ----------

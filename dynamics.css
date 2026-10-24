@@ -109,3 +109,14 @@ body.intro { overflow: hidden; }
   .gd-table { font-size: 13.5px; }
   .gd-table td:last-child { font-size: 10px; letter-spacing: .12em; }
 }
+
+/* THE FLEET on white: the GOOD® BLUE vehicles stand out (a full-width band, like THE CHASE on black) */
+.gd-white { margin: 0 calc(-1 * var(--side)); padding-left: var(--side); padding-right: var(--side); background: #fff; color: #0000ff; border-top-color: transparent; }
+.gd-white .gd-stage { background: radial-gradient(ellipse 60% 70% at 50% 45%, rgba(0, 0, 40, .05), transparent 75%); }
+.gd-white .gd-stage::before { background: linear-gradient(105deg, transparent 35%, rgba(0, 0, 255, .05) 48%, transparent 60%); }
+.gd-white .gd-floor { background: radial-gradient(closest-side, rgba(0, 0, 30, .28), transparent); }
+.gd-white .gd-car img { -webkit-box-reflect: below -4px linear-gradient(transparent 72%, rgba(255, 255, 255, .12)); }
+.gd-white .gd-bay.air .gd-car img { -webkit-box-reflect: none; }
+.gd-white .gd-angles button { border-color: rgba(0, 0, 255, .4); color: #0000ff; }
+.gd-white .gd-angles button[aria-pressed="true"] { background: #0000ff; border-color: #0000ff; color: #fff; }
+.gd-white .gd-spec dl div { border-top-color: rgba(0, 0, 255, .25); }
