@@ -29,12 +29,12 @@ const finish = (v, slim) => { const P = v.playerObject; v.render(); window.spin 
     const W = +(q.get('w') || 700), H = +(q.get('h') || 700);
     const v = viewer(W, H);
     await v.loadSkin(q.get('f') + '?' + Date.now(), { model: q.get('slim') === '1' ? 'slim' : 'default' });
-    v.fov = 30; v.zoom = top ? 1.6 : 1.7;
+    v.fov = top ? 30 : 18; v.zoom = top ? 1.6 : 1.45;                      // bottoms flatter, straight on
     const P = v.playerObject, s = P.skin;
     P.rotation.y = (kind === 'topback' ? 180 : +(q.get('turn') || 0)) * d;
     P.position.y = top ? -1 : 12;
     s.rightArm.rotation.z = 0.12; s.leftArm.rotation.z = -0.12;      // sleeves eased off the body
-    s.rightLeg.rotation.z = top ? 0.04 : 0.1; s.leftLeg.rotation.z = top ? -0.04 : -0.1;
+    s.rightLeg.rotation.z = 0; s.leftLeg.rotation.z = 0;                 // legs straight down: no knock knees
     s.head.visible = false;
     P.traverse((o) => { if (o.material) for (const m of [].concat(o.material)) { m.transparent = true; m.alphaTest = 0.1; m.needsUpdate = true; } });
     finish(v, false); return;
