@@ -99,17 +99,48 @@
     return tr;
   }));
 
-  // ---------- the fleet ----------
+  // ---------- the fleet: a showroom. Each vehicle on its own stage, rolling (or flying) in when it
+  // comes into view; its angles cross-fade on their own, or pick one. Jets hover, cars sit. ----------
   const FLEET = [
-    ['roadster01', 'GD® ROADSTER01', 'TWO-SEAT COUPE · $50,000'], ['energy01', 'GD® ENERGY01', 'TWO-SEAT HYPERCAR · $1,500,000'],
-    ['plane01', 'GD® PLANE01', 'PRIVATE JET, FLIES ITSELF · $8,000,000'], ['sprint01', 'GD® SPRINT01', 'SINGLE-SEAT JET · $12,000,000'],
+    { f: 'roadster01', n: 'GD® ROADSTER01', d: 'TWO-SEAT COUPE', price: '$50,000', air: false, specs: [['TOP SPEED', '105 mph'], ['POWER', 'Electric, 80 kWh'], ['SEATS', '2']], views: [['', 'FRONT'], ['-side', 'SIDE'], ['-rear', 'REAR']] },
+    { f: 'energy01', n: 'GD® ENERGY01', d: 'TWO-SEAT HYPERCAR', price: '$1,500,000', air: false, specs: [['TOP SPEED', '210 mph'], ['POWER', 'Electric, 120 kWh'], ['SEATS', '2']], views: [['', 'FRONT'], ['-side', 'SIDE']] },
+    { f: 'plane01', n: 'GD® PLANE01', d: 'PRIVATE JET, FLIES ITSELF', price: '$8,000,000', air: true, specs: [['TOP SPEED', '350 kt · TURBO 875 kt'], ['POWER', 'Fuel, 2,400 L'], ['SEATS', '4']], views: [['', 'ABOVE'], ['-side', 'SIDE']] },
+    { f: 'sprint01', n: 'GD® SPRINT01', d: 'SINGLE-SEAT JET', price: '$12,000,000', air: true, specs: [['TOP SPEED', '1,250 kt'], ['POWER', 'Fuel, 1,600 L'], ['SEATS', '1']], views: [['', 'ABOVE'], ['-side', 'SIDE']] },
   ];
-  $('fleet').replaceChildren(...FLEET.map(([f, n, d]) => {
-    const fig = document.createElement('figure');
-    fig.innerHTML = `<div class="img"><img src="/assets/dynamics/${f}.webp" alt="" decoding="async"></div><span class="v"></span><span class="d"></span>`;
-    fig.querySelector('.v').textContent = n; fig.querySelector('.d').textContent = d; fig.querySelector('img').alt = n;
-    return fig;
-  }));
+  const stages = FLEET.map((v, i) => {
+    const el = document.createElement('article');
+    el.className = `gd-bay${v.air ? ' air' : ''}${i % 2 ? ' flip' : ''}`;
+    el.innerHTML = `<div class="gd-stage"><div class="gd-floor"></div><div class="gd-car"></div><div class="gd-angles" role="group"></div></div>
+      <div class="gd-spec"><span class="no">${String(i + 1).padStart(2, '0')}</span><h3></h3><p class="d"></p><dl></dl><p class="pr"></p></div>`;
+    el.querySelector('h3').textContent = v.n; el.querySelector('.d').textContent = v.d; el.querySelector('.pr').textContent = v.price;
+    el.querySelector('dl').innerHTML = v.specs.map(([k, x]) => `<div><dt>${k}</dt><dd>${x}</dd></div>`).join('');
+    el.querySelector('.gd-angles').setAttribute('aria-label', `${v.n} angles`);
+    const car = el.querySelector('.gd-car'), chips = el.querySelector('.gd-angles');
+    const imgs = v.views.map(([suf, label], k) => {
+      const img = new Image(); img.src = `/assets/dynamics/${v.f}${suf}.webp`; img.alt = `${v.n}, ${label.toLowerCase()} view`; img.decoding = 'async'; img.draggable = false;
+      if (k === 0) img.className = 'on'; car.append(img);
+      const b = document.createElement('button'); b.type = 'button'; b.textContent = label; b.setAttribute('aria-pressed', String(k === 0));
+      b.onclick = () => { st.hold = true; show(k); }; chips.append(b);
+      return img;
+    });
+    const st = { el, k: 0, hold: false, n: imgs.length };
+    const show = (k) => {
+      st.k = k;
+      imgs.forEach((im, j) => im.classList.toggle('on', j === k));
+      chips.querySelectorAll('button').forEach((b, j) => b.setAttribute('aria-pressed', String(j === k)));
+    };
+    st.show = show;
+    $('fleet').append(el);
+    return st;
+  });
+  // In view: roll in once, then turn through the angles every few seconds (until someone picks one)
+  const bays = new IntersectionObserver((es) => es.forEach((e) => {
+    const st = stages.find((s) => s.el === e.target); if (!st) return;
+    st.seen = e.isIntersecting;
+    if (e.isIntersecting) e.target.classList.add('in');
+  }), { threshold: 0.35 });
+  stages.forEach((s) => bays.observe(s.el));
+  setInterval(() => stages.forEach((s) => { if (s.seen && !s.hold && s.n > 1) s.show((s.k + 1) % s.n); }), 3200);
 
   // ---------- sealed turntables (from js/wandering.js) ----------
   const scrambled = async (id, tries = 3) => {
