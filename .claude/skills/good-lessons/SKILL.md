@@ -69,3 +69,6 @@ Every rule here cost the owner a round trip. Check the list before you say "done
     (and GOOD_LOCK_KEY in it), `tools/studio/work/`, downloaded models and the local test data all go.
     Keep GOOD_LOCK_KEY in the cloud environment's settings, never only in a file. Send the owner a zip
     (SendUserFile) of any design work that isn't in git as soon as it exists, and say so.
+19. **Keep the privacy policy current.** Any change that stores something new, shows something
+    publicly, adds a service that receives data, or changes what DELETE ACCOUNT removes updates
+    privacy.html (and its "Last updated" date) in the same push.
