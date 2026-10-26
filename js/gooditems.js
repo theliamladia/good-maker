@@ -65,11 +65,15 @@ window.GoodItems = (() => {
     TICKET.forEach((row, y) => [...row].forEach((ch, i) => { if (TC[ch]) { x.fillStyle = TC[ch]; x.fillRect(i, y, 1, 1); } }));
   }
   // Draw any crate item into a canvas. item = { id, tex, hem, bottom, accessory } (from /api/crate).
+  // While a sealed piece loads, its canvas pulses softly (gi-wait in good.css); never a dead blank.
   async function draw(item, cv) {
     if (item.id === 'golden-ticket') { ticket(cv); return; }
-    let img = await locked(item.tex);
-    if (item.hem) img = hem(img);
-    flat(img, cv, item.bottom, item.accessory);
+    cv.classList.add('gi-wait');
+    try {
+      let img = await locked(item.tex);
+      if (item.hem) img = hem(img);
+      flat(img, cv, item.bottom, item.accessory);
+    } catch (e) { cv.classList.add('gi-fail'); throw e; } finally { cv.classList.remove('gi-wait'); }
   }
   // MY INVENTORY®: identical pieces stack into one card with the lowest serial on top.
   // A stack shows ×N; clicking it lists every serial in it, lowest first.

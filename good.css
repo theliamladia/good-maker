@@ -47,3 +47,8 @@
 a:focus-visible, button:focus-visible, summary:focus-visible, select:focus-visible, [tabindex]:focus-visible,
 [role="button"]:focus-visible, [role="tab"]:focus-visible, [role="radio"]:focus-visible { outline: 2px solid currentColor !important; outline-offset: 3px; }
 input:focus-visible, textarea:focus-visible { outline: 2px solid currentColor !important; outline-offset: 2px; }
+
+/* A sealed piece loading (js/gooditems.js): a soft pulse where it will appear */
+canvas.gi-wait { animation: gi-pulse 1.3s ease-in-out infinite; background: radial-gradient(closest-side, rgba(255, 255, 255, 0.35), rgba(255, 255, 255, 0)); }
+@keyframes gi-pulse { 50% { opacity: 0.35; } }
+@media (prefers-reduced-motion: reduce) { canvas.gi-wait { animation: none; } }

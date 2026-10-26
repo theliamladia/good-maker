@@ -77,10 +77,12 @@
     $('wCount').textContent = `${p.wardrobe.length}`;
     $('wEmpty').hidden = p.wardrobe.length > 0;
     $('grid').replaceChildren(...p.wardrobe.map((w) => {
-      // Only your own fits open in MAKER®; on someone else's profile they're just to look at.
-      const a = document.createElement(mine ? 'a' : 'div');
-      a.className = `ac-card${mine ? '' : ' ac-static'}`; if (mine) { const { ft, ...L } = w.look; a.href = `./?${new URLSearchParams(L)}`; } a.hidden = true;
+      // Every fit opens in MAKER®: yours as saved; someone else's on your own skin (TRY THIS FIT).
+      const a = document.createElement('a');
+      const { ft, u, ...L } = w.look;
+      a.className = 'ac-card'; a.href = `./?${new URLSearchParams(mine && u ? { u, ...L } : L)}`; a.hidden = true;
       a.innerHTML = '<span class="ac-fig"></span><span class="ac-fit-title"></span><span class="ac-piece"></span><span class="ac-cw mono"></span>';
+      if (!mine) { const t = document.createElement('span'); t.className = 'ac-try mono'; t.textContent = 'TRY THIS FIT →'; a.append(t); }
       a.querySelector('.ac-fit-title').textContent = w.title || '';
       if (mine) {
         // Your own profile: name your fits.

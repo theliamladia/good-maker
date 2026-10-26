@@ -1,7 +1,7 @@
 // GOOD® ACCOUNT in MAKER®: the nav shows your name and GOOD® COINS; signed
 // in, SAVE HOME SKIN / USE HOME SKIN sit under YOUR SKIN and your home skin
 // loads on every visit; SAVE TO WARDROBE stores the fit (+10 GOOD® COINS a
-// each for the first 2 new fits a day). Signing in and the wardrobe itself live on account.html.
+// each for the first 4 new fits a day). Signing in and the wardrobe itself live on account.html.
 (() => {
   // One /api/me per page load, shared by every script that needs it.
   const meOnce = () => (window.__goodMe ||= fetch('/api/me').then((r) => (r.ok ? r.json() : { user: null })).catch(() => ({ user: null })));
