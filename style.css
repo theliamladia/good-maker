@@ -1345,3 +1345,17 @@ body.fall .download-btn:disabled { background: rgba(255, 255, 255, 0.55); }
 @media (min-width: 701px) and (max-width: 1250px) {
   .stage { grid-template-columns: minmax(max(260px, calc(min(56vh, 520px) * 0.62)), 2fr) minmax(0, 3fr); }
 }
+
+/* ---------- Locked pieces in MAKER® (crate pieces you don't own yet): try on, can't download ---------- */
+.outfit.is-locked canvas.lk { filter: grayscale(1); opacity: 0.6; transition: filter 0.2s, opacity 0.2s; }
+.outfit.is-locked:hover canvas.lk, .outfit.is-locked[aria-pressed="true"] canvas.lk { filter: none; opacity: 1; }
+.lock-tag { position: absolute; top: 6px; left: 6px; z-index: 1; display: inline-flex; align-items: center; gap: 4px; padding: 2px 6px; border-radius: 3px;
+  background: #0b1526; color: #fff; font-size: var(--label-size) !important; font-weight: 700; letter-spacing: 0.12em; line-height: 1.4 !important; pointer-events: none; }
+.lock-tag::before { content: ''; width: 7px; height: 8px; background: currentColor; clip-path: polygon(0 45%, 15% 45%, 15% 20%, 30% 0, 70% 0, 85% 20%, 85% 45%, 100% 45%, 100% 100%, 0 100%); }
+.swatch-btn.sw-locked { position: relative; }
+.swatch-btn.sw-locked .dot { filter: grayscale(1); opacity: 0.5; }
+.swatch-btn.sw-locked::after { content: ''; position: absolute; right: 1px; bottom: 1px; width: 9px; height: 10px; background: #0b1526;
+  clip-path: polygon(0 45%, 15% 45%, 15% 20%, 30% 0, 70% 0, 85% 20%, 85% 45%, 100% 45%, 100% 100%, 0 100%); }
+.swatch-btn.sw-locked[aria-pressed="true"] .dot { filter: none; opacity: 1; }
+.sw-get { display: inline-block; margin-top: 4px; color: var(--good-blue); font-weight: 700; text-decoration: underline; text-underline-offset: 4px; }
+.download-hint a { color: inherit; font-weight: 700; }

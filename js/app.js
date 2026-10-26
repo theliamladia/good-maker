@@ -42,6 +42,10 @@
     deep: (k) => k.drop === 'deep',
   };
   const inSeason = (k) => (FILTERS[state.filter] || FILTERS.all)(k);
+  // Where a locked piece comes from, for the LOCKED note under the colours and on DOWNLOAD.
+  const crateOf = (c) => (c.kind && c.kind.drop === 'crate2' ? { name: 'GOOD® CRATE Nº002', href: 'inmotion' }
+    : CRATE1.has(c.id) || (c.kind && CRATE1.has(c.kind.id)) ? { name: 'GOOD® CRATE Nº001', href: 'crate' } : { name: 'A GOOD® CRATE', href: 'releases' });
+  const LOCK_TAG = '<span class="lock-tag mono">LOCKED</span>';
   const lineShirts = () => SHIRTS.filter((k) => inLine(k) && inSeason(k));
 
   const state = {
@@ -402,10 +406,10 @@
     fillShirts(shirts.map((k, i) => { const o = k.current, c = cover(k); const el = card(
       !state.noTop && o.kind === state.outfit.kind,
       c.locked
-        ? `${LOCKED_THUMB}${nameOnly(c)}`
+        ? `${k.colors.every(isLocked) ? LOCK_TAG : ''}${LOCKED_THUMB}${nameOnly(c)}`
         : `${k.isNew ? NEW_TAG : ''}<img class="ghost-thumb" src="${thumbs[i]}" alt="">${nameOnly(c)}`,
       () => selectOutfit(o)
-    ); if (c.locked) whenSeen(el, () => paintLocked(el, c, false)); return el; }));
+    ); if (k.colors.every(isLocked)) el.classList.add('is-locked'); if (c.locked) whenSeen(el, () => paintLocked(el, c, false)); return el; }));
     drawColors($('shirtColors'), state.outfit, (c) => selectOutfit(c));
     if (state.noTop) $('shirtColors').hidden = true;
     drawPants();
@@ -486,10 +490,10 @@
     fillPants(pants.map(({ current: p }, i) => { const el = card(
       !state.noBottom && p.kind === state.pants.kind,
       p.locked
-        ? `${LOCKED_THUMB}${nameOnly(p)}`
+        ? `${p.kind.colors.every(isLocked) ? LOCK_TAG : ''}${LOCKED_THUMB}${nameOnly(p)}`
         : `${p.kind.isNew ? NEW_TAG : ''}<img class="pants-thumb" src="${thumbs[i]}" alt="">${nameOnly(p)}`,
       () => pickPants(p)
-    ); if (p.locked) whenSeen(el, () => paintLocked(el, p, true)); return el; }));
+    ); if (p.kind.colors.every(isLocked)) el.classList.add('is-locked'); if (p.locked) whenSeen(el, () => paintLocked(el, p, true)); return el; }));
     drawColors($('pantsColors'), state.pants, pickPants);
     if (state.noBottom) $('pantsColors').hidden = true;
     // Only the shoes these pants come in; a missing pick shows the first pair.
@@ -522,7 +526,8 @@
     const list = box.querySelector('.acc-list');
     const none = card(!state.acc, '<span class="acc-none" aria-hidden="true">∅</span><span class="outfit-name">NONE</span>', () => { state.acc = null; drawAccessories(); render(); });
     const cards = ACCS.flatMap((k) => k.colors.map((c) => {
-      const el = card(state.acc === c, `${isLocked(c) ? '<span class="new-tag mono">PREVIEW</span>' : ''}${LOCKED_THUMB}<span class="outfit-name">${k.name} ${c.color}</span>`, () => { state.acc = c; drawAccessories(); render(); });
+      const el = card(state.acc === c, `${isLocked(c) ? LOCK_TAG : ''}${LOCKED_THUMB}<span class="outfit-name">${k.name} ${c.color}</span>`, () => { state.acc = c; drawAccessories(); render(); });
+      if (isLocked(c)) el.classList.add('is-locked');
       whenSeen(el, () => accThumb(c).then((src) => {
         const cv = el.querySelector('canvas.lk'); if (!src || !cv) return;
         cv.width = src.width; cv.height = src.height;
@@ -599,8 +604,19 @@
       name.setAttribute('aria-live', 'polite');
       el.replaceChildren(dots, name);
     }
-    for (const b of el.querySelectorAll('.swatch-btn')) b.setAttribute('aria-pressed', b._color === selected);
-    el.querySelector('.sw-label').textContent = selected.color || '';
+    // Colourways you don't own yet: greyed with a lock, still there to try on.
+    for (const b of el.querySelectorAll('.swatch-btn')) {
+      b.setAttribute('aria-pressed', b._color === selected);
+      b.classList.toggle('sw-locked', isLocked(b._color));
+      b.setAttribute('aria-label', `${b._color.color}${isLocked(b._color) ? ', locked: try it on' : ''}`);
+    }
+    const label = el.querySelector('.sw-label');
+    label.textContent = selected.color || '';
+    if (isLocked(selected)) {
+      const src = crateOf(selected), get = document.createElement('a');
+      get.className = 'sw-get'; get.href = src.href; get.textContent = `LOCKED · IN ${src.name} →`;
+      label.append(document.createElement('br'), get);
+    }
   }
 
   // ---------- Collab shirts ----------
@@ -626,7 +642,7 @@
     showOnly($('sleeve'), 'sleeve', sleevesOf(o));
     // A hooded top takes the slot: HOOD, up or down, instead of the sleeve.
     const hooded = !!o.hoodDown;
-    $('sleeveTag').textContent = hooded ? 'Nº007 / HOOD' : 'Nº007 / SLEEVE';
+    $('sleeveTag').textContent = hooded ? 'HOOD' : 'SLEEVE';
     $('sleeve').style.display = hooded ? 'none' : ''; $('hood').style.display = hooded ? '' : 'none';   // (.segmented is a grid, so not [hidden])
     // Only one sleeve length? Nothing to choose, so hide the whole control.
     $('sleeveSection').hidden = (!hooded && sleevesOf(o).length < 2) || state.noTop;
@@ -893,8 +909,7 @@
     unlock: (ids) => {
       let any = false;
       for (const k of [...SHIRTS, ...PANTS, ...ACCS]) for (const c of k.colors) if (c.locked && (ids.includes(k.id) || ids.includes(c.id))) { c.owned = true; any = true; }
-      if (any) drawAccessories();
-      if (any) render();
+      if (any) { drawAccessories(); drawOutfits(); render(); }
     },
     // Pop-ups freeze the page behind them (CSS animations + the 3D render loop).
     setModalOpen(open) {
@@ -1065,10 +1080,12 @@
       texture.open = false;
       state.resultUrl = null;
       dl.disabled = true;
-      dl.firstChild.textContent = 'PREVIEW ONLY ';
+      dl.firstChild.textContent = 'TRY-ON ONLY ';
       const accName = (c) => { const k = ACCS.find((k) => k.colors.includes(c)); return k ? `${k.name} ${c.color}` : fullName(c); };
-      const which = !noTop && isLocked(o) ? fullName(o) : !state.noBottom && isLocked(state.pants) ? fullName(state.pants) : accName(state.acc);
-      dl.title = `${which} can be previewed but not downloaded`;
+      const piece = !noTop && isLocked(o) ? o : !state.noBottom && isLocked(state.pants) ? state.pants : state.acc;
+      const which = piece === state.acc ? accName(piece) : fullName(piece), src = crateOf(piece);
+      dl.title = `${which} is locked: try it on, then pull it from ${src.name} to download it`;
+      $('downloadHint').innerHTML = `<strong>${which}</strong> IS LOCKED. YOU CAN TRY IT ON; PULL IT FROM <a href="${src.href}">${src.name}</a> TO DOWNLOAD IT.`;
       showSkin(withLeaves(merged.data, slim), slim);
       return;
     }
