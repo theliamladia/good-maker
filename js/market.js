@@ -107,7 +107,7 @@
       const it = items[l.item] || {};
       return `${it.name} ${it.color} ${l.seller} ${l.serial}`.toLowerCase().includes(q);
     }).sort((a, b) => (sort === 'new' ? b.at.localeCompare(a.at) : sort === 'high' ? b.price - a.price : a.price - b.price));
-    $('saleCount').textContent = `${listings.length} FOR SALE`;
+    $('saleCount').textContent = `${listings.length} LISTED`;
     $('empty').hidden = listings.length > 0;
     $('listings').replaceChildren(...rows.map((l) => {
       const f = piece(items[l.item], l.serial);

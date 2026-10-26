@@ -27,8 +27,8 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400&family=Inter:wght@300;400;500;600&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="good.css?v=1">
-  <link rel="stylesheet" href="style.css?v=6">
+  <link rel="stylesheet" href="good.css?v=2">
+  <link rel="stylesheet" href="style.css?v=8">
   <script>
     // Hide the page until js/intro.js plays the entrance (never for reduced motion;
     // the timeout is a safety net if scripts fail to load).
@@ -54,11 +54,11 @@
     <a class="nav-link mono" href="./" aria-current="page">MAKER®</a>
     <a class="nav-link mono" href="releases">RELEASES®</a>
     <a class="nav-link mono" href="market">MARKET®</a>
-    <a class="nav-link mono" href="colors">COLORS®</a>
-    <a class="nav-link mono" href="study">STUDY®</a>
     <a class="nav-link mono" href="members">MEMBERS®</a>
-    <a class="nav-link mono" href="collaborations">COLLABORATIONS®</a>
-    <a class="nav-link mono" href="account" id="acctBtn" data-acct>ACCOUNT</a>
+    <a class="nav-link nav-sec mono" href="colors">COLORS®</a>
+    <a class="nav-link nav-sec mono" href="study">STUDY®</a>
+    <a class="nav-link nav-sec mono" href="collaborations">COLLABORATIONS®</a>
+    <a class="nav-link nav-acct mono" href="account" data-acct>SIGN IN</a>
   </nav>
 </header>
 
@@ -245,7 +245,7 @@
       <canvas id="flat" width="64" height="64"></canvas>
     </details>
   </aside>
-    <button type="button" class="download-btn" id="download">GOOD® ME <span class="dot-live"></span></button>
+    <button type="button" class="download-btn" id="download">DOWNLOAD SKIN <span class="dot-live"></span></button>
     <p class="micro mono download-hint" id="downloadHint"></p>
     <button type="button" class="chip wardrobe-save mono" id="saveLook">SAVE TO WARDROBE <span><span class="coin" aria-hidden="true"></span>+10 GOOD® COINS · 4 FITS A DAY</span></button>
     <button type="button" class="chip wardrobe-save mono" id="mcStand">MINECRAFT STAND <span>A CODE FOR /goodstand npc</span></button>
@@ -256,20 +256,19 @@
 
 <div class="acct-toast mono" id="acctToast" hidden></div>
 
-<footer class="site-foot mono">© 2026 GOOD®. All rights reserved. · <a class="foot-link" href="/privacy">PRIVACY</a></footer>
+<footer class="site-foot mono"><nav class="foot-nav" aria-label="More"><a href="colors">COLORS®</a><a href="study">STUDY®</a><a href="collaborations">COLLABORATIONS®</a><a href="privacy">PRIVACY</a></nav><p>© 2026 GOOD®. All rights reserved.</p></footer>
 
 <script src="https://cdn.jsdelivr.net/npm/skinview3d@3.1.0/bundles/skinview3d.bundle.js"></script>
 <script src="js/skin.js?v=2"></script>
 <script src="js/outfits.js?v=4"></script>
-<script src="js/app.js?v=12"></script>
-<script src="js/mobile.js"></script>
+<script src="js/app.js?v=13"></script>
+<script src="js/mobile.js?v=2"></script>
 <script src="js/help.js"></script>
-<script src="js/account.js?v=2"></script>
+<script src="js/account.js?v=3"></script>
 <script src="js/intro.js"></script>
 <script src="js/runway.js"></script>
-<script src="js/nav.js"></script>
+<script src="js/nav.js?v=2"></script>
 <script src="js/leaves.js"></script>
 <script src="js/coin-timer.js"></script>
-<script src="js/crate-promo.js"></script>
 </body>
 </html>

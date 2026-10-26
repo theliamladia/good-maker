@@ -27,15 +27,16 @@
     rn.type = 'button'; rn.className = 'ac-rename mono'; rn.textContent = 'RENAME';
     rn.onclick = async (e) => {
       e.preventDefault(); e.stopPropagation();
-      const t = prompt('Name this fit (up to 32 characters, empty to clear):', w.title || '');
+      const t = await GoodUI.ask({ title: 'NAME THIS FIT', label: 'UP TO 32 CHARACTERS. LEAVE IT EMPTY TO CLEAR THE NAME.', value: w.title || '', max: 32, allowEmpty: true });
       if (t === null) return;
       try { const j = await post('api/me', { action: 'title', id: w.id, title: t }); w.title = j.title; a.querySelector('.ac-fit-title').textContent = j.title; toast(j.title ? 'FIT RENAMED.' : 'NAME CLEARED.'); } catch { toast('COULDN’T RENAME. TRY AGAIN.'); }
     };
     a.append(rn);
     a.querySelector('.ac-x').onclick = async (e) => {
       e.preventDefault(); e.stopPropagation();
+      if (!GoodUI.arm(e.currentTarget, 'REMOVE?')) return;
       await post('api/me', { action: 'remove', id: w.id }).catch(() => {});
-      wardrobe = wardrobe.filter((v) => v !== w); a.remove(); count();
+      wardrobe = wardrobe.filter((v) => v !== w); a.remove(); count(); toast('REMOVED FROM YOUR WARDROBE.');
     };
     GoodCompose.compose(skin, w.look).then(({ merged, slim, top, bottom }) => {
       a.querySelector('.ac-fig').append(GoodCompose.front(merged, slim));
@@ -86,7 +87,7 @@
     $('name').textContent = me.name;
     if (me.owner) { const b = document.createElement('span'); b.className = 'mb-admin mono'; b.textContent = 'ADMIN'; $('name').append(b); }
     $('coins').textContent = me.coins;
-    if (me.profile) { $('profileLink').hidden = false; $('profileLink').href = `/profiles/${me.profile}`; $('profileLink').textContent = `PUBLIC PROFILE: GOOD.LEEMS.ME/PROFILES/${me.profile.toUpperCase()} →`; } else $('profileLink').hidden = true;
+    if (me.profile) { $('profileLink').hidden = false; $('profileLink').href = `/profiles/${me.profile}`; $('profileLink').textContent = 'VIEW MY PUBLIC PROFILE →'; } else $('profileLink').hidden = true;
     try { skin = me.hasSkin ? await GoodCompose.load(`api/me?skin=1&t=${Date.now()}`) : await GoodCompose.load(DEMO); } catch { skin = await GoodCompose.load(DEMO); }
     GoodHeads.draw($('avatar'), me.hasSkin ? `api/me?skin=1&t=${Date.now()}` : null);
     $('grid').replaceChildren(...wardrobe.map(card));
@@ -171,7 +172,7 @@
   }
 
   $('invReset').onclick = async () => {
-    if (!confirm('Clear your own GOOD® CRATE test pulls? (Serials are never reused.)')) return;
+    if (!(await GoodUI.confirm({ title: 'CLEAR YOUR TEST PULLS?', body: 'Your own GOOD® CRATE test pulls go. Serials are never reused.', ok: 'CLEAR', danger: true }))) return;
     try { await post('api/crate', { action: 'reset' }); inventory = inventory.filter((e) => e.serial === 'GD-999'); drawInventory(); drawLedger(); toast('CRATE TEST RESET.'); } catch { toast('COULDN’T RESET. TRY AGAIN.'); }
   };
 
@@ -183,12 +184,12 @@
   };
   $('signout').onclick = async () => { await post('api/auth', { action: 'logout' }).catch(() => {}); me = null; render(); };
   $('rename').onclick = async () => {
-    const n = prompt('Your GOOD® name. It\'s on your comments and it\'s your profile link (good.leems.me/profiles/your-name):', me.name);
-    if (!n) return;
-    try { const j = await post('api/me', { action: 'name', name: n }); me.name = j.name; me.profile = j.profile; render(); } catch (e) { toast(e.code === 'taken' ? 'THAT NAME IS TAKEN. TRY ANOTHER.' : '2 TO 16 LETTERS OR NUMBERS.'); }
+    const n = await GoodUI.ask({ title: 'CHANGE YOUR NAME', body: 'It’s on your comments, and it’s your profile link.', label: '2 TO 16 LETTERS OR NUMBERS', value: me.name, max: 16 });
+    if (!n || n === me.name) return;
+    try { const j = await post('api/me', { action: 'name', name: n }); me.name = j.name; me.profile = j.profile; render(); toast(`YOU’RE ${j.name} NOW.`); } catch (e) { toast(e.code === 'taken' ? 'THAT NAME IS TAKEN. TRY ANOTHER.' : '2 TO 16 LETTERS OR NUMBERS.'); }
   };
   $('delete').onclick = async () => {
-    if (!confirm('Delete your GOOD® account, home skin, wardrobe and GOOD® COINS? This can’t be undone.')) return;
+    if (!(await GoodUI.confirm({ title: 'DELETE YOUR ACCOUNT?', body: 'Your GOOD® account, home skin, wardrobe and GOOD® COINS go for good. This can’t be undone.', ok: 'DELETE FOREVER', danger: true }))) return;
     await post('api/me', { action: 'delete' }).catch(() => {});
     me = null; render(); toast('ACCOUNT DELETED.');
   };

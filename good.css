@@ -41,3 +41,9 @@
 .good-label { font-family: var(--font-mono); font-size: var(--label-size); letter-spacing: var(--label-track); text-transform: uppercase; }
 .good-rule { border: 0; border-top: var(--rule); margin: 0; }
 .good-spot { background: var(--spot); }
+
+/* Keyboard focus, everywhere: a ring in the element's own text colour (white on GOOD® BLUE,
+   GOOD® BLUE on white), never removed. */
+a:focus-visible, button:focus-visible, summary:focus-visible, select:focus-visible, [tabindex]:focus-visible,
+[role="button"]:focus-visible, [role="tab"]:focus-visible, [role="radio"]:focus-visible { outline: 2px solid currentColor !important; outline-offset: 3px; }
+input:focus-visible, textarea:focus-visible { outline: 2px solid currentColor !important; outline-offset: 2px; }

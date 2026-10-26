@@ -59,7 +59,7 @@
   ctr.className = 'm-stage';
   ctr.innerHTML = '<div class="m-body mono" role="radiogroup" aria-label="Body type"><button type="button" role="radio" data-b="classic">CLASSIC</button><button type="button" role="radio" data-b="slim">SLIM</button></div>'
     + '<button type="button" class="m-skin mono">YOUR SKIN</button>'
-    + '<button type="button" class="m-dl" aria-label="Download your skin: GOOD® ME">↓</button>';
+    + '<button type="button" class="m-dl" aria-label="Download skin">↓</button>';
   stage.append(ctr);
   ctr.querySelector('.m-body').onclick = (e) => { const b = e.target.closest('[data-b]'); if (b) $('body').querySelector(`[data-body="${b.dataset.b}"]`)?.click(); };
   const syncBody = () => ctr.querySelectorAll('[data-b]').forEach((b) => b.setAttribute('aria-checked', $('body').querySelector(`[data-body="${b.dataset.b}"]`)?.getAttribute('aria-checked') || 'false'));

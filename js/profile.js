@@ -88,7 +88,7 @@
         b.type = 'button'; b.className = 'ac-rename mono'; b.textContent = 'RENAME';
         b.onclick = async (e) => {
           e.preventDefault(); e.stopPropagation();
-          const t = prompt('Name this fit (up to 32 characters, empty to clear):', w.title || '');
+          const t = await GoodUI.ask({ title: 'NAME THIS FIT', label: 'UP TO 32 CHARACTERS. LEAVE IT EMPTY TO CLEAR THE NAME.', value: w.title || '', max: 32, allowEmpty: true });
           if (t === null) return;
           try { const j = await post('api/me', { action: 'title', id: w.id, title: t }); w.title = j.title; a.querySelector('.ac-fit-title').textContent = j.title; toast(j.title ? 'FIT RENAMED.' : 'NAME CLEARED.'); } catch { toast('COULDN’T RENAME. TRY AGAIN.'); }
         };
@@ -118,7 +118,7 @@
         GoodHeads.draw(li.querySelector('canvas'), `api/profile?name=${encodeURIComponent(cm.slug)}&skin=1`);
         if (w.canDelete) {
           const d = document.createElement('button'); d.type = 'button'; d.className = 'pf-c-del mono'; d.textContent = 'DELETE';
-          d.onclick = async () => { if (!confirm('Delete this comment?')) return; try { await post('api/wall', { name: slug.toLowerCase(), action: 'delete', id: cm.id }); li.remove(); } catch { toast('COULDN’T DELETE.'); } };
+          d.onclick = async () => { if (!(await GoodUI.confirm({ title: 'DELETE THIS COMMENT?', ok: 'DELETE', danger: true }))) return; try { await post('api/wall', { name: slug.toLowerCase(), action: 'delete', id: cm.id }); li.remove(); } catch { toast('COULDN’T DELETE.'); } };
           li.append(d);
         }
         return li;

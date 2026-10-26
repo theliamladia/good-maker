@@ -26,22 +26,26 @@
   matchMedia('(min-width: 701px)').addEventListener('change', (m) => { if (m.matches) set(false); });
 })();
 
-// ACCOUNT in the nav is an avatar, not words: a blank profile until you sign in,
-// then your own face (from your home skin). Page scripts that already have the
-// account call GoodNav.update(me); pass fresh = true after the home skin changes.
+// You, in the nav: a pill with your face, name and GOOD® COINS once you're signed in, SIGN IN
+// (as words) before. Page scripts that already have the account call GoodNav.update(me);
+// pass fresh = true after the home skin changes.
 (() => {
   const links = [...document.querySelectorAll('[data-acct]')];
   if (!links.length) return;
-  const BLANK = '<svg viewBox="0 0 16 16" aria-hidden="true"><rect x="0.5" y="0.5" width="15" height="15" fill="none" stroke="currentColor"/><rect x="5" y="3" width="6" height="6" fill="currentColor" opacity="0.55"/><path d="M2 15.5V14q0-3 3-3h6q3 0 3 3v1.5" fill="currentColor" opacity="0.55"/></svg>';
+  const BLANK = '<svg viewBox="0 0 16 16" aria-hidden="true"><rect width="16" height="16" fill="currentColor" opacity="0.18"/><rect x="5" y="3" width="6" height="6" fill="currentColor" opacity="0.55"/><path d="M2 16V14q0-3 3-3h6q3 0 3 3v2" fill="currentColor" opacity="0.55"/></svg>';
   let face = null, faceFor = null;
+  const span = (cls, t) => { const e = document.createElement('span'); e.className = cls; e.textContent = t; return e; };
   const paint = (me) => links.forEach((a) => {
-    a.classList.add('nav-avatar');
-    a.setAttribute('aria-label', me ? `${me.name}: account, ${me.coins} GOOD® COINS` : 'Sign in');
-    a.title = me ? `${me.name} · ${me.coins} GOOD® COINS` : 'SIGN IN';
-    if (me && face) {
-      const c = document.createElement('canvas'); c.width = c.height = 8; c.setAttribute('aria-hidden', 'true');
-      c.getContext('2d').drawImage(face, 0, 0); a.replaceChildren(c);
-    } else a.innerHTML = BLANK;
+    a.classList.add('nav-acct'); a.classList.toggle('in', !!me);
+    a.setAttribute('aria-label', me ? `${me.name}: your account, ${me.coins} GOOD® COINS` : 'Sign in');
+    a.removeAttribute('title');
+    if (!me) { a.textContent = 'SIGN IN'; return; }
+    let pic;
+    if (face) {
+      pic = document.createElement('canvas'); pic.width = pic.height = 8; pic.setAttribute('aria-hidden', 'true');
+      pic.getContext('2d').drawImage(face, 0, 0);
+    } else { const t = document.createElement('template'); t.innerHTML = BLANK; pic = t.content.firstChild; }
+    a.replaceChildren(pic, span('na-name', me.name), span('na-coins', `${me.coins ?? 0} COINS`));
   });
   async function update(me, fresh) {
     if (me && me.hasSkin && (fresh || faceFor !== me.name || !face)) {
@@ -60,6 +64,5 @@
     paint(me);
   }
   window.GoodNav = { update };
-  paint(null);
   (window.__goodMe ||= fetch('/api/me').then((r) => (r.ok ? r.json() : { user: null })).catch(() => ({ user: null }))).then((j) => update(j.user));
 })();

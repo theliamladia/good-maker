@@ -36,12 +36,12 @@
 .cx-chip:focus-visible { outline: none; }
 .cx-chip:focus-visible .cx-cn { text-decoration: underline; text-underline-offset: 4px; }
 .cx-meta { display: grid; gap: 4px; padding-top: 16px; }
-.cx-n { font-size: 0.62rem; letter-spacing: 0.18em; opacity: 0.5; }
+.cx-n { font-size: 0.69rem; letter-spacing: 0.18em; opacity: 0.5; }
 .cx-cn { font-weight: var(--w-head); font-size: 0.98rem; letter-spacing: -0.02em; line-height: 1.15; }
-.cx-ch { font-size: 0.62rem; letter-spacing: 0.12em; opacity: 0.6; }
-.cx-pt { font-size: 0.56rem; letter-spacing: 0.16em; color: var(--good-blue); }
+.cx-ch { font-size: 0.69rem; letter-spacing: 0.12em; opacity: 0.6; }
+.cx-pt { font-size: 0.69rem; letter-spacing: 0.16em; color: var(--good-blue); }
 
-.cx-credit { margin: clamp(90px, 14vh, 150px) auto 0; max-width: 720px; text-align: center; font-size: 0.6rem; letter-spacing: 0.12em; line-height: 1.8; opacity: 0.55; }
+.cx-credit { margin: clamp(90px, 14vh, 150px) auto 0; max-width: 720px; text-align: center; font-size: 0.69rem; letter-spacing: 0.12em; line-height: 1.8; opacity: 0.55; }
 .cx-foot { color: #0b1526; text-shadow: none; padding-top: 60px; }
 
 /* The room: one colour, full screen */
@@ -59,9 +59,9 @@
 .cx-room-text { max-width: 30em; }
 .cx-desc { margin: 0; font-size: clamp(1.02rem, 1.5vw, 1.25rem); line-height: 1.55; }
 .cx-thanks { margin: 22px 0 0; font-weight: 700; font-size: 0.9rem; line-height: 1.45; }
-.cx-where { margin: 28px 0 0; display: grid; gap: 6px; font-size: 0.62rem; letter-spacing: 0.12em; line-height: 1.7; }
+.cx-where { margin: 28px 0 0; display: grid; gap: 6px; font-size: 0.69rem; letter-spacing: 0.12em; line-height: 1.7; }
 .cx-where span:first-child { font-weight: 700; letter-spacing: var(--label-track); }
-.cx-pantone { margin: 18px 0 0; font-size: 0.6rem; letter-spacing: 0.08em; line-height: 1.7; opacity: 0.8; }
+.cx-pantone { margin: 18px 0 0; font-size: 0.69rem; letter-spacing: 0.08em; line-height: 1.7; opacity: 0.8; }
 .cx-room [hidden] { display: none; }
 .cx-room-foot { display: flex; align-items: center; gap: clamp(14px, 3vw, 36px); }
 .cx-step { flex: none; border: 0; background: none; color: inherit; cursor: pointer; font-size: var(--label-size); font-weight: 700; letter-spacing: 0.2em; padding: 8px 0; }

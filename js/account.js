@@ -77,8 +77,10 @@
   }
 
   // ---------- Wardrobe ----------
+  // Signed out: say why before going to sign in (the fit stays: MAKER® remembers it in this browser).
+  const toSignIn = (why) => { toast(why); setTimeout(() => { location.href = 'account'; }, 1800); };
   $('saveLook').onclick = async () => {
-    if (!me) { location.href = 'account'; return; }
+    if (!me) { toSignIn('SIGN IN TO SAVE FITS AND EARN GOOD® COINS. TAKING YOU THERE…'); return; }
     try {
       const j = await post('api/me', { action: 'save', look: app().savedLook ? app().savedLook() : app().currentLook() });
       if (j.daily) { me.daily = j.daily; drawDaily(); }
@@ -94,7 +96,7 @@
   // Signs the finished skin (via /api/stand) and hands back a code for the
   // GoodStands plugin: /goodstand npc <code>.
   $('mcStand').onclick = async () => {
-    if (!me) { location.href = 'account'; return; }
+    if (!me) { toSignIn('SIGN IN TO MAKE A MINECRAFT STAND CODE. TAKING YOU THERE…'); return; }
     const s = app().standSkin();
     if (!s) { toast('PUT ON A FIT YOU CAN DOWNLOAD FIRST.'); return; }
     const b = $('mcStand'), label = b.firstChild.textContent;

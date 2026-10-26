@@ -1066,7 +1066,9 @@
       state.resultUrl = null;
       dl.disabled = true;
       dl.firstChild.textContent = 'PREVIEW ONLY ';
-      dl.title = `${fullName(!noTop && isLocked(o) ? o : state.pants)} can be previewed but not downloaded`;
+      const accName = (c) => { const k = ACCS.find((k) => k.colors.includes(c)); return k ? `${k.name} ${c.color}` : fullName(c); };
+      const which = !noTop && isLocked(o) ? fullName(o) : !state.noBottom && isLocked(state.pants) ? fullName(state.pants) : accName(state.acc);
+      dl.title = `${which} can be previewed but not downloaded`;
       showSkin(withLeaves(merged.data, slim), slim);
       return;
     }
@@ -1075,7 +1077,7 @@
     state.resultUrl = flat.toDataURL('image/png');
     const bare = state.noTop && state.noBottom;
     dl.disabled = state.isDemo || bare;
-    dl.firstChild.textContent = bare ? 'PERVERT! ' : 'GOOD® ME ';
+    dl.firstChild.textContent = bare ? 'PUT SOMETHING ON ' : 'DOWNLOAD SKIN ';
     dl.title = bare ? 'Equip clothes first before downloading' : state.isDemo ? 'Upload your skin first' : '';
     if (bare) $('downloadHint').textContent = 'EQUIP CLOTHES FIRST BEFORE DOWNLOADING.';
     showSkin(withLeaves(merged.data, slim), slim);

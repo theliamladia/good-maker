@@ -27,9 +27,9 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="good.css?v=1">
-  <link rel="stylesheet" href="style.css?v=2">
-  <link rel="stylesheet" href="account.css?v=2">
+  <link rel="stylesheet" href="good.css?v=2">
+  <link rel="stylesheet" href="style.css?v=8">
+  <link rel="stylesheet" href="account.css?v=3">
 </head>
 <body class="ac-page">
 
@@ -39,11 +39,11 @@
     <a class="nav-link mono" href="./">MAKER®</a>
     <a class="nav-link mono" href="releases">RELEASES®</a>
     <a class="nav-link mono" href="market">MARKET®</a>
-    <a class="nav-link mono" href="colors">COLORS®</a>
-    <a class="nav-link mono" href="study">STUDY®</a>
     <a class="nav-link mono" href="members">MEMBERS®</a>
-    <a class="nav-link mono" href="collaborations">COLLABORATIONS®</a>
-    <a class="nav-link mono" href="account" aria-current="page" data-acct>ACCOUNT</a>
+    <a class="nav-link nav-sec mono" href="colors">COLORS®</a>
+    <a class="nav-link nav-sec mono" href="study">STUDY®</a>
+    <a class="nav-link nav-sec mono" href="collaborations">COLLABORATIONS®</a>
+    <a class="nav-link nav-acct mono" href="account" aria-current="page" data-acct>SIGN IN</a>
   </nav>
 </header>
 
@@ -79,11 +79,6 @@
       </section>
     </div>
 
-    <section class="ac-block ac-ach" aria-labelledby="aTitle">
-      <header class="ac-bar"><h2 class="mono" id="aTitle">ACHIEVEMENTS</h2><span class="mono" id="aCount"></span></header>
-      <div class="ac-ach-grid" id="ach"></div>
-    </section>
-
     <section class="ac-block" aria-labelledby="wTitle">
       <header class="ac-bar"><h2 class="mono" id="wTitle">WARDROBE</h2><span class="mono" id="wCount"></span></header>
       <p class="ac-lede" id="wEmpty" hidden>Nothing here yet. In MAKER®, put on a fit and hit SAVE TO WARDROBE. Your first 2 new fits each day earn +10 GOOD® COINS each.</p>
@@ -101,6 +96,11 @@
         <nav class="ac-pages mono" id="ledgerPages" aria-label="Ledger pages"><button type="button" class="ac-link mono" id="ledgerPrev">← PREV</button><span id="ledgerPage"></span><button type="button" class="ac-link mono" id="ledgerNext">NEXT →</button></nav>
       </div>
       <button type="button" class="ac-link mono" id="invReset" hidden>OWNER: RESET MY CRATE TEST (CLEARS MY PULLS)</button>
+    </section>
+
+    <section class="ac-block ac-ach" aria-labelledby="aTitle">
+      <header class="ac-bar"><h2 class="mono" id="aTitle">ACHIEVEMENTS</h2><span class="mono" id="aCount"></span></header>
+      <div class="ac-ach-grid" id="ach"></div>
     </section>
 
     <section class="ac-block" id="suggest" aria-labelledby="sTitle">
@@ -123,7 +123,7 @@
 </main>
 
 <div class="ac-toast mono" id="toast" hidden></div>
-<footer class="site-foot mono">© 2026 GOOD®. All rights reserved. · <a class="foot-link" href="/privacy">PRIVACY</a></footer>
+<footer class="site-foot mono"><nav class="foot-nav" aria-label="More"><a href="colors">COLORS®</a><a href="study">STUDY®</a><a href="collaborations">COLLABORATIONS®</a><a href="privacy">PRIVACY</a></nav><p>© 2026 GOOD®. All rights reserved.</p></footer>
 
 <script src="js/skin.js?v=2"></script>
 <script src="js/outfits.js?v=4"></script>
@@ -132,7 +132,8 @@
 <script src="js/ach-row.js"></script>
 <script src="js/gooditems.js"></script>
 <script src="js/heads.js"></script>
-<script src="js/account-page.js?v=4"></script>
-<script src="js/nav.js"></script>
+<script src="js/ui.js?v=1"></script>
+<script src="js/account-page.js?v=6"></script>
+<script src="js/nav.js?v=2"></script>
 </body>
 </html>
