@@ -106,6 +106,12 @@ module.exports = async function handler(req, res) {
         return;
       }
       if (!user) { res.status(200).json({ user: null }); return; }
+      // TEMPORARY (remove once copied): the owner, signed in, reads GOOD_LOCK_KEY back once.
+      // Anyone else gets the normal response.
+      if (req.query && req.query.vault === '1' && isOwner(user)) {
+        res.setHeader('Cache-Control', 'no-store'); res.setHeader('Content-Type', 'text/plain; charset=utf-8');
+        res.status(200).send(process.env.GOOD_LOCK_KEY || 'NOT SET'); return;
+      }
       if (req.query && req.query.suggestions) {
         if (!isOwner(user)) { res.status(403).json({ error: 'owner_only' }); return; }
         const rows = (await redis('LRANGE', 'suggestions', 0, 499)) || [];
