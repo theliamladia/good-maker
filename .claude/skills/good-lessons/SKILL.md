@@ -49,14 +49,23 @@ Every rule here cost the owner a round trip. Check the list before you say "done
 
 ## People and access
 
-13. **Check who a name is.** Minecraft names and GOOD® names differ (globohomo123 = CHINNY).
+13. **Don't invent sub-lines.** New pieces join their line by name (the sports bra is a DYNAMICS®
+    piece). Never coin a label like "DYNAMICS® SPORT" unless the owner names it.
+14. **Check who a name is.** Minecraft names and GOOD® names differ (globohomo123 = CHINNY).
     Look at /api/members before wiring access to a name; ask if no match.
-14. **Private pieces:** owner + `PRIVATE_GUESTS` (profile slugs) in api/_account.js see and equip
+15. **Private pieces:** owner + `PRIVATE_GUESTS` (profile slugs) in api/_account.js see and equip
     them. Others may see them on a profile but never equip them.
 
 ## Shipping
 
-15. **Confirm the deploy, don't assume.** After a push, check
+16. **Confirm the deploy, don't assume.** After a push, check
     `gh api repos/theliamladia/good-maker/commits/<sha>/status` until it says success. A sealed or
     private change can't be seen signed-out, so say exactly what you could and couldn't verify.
-16. **Never chain `sleep`.** Poll with an until-loop on the status instead.
+17. **Never chain `sleep`.** Poll with an until-loop on the status instead.
+
+## The machine
+
+18. **The cloud container is temporary.** It gets recycled, and only git survives: the scratchpad
+    (and GOOD_LOCK_KEY in it), `tools/studio/work/`, downloaded models and the local test data all go.
+    Keep GOOD_LOCK_KEY in the cloud environment's settings, never only in a file. Send the owner a zip
+    (SendUserFile) of any design work that isn't in git as soon as it exists, and say so.
