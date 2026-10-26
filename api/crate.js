@@ -99,8 +99,8 @@ async function market(me, body, res) {
     await redis('LPUSH', 'market:sales', JSON.stringify({ item: listing.entry.item, serial: listing.entry.serial, price: listing.price, at }));
     await redis('LTRIM', 'market:sales', 0, 99);
     const t = { item: listing.entry.item, serial: listing.entry.serial, price: listing.price, at };
-    await logTrade(buyer.uid, { ...t, type: 'buy', with: listing.seller, balance: buyer.coins });
-    await logTrade(listing.uid, { ...t, type: 'sell', with: buyer.name || 'GOOD®', balance: seller ? seller.coins : undefined });
+    await logTrade(buyer.uid, { ...t, type: 'buy', with: listing.seller, withSlug: slugOf(listing.seller), balance: buyer.coins });
+    await logTrade(listing.uid, { ...t, type: 'sell', with: buyer.name || 'GOOD®', withSlug: buyer.name ? slugOf(buyer.name) : undefined, balance: seller ? seller.coins : undefined });
     res.status(200).json({ ok: true, coins: buyer.coins, entry: listing.entry });
   } finally { await unlockUser(me.uid); await unlockUser(listing.uid); }
 }

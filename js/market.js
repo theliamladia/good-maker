@@ -59,6 +59,43 @@
     tape.style.animationDuration = `${Math.max(20, bits.length * 6)}s`;
   }
 
+  // Someone you traded with: their face and name, linking to their profile (DELETED stays plain).
+  const slugify = (n) => String(n || '').toLowerCase().replace(/[^a-z0-9_]+/g, '-').replace(/^-+|-+$/g, '');
+  function person(name, slug) {
+    const s = name && name !== 'DELETED' && name !== 'GOOD®' ? slug || slugify(name) : '';
+    const el = document.createElement(s ? 'a' : 'span');
+    el.className = 'mk-seller mono';
+    if (s) el.href = `/profiles/${encodeURIComponent(s)}`;
+    const av = document.createElement('canvas'); av.className = 'mk-av'; av.setAttribute('aria-hidden', 'true');
+    el.append(av, name || '—');
+    GoodHeads.draw(av, s ? `api/profile?name=${encodeURIComponent(s)}&skin=1` : null);
+    return el;
+  }
+
+  // YOUR SALES: every piece of yours that sold, newest first, with who bought it.
+  // Sales since your last visit also get a toast.
+  function drawSales() {
+    const sold = trades.filter((t) => t.type === 'sell');
+    $('mySales').hidden = !me || !sold.length;
+    if (!me || !sold.length) return;
+    $('mySalesCount').textContent = `${sold.length} SOLD`;
+    $('mySalesRows').replaceChildren(...sold.map((t) => {
+      const li = document.createElement('li');
+      li.innerHTML = '<span class="mk-s-when mono"></span><span class="mk-s-piece"></span><span class="mk-s-ser mono"></span><span class="mk-s-to mono">TO</span><span class="mk-s-price mono"></span>';
+      li.querySelector('.mk-s-when').textContent = when(t.at);
+      li.querySelector('.mk-s-piece').textContent = nameOf(t.item);
+      li.querySelector('.mk-s-ser').textContent = t.serial;
+      li.querySelector('.mk-s-to').after(person(t.with, t.withSlug));
+      li.querySelector('.mk-s-price').innerHTML = `+${coin}${t.price}`;
+      return li;
+    }));
+    const KEY = `good-sales-seen-${me.name}`;
+    let seen = ''; try { seen = localStorage.getItem(KEY) || ''; } catch {}
+    const fresh = sold.filter((t) => t.at > seen);
+    if (seen && fresh.length) toast(fresh.length === 1 ? `SOLD: ${nameOf(fresh[0].item)} ${fresh[0].serial} TO ${fresh[0].with}.` : `${fresh.length} OF YOUR PIECES SOLD SINCE YOUR LAST VISIT. SEE YOUR SALES.`);
+    try { localStorage.setItem(KEY, sold[0].at); } catch {}
+  }
+
   function drawTrades() {
     const tab = document.querySelector('#tradeTabs [aria-selected="true"]').dataset.t;
     const bought = trades.filter((t) => t.type === 'buy'), sold = trades.filter((t) => t.type === 'sell');
@@ -74,7 +111,8 @@
       const amt = t.type === 'buy' ? `−${coin}${t.price}` : t.type === 'sell' ? `+${coin}${t.price}` : `<span class="mk-dim">${coin}${t.price}</span>`;
       tr.innerHTML = `<td class="mono"></td><td class="mono"><span class="mk-type">${TYPE[t.type] || ''}</span></td><td></td><td class="mono"></td><td class="mono"></td><td class="num mono">${amt}</td>`;
       const td = tr.children;
-      td[0].textContent = when(t.at); td[2].textContent = nameOf(t.item); td[3].textContent = t.serial; td[4].textContent = t.with || '—';
+      td[0].textContent = when(t.at); td[2].textContent = nameOf(t.item); td[3].textContent = t.serial;
+      if (t.with) td[4].append(person(t.with, t.withSlug)); else td[4].textContent = '—';
       return tr;
     }));
   }
@@ -206,7 +244,7 @@
     }));
   }
 
-  function drawAll() { drawWallet(); drawStats(); drawListings(); drawDoubles(); drawSold(); drawTrades(); }
+  function drawAll() { drawWallet(); drawStats(); drawListings(); drawDoubles(); drawSales(); drawSold(); drawTrades(); }
   const take = (m, mk) => { me = m.user; inventory = m.inventory || []; listings = mk.listings || []; sales = mk.sales || []; trades = mk.trades || []; };
 
   async function refresh() {

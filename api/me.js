@@ -225,7 +225,7 @@ module.exports = async function handler(req, res) {
         if (uid === user.uid) continue;
         const rows = (await redis('LRANGE', `user:${uid}:trades`, 0, -1)) || [];
         for (let i = 0; i < rows.length; i++) {
-          try { const t = JSON.parse(rows[i]); if (t.with && t.with === user.name) await redis('LSET', `user:${uid}:trades`, i, JSON.stringify({ ...t, with: 'DELETED' })); } catch {}
+          try { const t = JSON.parse(rows[i]); if (t.with && t.with === user.name) await redis('LSET', `user:${uid}:trades`, i, JSON.stringify({ ...t, with: 'DELETED', withSlug: undefined })); } catch {}
         }
       }
       const sugg = (await redis('LRANGE', 'suggestions', 0, -1)) || [];

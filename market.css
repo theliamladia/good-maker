@@ -162,3 +162,20 @@ a.mk-seller:hover .mk-av, a.mk-seller:focus-visible .mk-av { outline-color: #fff
   .mk-copies .mk-seller { grid-column: 1 / -1; }
   .mk-own { letter-spacing: 0.08em; }
 }
+
+/* YOUR SALES: who bought your pieces */
+.mk-sales { list-style: none; margin: 0; padding: 0; border-top: 1px solid rgba(255, 255, 255, 0.35); }
+.mk-sales li { display: grid; grid-template-columns: 130px minmax(0, 1fr) auto auto minmax(0, 220px) auto; align-items: center; gap: 16px; padding: 16px 0; border-bottom: 1px solid rgba(255, 255, 255, 0.22); }
+.mk-s-when, .mk-s-ser, .mk-s-to { font-size: var(--label-size); letter-spacing: 0.16em; opacity: 0.75; }
+.mk-s-piece { font-weight: 500; }
+.mk-s-price { text-align: right; white-space: nowrap; }
+.mk-sales .mk-seller { min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+@media (max-width: 640px) {
+  .mk-sales li { grid-template-columns: minmax(0, 1fr) auto; gap: 6px 12px; }
+  .mk-s-when { grid-column: 1; grid-row: 3; }
+  .mk-s-piece { grid-column: 1; grid-row: 1; }
+  .mk-s-price { grid-column: 2; grid-row: 1; }
+  .mk-s-ser { grid-column: 2; grid-row: 3; text-align: right; }
+  .mk-s-to { display: none; }
+  .mk-sales .mk-seller { grid-column: 1 / -1; grid-row: 2; }
+}
