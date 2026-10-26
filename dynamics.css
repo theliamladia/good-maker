@@ -160,3 +160,9 @@ body.intro { overflow: hidden; }
   .gd-odds td { padding: 0; border: 0; }
   .gd-odds td:nth-child(2) { grid-column: 1 / -1; grid-row: 2; }
 }
+/* Scenes between the looks: the clothes worn next to the GD® cars and planes */
+.gd-looks .gd-scene { grid-column: 1 / -1; margin: 10px 0 20px; cursor: default; }
+.gd-scene canvas { width: 100%; max-width: 1080px; height: auto; aspect-ratio: 1200 / 560; display: block; margin: 0 auto; pointer-events: none; }
+.gd-scene figcaption { margin-top: 10px; text-align: center; }
+.gd-scene .p { font: 500 15px/1.4 var(--sans); letter-spacing: -.01em; display: block; }
+.gd-looks .gd-scene canvas { background: none; }

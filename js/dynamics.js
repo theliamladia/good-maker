@@ -108,8 +108,21 @@
     f.setAttribute('aria-label', `TARMAC® look ${i + 1}: ${pieces}, ${cw}`);
     return f;
   }));
+  // Scenes between the looks: the clothes worn, next to the GD® cars and planes (sealed stills).
+  const SCENES = [
+    ['tarLooks', 3, 'dyn-s2', 'GD® PLANE01 · LOUNGE HOODIE® · LOUNGE PANT', 'LHR™'],
+    ['tarLooks', 6, 'dyn-s4', 'GD® SPRINT01 · BOARDING PASS PARKA · LOUNGE PANT', 'CDG™/AMS™ · LHR™'],
+    ['looks', 3, 'dyn-s1', 'GD® ROADSTER01 · FLIGHT JACKET® · CREW TROUSER', 'JET™/CONTRAIL™ · JET™'],
+    ['looks', 6, 'dyn-s3', 'GD® ENERGY01 · HANGAR HOODIE® · TECH JOGGER', 'CONTRAIL™/GOOD® BLUE · JET™/CONTRAIL™'],
+  ];
+  for (const [grid, after, id, label, cw] of SCENES) {
+    const f = document.createElement('figure'); f.className = 'gd-scene'; f.dataset.scene = id;
+    f.innerHTML = `<canvas width="1200" height="560" aria-hidden="true"></canvas><figcaption><span class="p"></span><p class="gd-cw">${dots(cw)}${cw}</p></figcaption>`;
+    f.querySelector('.p').textContent = label; f.setAttribute('aria-label', `${label}, ${cw}`);
+    const ref = $(grid).querySelectorAll('figure:not(.gd-scene)')[after]; $(grid).insertBefore(f, ref || null);
+  }
   // THE LOOKS: TARMAC® first, then DYNAMICS®, numbered straight through
-  $('looks').querySelectorAll('.n').forEach((n, i) => { n.textContent = `LOOK ${String(i + 1 + TLOOKS.length).padStart(2, '0')}`; });
+  $('looks').querySelectorAll('figure:not(.gd-scene) .n').forEach((n, i) => { n.textContent = `LOOK ${String(i + 1 + TLOOKS.length).padStart(2, '0')}`; });
   const TPIECES = [
     ['LOUNGE HOODIE®', 'LHR™ · CDG™ · LAX™ · DXB™'], ['LOUNGE PANT', 'LHR™ · CDG™ · LAX™ · DXB™'], ['TRANSIT TEE', 'LHR™ · CDG™ · LAX™ · DXB™'],
     ['CABIN SOCK SLIDE', 'WITH THE LOUNGE PANT'], ['PILLOW COLLAR® JACKET', 'LAX™ · LHR™'], ['CARRY-ON TROUSER', 'LHR™ · DXB™'],
@@ -233,7 +246,13 @@
     requestAnimationFrame(spin);
   };
   requestAnimationFrame(spin);
-  document.querySelectorAll('.gd-looks figure, .gd-chase figure').forEach((fig) => {
+  document.querySelectorAll('.gd-scene').forEach((fig) => {
+    const c = fig.querySelector('canvas'); c.addEventListener('contextmenu', (e) => e.preventDefault());
+    const io = new IntersectionObserver((es) => { if (es.some((e) => e.isIntersecting)) { io.disconnect();
+      scrambled(fig.dataset.scene).then((bmp) => { c.getContext('2d').drawImage(bmp, 0, 0, c.width, c.height); bmp.close(); }).catch(() => {}); } }, { rootMargin: '600px 0px' });
+    io.observe(c);
+  });
+  document.querySelectorAll('.gd-looks figure:not(.gd-scene), .gd-chase figure').forEach((fig) => {
     const c = fig.querySelector('canvas');
     c.dataset.look = fig.dataset.id; c.addEventListener('contextmenu', (e) => e.preventDefault());
     still(c, fig.dataset.id); near.observe(c);

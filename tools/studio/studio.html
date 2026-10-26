@@ -40,6 +40,23 @@ const finish = (v, slim) => { const P = v.playerObject; v.render(); window.spin 
     finish(v, false); return;
   }
   const L = (await (await fetch(`work/${q.get('set')}.json?${Date.now()}`)).json())[+q.get('i')];
+  // A floating outfit (entry.ghost): the top, pants and accessory with no body under them;
+  // only the head's outer layer shows (hoods, collars). entry.slim picks the arm model.
+  if (L.ghost) {
+    const top = await load(L.topFile || 'empty.png'), pants = await load(L.pantsFile || 'empty.png');
+    const o = SkinLib.combineOutfit(top, pants, !L.untucked);
+    const data = new Uint8ClampedArray(o.data);
+    if (L.accFile) { const a = await load(L.accFile); for (let i = 0; i < a.data.length; i += 4) if (a.data[i + 3]) for (let k = 0; k < 4; k++) data[i + k] = a.data[i + k]; }
+    const c = document.createElement('canvas'); c.width = c.height = 64; c.getContext('2d').putImageData(new ImageData(data, 64, 64), 0, 0);
+    const v = viewer(+(L.w || 420), +(L.h || 640));
+    await v.loadSkin(c, { model: L.slim ? 'slim' : 'default' });
+    v.zoom = L.zoom || 0.8; v.fov = 40;
+    pose(v, L.pose);
+    const s = v.playerObject.skin;
+    s.head.innerLayer.visible = false;
+    v.playerObject.traverse((ob) => { if (ob.material) for (const m of [].concat(ob.material)) { m.transparent = true; m.alphaTest = 0.1; m.needsUpdate = true; } });
+    finish(v, !!L.slim); return;
+  }
   const user = await load('models/' + L.skin + '.png');
   const slim = SkinLib.detectSlim(user);
   let m;
