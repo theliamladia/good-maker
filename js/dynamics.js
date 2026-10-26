@@ -5,7 +5,8 @@
 (() => {
   const $ = (id) => document.getElementById(id);
   const wait = (ms) => new Promise((ok) => setTimeout(ok, ms));
-  const C = { 'SLATE™': '#5e6873', 'JET™': '#131416', 'CONTRAIL™': '#eef0f2', 'GOOD® BLUE': '#0000ff' };
+  const C = { 'SLATE™': '#5e6873', 'JET™': '#131416', 'CONTRAIL™': '#eef0f2', 'GOOD® BLUE': '#0000ff',
+    'LHR™': '#3a2560', 'CDG™': '#8f8b85', 'LAX™': '#f1f0ea', 'DXB™': '#c9b38c', 'AMS™': '#ffd200', 'JFK™': '#b3121f' };
   const dots = (cw) => `<span class="gd-dots">${[...new Set(cw.split(/ · |\//))].map((n) => `<i style="background:${C[n] || '#000'}"></i>`).join('')}</span>`;
   const LOCK = { sq: 0.25, pos: 'lead', valign: 'centre', lift: 0.02, gap: 0.62, regPos: 'cap' };
 
@@ -85,6 +86,36 @@
     f.querySelector('.p').textContent = pieces;
     f.setAttribute('aria-label', `Look ${i + 1}: ${pieces}, ${cw}`);
     return f;
+  }));
+
+  // ---------- TARMAC® (in the same crate): colourways after the airports ----------
+  const TLOOKS = [
+    ['LOUNGE HOODIE® · LOUNGE PANT', 'LHR™ · LHR™'],
+    ['LOUNGE HOODIE® · LOUNGE PANT', 'DXB™ · DXB™'],
+    ['TRANSIT TEE · LOUNGE PANT · TRAVEL PILLOW', 'LAX™ · LAX™ · DXB™'],
+    ['TRANSIT TEE · CARRY-ON TROUSER · EYE MASK', 'CDG™/LHR™ · DXB™ · LHR™'],
+    ['PILLOW COLLAR® JACKET · CARRY-ON TROUSER', 'LAX™/LHR™ · LHR™'],
+    ['BOARDING PASS PARKA · LOUNGE PANT', 'CDG™/AMS™ · LHR™'],
+    ['SAFETY CARD SHIRT · CARRY-ON TROUSER · EYE MASK', 'LAX™/LHR™ · LHR™ · LHR™'],
+  ];
+  $('tarLooks').replaceChildren(...TLOOKS.map(([pieces, cw], i) => {
+    const f = document.createElement('figure'); f.dataset.id = `dyn-t${i + 1}`;
+    f.innerHTML = `<canvas width="202" height="407" aria-hidden="true"></canvas><figcaption><span class="n">LOOK ${String(i + 1).padStart(2, '0')}</span><span class="p"></span><p class="gd-cw">${dots(cw)}${cw}</p></figcaption>`;
+    f.querySelector('.p').textContent = pieces;
+    f.setAttribute('aria-label', `TARMAC® look ${i + 1}: ${pieces}, ${cw}`);
+    return f;
+  }));
+  const TPIECES = [
+    ['LOUNGE HOODIE®', 'LHR™ · CDG™ · LAX™ · DXB™'], ['LOUNGE PANT', 'LHR™ · CDG™ · LAX™ · DXB™'], ['TRANSIT TEE', 'LHR™ · CDG™ · LAX™ · DXB™'],
+    ['CABIN SOCK SLIDE', 'WITH THE LOUNGE PANT'], ['PILLOW COLLAR® JACKET', 'LAX™ · LHR™'], ['CARRY-ON TROUSER', 'LHR™ · DXB™'],
+    ['BOARDING PASS PARKA', 'CDG™ · LHR™'], ['SAFETY CARD SHIRT', 'LAX™/LHR™'], ['EYE MASK', 'LHR™ · JFK™'], ['TRAVEL PILLOW', 'DXB™'],
+    ['RED-EYE® LOUNGE SET · THE CHASE', 'JFK™/AMS™'],
+  ];
+  $('tarPieces').replaceChildren(...TPIECES.map(([name, cw], i) => {
+    const tr = document.createElement('tr'); if (/CHASE/.test(name)) tr.className = 'chase';
+    tr.innerHTML = `<td>${String(i + 1).padStart(2, '0')}</td><td></td><td>${C[cw.split(/ · |\//)[0]] ? dots(cw) : ''} ${cw}</td>`;
+    tr.children[1].textContent = name;
+    return tr;
   }));
 
   // ---------- the pieces ----------
