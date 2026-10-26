@@ -99,45 +99,75 @@
     window.GoodNav?.update(me);
   }
 
+  // FOR SALE: one card per piece (grouped copies), headed by its name, the floor and how many
+  // are listed; BUY takes the cheapest copy that isn't yours; ALL COPIES opens each one.
+  function buyButton(l, label = 'BUY') {
+    const b = document.createElement('button'); b.type = 'button'; b.className = 'mk-btn mono';
+    if (l.mine) {
+      b.textContent = 'UNLIST';
+      b.onclick = async () => { b.disabled = true; try { await post({ action: 'unlist', lid: l.lid }); toast('BACK IN YOUR INVENTORY.'); await refresh(); } catch (e) { toast(ERR[e.code] || 'COULDN’T UNLIST. TRY AGAIN.'); b.disabled = false; } };
+    } else if (!me) {
+      b.textContent = 'SIGN IN TO BUY'; b.onclick = () => { location.href = 'account'; };
+    } else {
+      b.textContent = label;
+      let sure = false, t;
+      b.onclick = async () => {
+        if (!sure) { sure = true; b.innerHTML = `ARE YOU SURE? ${coin}${l.price}`; b.classList.add('mk-sure'); t = setTimeout(() => { sure = false; b.textContent = label; b.classList.remove('mk-sure'); }, 4000); return; }
+        clearTimeout(t); b.disabled = true; b.textContent = 'BUYING…';
+        try { const j = await post({ action: 'buy', lid: l.lid }); me.coins = j.coins; toast(`IT'S YOURS: ${l.serial}. NOW IN MY INVENTORY® AND MAKER®.`); await refresh(); }
+        catch (e) { if (typeof e.coins === 'number') me.coins = e.coins; toast(ERR[e.code] || 'COULDN’T BUY IT. TRY AGAIN.'); await refresh(); }
+      };
+    }
+    return b;
+  }
+  function seller(l) {
+    const who = document.createElement(l.sellerSlug ? 'a' : 'span');
+    who.className = 'mk-seller mono';
+    if (l.sellerSlug) who.href = `/profiles/${encodeURIComponent(l.sellerSlug)}`;
+    const av = document.createElement('canvas'); av.className = 'mk-av'; av.setAttribute('aria-hidden', 'true');
+    who.append(av, l.seller || 'GOOD®');
+    GoodHeads.draw(av, l.sellerSkin && l.sellerSlug ? `api/profile?name=${encodeURIComponent(l.sellerSlug)}&skin=1` : null);
+    return who;
+  }
   function drawListings() {
     const q = $('q').value.trim().toLowerCase();
     const sort = $('sort').value;
-    const rows = listings.filter((l) => {
-      if (!q) return true;
+    const own = {};
+    for (const e of inventory) own[e.item] = (own[e.item] || 0) + 1;
+    const groups = {};
+    for (const l of listings) {
       const it = items[l.item] || {};
-      return `${it.name} ${it.color} ${l.seller} ${l.serial}`.toLowerCase().includes(q);
-    }).sort((a, b) => (sort === 'new' ? b.at.localeCompare(a.at) : sort === 'high' ? b.price - a.price : a.price - b.price));
+      if (q && !`${it.name} ${it.color} ${l.seller} ${l.serial}`.toLowerCase().includes(q)) continue;
+      (groups[l.item] ||= []).push(l);
+    }
+    const rows = Object.entries(groups).map(([id, ls]) => ({ id, ls: ls.sort((a, b) => a.price - b.price), floor: Math.min(...ls.map((l) => l.price)), at: ls.reduce((m, l) => (l.at > m ? l.at : m), '') }))
+      .sort((a, b) => (sort === 'new' ? b.at.localeCompare(a.at) : sort === 'high' ? b.floor - a.floor : a.floor - b.floor));
     $('saleCount').textContent = `${listings.length} LISTED`;
     $('empty').hidden = listings.length > 0;
-    $('listings').replaceChildren(...rows.map((l) => {
-      const f = piece(items[l.item], l.serial);
-      // The seller: their player head and name, linking to their profile.
-      const who = document.createElement(l.sellerSlug ? 'a' : 'span');
-      who.className = 'mk-seller mono';
-      if (l.sellerSlug) who.href = `/profiles/${encodeURIComponent(l.sellerSlug)}`;
-      const av = document.createElement('canvas'); av.className = 'mk-av'; av.setAttribute('aria-hidden', 'true');
-      who.append(av, l.seller || 'GOOD®');
-      GoodHeads.draw(av, l.sellerSkin && l.sellerSlug ? `api/profile?name=${encodeURIComponent(l.sellerSlug)}&skin=1` : null);
-      f.querySelector('.mk-meta').after(who);
-      const row = document.createElement('div'); row.className = 'mk-row';
-      row.innerHTML = `<span class="mk-price mono">${coin}${l.price}</span>`;
-      const b = document.createElement('button'); b.type = 'button'; b.className = 'mk-btn mono';
-      if (l.mine) {
-        b.textContent = 'UNLIST';
-        b.onclick = async () => { b.disabled = true; try { await post({ action: 'unlist', lid: l.lid }); toast('BACK IN YOUR INVENTORY.'); await refresh(); } catch (e) { toast(ERR[e.code] || 'COULDN’T UNLIST. TRY AGAIN.'); b.disabled = false; } };
-      } else if (!me) {
-        b.textContent = 'SIGN IN TO BUY'; b.onclick = () => { location.href = 'account'; };
-      } else {
-        b.textContent = 'BUY';
-        let sure = false, t;
-        b.onclick = async () => {
-          if (!sure) { sure = true; b.textContent = `ARE YOU SURE? ${l.price}`; b.classList.add('mk-sure'); t = setTimeout(() => { sure = false; b.textContent = 'BUY'; b.classList.remove('mk-sure'); }, 4000); return; }
-          clearTimeout(t); b.disabled = true; b.textContent = 'BUYING…';
-          try { const j = await post({ action: 'buy', lid: l.lid }); me.coins = j.coins; toast(`IT'S YOURS: ${l.serial}. NOW IN MY INVENTORY® AND MAKER®.`); await refresh(); }
-          catch (e) { if (typeof e.coins === 'number') me.coins = e.coins; toast(ERR[e.code] || 'COULDN’T BUY IT. TRY AGAIN.'); await refresh(); }
-        };
+    $('listings').replaceChildren(...rows.map(({ id, ls, floor }) => {
+      const f = piece(items[id], `${ls.length} LISTED`);
+      const cap = f.querySelector('figcaption');
+      const head = document.createElement('span'); head.className = 'mk-floor mono'; head.innerHTML = `FROM ${coin}${floor}`;
+      f.querySelector('.mk-cw').after(head);
+      if (own[id]) {
+        const o = document.createElement('a'); o.className = 'mk-own mono'; o.href = './';
+        o.textContent = `YOU OWN ×${own[id]} · WEAR IT IN MAKER® →`; cap.append(o);
       }
-      row.append(b); f.querySelector('figcaption').append(row);
+      const best = ls.find((l) => !l.mine);
+      const row = document.createElement('div'); row.className = 'mk-row';
+      row.append(best ? buyButton(best, ls.length > 1 ? 'BUY THE CHEAPEST' : 'BUY') : buyButton(ls[0]));
+      cap.append(row);
+      // Every copy: serial, seller, price, its own BUY / UNLIST
+      const more = document.createElement('details'); more.className = 'mk-copies';
+      more.innerHTML = `<summary class="mono">${ls.length > 1 ? `ALL ${ls.length} COPIES` : 'THIS COPY'}</summary><ol></ol>`;
+      more.querySelector('ol').replaceChildren(...ls.map((l) => {
+        const li = document.createElement('li');
+        const ser = document.createElement('span'); ser.className = 'mk-ser mono'; ser.textContent = l.serial;
+        const pr = document.createElement('span'); pr.className = 'mk-price mono'; pr.innerHTML = `${coin}${l.price}`;
+        li.append(ser, seller(l), pr, buyButton(l));
+        return li;
+      }));
+      cap.append(more);
       return f;
     }));
   }

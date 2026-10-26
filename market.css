@@ -140,3 +140,25 @@ a.mk-seller:hover .mk-av, a.mk-seller:focus-visible .mk-av { outline-color: #fff
   .mk-mine td:nth-child(5)::before { content: 'WITH '; }
   .mk-mine .mk-t-list td:nth-child(5), .mk-mine .mk-t-unlist td:nth-child(5) { display: none; }
 }
+
+/* FOR SALE, grouped by piece: a smaller spotlight, the name as the headline, the floor, every copy behind ALL COPIES */
+#listings .mk-spot { aspect-ratio: 4 / 3; }
+#listings .mk-name { font-size: clamp(1.15rem, 1.6vw, 1.4rem); font-weight: var(--w-head); letter-spacing: -0.03em; }
+.mk-floor { font-size: var(--label-size); letter-spacing: 0.18em; }
+.mk-floor .coin { width: 0.9em; height: 0.9em; vertical-align: -0.1em; }
+.mk-own { color: inherit; font-size: var(--label-size); letter-spacing: 0.14em; text-decoration: underline; text-underline-offset: 5px; }
+.mk-copies { width: 100%; margin-top: 4px; text-align: left; }
+.mk-copies summary { cursor: pointer; text-align: center; font-size: var(--label-size); letter-spacing: 0.18em; opacity: 0.8; padding: 8px 0; list-style: none; }
+.mk-copies summary::-webkit-details-marker { display: none; }
+.mk-copies summary::after { content: ' +'; }
+.mk-copies[open] summary::after { content: ' −'; }
+.mk-copies ol { list-style: none; margin: 6px 0 0; padding: 0; border-top: 1px solid rgba(255, 255, 255, 0.3); }
+.mk-copies li { display: grid; grid-template-columns: auto minmax(0, 1fr) auto auto; align-items: center; gap: 10px; padding: 10px 0; border-bottom: 1px solid rgba(255, 255, 255, 0.18); }
+.mk-copies .mk-ser { font-size: var(--label-size); letter-spacing: 0.14em; }
+.mk-copies .mk-seller { min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.mk-copies .mk-btn { padding: 8px 12px; }
+@media (max-width: 520px) {
+  .mk-copies li { grid-template-columns: auto auto; justify-content: space-between; }
+  .mk-copies .mk-seller { grid-column: 1 / -1; }
+  .mk-own { letter-spacing: 0.08em; }
+}
