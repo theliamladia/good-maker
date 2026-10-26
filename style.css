@@ -1277,8 +1277,9 @@ body.st {
    stage behind the model, not in the chrome. */
 body.fall { background: var(--good-blue); }
 body.fall .site-header { background: none; }
-body.fall .viewer-wrap { background: linear-gradient(to bottom, #5f7a4c 0, #6f7a42 18%, #8a6a32 40%, #a8552a 64%, #c86f30 84%, #d98a3a 100%); }
-@media (min-width: 701px) { body.fall .viewer-wrap { border-radius: var(--radius); padding: 0 0 12px; } }
+/* The model on GOOD® BLUE, in a soft white spotlight (house rule: pieces sit in a spotlight) */
+body.fall .viewer-wrap { background: radial-gradient(closest-side at 50% 45%, rgba(255, 255, 255, 0.55), rgba(255, 255, 255, 0) 100%); }
+@media (min-width: 701px) { body.fall .viewer-wrap { padding: 0 0 12px; } }
 body.fall .panel { background: rgba(255, 255, 255, 0.96); border-color: #fff; }
 body.fall .download-btn { background: #fff; color: var(--good-blue); border-color: #fff; font-weight: 600; box-shadow: 0 12px 40px rgba(0, 0, 60, 0.3); }
 body.fall .download-btn:hover:not(:disabled) { background: #fff; transform: translateY(-2px); }
@@ -1332,3 +1333,15 @@ body.fall .download-btn:disabled { background: rgba(255, 255, 255, 0.55); }
 .wd-piece { font-size: var(--label-size); letter-spacing: 0.08em; line-height: 1.45; color: #3b4d68; }
 .wd-rm { margin-top: 4px; min-height: 32px; padding: 0 10px; border: 1px solid rgba(0, 0, 255, 0.35); background: none; color: var(--good-blue); font-size: var(--label-size); letter-spacing: 0.14em; cursor: pointer; }
 .wd-more { display: block; margin-top: 32px; color: var(--good-blue); font-size: var(--label-size); letter-spacing: 0.16em; }
+/* Carousel arrows: GOOD® BLUE so they read on white cards */
+.carousel-btn { background: var(--good-blue); border-color: var(--good-blue); color: #fff; width: 34px; height: 34px; box-shadow: 0 4px 14px rgba(0, 0, 80, 0.3); }
+.carousel-btn:hover:not(:disabled) { background: #fff; color: var(--good-blue); border-color: var(--good-blue); }
+.carousel-btn:disabled { opacity: 0.25; }
+/* The model never clips: the viewer column is at least about half as wide as the stage is tall
+   (the model keeps its size; tall windows get a wider viewer). */
+@media (min-width: 1251px) {
+  .stage { grid-template-columns: minmax(max(260px, calc((100svh - 300px) * 0.58)), 25fr) minmax(250px, 19fr) minmax(0, 56fr); }
+}
+@media (min-width: 701px) and (max-width: 1250px) {
+  .stage { grid-template-columns: minmax(max(260px, calc(min(56vh, 520px) * 0.62)), 2fr) minmax(0, 3fr); }
+}
