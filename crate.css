@@ -1,5 +1,7 @@
 /* GOOD® CRATE landing page: a dark room, a GOOD® BLUE glow, one crate. */
-.cr-page { margin: 0; min-height: 100vh; color: #fff; background: radial-gradient(ellipse 70% 60% at 68% 42%, #1a2cff 0%, #0a0f6e 38%, #07092e 72%, #050616 100%) fixed; }
+/* House look: GOOD® BLUE, the crate in a soft white spotlight (no rays) */
+.cr-page { margin: 0; min-height: 100vh; color: #fff; background: var(--good-blue); }
+.cr-stage { background: radial-gradient(closest-side, rgba(255, 255, 255, 0.42), rgba(255, 255, 255, 0) 72%); }
 .cr-page ::selection { background: #fff; color: var(--good-blue); }
 .cr-main { position: relative; max-width: 1180px; margin: 0 auto; padding: 0 var(--gutter) 40px; overflow: hidden; }
 .cr-rays {
@@ -29,7 +31,9 @@
 #crate:active { cursor: grabbing; }
 .cr-hint { position: absolute; bottom: 6px; left: 0; right: 0; text-align: center; font-size: 0.69rem; letter-spacing: var(--label-track); opacity: 0.55; margin: 0; }
 
-.cr-drop { position: relative; text-align: center; margin: 10px auto 0; max-width: 560px; padding: 26px 24px 22px; border: 1px solid rgba(255, 255, 255, 0.35); background: rgba(5, 8, 40, 0.55); animation: cr-pop 0.5s cubic-bezier(0.16, 1, 0.3, 1); }
+.cr-modal { position: fixed; inset: 0; z-index: 950; display: grid; place-items: center; padding: 16px; background: rgba(0, 0, 60, 0.6); overflow-y: auto; }
+.cr-modal[hidden] { display: none; }
+.cr-drop { position: relative; text-align: center; width: min(560px, 100%); padding: 26px 24px 22px; border: 1px solid rgba(255, 255, 255, 0.35); background: var(--good-blue); box-shadow: 0 30px 80px rgba(0, 0, 40, 0.45); animation: cr-pop 0.5s cubic-bezier(0.16, 1, 0.3, 1); }
 .cr-drop[hidden] { display: none; }
 @keyframes cr-pop { from { opacity: 0; transform: translateY(16px) scale(0.97); } }
 .cr-item { margin: 0; font-weight: var(--w-head); font-size: clamp(1.6rem, 4vw, 2.4rem); letter-spacing: -0.04em; }
@@ -84,7 +88,7 @@
 .cr-drop.cr-t-ticket .cr-item span { color: #ffd23f; }
 
 /* The reel: cards scroll past a centre marker and stop on the pull */
-.cr-drop { max-width: 920px; }
+.cr-drop { width: min(920px, 100%); }
 .cr-reel { position: relative; overflow: hidden; margin: 8px -8px 4px; padding: 14px 0; background: rgba(0, 0, 20, 0.55); border-top: 1px solid rgba(255, 255, 255, 0.2); border-bottom: 1px solid rgba(255, 255, 255, 0.2);
   -webkit-mask: linear-gradient(90deg, transparent, #000 12%, #000 88%, transparent); mask: linear-gradient(90deg, transparent, #000 12%, #000 88%, transparent); }
 .cr-reel[hidden] { display: none; }
@@ -106,3 +110,13 @@
 .cr-ach { display: inline-block; margin-top: 10px; color: #ffd23f; letter-spacing: 0.2em; }
 .cr-timer { margin: 10px 0 0; font-size: 0.7rem; font-weight: 700; letter-spacing: 0.16em; min-height: 1.2em; }
 .cr-timer .coin { vertical-align: -0.2em; }
+
+/* HOW IT WORKS, on the crate page itself (was only on good-crate) */
+.cr-how { margin-top: clamp(40px, 7vh, 80px); }
+.cr-how .gc-steps { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(auto-fit, minmax(190px, 1fr)); gap: 16px; }
+.cr-how .gc-steps li { padding: 18px 16px; line-height: 1.55; font-size: 0.92rem; background: rgba(255, 255, 255, 0.06); border: 1px solid rgba(255, 255, 255, 0.2); }
+.cr-how .gc-steps b { display: block; margin-bottom: 6px; font-weight: var(--w-head); letter-spacing: -0.02em; font-size: 1.05rem; }
+.cr-how .gc-n { display: block; margin-bottom: 14px; font-size: var(--label-size); letter-spacing: 0.2em; opacity: 0.75; }
+.cr-drop-x { position: absolute; top: 8px; right: 8px; width: 40px; height: 40px; border: 0; background: none; color: #fff; font-size: 1rem; cursor: pointer; }
+.cr-drop-actions { display: flex; flex-wrap: wrap; justify-content: center; align-items: center; gap: 14px 24px; margin-top: 22px; }
+.cr-rays { display: none; }

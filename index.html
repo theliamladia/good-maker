@@ -28,7 +28,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400&family=Inter:wght@300;400;500;600&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="good.css?v=2">
-  <link rel="stylesheet" href="style.css?v=8">
+  <link rel="stylesheet" href="style.css?v=9">
   <script>
     // Hide the page until js/intro.js plays the entrance (never for reduced motion;
     // the timeout is a safety net if scripts fail to load).
@@ -41,9 +41,6 @@
 <body class="fall">
 <canvas class="fall-leaves" id="leaves" aria-hidden="true"></canvas>
 
-<!-- CRT overlay -->
-<div class="crt-scanlines" aria-hidden="true"></div>
-<div class="crt-vignette" aria-hidden="true"></div>
 
 
 <a class="im-banner wd-banner mono" href="wandering">WANDERING® <span>OUT NOW · CHINNY + GOOD® →</span></a>
@@ -63,11 +60,16 @@
 </header>
 
 
+<ol class="mk-steps mono" id="mkSteps" aria-label="How MAKER® works" hidden>
+  <li><b>1</b> YOUR SKIN</li><li><b>2</b> PICK PIECES</li><li><b>3</b> DOWNLOAD OR SAVE</li>
+  <li class="mk-steps-x"><button type="button" id="mkStepsX" aria-label="Hide these steps">GOT IT ×</button></li>
+</ol>
+
 <main class="stage">
   <h1 class="sr-only">MAKER®: dress your Minecraft skin in GOOD®</h1>
   <!-- Left: you -->
   <aside class="panel left">
-    <div class="section-tag mono">Nº001 / YOUR SKIN</div>
+    <div class="section-tag mono">YOUR SKIN</div>
     <label class="upload" id="drop">
       <input type="file" id="file" accept="image/png">
       <canvas id="face" width="8" height="8" title="Click your face to pick a skin tone"></canvas>
@@ -87,29 +89,30 @@
       <button type="button" class="chip mono" id="homeUse" hidden>USE HOME SKIN</button>
     </div>
 
-    <div class="section-tag mono">Nº002 / BODY</div>
+    <div class="section-tag mono">BODY</div>
     <div class="segmented" id="body" role="radiogroup" aria-label="Body type">
       <button type="button" data-body="classic" role="radio">Classic</button>
       <button type="button" data-body="slim" role="radio">Slim</button>
     </div>
     <p class="micro mono" id="bodyHint"></p>
 
-    <div class="section-tag mono">Nº003 / SKIN TONE</div>
-    <div class="tone" id="toneRow">
-      <label class="swatch" title="Pick a colour"><input type="color" id="tone" value="#e0ac8c" aria-label="Skin tone"><span id="swatch"></span></label>
-      <button type="button" class="chip mono" id="auto">AUTO</button>
-      <button type="button" class="chip mono" id="mySkin" aria-pressed="false" title="Keep your own skin texture wherever the outfit doesn't cover">MY SKIN</button>
-    </div>
-    <div class="ramp" id="ramp" title="Shading built from your tone"></div>
-    <p class="micro mono">CLICK YOUR FACE TO EYEDROP.</p>
-
     <!-- Hair & Head: two swipeable cards in the same spot, folded away under FINE TUNE -->
     <details class="fine-tune" id="fineTune">
-    <summary class="mono">FINE TUNE</summary>
+    <summary class="mono">ADJUST · SKIN TONE, HAIR, HEAD</summary>
+      <div class="section-tag mono">SKIN TONE</div>
+      <div class="tone" id="toneRow">
+        <label class="swatch" title="Pick a colour"><input type="color" id="tone" value="#e0ac8c" aria-label="Skin tone"><span id="swatch"></span></label>
+        <button type="button" class="chip mono" id="auto">AUTO</button>
+        <button type="button" class="chip mono" id="mySkin" aria-pressed="false" title="Keep your own skin texture wherever the outfit doesn't cover">MY SKIN</button>
+      </div>
+      <div class="ramp" id="ramp" title="Shading built from your tone"></div>
+      <p class="micro mono">CLICK YOUR FACE TO EYEDROP.</p>
+
+      <div class="section-tag mono">HAIR AND HEAD</div>
     <div class="swiper" id="swiper">
       <div class="swiper-tabs mono" role="tablist" aria-label="Hair and head">
-        <button type="button" role="tab" data-slide="0" aria-selected="true">Nº004 / HAIR</button>
-        <button type="button" role="tab" data-slide="1" aria-selected="false">Nº005 / HEAD</button>
+        <button type="button" role="tab" data-slide="0" aria-selected="true">HAIR</button>
+        <button type="button" role="tab" data-slide="1" aria-selected="false">HEAD</button>
       </div>
       <div class="slides" id="slides">
         <section class="slide" role="tabpanel" aria-label="Hair">
@@ -184,7 +187,7 @@
     </div>
     <div class="fit-cols">
     <div class="fit-col">
-    <div class="section-tag mono tag-row"><span>Nº006 / SHIRT</span><select class="season-btn season-select mono" data-filter aria-label="Filter shirts"><option value="all">ALL</option><option value="current">CURRENT SEASON</option><option value="crate2">GOOD® CRATE Nº002</option><option value="crate1">GOOD® CRATE Nº001</option><option value="fall">FALL®</option><option value="deep">DEEP END®</option></select></div>
+    <div class="section-tag mono tag-row"><span>SHIRT</span><select class="season-btn season-select mono" data-filter aria-label="Filter shirts"><option value="all">ALL</option><option value="current">CURRENT SEASON</option><option value="crate2">GOOD® CRATE Nº002</option><option value="crate1">GOOD® CRATE Nº001</option><option value="fall">FALL®</option><option value="deep">DEEP END®</option></select></div>
     <div class="outfit-carousel">
       <button type="button" class="carousel-btn" id="outfitPrev" aria-label="Previous outfits">‹</button>
       <div class="outfits" id="outfits"></div>
@@ -194,7 +197,7 @@
     <p class="micro mono" id="outfitHint" hidden></p>
 
     <div id="sleeveSection">
-      <div class="section-tag mono" id="sleeveTag">Nº007 / SLEEVE</div>
+      <div class="section-tag mono" id="sleeveTag">SLEEVE</div>
       <div class="segmented small" id="sleeve" role="radiogroup" aria-label="Sleeve length">
         <button type="button" data-sleeve="short" role="radio">Short</button>
         <button type="button" data-sleeve="long" role="radio">Long</button>
@@ -206,7 +209,7 @@
     </div>
 
     <div id="tuckSection">
-      <div class="section-tag mono">Nº008 / TUCK</div>
+      <div class="section-tag mono">TUCK</div>
       <div class="segmented small" id="tuck" role="radiogroup" aria-label="Tuck the shirt">
         <button type="button" data-tuck="in" role="radio">Tucked</button>
         <button type="button" data-tuck="out" role="radio">Untucked</button>
@@ -216,7 +219,7 @@
     </div>
     <div class="fit-col">
     <div id="pantsSection">
-      <div class="section-tag mono tag-row"><span>Nº009 / PANTS</span><select class="season-btn season-select mono" data-filter aria-label="Filter pants"><option value="all">ALL</option><option value="current">CURRENT SEASON</option><option value="crate2">GOOD® CRATE Nº002</option><option value="crate1">GOOD® CRATE Nº001</option><option value="fall">FALL®</option><option value="deep">DEEP END®</option></select></div>
+      <div class="section-tag mono tag-row"><span>PANTS</span><select class="season-btn season-select mono" data-filter aria-label="Filter pants"><option value="all">ALL</option><option value="current">CURRENT SEASON</option><option value="crate2">GOOD® CRATE Nº002</option><option value="crate1">GOOD® CRATE Nº001</option><option value="fall">FALL®</option><option value="deep">DEEP END®</option></select></div>
       <div class="outfit-carousel">
         <button type="button" class="carousel-btn" id="pantsPrev" aria-label="Previous pants">‹</button>
         <div class="outfits" id="pants"></div>
@@ -224,12 +227,12 @@
       </div>
       <div class="swatches" id="pantsColors" hidden></div>
       <div id="shoeSection">
-        <div class="section-tag mono">Nº010 / SHOE</div>
+        <div class="section-tag mono">SHOE</div>
         <div class="shoe-cards" id="shoeCards"></div>
         <div class="swatches" id="shoeColors" hidden></div>
       </div>
       <div id="boxerSection" hidden>
-        <div class="section-tag mono">Nº011 / BOXER</div>
+        <div class="section-tag mono">BOXER</div>
         <div class="segmented small" id="boxer" role="radiogroup" aria-label="Boxer">
           <button type="button" data-boxer="blue" role="radio">POOLSIDE™</button>
           <button type="button" data-boxer="tartan" role="radio">HIGHLAND™</button>
@@ -261,8 +264,9 @@
 <script src="https://cdn.jsdelivr.net/npm/skinview3d@3.1.0/bundles/skinview3d.bundle.js"></script>
 <script src="js/skin.js?v=2"></script>
 <script src="js/outfits.js?v=4"></script>
-<script src="js/app.js?v=13"></script>
-<script src="js/mobile.js?v=2"></script>
+<script src="js/app.js?v=14"></script>
+<script src="js/mobile.js?v=3"></script>
+<script src="js/maker-ui.js?v=1"></script>
 <script src="js/help.js"></script>
 <script src="js/account.js?v=3"></script>
 <script src="js/intro.js"></script>

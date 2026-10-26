@@ -32,3 +32,4 @@
 @media (max-width: 760px) { .gc-chase, .gc-ticket { grid-template-columns: 1fr; } .gc-chase-fig { order: -1; max-width: 260px; margin: 0 auto; } .gc-ticket-fig { max-width: 140px; margin: 0 auto; } }
 @media (prefers-reduced-motion: reduce) { .gc-rays, .gc-art, .gc-ticket-fig { animation: none; } }
 .gc-chase code { font-family: var(--font-mono); font-size: 0.9em; padding: 1px 6px; background: rgba(0, 0, 0, 0.35); color: #ffd23f; }
+.gc-rays { display: none; }

@@ -740,7 +740,7 @@
     state.fromName = false; // set by the username form: only then can the look link carry the name
     resetErasers();
     $('uploadTitle').textContent = name;
-    $('uploadSub').textContent = isDemo ? 'DEMO / TAP TO UPLOAD YOURS' : 'TAP TO SWAP SKIN';
+    $('uploadSub').textContent = isDemo ? 'A DEMO SKIN. TAP TO USE YOURS' : 'TAP TO SWAP SKIN';
     drawFace();
     setTone(SkinLib.sampleSkinTone(data), false);
     state.hairGuess = SkinLib.estimateHairRows(data, state.tone);
@@ -1080,6 +1080,7 @@
     dl.firstChild.textContent = bare ? 'PUT SOMETHING ON ' : 'DOWNLOAD SKIN ';
     dl.title = bare ? 'Equip clothes first before downloading' : state.isDemo ? 'Upload your skin first' : '';
     if (bare) $('downloadHint').textContent = 'EQUIP CLOTHES FIRST BEFORE DOWNLOADING.';
+    else if (state.isDemo) $('downloadHint').textContent = 'THIS IS THE DEMO SKIN. ADD YOURS UNDER YOUR SKIN TO DOWNLOAD.';
     showSkin(withLeaves(merged.data, slim), slim);
   }
 

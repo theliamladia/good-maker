@@ -25,15 +25,15 @@
   <meta property="og:image:alt" content="Seven Minecraft players posing in GOOD® outfits and jeans.">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,400&family=Inter:wght@300;400;500;600&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="good.css?v=2">
-  <link rel="stylesheet" href="style.css?v=8">
-  <link rel="stylesheet" href="colors.css?v=2">
-  <link rel="stylesheet" href="releases.css?v=2">
+  <link rel="stylesheet" href="style.css?v=9">
+  <link rel="stylesheet" href="collab.css?v=2">
+  <link rel="stylesheet" href="releases.css?v=3">
 </head>
-<body class="cx-page rl-page">
+<body class="co-page rl-page">
 
-<header class="site-header cx-header">
+<header class="site-header">
   <a class="wordmark" href="./">GOOD®</a>
   <nav class="site-nav" aria-label="Main">
     <a class="nav-link mono" href="./">MAKER®</a>
@@ -47,20 +47,43 @@
   </nav>
 </header>
 
-<main class="rl-main">
-  <section class="rl-hero">
-    <p class="rl-tag">RELEASES® · 5</p>
-    <h1 class="rl-title">RELEASES<sup>®</sup></h1>
-    <p class="rl-lede">Every crate and collection from GOOD®, newest first. Each one keeps its page: the story, the pieces, the odds.</p>
+<main class="co-main rl-main">
+  <section class="co-hero rl-hero">
+    <p class="co-tag mono">RELEASES® · 5</p>
+    <h1 class="co-title">Releases<span>®</span></h1>
+    <p class="co-lede">Every crate and collection from GOOD®, newest first. Each one keeps its page: the story, the pieces, the odds.</p>
   </section>
 
+  <section class="co-block" aria-labelledby="openTitle">
+    <header class="co-head"><p class="co-tag mono">OPEN NOW</p><h2 id="openTitle">GOOD® CRATES</h2></header>
+    <p class="rl-how">Save new fits in MAKER® for GOOD® COINS (+10 each, four a day). Open a crate with them. Every pull is serialized, lands in your inventory, and is yours to wear in MAKER® or sell on MARKET®.</p>
+    <div class="rl-crates">
+      <a class="rl-crate" href="inmotion">
+        <img src="assets/crate2.svg" alt="" width="160" height="160" draggable="false">
+        <span class="rl-crate-no mono">Nº002 · NEW</span>
+        <span class="rl-crate-name">ART® IN MOTION</span>
+        <span class="rl-crate-meta mono">5 GOOD® COINS · 30 PIECES</span>
+        <span class="rl-crate-go mono">OPEN Nº002 →</span>
+      </a>
+      <a class="rl-crate" href="crate">
+        <img src="assets/crate.svg" alt="" width="160" height="160" draggable="false">
+        <span class="rl-crate-no mono">Nº001</span>
+        <span class="rl-crate-name">GOOD® CRATE</span>
+        <span class="rl-crate-meta mono">5 GOOD® COINS · SERIALS FROM GD-001</span>
+        <span class="rl-crate-go mono">OPEN Nº001 →</span>
+      </a>
+    </div>
+  </section>
+
+  <section class="co-block" aria-labelledby="allTitle">
+    <header class="co-head"><p class="co-tag mono">NEWEST FIRST</p><h2 id="allTitle">EVERY RELEASE</h2></header>
   <ol class="rl-list">
     <li>
       <a class="rl-post" href="wandering">
         <img src="assets/rl/wandering.webp" alt="WANDERING®: a pixel valley at sunrise under a pink-lit mountain, CHINNY + GOOD® in DUCK HUNTER™ orange." loading="lazy" decoding="async" width="800" height="420">
         <div class="rl-copy">
           <p class="rl-meta">23 OCTOBER 2026 · CHINNY + GOOD® · COLLABORATION · <b>NEW</b></p>
-          <h2 class="rl-h">WANDERING<sup>®</sup></h2>
+          <h2 class="rl-h">WANDERING<span class="rl-mark">®</span></h2>
           <p class="rl-p">You left before the light did. Three collections for the long way round: TETON®, YELLOWSTONE® and CAMP®. Out now in MAKER®.</p>
           <span class="rl-go">WALK DOWN THE VALLEY →</span>
         </div>
@@ -71,7 +94,7 @@
         <img src="assets/rl/gud.webp" alt="GUD™ × GOOD®: a hellish collaboration." loading="lazy" decoding="async" width="800" height="420">
         <div class="rl-copy">
           <p class="rl-meta">19 OCTOBER 2026 · GUD™ × GOOD® · COLLABORATION</p>
-          <h2 class="rl-h">GUD<sup>™</sup></h2>
+          <h2 class="rl-h">GUD<span class="rl-mark">™</span></h2>
           <p class="rl-p">GUD™ × GOOD®. It has risen. A hellish collaboration, out now: see the pieces, then wear them in MAKER®.</p>
           <span class="rl-go">SEE THE PIECES →</span>
         </div>
@@ -82,19 +105,19 @@
         <img src="assets/rl/inmotion.webp" alt="ART® IN MOTION: the season's pigments painted across a white canvas." loading="lazy" decoding="async" width="800" height="420">
         <div class="rl-copy">
           <p class="rl-meta">15 OCTOBER 2026 · GOOD® CRATE Nº002</p>
-          <h2 class="rl-h">INMOTION<sup>®</sup></h2>
+          <h2 class="rl-h">ART® IN MOTION</h2>
           <p class="rl-p">ART® IN MOTION. A study of colour in movement, painted en plein air: six pigments on MARSHMALLOW™, a white crate, and a lookbook worn by our players.</p>
           <span class="rl-go">VIEW THE NEW CRATE →</span>
         </div>
       </a>
     </li>
     <li>
-      <a class="rl-post" href="good-crate">
+      <a class="rl-post" href="crate">
         <img src="assets/rl/crate.webp" alt="The GOOD® CRATE Nº001: a GOOD® BLUE pixel crate with chrome corners." loading="lazy" decoding="async" width="800" height="420">
         <div class="rl-copy">
           <p class="rl-meta">9 OCTOBER 2026 · GOOD® CRATE Nº001</p>
-          <h2 class="rl-h">Something soft is trying to get out.</h2>
-          <p class="rl-p">The first GOOD® CRATE: the archived GOODIE®s, the I'M SOWWY shirts and every RUNWAY® piece, serialized from GD-001. Still open.</p>
+          <h2 class="rl-h">GOOD® CRATE Nº001</h2>
+          <p class="rl-p">Something soft is trying to get out. The first GOOD® CRATE: the archived GOODIE®s, the I'M SOWWY shirts and every RUNWAY® piece, serialized from GD-001. Still open.</p>
           <span class="rl-go">OPEN THE FIRST CRATE →</span>
         </div>
       </a>
@@ -104,13 +127,14 @@
         <img src="assets/rl/att.webp" alt="AMONG THE TREES®: GOOD® CAPSULE Nº2." loading="lazy" decoding="async" width="800" height="420">
         <div class="rl-copy">
           <p class="rl-meta">6 OCTOBER 2026 · GOOD® CAPSULE Nº2 · FALL®</p>
-          <h2 class="rl-h">AMONG THE TREES<sup>®</sup></h2>
+          <h2 class="rl-h">AMONG THE TREES<span class="rl-mark">®</span></h2>
           <p class="rl-p">GOOD® will be with you in this wondrous occasion. The fall capsule: CINNAMON TOAST™/FERN™, WASH DAY™/TRENCH™ and MAPLE LEAF™/FATIGUE™.</p>
           <span class="rl-go">WEAR IT IN MAKER® →</span>
         </div>
       </a>
     </li>
   </ol>
+  </section>
 </main>
 
 <footer class="site-foot mono"><nav class="foot-nav" aria-label="More"><a href="colors">COLORS®</a><a href="study">STUDY®</a><a href="collaborations">COLLABORATIONS®</a><a href="privacy">PRIVACY</a></nav><p>© 2026 GOOD®. All rights reserved.</p></footer>

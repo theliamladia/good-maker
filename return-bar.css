@@ -1,0 +1,14 @@
+/* The way back from a world (WANDERING®, GUD™, Q&G®, DYNAMICS®, GOOD® CRATE Nº002): one small
+   bar in the corner, the same on every world, legible on any ground. */
+.rb { position: fixed; top: 12px; left: 12px; z-index: 5000; display: flex; align-items: center; padding: 0 6px; border-radius: 999px;
+  background: rgba(10, 10, 20, 0.55); -webkit-backdrop-filter: blur(10px); backdrop-filter: blur(10px); }
+.rb a { display: inline-flex; align-items: center; min-height: 36px; padding: 0 12px; color: #fff; text-decoration: none;
+  font: 400 11px 'Space Mono', ui-monospace, monospace; letter-spacing: 0.2em; white-space: nowrap; opacity: 0.85; }
+.rb a + a { border-left: 1px solid rgba(255, 255, 255, 0.25); }
+.rb a:hover, .rb a:focus-visible { opacity: 1; text-decoration: underline; text-underline-offset: 5px; }
+.rb a:focus-visible { outline: 2px solid #fff; outline-offset: -4px; }
+@media (max-width: 520px) { .rb a { padding: 0 9px; letter-spacing: 0.14em; } .rb .rb-rel { display: none; } }
+@media print { .rb { display: none; } }
+/* Out of the way while a world's intro plays */
+.rb { transition: opacity 0.4s; }
+body.intro .rb, body.booting .rb, body:not(.arrived) .rb.rb-wait { opacity: 0; pointer-events: none; }

@@ -30,13 +30,11 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="good.css?v=2">
-  <link rel="stylesheet" href="style.css?v=8">
-  <link rel="stylesheet" href="crate.css?v=2">
+  <link rel="stylesheet" href="style.css?v=9">
+  <link rel="stylesheet" href="crate.css?v=4">
 </head>
 <body class="cr-page">
 
-<div class="crt-scanlines" aria-hidden="true"></div>
-<div class="crt-vignette" aria-hidden="true"></div>
 
 <header class="site-header">
   <a class="wordmark" href="./">GOOD®</a>
@@ -62,7 +60,7 @@
       <div class="cr-actions">
         <button type="button" class="cr-open mono" id="open" disabled>OPEN THE CRATE</button>
         <a class="cr-link mono" href="account" id="inv">MY INVENTORY® →</a>
-        <a class="cr-link mono" href="good-crate">HOW IT WORKS</a>
+        <a class="cr-link mono" href="#how">HOW IT WORKS</a>
       </div>
       <p class="cr-wallet mono" id="wallet" aria-live="polite">&nbsp;</p>
       <p class="cr-timer mono" data-coin-timer></p>
@@ -73,7 +71,9 @@
     </div>
   </section>
 
-  <section class="cr-drop" id="drop" aria-live="polite" hidden>
+  <div class="cr-modal" id="dropWrap" hidden>
+  <section class="cr-drop" id="drop" role="dialog" aria-modal="true" aria-labelledby="dropTag" aria-live="polite">
+    <button type="button" class="cr-drop-x mono" id="dropClose" aria-label="Close">✕</button>
     <p class="cr-tag mono" id="dropTag">YOU UNBOXED</p>
     <div class="cr-reel" id="reel" hidden><div class="cr-strip" id="strip"></div></div>
     <div class="cr-gold" id="gold" hidden><span class="mono">GOLD ROLL</span><b id="goldName">&nbsp;</b></div>
@@ -83,7 +83,23 @@
       <p class="cr-serial mono" id="gotSerial"></p>
       <div class="cr-rarity"><span></span></div>
       <p class="cr-meta mono" id="gotMeta"></p>
+      <div class="cr-drop-actions">
+        <button type="button" class="cr-open mono" id="again">OPEN ANOTHER</button>
+        <a class="cr-link mono" href="./">WEAR IT IN MAKER® →</a>
+      </div>
     </div>
+  </section>
+  </div>
+
+  <section class="cr-how" id="how" aria-labelledby="howTitle">
+    <header class="cr-bar"><h2 class="mono" id="howTitle">HOW IT WORKS</h2><span class="mono">5 STEPS</span></header>
+    <ol class="gc-steps">
+      <li><span class="gc-n mono">01</span><b>Earn GOOD® COINS.</b> Sign in and save new fits to your wardrobe in MAKER®: +10 each, up to 4 a day.</li>
+      <li><span class="gc-n mono">02</span><b>Open a crate.</b> 5 GOOD® COINS. We ask once: ARE YOU SURE?</li>
+      <li><span class="gc-n mono">03</span><b>Watch the reel.</b> Every piece flies past the marker, slows down and stops on yours.</li>
+      <li><span class="gc-n mono">04</span><b>Keep it, numbered.</b> Every pull is serialized, GD-001 and up, and lands in MY INVENTORY® on your account page.</li>
+      <li><span class="gc-n mono">05</span><b>Wear it.</b> Own one serialized copy and the piece unlocks in MAKER®. Pull one you already have and 2 GOOD® COINS come back.</li>
+    </ol>
   </section>
 
   <section class="cr-contents">
@@ -98,7 +114,7 @@
 <script src="https://cdn.jsdelivr.net/npm/three@0.156.1/build/three.min.js"></script>
 <script src="js/gooditems.js"></script>
 <script src="js/crate.js"></script>
-<script src="js/crate-shop.js"></script>
+<script src="js/crate-shop.js?v=2"></script>
 <script src="js/coin-timer.js"></script>
 <script src="js/nav.js?v=2"></script>
 </body>

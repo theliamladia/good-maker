@@ -2,8 +2,9 @@
 // top of the screen; the fit sits in a panel under it, one tab at a time (SHIRT ·
 // PANTS · SHOE · ACC.), with the cards in a strip you swipe sideways. Pull the panel
 // up for a full grid. YOUR SKIN opens as a sheet; GOOD® ME floats on the stage; SAVE
-// TO WARDROBE and SHARE stay under your thumb. Desktop is untouched: everything here
-// only shows under 701px, and the pieces it moves go back when the screen widens.
+// TO WARDROBE and SHARE stay under your thumb. The tabs are on desktop too (at the top of
+// the fit panel, so one kind of piece shows at a time); the rest only shows under 701px,
+// and the pieces it moves go back when the screen widens.
 (() => {
   const $ = (id) => document.getElementById(id);
   const body = document.body;
@@ -86,12 +87,19 @@
     try { if (navigator.share) { await navigator.share({ title: 'My fit · MAKER® · GOOD®', url }); return; } } catch { return; }
     try { await navigator.clipboard.writeText(url); share.textContent = '✓'; setTimeout(() => { share.textContent = '↗'; }, 1400); } catch {}
   };
-  const save = $('saveLook'), saveHome = save.nextElementSibling;
+  const save = $('saveLook');
+  // Desktop: the actions (DOWNLOAD SKIN, SAVE TO WARDROBE, MINECRAFT STAND) sit together under the model.
+  const acts = document.createElement('div');
+  acts.className = 'mk-actions';
+  stage.after(acts);
+  acts.append($('download'), $('downloadHint'), save, $('mcStand'));
   // Move SAVE TO WARDROBE into the bar on phones, and back on wider screens.
   function place() {
     const m = mq.matches;
+    if (m && tabs.parentNode !== right) right.prepend(tabs);
+    if (!m && tabs.parentNode !== panel) panel.prepend(tabs);
     if (m && save.parentNode !== bar) { bar.append(save, share); right.append(bar); }
-    if (!m && save.parentNode === bar) { right.insertBefore(save, saveHome); bar.remove(); setOpen(false); you(false); }
+    if (!m && save.parentNode === bar) { acts.insertBefore(save, $('mcStand')); bar.remove(); setOpen(false); you(false); }
     // the stage sits under the header, however tall it wraps
     const h = document.querySelector('.site-header');
     if (h) document.documentElement.style.setProperty('--mh', `${h.offsetHeight}px`);

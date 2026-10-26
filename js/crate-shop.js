@@ -4,7 +4,7 @@
   // One /api/me per page load, shared by every script that needs it.
   const meOnce = () => (window.__goodMe ||= fetch('/api/me').then((r) => (r.ok ? r.json() : { user: null })).catch(() => ({ user: null })));
   const $ = (id) => document.getElementById(id);
-  const btn = $('open'), wallet = $('wallet');
+  const btn = $('open'), wallet = $('wallet'), again = $('again'), wrap = $('dropWrap');
   const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
   const wait = (ms) => new Promise((r) => setTimeout(r, reduce ? 0 : ms));
   let me = null, table = [], price = 5, refund = 2, state = 'idle', sureT;
@@ -50,12 +50,11 @@
   }
 
   async function openCrate() {
-    state = 'busy'; drawButton();
-    $('drop').hidden = true;
+    state = 'busy'; drawButton(); again.disabled = true;
     const r = await fetch('api/crate', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ action: 'open' }) });
     const j = await r.json().catch(() => ({}));
     if (!r.ok) {
-      state = 'idle';
+      state = 'idle'; again.disabled = false;
       if (typeof j.coins === 'number') me.coins = j.coins;
       drawButton();
       wallet.innerHTML = j.error === 'coins' ? `NOT ENOUGH GOOD® COINS. YOU HAVE ${coin}${me.coins}.` : j.error === 'signed_out' ? 'SIGN IN FIRST.' : 'COULDN’T OPEN IT. TRY AGAIN.';
@@ -64,10 +63,9 @@
     const roll = j.roll, item = table.find((t) => t.id === roll.item) || roll;
     window.GoodCrate && GoodCrate.open();
     await wait(900);
-    const drop = $('drop'); drop.hidden = false; drop.className = 'cr-drop';
+    const drop = $('drop'); wrap.hidden = false; drop.className = 'cr-drop';
     $('got').hidden = true; $('gold').hidden = true;
     $('dropTag').textContent = 'OPENING…';
-    drop.scrollIntoView({ behavior: reduce ? 'auto' : 'smooth', block: 'center' });
     // The reel, like a Counter-Strike case: the I'M SOWWY pieces hide behind one ★ GOLD card.
     const main = table.filter((t) => t.tier !== 'gold');
     const goldPct = table.filter((t) => t.tier === 'gold').reduce((a, t) => a + t.pct, 0);
@@ -91,7 +89,8 @@
     $('got').hidden = false;
     me.coins = j.coins; drawNav();
     state = 'idle'; drawButton();
-    btn.textContent = `OPEN ANOTHER · ${price} GOOD® COINS`;
+    again.textContent = me.coins >= price ? `OPEN ANOTHER · ${price} GOOD® COINS` : `NEED ${price} GOOD® COINS`;
+    again.disabled = me.coins < price;
     setTimeout(() => window.GoodCrate && GoodCrate.reset(), 2500);
   }
 
@@ -142,6 +141,12 @@
     await wait(900);
   }
 
+  // The result is a modal (same as Nº002): OPEN ANOTHER inside it skips ARE YOU SURE? (you just did).
+  again.onclick = () => { if (state === 'idle') openCrate(); };
+  const close = () => { if (state !== 'busy') { wrap.hidden = true; btn.focus(); } };
+  $('dropClose').onclick = close;
+  wrap.addEventListener('click', (e) => { if (e.target === wrap) close(); });
+  addEventListener('keydown', (e) => { if (e.key === 'Escape' && !wrap.hidden) close(); });
   btn.onclick = () => {
     if (!me) { location.href = 'account'; return; }
     if (state === 'idle') { state = 'sure'; drawButton(); return; }

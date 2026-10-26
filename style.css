@@ -1268,3 +1268,87 @@ body.st {
 .gu-actions .gu-ok.danger { background: #d1123f; border-color: #d1123f; }
 .gu-actions button:hover { filter: brightness(1.1); }
 .armed { background: #d1123f !important; color: #fff !important; border-color: #d1123f !important; }
+
+/* ---------- MAKER®, desktop (UX overhaul): one kind of piece at a time ----------
+   The phone's tabs (js/mobile.js) head the fit panel: SHIRT · PANTS · SHOE · ACC. Each tab
+   shows its cards and only its own options, so nothing hides below the panel's fold. */
+@media (min-width: 701px) {
+  body.m-maker .m-tabs { display: flex; align-items: center; gap: 6px; margin: 0 0 20px; padding: 0 0 16px; border-bottom: 1px solid rgba(11, 21, 38, 0.1); }
+  body.m-maker .m-handle, body.m-maker .m-grow { display: none; }
+  body.m-maker .m-tablist { display: flex; flex-wrap: wrap; gap: 6px; }
+  body.m-maker .m-tabs [role="tab"] { min-height: 40px; padding: 0 20px; border: 1px solid rgba(11, 21, 38, 0.16); border-radius: 999px; background: rgba(255, 255, 255, 0.6);
+    color: var(--ink); font: 700 0.75rem var(--font-mono); letter-spacing: 0.16em; cursor: pointer; }
+  body.m-maker .m-tabs [role="tab"]:hover { border-color: var(--good-blue); color: var(--good-blue); }
+  body.m-maker .m-tabs [aria-selected="true"], body.m-maker .m-tabs [aria-selected="true"]:hover { background: var(--good-blue); border-color: var(--good-blue); color: #fff; }
+  body.m-maker .m-tabs [role="tab"][hidden] { display: none; }
+  body.m-maker .fit-cols { grid-template-columns: minmax(0, 1fr); }
+  body.m-maker:not([data-mtab="shirt"]) #line { display: none; }
+  body.m-maker[data-mtab="shirt"] .fit-col:nth-child(2), body.m-maker[data-mtab="shirt"] #accSection { display: none !important; }
+  body.m-maker[data-mtab="pants"] .fit-col:first-child, body.m-maker[data-mtab="pants"] #shoeSection { display: none !important; }
+  body.m-maker[data-mtab="shoe"] .fit-col:first-child, body.m-maker[data-mtab="shoe"] #pantsSection > :not(#shoeSection) { display: none !important; }
+  body.m-maker[data-mtab="acc"] .fit-col:nth-child(2), body.m-maker[data-mtab="acc"] .fit-col:first-child > :not(#accSection) { display: none !important; }
+  body.m-maker[data-mtab="shoe"] #shoeSection > .section-tag:first-child,
+  body.m-maker[data-mtab="acc"] #accSection > .section-tag:first-child { margin-top: 0; }
+  body.m-maker .outfits { --rows: 2; grid-auto-columns: calc((100% - 30px) / 4); gap: 10px; }
+}
+@media (min-width: 1251px) and (min-height: 1000px) { body.m-maker .outfits { --rows: 3; } }
+@media (min-width: 1251px) and (max-height: 820px) { body.m-maker .outfits { grid-auto-columns: calc((100% - 50px) / 6); } body.m-maker .m-tabs { margin-bottom: 14px; padding-bottom: 12px; } body.m-maker .panel.right .line-toggle { margin-bottom: 14px; } }
+
+/* The three steps, once, above the stage (js/maker-ui.js hides them after the first save) */
+.mk-steps { display: flex; flex-wrap: wrap; justify-content: center; align-items: center; gap: 6px 28px; list-style: none; margin: 0 auto; padding: 4px 16px 10px;
+  color: #fff; font-size: var(--label-size); letter-spacing: 0.18em; }
+.mk-steps[hidden] { display: none; }
+.mk-steps li { display: inline-flex; align-items: center; gap: 10px; opacity: 0.75; }
+.mk-steps li.on { opacity: 1; }
+.mk-steps b { display: inline-grid; place-items: center; width: 22px; height: 22px; border: 1px solid currentColor; border-radius: 50%; font-weight: 700; letter-spacing: 0; }
+.mk-steps li.on b { background: #fff; color: var(--good-blue); }
+.mk-steps li.done b { background: transparent; }
+.mk-steps li + li:not(.mk-steps-x)::before { content: '→'; margin-right: 18px; opacity: 0.6; }
+.mk-steps-x button { min-height: 32px; padding: 0 12px; border: 1px solid rgba(255, 255, 255, 0.5); border-radius: 999px; background: none; color: #fff; font: inherit; letter-spacing: 0.16em; cursor: pointer; }
+@media (min-width: 1251px) { body.has-steps .stage { --chrome: 166px; } }
+@media (max-width: 700px) { .mk-steps { display: none !important; } }
+
+/* Filter chips (built from the filter dropdowns by js/maker-ui.js) */
+.mk-chips { display: flex; flex-wrap: wrap; gap: 6px; margin: 0 0 14px; }
+.mk-chips button { min-height: 32px; padding: 0 12px; border: 1px solid rgba(11, 21, 38, 0.16); border-radius: 999px; background: none; color: var(--ink);
+  font: 400 var(--label-size) var(--font-mono); letter-spacing: 0.12em; cursor: pointer; }
+.mk-chips button:hover { border-color: var(--good-blue); color: var(--good-blue); }
+.mk-chips button[aria-pressed="true"] { background: var(--ink); border-color: var(--ink); color: #fff; }
+@media (min-width: 701px) { body.m-maker .tag-row .season-select { display: none; } }
+@media (max-width: 700px) { .mk-chips { display: none; } }
+
+/* MINECRAFT STAND: a quiet link under the main actions, not a third big button */
+#mcStand.wardrobe-save { display: block; text-align: center; border: 0; background: none; padding: 8px 0; margin-top: 2px; font-weight: 400; opacity: 0.8; }
+#mcStand.wardrobe-save > span { margin-top: 2px; opacity: 0.8; }
+#mcStand.wardrobe-save:hover { opacity: 1; text-decoration: underline; text-underline-offset: 5px; }
+
+/* MAKER® in the house colour: GOOD® BLUE around everything; the season (fall) lives on the
+   stage behind the model, not in the chrome. */
+body.fall { background: var(--good-blue); }
+body.fall .site-header { background: none; }
+body.fall .viewer-wrap { background: linear-gradient(to bottom, #5f7a4c 0, #6f7a42 18%, #8a6a32 40%, #a8552a 64%, #c86f30 84%, #d98a3a 100%); }
+@media (min-width: 701px) { body.fall .viewer-wrap { border-radius: var(--radius); padding: 0 0 12px; } }
+body.fall .panel { background: rgba(255, 255, 255, 0.96); border-color: #fff; }
+body.fall .download-btn { background: #fff; color: var(--good-blue); border-color: #fff; font-weight: 600; box-shadow: 0 12px 40px rgba(0, 0, 60, 0.3); }
+body.fall .download-btn:hover:not(:disabled) { background: #fff; transform: translateY(-2px); }
+body.fall .download-btn:disabled { background: rgba(255, 255, 255, 0.55); }
+
+/* Actions under the model (js/mobile.js .mk-actions) */
+.mk-actions { display: flex; flex-direction: column; gap: 10px; min-width: 0; }
+.mk-actions .download-hint { margin: 0 4px; }
+.mk-actions .wardrobe-save { margin-top: 4px; }
+@media (min-width: 1251px) {
+  .stage { grid-template-rows: minmax(0, 1fr) auto; grid-template-areas: "view you fit" "acts you fit"; }
+  .mk-actions { grid-area: acts; padding-top: 14px; }
+  .mk-actions #download { margin-top: 0; }
+}
+@media (min-width: 701px) and (max-width: 1250px) {
+  .stage { grid-template-columns: minmax(260px, 2fr) minmax(0, 3fr); grid-template-areas: "view you" "acts fit" "x fit"; grid-template-rows: auto auto 1fr;
+    align-items: start; gap: 20px 24px; min-height: 0; padding: 8px 20px 40px; }
+  .viewer-wrap { grid-area: view; order: 0; }
+  #view3d { height: min(56vh, 520px); }
+  .panel.left { grid-area: you; }
+  .right-col { grid-area: fit; }
+  .mk-actions { grid-area: acts; }
+}
+@media (max-width: 700px) { body.m-maker .mk-actions { display: none; } }
