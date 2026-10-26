@@ -13,11 +13,14 @@
   // ---------- the hero logo: built once, scaled by its viewBox ----------
   const fontsReady = Promise.race([Promise.all([document.fonts.load('100px Michroma', 'DYNAMICS®'), document.fonts.ready]), wait(2500)]).catch(() => {});
   fontsReady.then(() => {
-    const svg = $('heroLogo');
-    const g = lockup(svg, { ...LOCK, size: 100, x: 0, y: 0 });
-    const b = svg.getBBox(), pad = 4;
-    svg.setAttribute('viewBox', `${b.x - pad} ${b.y - pad} ${b.width + 2 * pad} ${b.height + 2 * pad}`);
-    return g;
+    const build = (svg) => {
+      const g = lockup(svg, { ...LOCK, size: 100, x: 0, y: 0 });
+      const b = svg.getBBox(), pad = 4;
+      svg.setAttribute('viewBox', `${b.x - pad} ${b.y - pad} ${b.width + 2 * pad} ${b.height + 2 * pad}`);
+      return g;
+    };
+    if ($('coLogo')) build($('coLogo'));   // DYNAMICS® again, where the company is introduced
+    return build($('heroLogo'));
   });
 
   // ---------- the intro ----------
@@ -105,6 +108,8 @@
     f.setAttribute('aria-label', `TARMAC® look ${i + 1}: ${pieces}, ${cw}`);
     return f;
   }));
+  // THE LOOKS: TARMAC® first, then DYNAMICS®, numbered straight through
+  $('looks').querySelectorAll('.n').forEach((n, i) => { n.textContent = `LOOK ${String(i + 1 + TLOOKS.length).padStart(2, '0')}`; });
   const TPIECES = [
     ['LOUNGE HOODIE®', 'LHR™ · CDG™ · LAX™ · DXB™'], ['LOUNGE PANT', 'LHR™ · CDG™ · LAX™ · DXB™'], ['TRANSIT TEE', 'LHR™ · CDG™ · LAX™ · DXB™'],
     ['CABIN SOCK SLIDE', 'WITH THE LOUNGE PANT'], ['PILLOW COLLAR® JACKET', 'LAX™ · LHR™'], ['CARRY-ON TROUSER', 'LHR™ · DXB™'],
@@ -118,6 +123,21 @@
     return tr;
   }));
 
+  // ---------- the odds (per crate) ----------
+  const ODDS = [
+    ['TARMAC® ESSENTIALS', 'LOUNGE HOODIE®, LOUNGE PANT, TRANSIT TEE, TRAVEL PILLOW, EYE MASK', '48%'],
+    ['DYNAMICS®', 'FLIGHT JACKET®, CREW TEE, PILOT SHIRT®, HANGAR HOODIE®, MOCK NECK®, FLIGHT CARGO, CREW TROUSER, TECH JOGGER, PILOT SHORT, CONTRAIL WIDE TROUSER, SPORTS BRA, YOGA PANT, WIDE-LEG TROUSER', '36%'],
+    ['TARMAC® AVANT-GARDE', 'PILLOW COLLAR® JACKET, CARRY-ON TROUSER, BOARDING PASS PARKA, SAFETY CARD SHIRT', '13%'],
+    ['THE CHASE', 'RED-EYE® LOUNGE SET (JFK™/AMS™)', '1.5%'],
+    ['THE CHASE', 'HANGAR HOODIE® · TECH JOGGER (GOOD® BLUE/CONTRAIL™)', '1.5%'],
+  ];
+  $('odds').replaceChildren(...ODDS.map(([tier, what, p]) => {
+    const tr = document.createElement('tr'); if (tier === 'THE CHASE') tr.className = 'chase';
+    tr.innerHTML = '<td></td><td></td><td></td>';
+    [tier, what, p].forEach((t, k) => { tr.children[k].textContent = t; });
+    return tr;
+  }));
+
   // ---------- the pieces ----------
   const PIECES = [
     ['FLIGHT JACKET®', 'JET™/CONTRAIL™'], ['CREW TEE', 'CONTRAIL™/GOOD® BLUE'], ['PILOT SHIRT®', 'SLATE™/CONTRAIL™'],
@@ -128,7 +148,7 @@
   ];
   $('pieces').replaceChildren(...PIECES.map(([name, cw], i) => {
     const tr = document.createElement('tr'); if (/CHASE/.test(name)) tr.className = 'chase';
-    tr.innerHTML = `<td>${String(i + 1).padStart(2, '0')}</td><td></td><td>${dots(cw)} ${cw}</td>`;
+    tr.innerHTML = `<td>${String(i + 1 + TPIECES.length).padStart(2, '0')}</td><td></td><td>${dots(cw)} ${cw}</td>`;
     tr.children[1].textContent = name;
     return tr;
   }));
