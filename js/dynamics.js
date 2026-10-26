@@ -147,10 +147,8 @@
   setInterval(() => stages.forEach((s) => { if (s.seen && !s.hold && s.n > 1) s.show((s.k + 1) % s.n); }), 3200);
 
   // ---------- sealed turntables (from js/wandering.js) ----------
-  // The SPORT looks aren't sealed yet: scrambled the same way, served as static files for now.
-  const UNSEALED = { 'dyn-7': 's7', 'dyn-spin-7': 's7-spin', 'dyn-8': 's8', 'dyn-spin-8': 's8-spin' };
   const scrambled = async (id, tries = 3) => {
-    const r = await fetch(UNSEALED[id] ? `/assets/dynamics/${UNSEALED[id]}.json` : `/api/outfit?id=${id}`, { cache: 'no-store' }).catch(() => null);
+    const r = await fetch(`/api/outfit?id=${id}`, { cache: 'no-store' }).catch(() => null);
     if (!r || !r.ok) {
       if (tries > 1 && (!r || r.status >= 500)) { await wait(800); return scrambled(id, tries - 1); }
       throw new Error('unavailable');
