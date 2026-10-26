@@ -76,9 +76,11 @@
     ['PILOT SHIRT® · CONTRAIL WIDE TROUSER', 'SLATE™/CONTRAIL™ · CONTRAIL™'],
     ['HANGAR HOODIE® · TECH JOGGER', 'CONTRAIL™/GOOD® BLUE · JET™/CONTRAIL™'],
     ['MOCK NECK® · PILOT SHORT', 'JET™/CONTRAIL™ · SLATE™'],
+    ['SPORTS BRA · YOGA PANT', 'JET™ · JET™', 'dyn-7'],
+    ['SPORTS BRA · WIDE-LEG TROUSER', 'CONTRAIL™ · CONTRAIL™', 'dyn-8'],
   ];
-  $('looks').replaceChildren(...LOOKS.map(([pieces, cw], i) => {
-    const f = document.createElement('figure'); f.dataset.id = `dyn-${i + 1}`;
+  $('looks').replaceChildren(...LOOKS.map(([pieces, cw, id], i) => {
+    const f = document.createElement('figure'); f.dataset.id = id || `dyn-${i + 1}`;
     f.innerHTML = `<canvas width="202" height="407" aria-hidden="true"></canvas><figcaption><span class="n">LOOK ${String(i + 1).padStart(2, '0')}</span><span class="p"></span><p class="gd-cw">${dots(cw)}${cw}</p></figcaption>`;
     f.querySelector('.p').textContent = pieces;
     f.setAttribute('aria-label', `Look ${i + 1}: ${pieces}, ${cw}`);
@@ -145,8 +147,10 @@
   setInterval(() => stages.forEach((s) => { if (s.seen && !s.hold && s.n > 1) s.show((s.k + 1) % s.n); }), 3200);
 
   // ---------- sealed turntables (from js/wandering.js) ----------
+  // The SPORT looks aren't sealed yet: scrambled the same way, served as static files for now.
+  const UNSEALED = { 'dyn-7': 's7', 'dyn-spin-7': 's7-spin', 'dyn-8': 's8', 'dyn-spin-8': 's8-spin' };
   const scrambled = async (id, tries = 3) => {
-    const r = await fetch(`/api/outfit?id=${id}`, { cache: 'no-store' }).catch(() => null);
+    const r = await fetch(UNSEALED[id] ? `/assets/dynamics/${UNSEALED[id]}.json` : `/api/outfit?id=${id}`, { cache: 'no-store' }).catch(() => null);
     if (!r || !r.ok) {
       if (tries > 1 && (!r || r.status >= 500)) { await wait(800); return scrambled(id, tries - 1); }
       throw new Error('unavailable');
