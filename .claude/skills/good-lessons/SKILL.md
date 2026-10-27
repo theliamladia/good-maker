@@ -72,3 +72,7 @@ Every rule here cost the owner a round trip. Check the list before you say "done
 19. **Keep the privacy policy current.** Any change that stores something new, shows something
     publicly, adds a service that receives data, or changes what DELETE ACCOUNT removes updates
     privacy.html (and its "Last updated" date) in the same push.
+20. **Never show a player half-dressed.** A piece is shown worn only as part of a full outfit. On
+    drop pages the looks are floating outfits; a single piece on a player shows their bare skin
+    (shirtless, bare legs) and must not ship. If you ever doubt a render, look at it as the owner
+    would before you push.
