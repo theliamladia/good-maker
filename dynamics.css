@@ -162,7 +162,19 @@ body.intro { overflow: hidden; }
 }
 /* Scenes between the looks: the clothes worn next to the GD® cars and planes */
 .gd-looks .gd-scene { grid-column: 1 / -1; margin: 10px 0 20px; cursor: default; }
-.gd-scene canvas { width: 100%; max-width: 1080px; height: auto; aspect-ratio: 1200 / 560; display: block; margin: 0 auto; pointer-events: none; }
+.gd-scene canvas { width: 100%; height: auto; aspect-ratio: 1600 / 640; display: block; margin: 0 auto; pointer-events: none; }
 .gd-scene figcaption { margin-top: 10px; text-align: center; }
 .gd-scene .p { font: 500 15px/1.4 var(--sans); letter-spacing: -.01em; display: block; }
 .gd-looks .gd-scene canvas { background: none; }
+
+/* THE LOOKS, one piece at a time: the piece floating (no glow), the player wearing it beside it */
+.gd-looks { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 90px clamp(40px, 6vw, 96px); }
+.gd-pair { display: flex; align-items: center; justify-content: center; gap: clamp(10px, 2vw, 28px); width: 100%; }
+.gd-looks .gd-pair canvas { background: none; max-width: none; }
+.gd-looks .gd-solo { width: 43%; max-width: 248px; aspect-ratio: 1; }   /* same scale as the player: 1.08 × its width */
+.gd-looks .gd-on { width: 40%; max-width: 230px; aspect-ratio: 202 / 407; }
+.gd-looks .w { display: block; margin-top: 10px; font: 400 10px var(--mono); letter-spacing: .2em; opacity: .65; }
+.gd-looks .gd-scene { margin: 30px calc(-1 * var(--side) / 2) 40px; }
+.gd-looks .gd-scene canvas { max-width: none; }
+@media (max-width: 900px) { .gd-looks { grid-template-columns: minmax(0, 1fr); gap: 70px; } }
+@media (max-width: 600px) { .gd-looks .gd-scene { margin: 10px 0 20px; } }
