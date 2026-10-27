@@ -74,14 +74,16 @@
   })();
 
   // ---------- the looks ----------
-  const LOOKS = [
-    ['FLIGHT JACKET® · CREW TROUSER', 'JET™/CONTRAIL™ · JET™'],
-    ['CREW TEE · FLIGHT CARGO', 'CONTRAIL™/GOOD® BLUE · SLATE™'],
-    ['PILOT SHIRT® · CONTRAIL WIDE TROUSER', 'SLATE™/CONTRAIL™ · CONTRAIL™'],
-    ['HANGAR HOODIE® · TECH JOGGER', 'CONTRAIL™/GOOD® BLUE · JET™/CONTRAIL™'],
-    ['MOCK NECK® · PILOT SHORT', 'JET™/CONTRAIL™ · SLATE™'],
+  const LOOKS = [   // each look in one colourway
+    ['FLIGHT JACKET® · CREW TROUSER', 'JET™/CONTRAIL™ · JET™', 'dyn-1'],
+    ['MOCK NECK® · TECH JOGGER', 'JET™/CONTRAIL™ · JET™/CONTRAIL™', 'dyn-2'],
+    ['CREW TEE · CONTRAIL WIDE TROUSER', 'CONTRAIL™/GOOD® BLUE · CONTRAIL™', 'dyn-3'],
+    ['HANGAR HOODIE® · CONTRAIL WIDE TROUSER', 'CONTRAIL™/GOOD® BLUE · CONTRAIL™', 'dyn-4'],
+    ['PILOT SHIRT® · FLIGHT CARGO', 'SLATE™/CONTRAIL™ · SLATE™', 'dyn-5'],
+    ['PILOT SHIRT® · PILOT SHORT', 'SLATE™/CONTRAIL™ · SLATE™', 'dyn-9'],
     ['SPORTS BRA · YOGA PANT', 'JET™ · JET™', 'dyn-7'],
     ['SPORTS BRA · WIDE-LEG TROUSER', 'CONTRAIL™ · CONTRAIL™', 'dyn-8'],
+    ['SPORTS BRA · WIDE-LEG TROUSER', 'SLATE™ · SLATE™', 'dyn-10'],
   ];
   $('looks').replaceChildren(...LOOKS.map(([pieces, cw, id], i) => {
     const f = document.createElement('figure'); f.dataset.id = id || `dyn-${i + 1}`;
@@ -92,14 +94,14 @@
   }));
 
   // ---------- TARMAC® (in the same crate): colourways after the airports ----------
-  const TLOOKS = [
+  const TLOOKS = [   // each look in one airport
     ['LOUNGE HOODIE® · LOUNGE PANT', 'LHR™ · LHR™'],
+    ['PILLOW COLLAR® JACKET · LOUNGE PANT', 'LAX™/LHR™ · LAX™'],
     ['LOUNGE HOODIE® · LOUNGE PANT', 'DXB™ · DXB™'],
-    ['TRANSIT TEE · LOUNGE PANT · TRAVEL PILLOW', 'LAX™ · LAX™ · DXB™'],
-    ['TRANSIT TEE · CARRY-ON TROUSER · EYE MASK', 'CDG™/LHR™ · DXB™ · LHR™'],
-    ['PILLOW COLLAR® JACKET · CARRY-ON TROUSER', 'LAX™/LHR™ · LHR™'],
-    ['BOARDING PASS PARKA · LOUNGE PANT', 'CDG™/AMS™ · LHR™'],
-    ['SAFETY CARD SHIRT · CARRY-ON TROUSER · EYE MASK', 'LAX™/LHR™ · LHR™ · LHR™'],
+    ['TRANSIT TEE · CARRY-ON TROUSER · EYE MASK', 'LHR™ · LHR™ · LHR™'],
+    ['SAFETY CARD SHIRT · LOUNGE PANT', 'LAX™/LHR™ · LAX™'],
+    ['BOARDING PASS PARKA · LOUNGE PANT', 'CDG™/AMS™ · CDG™'],
+    ['TRANSIT TEE · LOUNGE PANT · TRAVEL PILLOW', 'DXB™ · DXB™ · DXB™'],
   ];
   $('tarLooks').replaceChildren(...TLOOKS.map(([pieces, cw], i) => {
     const f = document.createElement('figure'); f.dataset.id = `dyn-t${i + 1}`;
@@ -111,9 +113,9 @@
   // Scenes between the looks: the clothes worn, next to the GD® cars and planes (sealed stills).
   const SCENES = [
     ['tarLooks', 3, 'dyn-s2', 'GD® PLANE01 · LOUNGE HOODIE® · LOUNGE PANT', 'LHR™'],
-    ['tarLooks', 6, 'dyn-s4', 'GD® SPRINT01 · BOARDING PASS PARKA · LOUNGE PANT', 'CDG™/AMS™ · LHR™'],
+    ['tarLooks', 6, 'dyn-s4', 'GD® SPRINT01 · BOARDING PASS PARKA · LOUNGE PANT', 'CDG™/AMS™ · CDG™'],
     ['looks', 3, 'dyn-s1', 'GD® ROADSTER01 · FLIGHT JACKET® · CREW TROUSER', 'JET™/CONTRAIL™ · JET™'],
-    ['looks', 6, 'dyn-s3', 'GD® ENERGY01 · HANGAR HOODIE® · TECH JOGGER', 'CONTRAIL™/GOOD® BLUE · JET™/CONTRAIL™'],
+    ['looks', 6, 'dyn-s3', 'GD® ENERGY01 · HANGAR HOODIE® · CONTRAIL WIDE TROUSER', 'CONTRAIL™/GOOD® BLUE · CONTRAIL™'],
   ];
   for (const [grid, after, id, label, cw] of SCENES) {
     const f = document.createElement('figure'); f.className = 'gd-scene'; f.dataset.scene = id;
