@@ -76,4 +76,55 @@ const ITEMS2 = {
 const table2 = () => Object.entries(ITEMS2).map(([id, it]) => ({ id, ...it }));
 const ODDS2 = Object.entries(ITEMS2).map(([id, it]) => [id, it.pct]);
 
-module.exports = { ITEMS, ODDS, GOLD_ODDS, PRICE, REFUND, table, ITEMS2, ODDS2, table2 };
+// GOOD® CRATE Nº003 · DYNAMICS® I (/dynamics; GET /api/crate?crate=3, POST { action: 'open', crate: 3 }).
+// TARMAC® essentials 48%, DYNAMICS® 36%, TARMAC® avant-garde 13% (shared evenly in each tier), and two
+// chases at 1.5% each. A chase is a set: one pull unlocks both pieces (unlock is a list).
+const ITEMS3 = {
+  "c3-lounge-hoodie-lhr": { name: "LOUNGE HOODIE®", color: "LHR", line: 'tarmac', tier: 'core', pct: 3.2, tex: 'c3-lounge-hoodie-lhr-classic', unlock: 'c3-lounge-hoodie-lhr' },
+  "c3-lounge-hoodie-cdg": { name: "LOUNGE HOODIE®", color: "CDG", line: 'tarmac', tier: 'core', pct: 3.2, tex: 'c3-lounge-hoodie-cdg-classic', unlock: 'c3-lounge-hoodie-cdg' },
+  "c3-lounge-hoodie-lax": { name: "LOUNGE HOODIE®", color: "LAX", line: 'tarmac', tier: 'core', pct: 3.2, tex: 'c3-lounge-hoodie-lax-classic', unlock: 'c3-lounge-hoodie-lax' },
+  "c3-lounge-hoodie-dxb": { name: "LOUNGE HOODIE®", color: "DXB", line: 'tarmac', tier: 'core', pct: 3.2, tex: 'c3-lounge-hoodie-dxb-classic', unlock: 'c3-lounge-hoodie-dxb' },
+  "c3-transit-tee-lhr": { name: "TRANSIT TEE", color: "LHR", line: 'tarmac', tier: 'core', pct: 3.2, tex: 'c3-transit-tee-lhr-classic', unlock: 'c3-transit-tee-lhr' },
+  "c3-transit-tee-cdg": { name: "TRANSIT TEE", color: "CDG", line: 'tarmac', tier: 'core', pct: 3.2, tex: 'c3-transit-tee-cdg-classic', unlock: 'c3-transit-tee-cdg' },
+  "c3-transit-tee-lax": { name: "TRANSIT TEE", color: "LAX", line: 'tarmac', tier: 'core', pct: 3.2, tex: 'c3-transit-tee-lax-classic', unlock: 'c3-transit-tee-lax' },
+  "c3-transit-tee-dxb": { name: "TRANSIT TEE", color: "DXB", line: 'tarmac', tier: 'core', pct: 3.2, tex: 'c3-transit-tee-dxb-classic', unlock: 'c3-transit-tee-dxb' },
+  "c3-pillow-collar-lax": { name: "PILLOW COLLAR® JACKET", color: "LAX", line: 'tarmac', tier: 'rare', pct: 1.857, tex: 'c3-pillow-collar-lax-classic', unlock: 'c3-pillow-collar-lax' },
+  "c3-pillow-collar-lhr": { name: "PILLOW COLLAR® JACKET", color: "LHR", line: 'tarmac', tier: 'rare', pct: 1.857, tex: 'c3-pillow-collar-lhr-classic', unlock: 'c3-pillow-collar-lhr' },
+  "c3-parka-cdg": { name: "BOARDING PASS PARKA", color: "CDG/AMS", line: 'tarmac', tier: 'rare', pct: 1.857, tex: 'c3-parka-cdg-classic', unlock: 'c3-parka-cdg' },
+  "c3-parka-lhr": { name: "BOARDING PASS PARKA", color: "LHR", line: 'tarmac', tier: 'rare', pct: 1.857, tex: 'c3-parka-lhr-classic', unlock: 'c3-parka-lhr' },
+  "c3-safety-card-lax": { name: "SAFETY CARD SHIRT", color: "LAX/LHR", line: 'tarmac', tier: 'rare', pct: 1.857, tex: 'c3-safety-card-lax-classic', unlock: 'c3-safety-card-lax' },
+  "c3-flight-jacket-jet": { name: "FLIGHT JACKET®", color: "JET/CONTRAIL", line: 'dynamics', tier: 'core', pct: 1.895, tex: 'c3-flight-jacket-jet-classic', unlock: 'c3-flight-jacket-jet' },
+  "c3-crew-tee-contrail": { name: "CREW TEE", color: "CONTRAIL/GOOD® BLUE", line: 'dynamics', tier: 'core', pct: 1.895, tex: 'c3-crew-tee-contrail-classic', unlock: 'c3-crew-tee-contrail' },
+  "c3-pilot-shirt-slate": { name: "PILOT SHIRT®", color: "SLATE/CONTRAIL", line: 'dynamics', tier: 'core', pct: 1.895, tex: 'c3-pilot-shirt-slate-classic', unlock: 'c3-pilot-shirt-slate' },
+  "c3-hangar-hoodie-contrail": { name: "HANGAR HOODIE®", color: "CONTRAIL/GOOD® BLUE", line: 'dynamics', tier: 'core', pct: 1.895, tex: 'c3-hangar-hoodie-contrail-classic', unlock: 'c3-hangar-hoodie-contrail' },
+  "c3-mock-neck-jet": { name: "MOCK NECK®", color: "JET/CONTRAIL", line: 'dynamics', tier: 'core', pct: 1.895, tex: 'c3-mock-neck-jet-classic', unlock: 'c3-mock-neck-jet' },
+  "c3-sports-bra-jet": { name: "SPORTS BRA", color: "JET", line: 'dynamics', tier: 'core', pct: 1.895, tex: 'c3-sports-bra-jet-classic', unlock: 'c3-sports-bra-jet' },
+  "c3-sports-bra-contrail": { name: "SPORTS BRA", color: "CONTRAIL", line: 'dynamics', tier: 'core', pct: 1.895, tex: 'c3-sports-bra-contrail-classic', unlock: 'c3-sports-bra-contrail' },
+  "c3-sports-bra-slate": { name: "SPORTS BRA", color: "SLATE", line: 'dynamics', tier: 'core', pct: 1.895, tex: 'c3-sports-bra-slate-classic', unlock: 'c3-sports-bra-slate' },
+  "c3-lounge-pant-lhr": { name: "LOUNGE PANT", color: "LHR", line: 'tarmac', tier: 'core', pct: 3.2, tex: 'c3-lounge-pant-lhr', bottom: true, unlock: 'c3-lounge-pant-lhr' },
+  "c3-lounge-pant-cdg": { name: "LOUNGE PANT", color: "CDG", line: 'tarmac', tier: 'core', pct: 3.2, tex: 'c3-lounge-pant-cdg', bottom: true, unlock: 'c3-lounge-pant-cdg' },
+  "c3-lounge-pant-lax": { name: "LOUNGE PANT", color: "LAX", line: 'tarmac', tier: 'core', pct: 3.2, tex: 'c3-lounge-pant-lax', bottom: true, unlock: 'c3-lounge-pant-lax' },
+  "c3-lounge-pant-dxb": { name: "LOUNGE PANT", color: "DXB", line: 'tarmac', tier: 'core', pct: 3.2, tex: 'c3-lounge-pant-dxb', bottom: true, unlock: 'c3-lounge-pant-dxb' },
+  "c3-carry-on-lhr": { name: "CARRY-ON TROUSER", color: "LHR", line: 'tarmac', tier: 'rare', pct: 1.857, tex: 'c3-carry-on-lhr', bottom: true, unlock: 'c3-carry-on-lhr' },
+  "c3-carry-on-dxb": { name: "CARRY-ON TROUSER", color: "DXB", line: 'tarmac', tier: 'rare', pct: 1.857, tex: 'c3-carry-on-dxb', bottom: true, unlock: 'c3-carry-on-dxb' },
+  "c3-flight-cargo-slate": { name: "FLIGHT CARGO", color: "SLATE", line: 'dynamics', tier: 'core', pct: 1.895, tex: 'c3-flight-cargo-slate', bottom: true, unlock: 'c3-flight-cargo-slate' },
+  "c3-crew-trouser-jet": { name: "CREW TROUSER", color: "JET", line: 'dynamics', tier: 'core', pct: 1.895, tex: 'c3-crew-trouser-jet', bottom: true, unlock: 'c3-crew-trouser-jet' },
+  "c3-tech-jogger-jet": { name: "TECH JOGGER", color: "JET/CONTRAIL", line: 'dynamics', tier: 'core', pct: 1.895, tex: 'c3-tech-jogger-jet', bottom: true, unlock: 'c3-tech-jogger-jet' },
+  "c3-pilot-short-slate": { name: "PILOT SHORT", color: "SLATE", line: 'dynamics', tier: 'core', pct: 1.895, tex: 'c3-pilot-short-slate', bottom: true, unlock: 'c3-pilot-short-slate' },
+  "c3-contrail-wide-contrail": { name: "CONTRAIL WIDE TROUSER", color: "CONTRAIL", line: 'dynamics', tier: 'core', pct: 1.895, tex: 'c3-contrail-wide-contrail', bottom: true, unlock: 'c3-contrail-wide-contrail' },
+  "c3-yoga-pant-jet": { name: "YOGA PANT", color: "JET", line: 'dynamics', tier: 'core', pct: 1.895, tex: 'c3-yoga-pant-jet', bottom: true, unlock: 'c3-yoga-pant-jet' },
+  "c3-yoga-pant-contrail": { name: "YOGA PANT", color: "CONTRAIL", line: 'dynamics', tier: 'core', pct: 1.895, tex: 'c3-yoga-pant-contrail', bottom: true, unlock: 'c3-yoga-pant-contrail' },
+  "c3-yoga-pant-slate": { name: "YOGA PANT", color: "SLATE", line: 'dynamics', tier: 'core', pct: 1.895, tex: 'c3-yoga-pant-slate', bottom: true, unlock: 'c3-yoga-pant-slate' },
+  "c3-wide-leg-jet": { name: "WIDE-LEG TROUSER", color: "JET", line: 'dynamics', tier: 'core', pct: 1.895, tex: 'c3-wide-leg-jet', bottom: true, unlock: 'c3-wide-leg-jet' },
+  "c3-wide-leg-contrail": { name: "WIDE-LEG TROUSER", color: "CONTRAIL", line: 'dynamics', tier: 'core', pct: 1.895, tex: 'c3-wide-leg-contrail', bottom: true, unlock: 'c3-wide-leg-contrail' },
+  "c3-wide-leg-slate": { name: "WIDE-LEG TROUSER", color: "SLATE", line: 'dynamics', tier: 'core', pct: 1.895, tex: 'c3-wide-leg-slate', bottom: true, unlock: 'c3-wide-leg-slate' },
+  "c3-eye-mask-lhr": { name: "EYE MASK", color: "LHR", line: 'tarmac', tier: 'core', pct: 3.2, tex: 'c3-eye-mask-lhr', accessory: true, unlock: 'c3-eye-mask-lhr' },
+  "c3-eye-mask-jfk": { name: "EYE MASK", color: "JFK", line: 'tarmac', tier: 'core', pct: 3.2, tex: 'c3-eye-mask-jfk', accessory: true, unlock: 'c3-eye-mask-jfk' },
+  "c3-travel-pillow-dxb": { name: "TRAVEL PILLOW", color: "DXB", line: 'tarmac', tier: 'core', pct: 3.2, tex: 'c3-travel-pillow-dxb', accessory: true, unlock: 'c3-travel-pillow-dxb' },
+  'c3-red-eye-set': { name: 'RED-EYE® LOUNGE SET', color: 'JFK/AMS', line: 'tarmac', tier: 'chase', chase: true, pct: 1.5, tex: 'c3-lounge-hoodie-jfk-classic', unlock: ['c3-lounge-hoodie-jfk', 'c3-lounge-pant-jfk'] },
+  'c3-hangar-set': { name: 'HANGAR HOODIE® · TECH JOGGER', color: 'GOOD® BLUE/CONTRAIL', line: 'dynamics', tier: 'chase', chase: true, pct: 1.5, tex: 'c3-hangar-hoodie-good-blue-classic', unlock: ['c3-hangar-hoodie-good-blue', 'c3-tech-jogger-good-blue'] },
+};
+const table3 = () => Object.entries(ITEMS3).map(([id, it]) => ({ id, ...it }));
+const ODDS3 = Object.entries(ITEMS3).map(([id, it]) => [id, it.pct]);
+
+module.exports = { ITEMS, ODDS, GOLD_ODDS, PRICE, REFUND, table, ITEMS2, ODDS2, table2, ITEMS3, ODDS3, table3 };

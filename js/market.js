@@ -270,10 +270,11 @@
   Promise.all([
     fetch('api/crate').then((r) => r.json()).catch(() => ({ items: [] })),
     fetch('api/crate?crate=2').then((r) => r.json()).catch(() => ({ items: [] })),
+    fetch('api/crate?crate=3').then((r) => r.json()).catch(() => ({ items: [] })),
     meOnce(),
     fetch('api/crate?market=1', { cache: 'no-store' }).then((r) => r.json()).catch(() => ({ listings: [], sales: [] })),
-  ]).then(([c1, c2, m, mk]) => {
-    for (const it of [...(c1.items || []), ...(c2.items || [])]) items[it.id] = it;
+  ]).then(([c1, c2, c3, m, mk]) => {
+    for (const it of [...(c1.items || []), ...(c2.items || []), ...(c3.items || [])]) items[it.id] = it;
     take(m, mk); drawAll();
   });
 })();

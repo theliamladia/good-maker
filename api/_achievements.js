@@ -14,6 +14,7 @@ const DEFS = [
   { id: 'scarfin-it-down', name: "SCARFIN' IT DOWN", desc: 'Get the SCARF® from GOOD® CRATE Nº002.', icon: 'assets/ach/scarfin-it-down.png' },
   { id: 'en-plein-air', name: 'EN PLEIN AIR', desc: 'Be the first to get the JEAN® PAINTER SPLATTER.', icon: 'assets/ach/en-plein-air.png', first: true },
   { id: 'creatif', name: 'CREATIF', desc: 'Get any chase from GOOD® CRATE Nº002.', icon: 'assets/ach/creatif.png' },
+  { id: 'frequent-flyer', name: 'FREQUENT FLYER', desc: 'Get the RED-EYE® LOUNGE SET from GOOD® CRATE Nº003.', icon: 'assets/ach/frequent-flyer.png' },
 ];
 
 async function award(uid, id) {
@@ -43,6 +44,8 @@ async function onPull(uid, item) {
   if (['c2-scarf-im-sowwy', 'c2-scarf-splatter'].includes(item) && (await award(uid, 'scarfin-it-down'))) got.push('scarfin-it-down');
   if (['c2-jean-painter', 'c2-scarf-im-sowwy'].includes(item) && (await award(uid, 'creatif'))) got.push('creatif');
   if (item === 'c2-jean-painter' && (await redis('SET', 'ach:en-plein-air:first', uid, 'NX')) && (await award(uid, 'en-plein-air'))) got.push('en-plein-air');
+  // GOOD® CRATE Nº003: the RED-EYE® LOUNGE SET (the TARMAC® chase) is FREQUENT FLYER.
+  if (item === 'c3-red-eye-set' && (await award(uid, 'frequent-flyer'))) got.push('frequent-flyer');
   return got.map((id) => DEFS.find((d) => d.id === id));
 }
 

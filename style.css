@@ -891,6 +891,7 @@ body.st {
 }
 /* WANDERING®: the valley at dawn */
 .im-banner.wd-banner { color: #f3ead8; background: linear-gradient(90deg, #141838 0%, #3b2a5e 38%, #8a4a6a 66%, #e2672a 100%); }
+.im-banner.dy-banner { color: #fff; background: #131416; }
 .im-banner span { margin-left: 14px; font-weight: 400; text-decoration: underline; text-underline-offset: 4px; text-decoration-thickness: 1px; }
 .im-banner:hover span { text-underline-offset: 7px; }
 .intro .im-banner { opacity: 0; }

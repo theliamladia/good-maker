@@ -55,14 +55,18 @@ const UNLOCKS = {
   // owner: plus every GOOD® CRATE Nº002 piece (kind ids), which the owner wore before it opened
   '402fb6989f1b7e8cf49c604bd500e77fef3bc4fb340372fc7d5415ee09717511': ['goodie-im-sowwy', 'goodie-black-chrome',
     'c2-chore', 'c2-trench', 'c2-inside-out', 'c2-baby-hoodie', 'c2-baby-cozyknit', 'c2-jean-splatter', 'c2-jean-ice',
-    'c2-jean-bleached', 'c2-jeajean', 'c2-jean-painter', 'c2-baby-tights', 'c2-scarf'],
+    'c2-jean-bleached', 'c2-jeajean', 'c2-jean-painter', 'c2-baby-tights', 'c2-scarf',
+    // and every GOOD® CRATE Nº003 piece
+    'c3-lounge-hoodie', 'c3-transit-tee', 'c3-pillow-collar', 'c3-parka', 'c3-safety-card', 'c3-flight-jacket', 'c3-crew-tee',
+    'c3-pilot-shirt', 'c3-hangar-hoodie', 'c3-mock-neck', 'c3-sports-bra', 'c3-lounge-pant', 'c3-carry-on', 'c3-flight-cargo',
+    'c3-crew-trouser', 'c3-tech-jogger', 'c3-pilot-short', 'c3-contrail-wide', 'c3-yoga-pant', 'c3-wide-leg', 'c3-eye-mask', 'c3-travel-pillow'],
 };
 // Plus anything the account owns a serialized copy of from the GOOD® CRATE.
 async function unlocksFor(user) {
   if (!user) return [];
-  const { ITEMS, ITEMS2 } = require('./_crate');
+  const { ITEMS, ITEMS2, ITEMS3 } = require('./_crate');
   const owned = (await redis('SMEMBERS', `user:${user.uid}:owned`)) || [];
-  const fromCrate = owned.map((id) => (ITEMS[id] || ITEMS2[id] || {}).unlock).filter(Boolean);
+  const fromCrate = owned.flatMap((id) => (ITEMS[id] || ITEMS2[id] || ITEMS3[id] || {}).unlock).filter(Boolean);   // a chase set unlocks a list
   return [...new Set([...(UNLOCKS[sha(String(user.email).toLowerCase())] || []), ...fromCrate])];
 }
 

@@ -4,7 +4,7 @@
 .rl-how { max-width: 40em; margin: 0 0 clamp(40px, 6vh, 64px); font: 300 1.05rem/1.6 var(--font-sans); }
 
 /* OPEN NOW: the two crates, each in its own spotlight */
-.rl-crates { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: clamp(24px, 4vw, 56px); }
+.rl-crates { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: clamp(24px, 4vw, 56px); }
 .rl-crate { display: grid; justify-items: center; gap: 10px; padding: clamp(28px, 4vw, 48px) 16px; color: #fff; text-decoration: none; text-align: center;
   background: radial-gradient(closest-side, rgba(255, 255, 255, 0.28), rgba(255, 255, 255, 0) 70%); }
 .rl-crate img { width: clamp(110px, 14vw, 160px); height: auto; margin-bottom: 14px; transition: transform 0.5s cubic-bezier(0.2, 0.7, 0.2, 1); }
@@ -29,7 +29,7 @@
 
 @media (max-width: 800px) {
   .rl-post { grid-template-columns: 1fr; gap: 22px; }
-  .rl-crates { gap: 12px; }
+  .rl-crates { grid-template-columns: minmax(0, 1fr); gap: 12px; }
   .rl-crate { padding: 20px 4px; }
   .rl-crate-meta { letter-spacing: 0.08em; }
   .rl-crate-go { padding: 12px 12px; letter-spacing: 0.12em; }

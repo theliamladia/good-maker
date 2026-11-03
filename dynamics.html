@@ -4,30 +4,31 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>DYNAMICS® I · GOOD® CRATE Nº003</title>
-  <meta name="description" content="GOOD® CRATE Nº003, DYNAMICS® I: TARMAC®, what you wear to fly, the flight pieces in SLATE™, JET™ and CONTRAIL™, and two chases. Tomorrow is Today.">
-  <meta name="robots" content="noindex">
+  <meta name="description" content="GOOD® CRATE Nº003, DYNAMICS® I: TARMAC® and the flight pieces, two chases, 5 GOOD® COINS to open. Tomorrow is Today.">
   <meta name="theme-color" content="#0000ff">
-  <link rel="canonical" href="https://good.leems.me/dynamics">
+
   <meta property="og:site_name" content="GOOD®">
   <meta property="og:type" content="website">
   <meta property="og:url" content="https://good.leems.me/dynamics">
   <meta property="og:title" content="DYNAMICS® I · GOOD® CRATE Nº003">
-  <meta property="og:description" content="Tomorrow is Today. DYNAMICS® I, GOOD® CRATE Nº003.">
-  <meta property="og:image" content="https://good.leems.me/assets/og-dynamics.png?v=1">
+  <meta property="og:description" content="Out now. Tomorrow is Today.">
+  <meta property="og:image" content="https://good.leems.me/assets/og-dynamics.png?v=2">
+  <meta property="og:image:secure_url" content="https://good.leems.me/assets/og-dynamics.png?v=2">
   <meta property="og:image:type" content="image/png">
   <meta property="og:image:width" content="1200">
   <meta property="og:image:height" content="630">
-  <meta property="og:image:alt" content="The DYNAMICS® logo, four white squares and the word DYNAMICS, on GOOD® BLUE. Tomorrow is Today.">
+  <meta property="og:image:alt" content="GOOD® CRATE Nº003: a pixel carry-on and the DYNAMICS® logo on GOOD® BLUE. Tomorrow is Today.">
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:title" content="DYNAMICS® I · GOOD® CRATE Nº003">
-  <meta name="twitter:description" content="Tomorrow is Today.">
-  <meta name="twitter:image" content="https://good.leems.me/assets/og-dynamics.png?v=1">
+  <meta name="twitter:description" content="Out now. Tomorrow is Today.">
+  <meta name="twitter:image" content="https://good.leems.me/assets/og-dynamics.png?v=2">
+  <meta name="twitter:image:alt" content="GOOD® CRATE Nº003: a pixel carry-on and the DYNAMICS® logo on GOOD® BLUE. Tomorrow is Today.">
   <link rel="icon" href="/favicon.svg" type="image/svg+xml">
   <link rel="icon" href="/favicon-32.png" sizes="32x32" type="image/png">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Michroma&family=Inter:wght@300;400;500;600&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="/dynamics.css?v=13">
+  <link rel="stylesheet" href="/dynamics.css?v=14">
   <link rel="stylesheet" href="/return-bar.css?v=2">
 </head>
 <body class="gd intro">
@@ -49,6 +50,7 @@
     <svg class="gd-logo" id="heroLogo" aria-hidden="true"></svg>
     <p class="gd-line">Tomorrow is Today.</p>
     <p class="gd-lede">The first GOOD® DYNAMICS® crate. On the tarmac: soft essentials for the long way, flight pieces in SLATE™, JET™ and CONTRAIL™, and two chases.</p>
+    <a class="gd-go" href="#crateT">OPEN THE CRATE ↓</a>
   </section>
 
   <section class="gd-block gd-tar" aria-labelledby="tarT">
@@ -101,19 +103,37 @@
     <p class="gd-copy gd-fine">5 GOOD® COINS a crate. Every pull is serialized and goes to MY INVENTORY®; own one to wear it in MAKER®. A piece you already have refunds 2 GOOD® COINS.</p>
   </section>
 
+  <section class="gd-block gd-crate" aria-labelledby="crateT">
+    <header class="gd-head"><h2 id="crateT">THE CRATE</h2><span>06</span></header>
+    <div class="gd-crate-row">
+      <figure class="gd-box">
+        <canvas id="crate3d" aria-label="GOOD® CRATE Nº003 in 3D: a grey hard-shell carry-on with a yellow stripe and a luggage tag, lid lifted, the DYNAMICS® I pieces inside. Drag to turn."></canvas>
+        <figcaption class="gd-tag" id="crateHint">DRAG TO TURN</figcaption>
+      </figure>
+      <div class="gd-crate-copy">
+        <p class="gd-tag">GOOD® CRATE Nº003</p>
+        <p class="gd-chase-h">Pack light. Open it at the gate.</p>
+        <p class="gd-copy">One carry-on, every piece in DYNAMICS® I inside. 5 GOOD® COINS to open; what comes out is numbered and yours to wear in MAKER®.</p>
+        <button type="button" class="gd-open" id="open" disabled>OPEN THE CRATE</button>
+        <p class="gd-wallet" id="wallet" aria-live="polite">&nbsp;</p>
+        <p class="gd-wallet" data-coin-timer></p>
+      </div>
+    </div>
+  </section>
+
   <section class="gd-block gd-co" aria-labelledby="coT">
-    <header class="gd-head"><h2 id="coT">DYNAMICS®</h2><span>06</span></header>
+    <header class="gd-head"><h2 id="coT">DYNAMICS®</h2><span>07</span></header>
     <svg class="gd-logo gd-logo-sm" id="coLogo" aria-hidden="true"></svg>
     <p class="gd-line">Tomorrow is Today.</p>
     <p class="gd-lede">GOOD® DYNAMICS® is GOOD®'s automobile and aerospace company: four vehicles, a Homepod to come home to, and the clothes to fly in.</p>
   </section>
 
   <section class="gd-block gd-white" aria-labelledby="fleetT">
-    <header class="gd-head"><h2 id="fleetT">THE FLEET</h2><span>07</span></header>
+    <header class="gd-head"><h2 id="fleetT">THE FLEET</h2><span>08</span></header>
     <div class="gd-fleet" id="fleet"></div>
   </section>
   <section class="gd-block gd-white gd-hp" aria-labelledby="hpT">
-    <header class="gd-head"><h2 id="hpT">THE HOMEPOD</h2><span>08</span></header>
+    <header class="gd-head"><h2 id="hpT">THE HOMEPOD</h2><span>09</span></header>
     <div class="gd-hp-top">
       <div class="gd-hp-art"><img class="icon" src="/assets/dynamics/homepod-icon.png" alt="The DYNAMICS Homepod seen from above: a dark 3×3 pad with a blue light ring and the GD logo."><img class="pad" src="/assets/dynamics/homepod.webp" alt="A GD® ENERGY01 parked on its Homepod."></div>
       <div class="gd-hp-copy">
@@ -132,9 +152,35 @@
   </section>
 </main>
 
+<!-- The unboxing: the reel, then the piece. -->
+<div class="gd-drop" id="drop" hidden>
+  <div class="gd-drop-card" role="dialog" aria-modal="true" aria-labelledby="dropTag">
+    <button type="button" class="gd-drop-x" id="dropClose" aria-label="Close">✕</button>
+    <p class="gd-tag" id="dropTag">OPENING…</p>
+    <div class="gd-reel" id="reel"><div class="gd-strip" id="strip"></div><i class="gd-marker" aria-hidden="true"></i></div>
+    <div class="gd-got" id="got" hidden>
+      <canvas id="gotFig" aria-hidden="true"></canvas>
+      <div>
+        <p class="gd-chase-h" id="gotName"></p>
+        <p class="gd-serial" id="gotSerial"></p>
+        <p class="gd-copy" id="gotMeta"></p>
+        <div class="gd-got-actions">
+          <button type="button" class="gd-open" id="again">OPEN ANOTHER</button>
+          <a class="gd-go" href="/">WEAR IT IN MAKER® →</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
 <footer class="gd-foot"><span>© 2026 GOOD®. DYNAMICS® I is GOOD® CRATE Nº003.</span><span>TOMORROW IS TODAY</span></footer>
 
 <script src="/js/dynamics-lockup.js?v=1"></script>
 <script src="/js/dynamics.js?v=15"></script>
+<script src="https://cdn.jsdelivr.net/npm/three@0.156.1/build/three.min.js"></script>
+<script src="/js/gooditems.js?v=4"></script>
+<script src="/js/dynamics-crate.js?v=1"></script>
+<script src="/js/dynamics-open.js?v=1"></script>
+<script src="/js/coin-timer.js?v=2"></script>
 </body>
 </html>

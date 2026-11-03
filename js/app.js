@@ -38,12 +38,14 @@
     current: (k) => k.season === LATEST,
     crate1: (k) => CRATE1.has(k.id) || k.colors.some((c) => CRATE1.has(c.id)),
     crate2: (k) => k.drop === 'crate2',
+    crate3: (k) => k.drop === 'crate3',
     fall: (k) => k.season === 2,
     deep: (k) => k.drop === 'deep',
   };
   const inSeason = (k) => (FILTERS[state.filter] || FILTERS.all)(k);
   // Where a locked piece comes from, for the LOCKED note under the colours and on DOWNLOAD.
-  const crateOf = (c) => (c.kind && c.kind.drop === 'crate2' ? { name: 'GOOD® CRATE Nº002', href: 'inmotion' }
+  const crateOf = (c) => (c.kind && c.kind.drop === 'crate3' ? { name: 'GOOD® CRATE Nº003', href: 'dynamics' }
+    : c.kind && c.kind.drop === 'crate2' ? { name: 'GOOD® CRATE Nº002', href: 'inmotion' }
     : CRATE1.has(c.id) || (c.kind && CRATE1.has(c.kind.id)) ? { name: 'GOOD® CRATE Nº001', href: 'crate' } : { name: 'A GOOD® CRATE', href: 'releases' });
   const LOCK_TAG = '<span class="lock-tag mono">LOCKED</span>';
   const lineShirts = () => SHIRTS.filter((k) => inLine(k) && inSeason(k));
