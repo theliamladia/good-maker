@@ -592,6 +592,14 @@ window.OUTFITS = [
         swatch: ['#8a2a4b', '#f2a7c0'],
         long: { classic: 'outfits/fleece-berry-peony-long-classic.png', slim: 'outfits/fleece-berry-peony-long-slim.png' },
       },
+      {
+        // Shown as THE EILEEN; made of OLIVE sherpa with TERRACOTTA zips (front and chest pocket).
+        id: 'fleece-the-eileen',
+        color: 'THE EILEEN',
+        palette: ['OLIVE', 'TERRACOTTA'],
+        swatch: ['#66603a', '#c7623f'],
+        long: { classic: 'outfits/fleece-the-eileen-long-classic.png', slim: 'outfits/fleece-the-eileen-long-slim.png' },
+      },
     ],
   },
   {
