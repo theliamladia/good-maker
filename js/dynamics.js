@@ -125,19 +125,6 @@
   }
   // THE LOOKS: TARMAC® first, then DYNAMICS®, numbered straight through
   $('looks').querySelectorAll('figure:not(.gd-scene) .n').forEach((n, i) => { n.textContent = `LOOK ${String(i + 1 + TLOOKS.length).padStart(2, '0')}`; });
-  const TPIECES = [
-    ['LOUNGE HOODIE®', 'LHR™ · CDG™ · LAX™ · DXB™'], ['LOUNGE PANT', 'LHR™ · CDG™ · LAX™ · DXB™'], ['TRANSIT TEE', 'LHR™ · CDG™ · LAX™ · DXB™'],
-    ['CABIN SOCK SLIDE', 'WITH THE LOUNGE PANT'], ['PILLOW COLLAR® JACKET', 'LAX™ · LHR™'], ['CARRY-ON TROUSER', 'LHR™ · DXB™'],
-    ['BOARDING PASS PARKA', 'CDG™ · LHR™'], ['SAFETY CARD SHIRT', 'LAX™/LHR™'], ['EYE MASK', 'LHR™ · JFK™'], ['TRAVEL PILLOW', 'DXB™'],
-    ['RED-EYE® LOUNGE SET · THE CHASE', 'JFK™/AMS™'],
-  ];
-  $('tarPieces').replaceChildren(...TPIECES.map(([name, cw], i) => {
-    const tr = document.createElement('tr'); if (/CHASE/.test(name)) tr.className = 'chase';
-    tr.innerHTML = `<td>${String(i + 1).padStart(2, '0')}</td><td></td><td>${C[cw.split(/ · |\//)[0]] ? dots(cw) : ''} ${cw}</td>`;
-    tr.children[1].textContent = name;
-    return tr;
-  }));
-
   // ---------- the odds (per crate) ----------
   const ODDS = [
     ['TARMAC® ESSENTIALS', 'LOUNGE HOODIE®, LOUNGE PANT, TRANSIT TEE, TRAVEL PILLOW, EYE MASK', '48%'],
@@ -150,21 +137,6 @@
     const tr = document.createElement('tr'); if (tier === 'THE CHASE') tr.className = 'chase';
     tr.innerHTML = '<td></td><td></td><td></td>';
     [tier, what, p].forEach((t, k) => { tr.children[k].textContent = t; });
-    return tr;
-  }));
-
-  // ---------- the pieces ----------
-  const PIECES = [
-    ['FLIGHT JACKET®', 'JET™/CONTRAIL™'], ['CREW TEE', 'CONTRAIL™/GOOD® BLUE'], ['PILOT SHIRT®', 'SLATE™/CONTRAIL™'],
-    ['HANGAR HOODIE®', 'CONTRAIL™/GOOD® BLUE'], ['MOCK NECK®', 'JET™/CONTRAIL™'], ['FLIGHT CARGO', 'SLATE™'], ['CREW TROUSER', 'JET™'],
-    ['TECH JOGGER', 'JET™/CONTRAIL™'], ['PILOT SHORT', 'SLATE™'], ['CONTRAIL WIDE TROUSER', 'CONTRAIL™'],
-    ['SPORTS BRA', 'JET™ · CONTRAIL™ · SLATE™'], ['YOGA PANT', 'JET™ · CONTRAIL™ · SLATE™'], ['WIDE-LEG TROUSER', 'JET™ · CONTRAIL™ · SLATE™'],
-    ['HANGAR HOODIE® · THE CHASE', 'GOOD® BLUE/CONTRAIL™'], ['TECH JOGGER · THE CHASE', 'GOOD® BLUE/CONTRAIL™'],
-  ];
-  $('pieces').replaceChildren(...PIECES.map(([name, cw], i) => {
-    const tr = document.createElement('tr'); if (/CHASE/.test(name)) tr.className = 'chase';
-    tr.innerHTML = `<td>${String(i + 1 + TPIECES.length).padStart(2, '0')}</td><td></td><td>${dots(cw)} ${cw}</td>`;
-    tr.children[1].textContent = name;
     return tr;
   }));
 

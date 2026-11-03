@@ -217,3 +217,18 @@ body.intro { overflow: hidden; }
   .gd-crate-copy .gd-copy { margin-left: auto; margin-right: auto; }
   .gd-reel-card { flex-basis: 112px; }
 }
+
+/* 03 THE ITEMS: every piece in the crate, flat, in its spotlight, with its odds */
+.gd-items { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 64px clamp(24px, 3vw, 48px); }
+.gd-item { margin: 0; text-align: center; user-select: none; -webkit-user-select: none; }
+.gd-item canvas { display: block; width: 100%; aspect-ratio: 1; object-fit: contain; image-rendering: pixelated; padding: 24%; box-sizing: border-box;
+  background: radial-gradient(closest-side, rgba(255, 255, 255, .55), rgba(255, 255, 255, 0) 78%); pointer-events: none; }
+.gd-item figcaption { display: grid; gap: 6px; margin-top: 14px; }
+.gd-item .p { font: 500 15px/1.35 var(--sans); letter-spacing: -.01em; }
+.gd-item .c, .gd-item .r { font: 400 10px/1.5 var(--mono); letter-spacing: .2em; opacity: .8; }
+.gd-item.gd-t-chase .r { color: #ffd200; opacity: 1; }
+.gd-items + .gd-sub { margin-top: 110px; }
+.gd-item canvas.gi-wait { animation: gd-pulse 1.4s ease-in-out infinite; }
+@keyframes gd-pulse { 50% { opacity: .55; } }
+@media (max-width: 900px) { .gd-items { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
+@media (max-width: 600px) { .gd-items { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 44px 16px; } }

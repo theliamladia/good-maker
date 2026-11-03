@@ -107,6 +107,26 @@
     again.disabled = me.coins < price;
   }
 
+  // 03 THE ITEMS: every piece in the crate, drawn flat in its spotlight, with its odds. TARMAC®
+  // (essentials, then avant-garde), DYNAMICS®, then the two chase sets.
+  function drawItems() {
+    const card = (it) => {
+      const f = document.createElement('figure'); f.className = `gd-item gd-t-${it.tier}`;
+      f.innerHTML = '<canvas aria-hidden="true"></canvas><figcaption><span class="p"></span><span class="c"></span><span class="r"></span></figcaption>';
+      f.querySelector('.p').textContent = it.name;
+      f.querySelector('.c').textContent = tm(it.color);
+      f.querySelector('.r').textContent = `${pct(it.pct)} · ${TIER(it)}`;
+      f.querySelector('canvas').addEventListener('contextmenu', (e) => e.preventDefault());
+      GoodItems.draw(it, f.querySelector('canvas')).catch(() => {});
+      return f;
+    };
+    const rank = { core: 0, rare: 1 };
+    $('itemsTar')?.replaceChildren(...table.filter((i) => i.line === 'tarmac' && i.tier !== 'chase').sort((a, b) => rank[a.tier] - rank[b.tier]).map(card));
+    $('itemsDyn')?.replaceChildren(...table.filter((i) => i.line === 'dynamics' && i.tier !== 'chase').map(card));
+    $('itemsChase')?.replaceChildren(...table.filter((i) => i.tier === 'chase').map(card));
+    if ($('itemsCount')) $('itemsCount').textContent = `${table.length} PIECES · ODDS PER CRATE`;
+  }
+
   btn.onclick = () => {
     if (!me) { location.href = '/account'; return; }
     if (state === 'idle') { state = 'sure'; drawButton(); return; }
@@ -123,6 +143,7 @@
     meOnce(),
   ]).then(([c, m]) => {
     table = c.items || []; price = c.price || 5;
+    drawItems();
     me = m.user; drawButton();
   }).catch(() => { wallet.textContent = 'THE CRATE IS RESTING. TRY AGAIN SOON.'; });
 })();
