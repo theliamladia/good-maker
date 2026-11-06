@@ -906,7 +906,13 @@
     // added to the lists with their own filter option, wearable and downloadable.
     // Pieces that arrive after boot: the owner's own (addPrivate) or a released drop like
     // GUD™ (addDrop). They join the lists with their own filter option.
-    addPrivate: (cat) => addDrop(cat, { filter: 'private', label: 'PRIVATE', extra: true }),
+    addPrivate: (cat) => {
+      // CORE® (drop: 'core', the owner's alone for now) gets its own filter; the rest is PRIVATE.
+      const part = (core) => Object.fromEntries(['tops', 'pants', 'accessories'].map((p) => [p, (cat[p] || []).filter((k) => (k.drop === 'core') === core)]));
+      const core = part(true);
+      if (core.tops.length || core.pants.length || core.accessories.length) addDrop(core, { filter: 'core', label: 'CORE®', extra: true });
+      addDrop(part(false), { filter: 'private', label: 'PRIVATE', extra: true });
+    },
     addDrop: (cat, opts) => addDrop(cat, opts),
     unlock: (ids) => {
       let any = false;
