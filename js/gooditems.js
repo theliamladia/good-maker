@@ -77,10 +77,12 @@ window.GoodItems = (() => {
   }
   // MY INVENTORY®: identical pieces stack into one card with the lowest serial on top.
   // A stack shows ×N; clicking it lists every serial in it, lowest first.
+  // Latest unboxings first: by when each copy was pulled (a stack sits where its newest copy is).
   const serialNo = (s) => { const m = /(\d+)/.exec(s || ''); return m ? +m[1] : Infinity; };
   function inventoryCards(inventory, items) {
-    const stacks = new Map();   // first seen first: the inventory comes newest first
-    for (const e of inventory) {
+    const stacks = new Map();
+    const newest = [...inventory].sort((a, b) => String(b.at || '').localeCompare(String(a.at || '')));
+    for (const e of newest) {
       if (!stacks.has(e.item)) stacks.set(e.item, []);
       stacks.get(e.item).push(e.serial);
     }
