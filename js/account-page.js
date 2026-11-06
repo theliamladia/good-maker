@@ -111,8 +111,8 @@
     GoodAch.draw($('ach'), achievements.map((a) => ({ ...a, earned: !!a.earned })));   // js/ach-row.js
   }
 
-  // Owner: the ledger of every serialized pull (not the GD-999 set), ten rows a page,
-  // searchable by owner or piece.
+  // Owner: the ledger of every serialized pull (not the GD-999 set), latest first, ten rows a
+  // page, searchable by owner or piece.
   const PER = 10;
   let ledger = [], ledgerPage = 0;
   function drawLedgerPage() {
@@ -140,7 +140,8 @@
     fetch('api/crate?ledger=1').then((r) => (r.ok ? r.json() : null)).then((j) => {
       if (!j) return;
       $('ledger').hidden = false;
-      ledger = j.rows.map((r) => {
+      // Latest pulls first (by the moment of the pull; same moment: higher serial first).
+      ledger = [...j.rows].sort((a, b) => String(b.at || '').localeCompare(String(a.at || '')) || String(b.serial).localeCompare(String(a.serial))).map((r) => {
         const it = crateItems[r.item] || { name: r.item, color: '' };
         return { serial: r.serial, piece: `${it.name} ${it.color}`.trim(), owner: r.name || '', at: (r.at || '').slice(0, 10) };
       });
