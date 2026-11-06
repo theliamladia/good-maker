@@ -1360,3 +1360,32 @@ body.fall .download-btn:disabled { background: rgba(255, 255, 255, 0.55); }
 .swatch-btn.sw-locked[aria-pressed="true"] .dot { filter: none; opacity: 1; }
 .sw-get { display: inline-block; margin-top: 4px; color: var(--good-blue); font-weight: 700; text-decoration: underline; text-underline-offset: 4px; }
 .download-hint a { color: inherit; font-weight: 700; }
+
+/* ---------- MAKER® on laptop screens (13-16in): the model gets the room ----------
+   The actions under the model sit two a row (DOWNLOAD across, then SAVE TO WARDROBE beside MY
+   WARDROBE, MINECRAFT STAND as a quiet link), and the pieces rail stays beside the model, never
+   over the IDLE/WALK bar. */
+@media (min-width: 1251px) {
+  .mk-actions { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 8px 10px; align-content: start; }
+  .mk-actions > *, .mk-actions > #download, .mk-actions > #downloadHint, .mk-actions > #saveLook, .mk-actions > #mcStand { grid-area: auto; }
+  .mk-actions > #download, .mk-actions > #downloadHint, .mk-actions > #mcStand { grid-column: 1 / -1; }
+  .mk-actions > #download { order: 0; } .mk-actions > #downloadHint { order: 1; } .mk-actions > #saveLook { order: 2; }
+  .mk-actions > .wd-open-desk { order: 3; } .mk-actions > #mcStand { order: 4; }
+  .mk-actions > #downloadHint { margin: 0 4px; font-size: 0.66rem; line-height: 1.5; }
+  .mk-actions > #saveLook { margin-top: 2px; padding: 10px 8px; font-size: 0.69rem; }
+  .mk-actions > #saveLook > span { font-size: 0.6rem; letter-spacing: 0.06em; margin-top: 3px; }
+  .mk-actions > .wd-open-desk { margin-top: 2px; min-height: 0; border: 1px solid rgba(255, 255, 255, 0.6); border-radius: 999px; text-decoration: none; font-size: 0.69rem; }
+  .mk-actions > .wd-open-desk:hover { background: #fff; color: var(--good-blue); }
+  .mk-actions > #mcStand { padding: 2px 0 0; margin: 0; }
+  .equipped { top: calc(50% - 36px); }   /* the middle of the model, above the IDLE/WALK bar */
+}
+@media (min-width: 1251px) and (max-height: 960px) {
+  .eq-slot { width: 50px; height: 50px; padding: 5px; border-radius: 12px; }
+  .equipped { gap: 8px; }
+  .mk-actions > #download { padding: 11px 16px; font-size: 1rem; }
+  .viewer-wrap > .micro { margin-top: 4px; }
+}
+@media (min-width: 1251px) and (max-height: 860px) {
+  .mk-actions > #saveLook > span { display: none; }   /* short screens: the coin note goes; the button stays one line */
+  .mk-actions > #saveLook, .mk-actions > .wd-open-desk { min-height: 40px; padding: 8px 6px; }
+}
