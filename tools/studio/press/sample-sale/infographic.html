@@ -1,0 +1,89 @@
+<!doctype html>
+<!-- SAMPLE SALE + GOOD® CASINO launch infographic for Discord (1600 wide), the house look:
+     GOOD® BLUE, white type, Inter + Space Mono labels, 1px rules, lots of room, no glow behind pieces.
+     Pieces: the live shelf, cropped from the render studio (tools/studio/work/out/ss-info, gitignored).
+     Render: node tools/studio/sheet.js tools/studio/press/sample-sale/infographic.html out.png 1600 -->
+<html><head><meta charset="utf-8">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+  :root { --blue: #0000ff; --mono: 'Space Mono', monospace; --sans: Inter, sans-serif; }
+  html, body { margin: 0; background: var(--blue); color: #fff; font-family: var(--sans); }
+  .wrap { width: 1600px; box-sizing: border-box; padding: 140px 150px 120px; }
+  .tag { margin: 0; font: 400 15px var(--mono); letter-spacing: .22em; }
+  h1 { margin: 26px 0 0; font: 600 120px/.95 var(--sans); letter-spacing: -.035em; }
+  h1 sup { font-size: .3em; font-weight: 400; vertical-align: 1.9em; letter-spacing: 0; }
+  .lede { margin: 34px 0 0; max-width: 30em; font: 300 26px/1.55 var(--sans); opacity: .94; }
+  .rule { height: 1px; background: #fff; margin: 120px 0 0; }
+  .head { display: flex; justify-content: space-between; align-items: baseline; margin-top: 30px; }
+  h2 { margin: 70px 0 0; font: 500 64px/1 var(--sans); letter-spacing: -.03em; }
+  .copy { margin: 26px 0 0; max-width: 32em; font: 300 22px/1.6 var(--sans); opacity: .94; }
+  .shelf { display: grid; grid-template-columns: repeat(4, 1fr); gap: 60px; margin-top: 90px; }
+  .piece .img { height: 300px; display: flex; align-items: flex-end; justify-content: center; }
+  .piece img { image-rendering: pixelated; max-height: 300px; max-width: 100%; }
+  .dots { display: flex; gap: 8px; margin: 40px 0 16px; }
+  .dots i { width: 13px; height: 13px; border-radius: 50%; border: 1px solid rgba(255,255,255,.8); }
+  .name { margin: 0; font: 500 24px/1.3 var(--sans); letter-spacing: -.01em; }
+  .cw { margin: 8px 0 0; font: 400 14px var(--mono); letter-spacing: .22em; opacity: .85; }
+  .foot { display: flex; justify-content: space-between; align-items: baseline; margin-top: 24px; padding-top: 16px; border-top: 1px solid rgba(255,255,255,.5); font: 400 14px var(--mono); letter-spacing: .22em; }
+  .foot b { font: 600 24px var(--sans); letter-spacing: -.01em; }
+  .steps { display: grid; grid-template-columns: repeat(3, 1fr); gap: 60px; margin-top: 80px; }
+  .steps p { margin: 0; font: 300 20px/1.55 var(--sans); opacity: .94; }
+  .steps .n { font: 400 14px var(--mono); letter-spacing: .22em; margin-bottom: 14px; opacity: 1; }
+  .games { display: grid; grid-template-columns: repeat(3, 1fr); gap: 60px; margin-top: 90px; }
+  .game .vis { height: 230px; display: flex; align-items: center; gap: 16px; }
+  .card { width: 104px; height: 148px; background: #fff; border-radius: 10px; color: #0b1526; position: relative; box-sizing: border-box; padding: 12px 14px; font: 600 30px/1 var(--sans); }
+  .card.red { color: #d1123f; }
+  .card .s { position: absolute; left: 0; right: 0; bottom: 18px; text-align: center; font-size: 44px; }
+  .card.back { background: none; border: 1px solid #fff; color: #fff; display: grid; place-items: center; font: 700 13px var(--mono); letter-spacing: .2em; }
+  .arrows { display: grid; gap: 12px; margin-left: 18px; font: 400 14px var(--mono); letter-spacing: .22em; }
+  .arrows span { border: 1px solid #fff; padding: 12px 18px; }
+  .wheel { width: 190px; height: 190px; border-radius: 50%; border: 1px solid #fff; display: grid; place-items: center; position: relative; }
+  .wheel b { font: 500 64px var(--sans); letter-spacing: -.03em; }
+  .wheel i { position: absolute; top: 24px; width: 12px; height: 12px; border-radius: 50%; background: #d1123f; }
+  .game h3 { margin: 50px 0 0; font: 500 30px/1.2 var(--sans); letter-spacing: -.02em; }
+  .game p { margin: 14px 0 0; font: 300 19px/1.55 var(--sans); opacity: .94; }
+  .game .pay { margin-top: 20px; padding-top: 14px; border-top: 1px solid rgba(255,255,255,.5); font: 400 13px var(--mono); letter-spacing: .2em; }
+  .end { display: flex; justify-content: space-between; align-items: baseline; margin-top: 140px; padding-top: 30px; border-top: 1px solid #fff; font: 400 15px var(--mono); letter-spacing: .22em; }
+  .end b { font: 600 40px var(--sans); letter-spacing: -.03em; }
+</style></head><body><div class="wrap">
+  <p class="tag">GOOD® · NEW ON GOOD.LEEMS.ME</p>
+  <h1>SAMPLE SALE &amp; CASINO<sup>®</sup></h1>
+  <p class="lede">Two new ways to spend your GOOD® COINS. One of one pieces on MARKET®, and a quiet table after dark.</p>
+
+  <div class="rule"></div>
+  <div class="head"><p class="tag">01 · SAMPLE SALE</p><p class="tag">ON MARKET® NOW</p></div>
+  <h2>One of one.</h2>
+  <p class="copy">Pieces you know, in colours MAKER® never gets. One of each, sold only on MARKET®. When one goes, another takes its place.</p>
+  <div class="shelf">
+    <div class="piece"><div class="img bottom"><img src="../../work/out/ss-info/cargo.png" style="height:240px"></div><div class="dots"><i style="background:#e0213a"></i></div><p class="name">CARGO®</p><p class="cw">CHERRY™</p><div class="foot"><b>90</b><span>1 OF 1</span></div></div>
+    <div class="piece"><div class="img"><img src="../../work/out/ss-info/anorak.png" style="width:300px"></div><div class="dots"><i style="background:#bfe8cf"></i><i style="background:#0000ff"></i></div><p class="name">HERITAGE™ ANORAK</p><p class="cw">MINT™/GOOD® BLUE™</p><div class="foot"><b>150</b><span>1 OF 1</span></div></div>
+    <div class="piece"><div class="img bottom"><img src="../../work/out/ss-info/jean.png" style="height:240px"></div><div class="dots"><i style="background:#8e9096"></i></div><p class="name">JEAN® ICE</p><p class="cw">ASH™</p><div class="foot"><b>90</b><span>1 OF 1</span></div></div>
+    <div class="piece"><div class="img bottom"><img src="../../work/out/ss-info/fencing.png" style="height:200px"></div><div class="dots"><i style="background:#a9502a"></i></div><p class="name">FENCING PANT®</p><p class="cw">RUST™</p><div class="foot"><b>90</b><span>1 OF 1</span></div></div>
+  </div>
+  <div class="steps">
+    <div><p class="n">01</p><p>Four pieces on the shelf, each the only one there will ever be.</p></div>
+    <div><p class="n">02</p><p>Buy one and it's numbered, yours to wear in MAKER® or resell.</p></div>
+    <div><p class="n">03</p><p>Another piece takes its place straight away. Never the same twice.</p></div>
+  </div>
+
+  <div class="rule"></div>
+  <div class="head"><p class="tag">02 · GOOD® CASINO</p><p class="tag">GOOD.LEEMS.ME/CASINO</p></div>
+  <h2>A quiet table after dark.</h2>
+  <p class="copy">Bet the GOOD® COINS you earned saving fits, 1 to 100 a hand. Free coins, never real money.</p>
+  <div class="games">
+    <div class="game">
+      <div class="vis"><div class="card">A<div class="s">♠</div></div><div class="card red">K<div class="s">♥</div></div><div class="card back">GOOD®</div></div>
+      <h3>BLACKJACK</h3><p>Hit, stand or double. Dealer stands on soft 17.</p><p class="pay">BLACKJACK PAYS 3:2</p>
+    </div>
+    <div class="game">
+      <div class="vis"><div class="card red">7<div class="s">♦</div></div><div class="arrows"><span>HIGHER ↑</span><span>LOWER ↓</span></div></div>
+      <h3>HIGH-LOW</h3><p>Call the next card. Every right guess grows the pot; cash out any time.</p><p class="pay">ACE HIGH · A TIE LOSES</p>
+    </div>
+    <div class="game">
+      <div class="vis"><div class="wheel"><i></i><b>17</b></div></div>
+      <h3>ROULETTE</h3><p>European, single zero. Red or black, odd or even, a dozen or one number.</p><p class="pay">A NUMBER PAYS 35:1</p>
+    </div>
+  </div>
+
+  <div class="end"><b>Spend them well.</b><span>GOOD.LEEMS.ME</span></div>
+</div></body></html>
