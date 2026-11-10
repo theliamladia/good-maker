@@ -1,39 +1,49 @@
 <!doctype html>
-<!-- Q&G® launch infographic for Discord (1600×2000). Screenshot at that size. -->
+<!-- Q&G® launch infographic for Discord (1600×2000), in the /q page's own look (q.css): black,
+     the compressed serif, GOOD® BLUE, thick white rules, raw look cells, CRT over everything. -->
 <html><head><meta charset="utf-8">
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;500;600&family=Space+Mono&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+JP:wght@900&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
 <style>
-  html, body { margin: 0; width: 1600px; height: 2000px; background: #0000ff; color: #fff; overflow: hidden; font-family: Inter, sans-serif; }
-  .wrap { padding: 120px 150px 0; }
-  .t { font: 400 16px 'Space Mono', monospace; letter-spacing: .3em; opacity: .85; margin: 0; }
-  h1 { margin: 26px 0 0; font: 600 170px/0.9 Inter, sans-serif; letter-spacing: -.05em; }
-  h1 sup { font-size: .24em; font-weight: 400; vertical-align: 2.8em; letter-spacing: 0; }
-  .l { font: 300 30px/1.5 Inter, sans-serif; margin: 34px 0 0; max-width: 24em; opacity: .92; }
-  .rule { height: 1px; background: rgba(255,255,255,.5); margin: 70px 0 50px; }
-  .looks { display: grid; grid-template-columns: repeat(3, 1fr); gap: 60px 50px; }
-  .looks figure { margin: 0; text-align: center; }
-  .looks .sp { height: 420px; display: grid; place-items: end center; background: radial-gradient(closest-side, rgba(255,255,255,.55), rgba(255,255,255,0) 100%); }
-  .looks img { width: 150px; image-rendering: pixelated; }
-  .looks figcaption { margin-top: 18px; }
-  .p { display: block; font: 500 22px/1.35 Inter, sans-serif; letter-spacing: -.01em; }
-  .c { display: inline-flex; align-items: center; gap: 10px; margin-top: 10px; font: 400 14px 'Space Mono', monospace; letter-spacing: .2em; opacity: .9; }
-  .c i { width: 13px; height: 13px; border-radius: 50%; box-shadow: inset 0 0 0 1px rgba(255,255,255,.7); display: inline-block; }
-  .bars { display: flex; height: 70px; margin-top: 22px; }
-  .bars i { display: block; }
-  .foot { position: absolute; left: 150px; right: 150px; bottom: 70px; display: flex; justify-content: space-between; font: 400 16px 'Space Mono', monospace; letter-spacing: .26em; }
-  .story { margin-top: 60px; }
+  :root { --acc: #0000ff; --acc-text: #4a4aff; --serif: 'Noto Serif JP', serif; --mono: 'Space Mono', monospace; }
+  html, body { margin: 0; width: 1600px; height: 2000px; background: #000; color: #fff; overflow: hidden; font-family: var(--mono);
+    text-shadow: 2px 0 rgba(255, 0, 40, .55), -2px 0 rgba(0, 200, 255, .5), 0 0 6px rgba(255, 255, 255, .35); }
+  .wrap { padding: 90px 100px 0; }
+  .ep { margin: 0; font: 900 40px/1 var(--serif); transform: scaleX(.82); transform-origin: left; }
+  h1 { margin: 6px 0 0; font: 900 290px/.86 var(--serif); letter-spacing: -.06em; transform: scaleX(.84); transform-origin: left top; white-space: nowrap; }
+  h1 span { color: var(--acc); }
+  h1 sup { font-size: .16em; vertical-align: 4.4em; letter-spacing: 0; margin-left: .04em; }
+  .by { margin: 92px 0 0; font: 900 76px/1 var(--serif); transform: scaleX(.8); transform-origin: left; }
+  .lede { margin: 30px 0 0; max-width: 38em; font: 400 22px/1.55 var(--mono); border-left: 8px solid var(--acc); padding-left: 22px; }
+  .rule { height: 6px; background: #fff; margin: 46px 0 0; }
+  .looks { display: grid; grid-template-columns: repeat(3, 1fr); border-left: 4px solid #fff; border-top: 4px solid #fff; margin-top: 46px; }
+  .looks figure { margin: 0; border-right: 4px solid #fff; border-bottom: 4px solid #fff; display: flex; flex-direction: column; }
+  .n { display: flex; justify-content: space-between; padding: 12px 16px; border-bottom: 4px solid #fff; font: 900 34px/1 var(--serif); }
+  .n b { font: 700 14px var(--mono); letter-spacing: .2em; color: var(--acc-text); align-self: center; }
+  .looks img { display: block; width: 140px; margin: 22px auto; image-rendering: pixelated; }
+  figcaption { border-top: 4px solid #fff; padding: 12px 16px 14px; display: grid; gap: 8px; font: 400 14px/1.45 var(--mono); letter-spacing: .1em; }
+  .dots { display: inline-flex; gap: 5px; vertical-align: middle; margin-right: 8px; }
+  .dots i { width: 14px; height: 14px; border: 2px solid #fff; display: inline-block; }
+  .bars { display: flex; height: 80px; border: 4px solid #fff; margin-top: 40px; }
+  .bars i { display: block; border-right: 4px solid #fff; }
+  .bars i:last-child { border-right: 0; }
+  .foot { position: absolute; left: 100px; right: 100px; bottom: 56px; display: flex; justify-content: space-between; align-items: baseline; font: 700 18px var(--mono); letter-spacing: .2em; }
+  .foot b { font: 900 46px/1 var(--serif); letter-spacing: 0; transform: scaleX(.84); transform-origin: left; display: inline-block; }
+  .crt { position: absolute; inset: 0; pointer-events: none; text-shadow: none;
+    background: repeating-linear-gradient(0deg, rgba(0,0,0,.28) 0 2px, rgba(0,0,0,0) 2px 4px), radial-gradient(ellipse at center, rgba(0,0,0,0) 55%, rgba(0,0,0,.55) 100%); }
 </style></head><body><div class="wrap">
-  <p class="t">ROYALS &amp; GOOD® · OUT NOW</p>
-  <h1>Q&amp;G<sup>®</sup></h1>
-  <p class="l">The latest collaborative effort between GOOD® and the People®. Six pieces, in MAKER® now.</p>
+  <p class="ep">EPISODE: 01</p>
+  <h1>Q<span>&amp;</span>G<sup>®</sup></h1>
+  <p class="by">ROYALS &amp; GOOD®</p>
+  <p class="lede">Q&amp;G® is the latest collaborative effort between GOOD® and the People®. Out now in MAKER®.</p>
   <div class="rule"></div>
   <div class="looks" id="looks"></div>
-  <div class="story"><p class="t">THE COLOR STORY®</p><div class="bars"><i style="background:#17171a;flex:3"></i><i style="background:#12235c;flex:2"></i><i style="background:#ebe8e1;flex:2"></i><i style="background:#3e3f44;flex:2"></i><i style="background:#8e9096;flex:1.4"></i><i style="background:#cfd2d6;flex:1"></i><i style="background:#d8b23c;flex:.6"></i></div></div>
+  <div class="bars"><i style="background:#17171a;flex:3"></i><i style="background:#12235c;flex:2"></i><i style="background:#ebe8e1;flex:2"></i><i style="background:#3e3f44;flex:2"></i><i style="background:#8e9096;flex:1.4"></i><i style="background:#cfd2d6;flex:1"></i><i style="background:#d8b23c;flex:.6"></i></div>
 </div>
-<div class="foot"><span>OUT NOW IN MAKER®</span><span>GOOD.LEEMS.ME/Q</span></div>
+<div class="foot"><b>OUT NOW IN MAKER®</b><span>GOOD.LEEMS.ME/Q</span></div>
+<div class="crt"></div>
 <script>
   const C = { ONYX: '#17171a', ROYAL: '#12235c', PEARL: '#ebe8e1', GRAPHITE: '#3e3f44', ASH: '#8e9096', SILVER: '#cfd2d6', GOLD: '#d8b23c' };
   const LOOKS = [['FENCING JACKET® · FENCING PANT®', 'ONYX/SILVER'], ['FENCING JACKET® · FENCING PANT®', 'ROYAL/SILVER'], ['CLASP JACKET® · BIKER PANT®', 'PEARL/GOLD'],
     ['CLASP JACKET® · STUDDED BIKER PANT®', 'ONYX/SILVER'], ['BABY® CROPPED JACKET · FENCING PANT®', 'ONYX/PEARL'], ['BABY® CROPPED JACKET · BIKER PANT®', 'PEARL/ONYX']];
-  document.getElementById('looks').innerHTML = LOOKS.map(([p, cw], i) => `<figure><div class="sp"><img src="/tools/studio/work/out/qglooks-sheets/qg-${i + 1}.png"></div><figcaption><span class="p">${p}</span><span class="c">${cw.split('/').map((c) => `<i style="background:${C[c]}"></i>`).join('')}${cw.split('/').map((c) => c + '™').join('/')}</span></figcaption></figure>`).join('');
+  document.getElementById('looks').innerHTML = LOOKS.map(([p, cw], i) => `<figure><div class="n">${String(i + 1).padStart(2, '0')}<b>LOOK</b></div><img src="/tools/studio/work/out/qglooks-sheets/qg-${i + 1}.png"><figcaption><span>${p}</span><span><span class="dots">${cw.split('/').map((c) => `<i style="background:${C[c]}"></i>`).join('')}</span>${cw.split('/').map((c) => c + '™').join('/')}</span></figcaption></figure>`).join('');
 </script></body></html>
