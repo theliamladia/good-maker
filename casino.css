@@ -1,0 +1,111 @@
+/* GOOD® CASINO (/casino): the COLLABORATIONS® look. GOOD® BLUE, white type, thin rules, air. */
+.cs-page .co-title { font-weight: 600; letter-spacing: -0.045em; }
+.cs-hero { padding-bottom: clamp(56px, 9vh, 96px); }
+.cs-wallet { margin: 40px 0 0; font-size: var(--label-size); letter-spacing: var(--label-track); opacity: 0.9; }
+.cs-wallet a { color: inherit; }
+.cs-page .coin { display: inline-block; width: 1.15em; height: 1.15em; background: url(assets/coin.svg) center / contain no-repeat; vertical-align: -0.22em; margin-right: 0.3em; }
+.cs-note, .cs-empty { max-width: 38em; line-height: 1.65; font-weight: 300; opacity: 0.92; margin: 0; }
+.cs-note a { color: inherit; }
+.cs-soon { padding-bottom: clamp(120px, 20vh, 220px); }
+
+/* Tabs and the bet */
+.cs-bar { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 24px 40px; border-top: var(--rule); padding: 22px 0; }
+.cs-tabs { display: flex; gap: 28px; }
+.cs-tabs button { background: none; border: 0; color: #fff; padding: 6px 0; font: 700 var(--label-size) var(--font-mono); letter-spacing: var(--label-track); cursor: pointer; opacity: 0.6; border-bottom: 1px solid transparent; }
+.cs-tabs button[aria-selected="true"] { opacity: 1; border-bottom-color: #fff; }
+.cs-tabs button:hover, .cs-tabs button:focus-visible { opacity: 1; outline: none; }
+.cs-bet { display: flex; align-items: center; gap: 14px; font-size: var(--label-size); letter-spacing: var(--label-track); }
+.cs-bet input, .cs-straight input { width: 64px; border: 0; border-bottom: 1px solid rgba(255, 255, 255, 0.7); background: transparent; color: #fff; font: 400 0.95rem var(--font-mono); padding: 4px 2px; outline: none; -moz-appearance: textfield; text-align: center; }
+.cs-bet input:focus, .cs-straight input:focus { border-bottom-color: #fff; }
+.cs-bet input::-webkit-inner-spin-button, .cs-straight input::-webkit-inner-spin-button { -webkit-appearance: none; }
+.cs-straight input::placeholder { color: rgba(255, 255, 255, 0.5); font-size: 0.7rem; }
+.cs-chips { display: flex; gap: 8px; }
+.cs-chips button { width: 38px; height: 38px; border-radius: 50%; border: 1px solid rgba(255, 255, 255, 0.7); background: transparent; color: #fff; font: 400 0.7rem var(--font-mono); letter-spacing: 0.04em; cursor: pointer; padding: 0; }
+.cs-chips button:hover, .cs-chips button:focus-visible, .cs-chips button.on { background: #fff; color: var(--good-blue); outline: none; }
+
+/* Buttons and lines */
+.cs-btn { border: var(--rule); background: transparent; color: #fff; font-size: 0.69rem; letter-spacing: 0.2em; padding: 12px 22px; cursor: pointer; }
+.cs-btn:hover:not(:disabled), .cs-btn:focus-visible, .cs-btn.cs-solid, .cs-btn.cs-sure { background: #fff; color: var(--good-blue); outline: none; }
+.cs-btn.cs-solid:hover:not(:disabled) { background: transparent; color: #fff; }
+.cs-btn:disabled { opacity: 0.45; cursor: default; }
+.cs-btn[hidden] { display: none; }
+.cs-actions { display: flex; flex-wrap: wrap; gap: 12px; }
+.cs-label { font-size: var(--label-size); letter-spacing: var(--label-track); margin: 0 0 16px; opacity: 0.85; }
+.cs-label span { margin-left: 10px; opacity: 1; }
+.cs-result { font-size: clamp(1.05rem, 1.6vw, 1.3rem); font-weight: 300; line-height: 1.55; max-width: 34em; margin: clamp(36px, 6vh, 56px) 0 28px; min-height: 3.1em; }
+.cs-result b { font-weight: 500; }
+.cs-game { padding-top: clamp(48px, 8vh, 80px); }
+
+/* Cards: white, simple, blue and ink suits */
+.cs-cards { display: flex; flex-wrap: wrap; gap: 12px; min-height: 108px; }
+.cs-hand + .cs-hand { margin-top: clamp(36px, 6vh, 56px); }
+.cs-card { position: relative; width: 74px; height: 106px; background: #fff; color: var(--ink); border-radius: 6px; box-shadow: 0 8px 24px rgba(0, 0, 60, 0.28); font-family: var(--font-sans); animation: cs-in 0.28s ease-out both; }
+.cs-card.red { color: var(--good-blue); }
+.cs-card .r { position: absolute; top: 8px; left: 9px; font-weight: 500; font-size: 1.05rem; letter-spacing: -0.02em; line-height: 1; text-align: center; }
+.cs-card .r small { display: block; font-size: 0.8rem; margin-top: 2px; }
+.cs-card .s { position: absolute; inset: 0; display: grid; place-items: center; font-size: 2rem; padding-top: 10px; }
+.cs-card.back { background: var(--good-blue); border: 1px solid #fff; box-shadow: inset 0 0 0 5px var(--good-blue), inset 0 0 0 6px rgba(255, 255, 255, 0.6), 0 8px 24px rgba(0, 0, 60, 0.28); color: #fff; display: grid; place-items: center; font: 700 0.55rem var(--font-mono); letter-spacing: 0.18em; }
+.cs-big .cs-card { width: 108px; height: 154px; border-radius: 8px; }
+.cs-big .cs-card .r { font-size: 1.4rem; top: 12px; left: 13px; }
+.cs-big .cs-card .s { font-size: 3rem; }
+.cs-big .cs-card.was { opacity: 0.45; transform: scale(0.86); transform-origin: bottom left; }
+@keyframes cs-in { from { opacity: 0; transform: translateY(-8px); } }
+@media (prefers-reduced-motion: reduce) { .cs-card { animation: none; } }
+
+/* HIGH-LOW */
+.cs-hl { display: flex; flex-wrap: wrap; align-items: flex-end; gap: 40px clamp(48px, 8vw, 120px); }
+.cs-big { min-height: 154px; align-items: flex-end; }
+.cs-pot { display: flex; gap: clamp(32px, 5vw, 64px); margin: 0; }
+.cs-pot div { margin: 0; }
+.cs-pot dt { font-size: 0.69rem; letter-spacing: 0.2em; opacity: 0.8; }
+.cs-pot dd { margin: 8px 0 0; font: 500 clamp(2rem, 4vw, 3rem) var(--font-sans); letter-spacing: -0.04em; line-height: 1; }
+
+/* ROULETTE */
+.cs-wheel { display: flex; align-items: center; gap: 28px; }
+.cs-wheel .cs-label { margin: 0; }
+.cs-ball { width: 112px; height: 112px; border-radius: 50%; border: var(--rule); display: grid; place-items: center; font: 500 2.6rem var(--font-sans); letter-spacing: -0.04em; flex: none; background: var(--spot); }
+.cs-ball.RED { background: #d8203a; border-color: #d8203a; }
+.cs-ball.BLACK { background: var(--ink); border-color: var(--ink); }
+.cs-ball.GREEN { background: #0f8a4a; border-color: #0f8a4a; }
+.cs-ball.spin span { animation: cs-flick 0.12s steps(2) infinite; }
+@keyframes cs-flick { 50% { opacity: 0.3; } }
+.cs-picks { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 10px; max-width: 640px; margin-top: clamp(40px, 6vh, 60px); }
+.cs-picks button, .cs-straight { display: flex; align-items: center; gap: 8px; border: 1px solid rgba(255, 255, 255, 0.5); background: transparent; color: #fff; font: 400 0.69rem var(--font-mono); letter-spacing: 0.16em; padding: 12px 14px; cursor: pointer; text-align: left; }
+.cs-picks em { font-style: normal; margin-left: auto; opacity: 0.6; letter-spacing: 0.06em; }
+.cs-picks button:hover, .cs-picks button:focus-visible, .cs-straight:hover { border-color: #fff; outline: none; }
+.cs-picks [aria-checked="true"], .cs-straight.on { background: #fff; color: var(--good-blue); border-color: #fff; }
+.cs-straight.on input { color: var(--good-blue); border-bottom-color: var(--good-blue); }
+.cs-straight { grid-column: span 3; cursor: text; }
+.cs-straight input { width: 56px; }
+.cs-dot { width: 9px; height: 9px; border-radius: 50%; box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.8); }
+.cs-dot.red { background: #d8203a; }
+.cs-dot.black { background: var(--ink); }
+.cs-last { margin-top: 32px; opacity: 0.7; }
+
+/* History */
+.cs-scroll { overflow-x: auto; -webkit-overflow-scrolling: touch; }
+.cs-table { width: 100%; border-collapse: collapse; }
+.cs-table th { text-align: left; font-size: 0.69rem; letter-spacing: var(--label-track); font-weight: 400; opacity: 0.75; padding: 0 16px 14px 0; border-bottom: var(--rule); white-space: nowrap; }
+.cs-table td { padding: 16px 16px 16px 0; border-bottom: 1px solid rgba(255, 255, 255, 0.22); font-size: 0.7rem; letter-spacing: 0.14em; font-family: var(--font-mono); white-space: nowrap; }
+.cs-table .num, .cs-table td:last-child { text-align: right; padding-right: 0; }
+.cs-empty { margin-top: 24px; }
+.cs-empty[hidden] { display: none; }
+
+.cs-toast { position: fixed; left: 50%; bottom: 28px; transform: translateX(-50%); z-index: 960; background: #fff; color: var(--good-blue); padding: 12px 20px; font-size: 0.69rem; font-weight: 700; letter-spacing: 0.16em; box-shadow: 0 10px 30px rgba(0, 0, 40, 0.35); max-width: calc(100vw - 32px); text-align: center; box-sizing: border-box; }
+.cs-toast[hidden] { display: none; }
+
+@media (max-width: 700px) {
+  .cs-bar { flex-direction: column; align-items: flex-start; }
+  .cs-tabs { gap: 20px; }
+  .cs-bet { flex-wrap: wrap; }
+  .cs-card { width: 56px; height: 80px; border-radius: 5px; }
+  .cs-card .r { font-size: 0.9rem; top: 6px; left: 7px; }
+  .cs-card .s { font-size: 1.5rem; }
+  .cs-cards { gap: 8px; min-height: 82px; }
+  .cs-big .cs-card { width: 92px; height: 132px; }
+  .cs-picks { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .cs-straight { grid-column: span 2; }
+  .cs-ball { width: 92px; height: 92px; font-size: 2.1rem; }
+  .cs-hide { display: none; }
+  .cs-actions .cs-btn { flex: 1 1 auto; }
+}
