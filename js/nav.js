@@ -76,7 +76,8 @@
       filter: drop-shadow(0 6px 14px rgba(0, 0, 60, 0.35)); transition: transform 0.4s cubic-bezier(0.2, 0.8, 0.2, 1); }
     .casino-chip:hover, .casino-chip:focus-visible { transform: rotate(45deg) scale(1.06); outline: none; }
     .casino-chip svg { width: 100%; height: 100%; display: block; }
-    @media (max-width: 700px) { .casino-chip { left: 14px; bottom: 14px; width: 44px; height: 44px; } body.m-maker .casino-chip { display: none; } }
+    @media (max-width: 700px) { .casino-chip { left: 14px; bottom: 14px; width: 44px; height: 44px; }
+      .m-stage > .casino-chip { position: absolute; left: 12px; bottom: 30px; width: 50px; height: 50px; } body.m-maker.m-open .m-stage > .casino-chip { width: 40px; height: 40px; bottom: 26px; } }
     @media print { .casino-chip { display: none; } }`;
   document.head.append(css);
   const a = document.createElement('a');
@@ -85,5 +86,8 @@
     + '<circle cx="28" cy="28" r="22" fill="none" stroke="#0000ff" stroke-width="6" stroke-dasharray="5.76 5.76"/>'
     + '<circle cx="28" cy="28" r="14" fill="#0000ff"/>'
     + '<path d="M28 19c3 4 8 6 8 10.5 0 2.6-2 4.4-4.3 4.4-1.4 0-2.5-.6-3.1-1.5.3 2 1 3.4 2.2 4.6h-5.6c1.2-1.2 1.9-2.6 2.2-4.6-.6.9-1.7 1.5-3.1 1.5-2.3 0-4.3-1.8-4.3-4.4C20 25 25 23 28 19z" fill="#fff"/></svg>');
-  document.body.append(a);
+  // MAKER® on a phone: on the stage, across from the download button, not over the piece sheet.
+  const phone = matchMedia('(max-width: 700px)');
+  const place = () => { const st = phone.matches && document.querySelector('.m-stage'); (st || document.body).append(a); };
+  place(); addEventListener('load', place); phone.addEventListener('change', place);
 })();
