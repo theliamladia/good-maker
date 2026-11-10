@@ -1562,7 +1562,7 @@
   // HOUSE® (MARKET® one-of-ones): the pieces this account owns, to wear and download.
   fetch('api/crate?house=mine', { cache: 'no-store' }).then((r) => (r.ok ? r.json() : null)).then(async (cat) => {
     if (!cat || !((cat.tops || []).length || (cat.pants || []).length)) return;
-    await bootDone; addDrop(cat, { filter: 'house', label: 'HOUSE®' });
+    await bootDone; addDrop(cat, { filter: 'house', label: 'SAMPLE SALE' });
   }).catch(() => {});
 
   // Drops (GUD™, WANDERING®): released pieces come from the server (sealed until the drop; api/_drop.js).

@@ -254,7 +254,7 @@ module.exports = async function handler(req, res) {
         if (!user) { res.status(401).json({ error: 'signed_out' }); return; }
         const r = await HOUSE.buy(user, String(body.hid || ''), saveUser);
         if (r.error) { res.status(r.error === 'coins' ? 402 : 409).json(r); return; }
-        await logTrade(user.uid, { type: 'buy', item: r.entry.item, serial: r.entry.serial, price: r.item.price, with: 'GOOD® HOUSE®', balance: r.coins });
+        await logTrade(user.uid, { type: 'buy', item: r.entry.item, serial: r.entry.serial, price: r.item.price, with: 'GOOD® SAMPLE SALE', balance: r.coins });
         res.status(200).json({ ok: true, ...r }); return;
       } finally { await unlockUser(me.uid); }
     }
