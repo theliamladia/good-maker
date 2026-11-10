@@ -14,7 +14,7 @@ const { redis, overLimit } = require('./_redis');
 const { isOwner, saveUser } = require('./_account');
 
 // Preview until the owner ships it: while false only the owner can play; everyone else gets 404.
-const OPEN = false;
+const OPEN = true;   // shipped 10 November 2026, at the owner's word
 const MIN_BET = 1, MAX_BET = 100;
 const HAND_TTL = 6 * 3600;         // an abandoned hand expires (its bet is lost, as if folded)
 const HIST_MAX = 50;

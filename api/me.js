@@ -235,7 +235,7 @@ module.exports = async function handler(req, res) {
         try { const sg = JSON.parse(sugg[i]); if (sg.name === user.name) await redis('LSET', 'suggestions', i, JSON.stringify({ ...sg, name: 'DELETED' })); } catch {}
       }
       for (const d of ACH.DEFS) await redis('DEL', `user:${user.uid}:ach:${d.id}`);
-      await redis('DEL', `user:${user.uid}`, `user:${user.uid}:skin`, `user:${user.uid}:wardrobe`, `user:${user.uid}:earned`, `user:${user.uid}:inv`, `user:${user.uid}:owned`, `user:${user.uid}:ach`, `user:${user.uid}:trades`, `user:email:${sha(user.email)}`);
+      await redis('DEL', `user:${user.uid}`, `user:${user.uid}:skin`, `user:${user.uid}:wardrobe`, `user:${user.uid}:earned`, `user:${user.uid}:inv`, `user:${user.uid}:owned`, `user:${user.uid}:ach`, `user:${user.uid}:trades`, `casino:bj:${user.uid}`, `casino:hl:${user.uid}`, `casino:hist:${user.uid}`, `user:email:${sha(user.email)}`);
       if ((await redis('GET', `profile:${slugOf(user.name)}`)) === user.uid) await redis('DEL', `profile:${slugOf(user.name)}`);
       await redis('SREM', 'users:all', user.uid);
       for (const d of ACH.DEFS) await redis('SREM', `ach:${d.id}`, user.uid);

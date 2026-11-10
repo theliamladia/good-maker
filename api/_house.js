@@ -17,7 +17,7 @@ const path = require('path');
 const crypto = require('crypto');
 const { redis } = require('./_redis');
 
-const OPEN = false;
+const OPEN = true;   // shipped 10 November 2026, at the owner's word
 const SHELF = 4;
 
 let pool = null;
