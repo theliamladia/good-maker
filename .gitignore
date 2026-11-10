@@ -5,3 +5,4 @@ tools/studio/work/
 tools/studio/models/*
 !tools/studio/models/mannequin-*.png
 __pycache__/
+.claude/worktrees/
