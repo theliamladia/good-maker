@@ -58,6 +58,9 @@ im.save('tools/studio/work/x/jacket.png')
   face (×0.55); studs = grey checkerboard (#8f9197/#3a3b40); padded knees = alternating rows on
   v4–7; distressing = a few ASH™ pixels + noise; hardware = 1–2px silver/gold.
 
+- **Check, then vault.** `python3 tools/studio/check.py <pngs>` before sealing or rendering (open collars
+  fail), and `node tools/studio/vault.js seal <folder>` after every change: work/ is not in git.
+
 ## 2. Render
 Write a set to `tools/studio/work/<set>.json`, then:
 ```bash

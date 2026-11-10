@@ -102,9 +102,20 @@ def lift_pants(im):
                     b, o = px[x + u, y + v], px[x + u + dx, y + v + dy]
                     if b[3] and not o[3]: px[x + u + dx, y + v + dy] = b
     return im
+def seal_under(im, col, k=0.85):
+    """Fill the head outer layer's bottom face (x 48-55, y 0-7) wherever the piece wears anything
+    on the head's outer layer, so nobody can see up into a collar or hood from below. Every hood,
+    collar and neck goes through this (the house rule; tools/studio/check.py fails without it)."""
+    px = im.load()
+    x0, y0, w, h = HAT['bottom']
+    if any(px[x, y][3] for side in ('front', 'right', 'left', 'back') for (X, Y, W, Hh) in [HAT[side]] for x in range(X, X + W) for y in range(Y + 6, Y + Hh)):
+        for x in range(x0, x0 + w):
+            for y in range(y0, y0 + h): px[x, y] = sd(col, 'bottom', k / FK['bottom'], 0.01)
+    return im
 def neck(col):
     """A high collar carried onto the head's layer 2: the bottom rows round the neck, only the
-    corner squares at the front so the face stays clear. Use as the look's accFile."""
+    corner squares at the front so the face stays clear, and the underside sealed. Use as the
+    look's accFile (or paste its hat layer into the top)."""
     im = new(); px = im.load()
     for side, (x, y, w, h) in HAT.items():
         for v in range(h):
@@ -113,7 +124,7 @@ def neck(col):
                 if side == 'front' and not (v == 7 and u in (0, 1, 6, 7)): continue
                 if side != 'front' and v < 6: continue
                 px[x + u, y + v] = sd(col, side, 0.92 if v == 7 else 1)
-    return im
+    return seal_under(im, col)
 
 def art(rows, pal, scale=20):
     """Flat pixel art (accessories on sheets): rows of chars, pal = {char: colour}."""

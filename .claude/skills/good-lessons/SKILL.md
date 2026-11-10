@@ -76,3 +76,10 @@ Every rule here cost the owner a round trip. Check the list before you say "done
     drop pages the looks are floating outfits; a single piece on a player shows their bare skin
     (shirtless, bare legs) and must not ship. If you ever doubt a render, look at it as the owner
     would before you push.
+21. **Nothing lives only in the container.** Every design (generator, textures, render sets) goes into
+    the vault: `GOOD_LOCK_KEY=… node tools/studio/vault.js seal <folder>` (tools/studio/vault/, encrypted,
+    committed) in the same push as the work. `vault.js open` restores it. Q&G®'s sources were lost in the
+    26 Oct reset and had to be rebuilt from renders.
+22. **Run tools/studio/check.py on every texture before it's sealed or rendered.** It fails on a collar or
+    hood (head outer layer rows 6-7) without its underside filled. lib.neck() now seals it; anything
+    custom on the head goes through lib.seal_under().
