@@ -1,0 +1,139 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>CASINO® · GOOD®</title>
+  <meta name="robots" content="noindex">
+  <meta name="description" content="The GOOD® CASINO: BLACKJACK, HIGH-LOW and ROULETTE for GOOD® COINS.">
+  <meta name="theme-color" content="#0000ff">
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+  <link rel="icon" href="/favicon-32.png" sizes="32x32" type="image/png">
+  <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="good.css?v=3">
+  <link rel="stylesheet" href="style.css?v=14">
+  <link rel="stylesheet" href="collab.css?v=2">
+  <link rel="stylesheet" href="casino.css?v=1">
+</head>
+<body class="co-page cs-page">
+
+<header class="site-header">
+  <a class="wordmark" href="./">GOOD®</a>
+  <nav class="site-nav" aria-label="Main">
+    <a class="nav-link mono" href="./">MAKER®</a>
+    <a class="nav-link mono" href="releases">RELEASES®</a>
+    <a class="nav-link mono" href="market">MARKET®</a>
+    <a class="nav-link mono" href="members">MEMBERS®</a>
+    <a class="nav-link nav-sec mono" href="colors">COLORS®</a>
+    <a class="nav-link nav-sec mono" href="study">STUDY®</a>
+    <a class="nav-link nav-sec mono" href="collaborations">COLLABORATIONS®</a>
+    <a class="nav-link nav-acct mono" href="account" data-acct>SIGN IN</a>
+  </nav>
+</header>
+
+<main class="co-main">
+  <section class="co-hero cs-hero">
+    <p class="co-tag mono">GOOD® · CASINO®</p>
+    <h1 class="co-title">CASINO<span>®</span></h1>
+    <p class="co-lede">A quiet table after dark, the city still awake behind the glass. Bring the GOOD® COINS you earned saving fits; they're free, never real money.</p>
+    <p class="cs-wallet mono" id="wallet" aria-live="polite">&nbsp;</p>
+  </section>
+
+  <section class="co-block cs-soon" id="soon" hidden>
+    <p class="co-tag mono">COMING SOON</p>
+    <p class="cs-note">The tables aren't open yet.</p>
+  </section>
+
+  <div id="tables" hidden>
+    <div class="cs-bar">
+      <div class="cs-tabs mono" role="tablist" id="tabs">
+        <button type="button" role="tab" data-g="bj" aria-selected="true" aria-controls="g-bj">BLACKJACK</button>
+        <button type="button" role="tab" data-g="hl" aria-selected="false" aria-controls="g-hl">HIGH-LOW</button>
+        <button type="button" role="tab" data-g="roulette" aria-selected="false" aria-controls="g-roulette">ROULETTE</button>
+      </div>
+      <div class="cs-bet mono">
+        <label for="bet">BET</label>
+        <input id="bet" type="number" inputmode="numeric" min="1" max="100" step="1" value="5">
+        <div class="cs-chips" id="chips"><button type="button" data-v="1">1</button><button type="button" data-v="5">5</button><button type="button" data-v="25">25</button><button type="button" data-v="100">100</button></div>
+      </div>
+    </div>
+
+    <section class="co-block cs-game" id="g-bj" role="tabpanel" aria-label="BLACKJACK">
+      <div class="cs-hand">
+        <p class="cs-label mono">DEALER <span id="bjDT"></span></p>
+        <div class="cs-cards" id="bjDealer"></div>
+      </div>
+      <div class="cs-hand">
+        <p class="cs-label mono">YOU <span id="bjPT"></span></p>
+        <div class="cs-cards" id="bjPlayer"></div>
+      </div>
+      <p class="cs-result" id="bjResult" aria-live="polite">Closest to 21 without going over. Dealer stands on soft 17; blackjack pays 3:2.</p>
+      <div class="cs-actions">
+        <button type="button" class="cs-btn mono" id="bjDeal">DEAL</button>
+        <button type="button" class="cs-btn mono" id="bjHit" hidden>HIT</button>
+        <button type="button" class="cs-btn mono" id="bjStand" hidden>STAND</button>
+        <button type="button" class="cs-btn mono" id="bjDouble" hidden>DOUBLE</button>
+      </div>
+    </section>
+
+    <section class="co-block cs-game" id="g-hl" role="tabpanel" aria-label="HIGH-LOW" hidden>
+      <div class="cs-hl">
+        <div class="cs-cards cs-big" id="hlCards"></div>
+        <dl class="cs-pot mono"><div><dt>POT</dt><dd id="hlPot">—</dd></div><div><dt>STREAK</dt><dd id="hlStreak">—</dd></div></dl>
+      </div>
+      <p class="cs-result" id="hlResult" aria-live="polite">Higher or lower than this card? Aces are high and a tie loses. Each right guess grows the pot; cash out whenever you like.</p>
+      <div class="cs-actions">
+        <button type="button" class="cs-btn mono" id="hlStart">START</button>
+        <button type="button" class="cs-btn mono" id="hlHigher" hidden>HIGHER</button>
+        <button type="button" class="cs-btn mono" id="hlLower" hidden>LOWER</button>
+        <button type="button" class="cs-btn mono cs-solid" id="hlCash" hidden>CASH OUT</button>
+      </div>
+    </section>
+
+    <section class="co-block cs-game" id="g-roulette" role="tabpanel" aria-label="ROULETTE" hidden>
+      <div class="cs-wheel">
+        <div class="cs-ball" id="rlBall"><span id="rlNum">–</span></div>
+        <p class="cs-label mono" id="rlColor">EUROPEAN · SINGLE ZERO</p>
+      </div>
+      <div class="cs-picks mono" id="picks" role="radiogroup" aria-label="Your bet">
+        <button type="button" role="radio" data-t="red" aria-checked="true"><i class="cs-dot red"></i>RED <em>1:1</em></button>
+        <button type="button" role="radio" data-t="black" aria-checked="false"><i class="cs-dot black"></i>BLACK <em>1:1</em></button>
+        <button type="button" role="radio" data-t="odd" aria-checked="false">ODD <em>1:1</em></button>
+        <button type="button" role="radio" data-t="even" aria-checked="false">EVEN <em>1:1</em></button>
+        <button type="button" role="radio" data-t="low" aria-checked="false">1-18 <em>1:1</em></button>
+        <button type="button" role="radio" data-t="high" aria-checked="false">19-36 <em>1:1</em></button>
+        <button type="button" role="radio" data-t="dozen" data-n="1" aria-checked="false">1ST 12 <em>2:1</em></button>
+        <button type="button" role="radio" data-t="dozen" data-n="2" aria-checked="false">2ND 12 <em>2:1</em></button>
+        <button type="button" role="radio" data-t="dozen" data-n="3" aria-checked="false">3RD 12 <em>2:1</em></button>
+        <label class="cs-straight" data-t="straight">NUMBER <input id="rlN" type="number" inputmode="numeric" min="0" max="36" placeholder="0–36" aria-label="Straight number, 0 to 36"> <em>35:1</em></label>
+      </div>
+      <p class="cs-result" id="rlResult" aria-live="polite">Pick one bet, then spin.</p>
+      <div class="cs-actions">
+        <button type="button" class="cs-btn mono" id="rlSpin">SPIN</button>
+      </div>
+      <p class="cs-label mono cs-last" id="rlLast"></p>
+    </section>
+
+    <section class="co-block" aria-labelledby="histTitle">
+      <header class="co-head"><p class="co-tag mono">YOUR TABLE</p><h2 id="histTitle">Last games</h2></header>
+      <div class="cs-scroll">
+        <table class="cs-table cs-hist">
+          <thead class="mono"><tr><th scope="col">TIME</th><th scope="col">GAME</th><th scope="col" class="cs-hide">HAND</th><th scope="col" class="num">BET</th><th scope="col" class="num">NET</th></tr></thead>
+          <tbody id="hist"></tbody>
+        </table>
+      </div>
+      <p class="cs-empty" id="histEmpty">No games yet.</p>
+    </section>
+  </div>
+</main>
+
+<div class="cs-toast mono" id="toast" hidden></div>
+<footer class="site-foot mono"><nav class="foot-nav" aria-label="More"><a href="colors">COLORS®</a><a href="study">STUDY®</a><a href="collaborations">COLLABORATIONS®</a><a href="privacy">PRIVACY</a></nav><p>© 2026 GOOD®. All rights reserved.</p></footer>
+
+<script src="js/casino.js?v=1"></script>
+<script src="js/nav.js?v=2"></script>
+</body>
+</html>

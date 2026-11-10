@@ -10,6 +10,7 @@
 //   GET  /api/crate?crate=house         -> HOUSE® (api/_house.js): { open, shelf: [4 pieces], items: [every piece shown so far] }
 //   GET  /api/crate?house=mine          -> the HOUSE® pieces you own, as a MAKER® catalogue { tops, pants }
 //   POST /api/crate { action: 'house', hid } -> buy that HOUSE® piece (one of one); another takes its place
+//   GET  /api/crate?casino=1 · POST { action: 'casino', game, move, ... } -> GOOD® CASINO (api/_casino.js)
 // Signed in only. Opening costs 5 GOOD® COINS; the roll happens here, never on
 // the page. Every roll is serialized per item (GD-001, GD-002, ...) and added to
 // the account's inventory (user:<uid>:inv). A piece you already had refunds 2.
@@ -20,6 +21,7 @@ const { currentUser, saveUser, isOwner, slugOf } = require('./_account');
 const { ITEMS, ODDS, GOLD_ODDS, PRICE, REFUND, table, ITEMS2, ODDS2, table2, ITEMS3, ODDS3, table3 } = require('./_crate');
 const ACH = require('./_achievements');
 const HOUSE = require('./_house');
+const CASINO = require('./_casino');
 
 // Weighted pick in hundredths of a percent, from a cryptographic RNG.
 function pick(odds) {
@@ -178,6 +180,13 @@ module.exports = async function handler(req, res) {
       res.status(200).json({ rows }); return;
     } catch { res.status(502).json({ error: 'storage' }); return; }
   }
+  // GOOD® CASINO: your balance, any hand in progress and your last games.
+  if (req.method === 'GET' && req.query && req.query.casino) {
+    try {
+      const me = configured() ? await currentUser(req) : null;
+      await CASINO.state(req, res, me); return;
+    } catch { res.status(502).json({ error: 'storage' }); return; }
+  }
   // MARKET®: what's for sale (seller names only, never account ids) and the latest sales.
   if (req.method === 'GET' && req.query && req.query.market) {
     try {
@@ -230,6 +239,7 @@ module.exports = async function handler(req, res) {
   if (!configured()) { res.status(503).json({ error: 'not_configured' }); return; }
   try {
     const me = await currentUser(req);
+    if (!me && !CASINO.OPEN && parseBody(req).action === 'casino') { res.status(404).json({ error: 'gone' }); return; }
     if (!me) { res.status(401).json({ error: 'signed_out' }); return; }
     const body = parseBody(req), action = body.action;
     const two = String(body.crate) === '2';   // GOOD® CRATE Nº002
@@ -262,6 +272,7 @@ module.exports = async function handler(req, res) {
       if (await overLimit(req, `market:${me.uid}`, 60)) { res.status(429).json({ error: 'slow_down' }); return; }
       await market(me, body, res); return;
     }
+    if (action === 'casino') { await CASINO.play(req, res, me, body, { lockUser, unlockUser }); return; }
     if (action !== 'open') { res.status(400).json({ error: 'action' }); return; }
     await dedupeSerials();
     if (await overLimit(req, `crate:${me.uid}`, 20)) { res.status(429).json({ error: 'slow_down' }); return; }
