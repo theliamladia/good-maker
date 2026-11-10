@@ -11,6 +11,9 @@
 //   house:sold    -> set of hids sold
 //   house:serial  -> counter (HSE-001, HSE-002, ... in the order they sell)
 //   house:last    -> the colour family of the last piece placed
+//   house:day     -> the day (New York time) the shelf was last reset
+// Every day at midnight New York time the unsold pieces go back into the pool and four new ones
+// come out (owner: reset every 24 hours). Never the four that were just there.
 // Until HOUSE® ships (OPEN), only the owner sees or buys it.
 const fs = require('fs');
 const path = require('path');
@@ -42,10 +45,10 @@ const shuffle = (a) => { for (let i = a.length - 1; i > 0; i--) { const j = cryp
 // The next piece for an empty slot. Hard rules: not sold, not on the shelf, not the piece or the
 // colourway that just sold. Then, as far as the pool allows: a family other than the last one
 // placed, and a piece (kind) that isn't already on the shelf.
-async function next(shelf, sold, gone) {
+async function next(shelf, sold, gone, skip = new Set()) {
   const last = await redis('GET', 'house:last');
   const onShelf = shelf.filter(Boolean).map(byId).filter(Boolean);
-  const free = poolAll().filter((p) => !sold.has(p.hid) && !shelf.includes(p.hid)
+  const free = poolAll().filter((p) => !sold.has(p.hid) && !shelf.includes(p.hid) && !skip.has(p.hid)
     && !(gone && (p.kind === gone.kind || p.color === gone.color)));
   const tiers = [
     (p) => p.family !== last && (!gone || p.family !== gone.family) && !onShelf.some((o) => o.kind === p.kind || o.family === p.family),
@@ -56,8 +59,8 @@ async function next(shelf, sold, gone) {
   for (const ok of tiers) { const c = free.filter(ok); if (c.length) return shuffle(c)[0]; }
   return null;
 }
-async function place(shelf, i, sold, gone) {
-  const p = await next(shelf, sold, gone);
+async function place(shelf, i, sold, gone, skip) {
+  const p = await next(shelf, sold, gone, skip);
   shelf[i] = p ? p.hid : null;
   if (p) { await redis('SET', 'house:last', p.family); await redis('SADD', 'house:shown', p.hid); }
 }
@@ -66,8 +69,21 @@ async function state() {
   const sold = new Set((await redis('SMEMBERS', 'house:sold')) || []);
   return { shelf, sold };
 }
+// The daily reset: once per New York day (the first request after midnight does it, once).
+const today = () => new Intl.DateTimeFormat('en-CA', { timeZone: 'America/New_York' }).format(new Date());
+async function rotate() {
+  const day = today(), was = await redis('GET', 'house:day');
+  if (was === day) return;
+  if (!was) { await redis('SET', 'house:day', day); return; }   // the first day: keep the shelf it has
+  if (!(await redis('SET', `house:reset:${day}`, 1, 'EX', 172800, 'NX'))) return;
+  await redis('SET', 'house:day', day);
+  const s = await state(), skip = new Set(s.shelf.filter(Boolean)), fresh = [];
+  for (let i = 0; i < SHELF; i++) await place(fresh, i, s.sold, null, skip);
+  await redis('SET', 'house:shelf', JSON.stringify(fresh));
+}
 // The shelf, filled if anything is missing (first run, or the pool grew).
 async function shelf() {
+  await rotate();
   const s = await state();
   let changed = false;
   for (let i = 0; i < SHELF; i++) if (!s.shelf[i] || s.sold.has(s.shelf[i]) || !byId(s.shelf[i])) { await place(s.shelf, i, s.sold, null); changed = true; }
@@ -84,6 +100,7 @@ async function buy(user, hid, saveUser) {
   const p = byId(hid);
   if (!p) return { error: 'gone' };
   // one buyer per piece, even if two arrive at once
+  await rotate();
   if (!(await redis('SET', `house:lock:${hid}`, user.uid, 'EX', 15, 'NX'))) return { error: 'gone' };
   try {
     const s = await state();
