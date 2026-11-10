@@ -66,3 +66,24 @@
   window.GoodNav = { update };
   (window.__goodMe ||= fetch('/api/me').then((r) => (r.ok ? r.json() : { user: null })).catch(() => ({ user: null }))).then((j) => update(j.user));
 })();
+
+// GOOD® CASINO: a chip in the bottom-left corner of every page (not on /casino itself, not over
+// MAKER®'s phone sheet). Its styles come with it, so no page needs new CSS.
+(() => {
+  if (/^\/casino/.test(location.pathname) || document.querySelector('.casino-chip')) return;
+  const css = document.createElement('style');
+  css.textContent = `.casino-chip { position: fixed; left: 22px; bottom: 22px; z-index: 440; width: 52px; height: 52px; display: block; border-radius: 50%;
+      filter: drop-shadow(0 6px 14px rgba(0, 0, 60, 0.35)); transition: transform 0.4s cubic-bezier(0.2, 0.8, 0.2, 1); }
+    .casino-chip:hover, .casino-chip:focus-visible { transform: rotate(45deg) scale(1.06); outline: none; }
+    .casino-chip svg { width: 100%; height: 100%; display: block; }
+    @media (max-width: 700px) { .casino-chip { left: 14px; bottom: 14px; width: 44px; height: 44px; } body.m-maker .casino-chip { display: none; } }
+    @media print { .casino-chip { display: none; } }`;
+  document.head.append(css);
+  const a = document.createElement('a');
+  a.className = 'casino-chip'; a.href = '/casino'; a.setAttribute('aria-label', 'GOOD® CASINO'); a.title = 'GOOD® CASINO';
+  a.innerHTML = window.GoodChip || (window.GoodChip = '<svg viewBox="0 0 56 56" aria-hidden="true"><circle cx="28" cy="28" r="27" fill="#fff"/>'
+    + '<circle cx="28" cy="28" r="22" fill="none" stroke="#0000ff" stroke-width="6" stroke-dasharray="5.76 5.76"/>'
+    + '<circle cx="28" cy="28" r="14" fill="#0000ff"/>'
+    + '<path d="M28 19c3 4 8 6 8 10.5 0 2.6-2 4.4-4.3 4.4-1.4 0-2.5-.6-3.1-1.5.3 2 1 3.4 2.2 4.6h-5.6c1.2-1.2 1.9-2.6 2.2-4.6-.6.9-1.7 1.5-3.1 1.5-2.3 0-4.3-1.8-4.3-4.4C20 25 25 23 28 19z" fill="#fff"/></svg>');
+  document.body.append(a);
+})();
