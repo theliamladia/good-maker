@@ -68,7 +68,7 @@ window.OUTFITS = [
         id: 'shirt-ii-qg',
         color: "ONYX™/GOOD® BLUE",
         swatch: ['#17171a', '#0000ff'],
-        collab: { name: 'Q&G®', soon: true },
+        collab: { name: 'Q&G®', href: '/q' },
         bodies: { classic: 'outfits/collab/shirt-ii-qg-classic.png', slim: 'outfits/collab/shirt-ii-qg-slim.png' },
         long: { classic: 'outfits/collab/shirt-ii-qg-long-classic.png', slim: 'outfits/collab/shirt-ii-qg-long-slim.png' },
       },

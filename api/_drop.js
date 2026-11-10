@@ -3,6 +3,7 @@
 // they're public. A drop with at: null stays shut until it gets a date.
 //   GUD™ went live on 19 October 2026 (released early, at the owner's word).
 //   WANDERING® went live on 23 October 2026, at the owner's word.
+//   Q&G® went live on 10 November 2026, at the owner's word.
 const fs = require('fs');
 const path = require('path');
 const crypto = require('crypto');
@@ -10,6 +11,7 @@ const crypto = require('crypto');
 const DROPS = {
   gud: { at: Date.parse('2026-10-19T00:00:00-04:00'), prefix: 'gud-', index: 'gud-index' },
   wandering: { at: Date.parse('2026-10-23T00:00:00-04:00'), prefix: 'wdm-', index: 'wdm-index' },
+  qg: { at: Date.parse('2026-11-10T00:00:00-05:00'), prefix: 'qgm-', index: 'qgm-index' },   // Q&G® (ROYALS & GOOD®), live 10 November 2026
 };
 const isOpen = (name, now = Date.now()) => { const d = DROPS[name]; return !!d && d.at !== null && now >= d.at; };
 const dropOf = (id) => Object.keys(DROPS).find((n) => id.startsWith(DROPS[n].prefix)) || null;
