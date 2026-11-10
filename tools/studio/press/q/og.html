@@ -1,23 +1,41 @@
 <!doctype html>
-<!-- Q&G® share banner (assets/og-q.png, 1200×630) and its RELEASES® card. Looks from the render studio
-     (tools/studio/work/out/qglooks-sheets, gitignored). Screenshot at 1200×630. -->
+<!-- Q&G® share banner (assets/og-q.png, 1200×630; RELEASES® card assets/rl/q.webp is the same at 800×420),
+     in the /q page's own look (q.css): black, the compressed serif with the GOOD® BLUE "&", thick white
+     rules, raw look cells, CRT over everything. Looks from tools/studio/work/out/qglooks-sheets (gitignored). -->
 <html><head><meta charset="utf-8">
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;600&family=Space+Mono&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+JP:wght@900&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
 <style>
-  html, body { margin: 0; width: 1200px; height: 630px; background: #0000ff; color: #fff; overflow: hidden; font-family: Inter, sans-serif; }
-  .copy { position: absolute; left: 96px; top: 50%; transform: translateY(-50%); }
-  .t { font: 400 13px 'Space Mono', monospace; letter-spacing: .3em; opacity: .85; margin: 0 0 22px; }
-  h1 { margin: 0; font: 600 132px/0.9 Inter, sans-serif; letter-spacing: -.05em; }
-  h1 sup { font-size: .26em; font-weight: 400; vertical-align: 2.6em; letter-spacing: 0; }
-  .l { font: 300 22px Inter, sans-serif; margin: 26px 0 0; opacity: .92; }
-  .looks { position: absolute; right: 70px; top: 60px; display: flex; gap: 10px; }
-  .looks figure { margin: 0; width: 170px; height: 470px; display: grid; place-items: end center;
-    background: radial-gradient(closest-side, rgba(255,255,255,.55), rgba(255,255,255,0) 100%); }
-  .looks img { width: 150px; image-rendering: pixelated; }
-  .f { position: absolute; bottom: 40px; font: 400 12px 'Space Mono', monospace; letter-spacing: .26em; opacity: .8; }
-  .f.a { left: 96px; } .f.b { right: 96px; }
+  :root { --acc: #0000ff; --acc-text: #4a4aff; --serif: 'Noto Serif JP', serif; --mono: 'Space Mono', monospace; }
+  html, body { margin: 0; width: 1200px; height: 630px; background: #000; color: #fff; overflow: hidden; font-family: var(--mono);
+    text-shadow: 2px 0 rgba(255, 0, 40, .55), -2px 0 rgba(0, 200, 255, .5), 0 0 6px rgba(255, 255, 255, .35); }
+  .copy { position: absolute; left: 72px; top: 64px; }
+  .ep { margin: 0; font: 900 26px/1 var(--serif); transform: scaleX(.82); transform-origin: left; }
+  h1 { margin: 8px 0 0; font: 900 196px/.86 var(--serif); letter-spacing: -.06em; transform: scaleX(.84); transform-origin: left top; white-space: nowrap; }
+  h1 span { color: var(--acc); }
+  h1 sup { font-size: .16em; vertical-align: 4.4em; letter-spacing: 0; margin-left: .04em; }
+  .by { margin: 60px 0 0; font: 900 46px/1 var(--serif); transform: scaleX(.8); transform-origin: left; }
+  .lede { margin: 22px 0 0; font: 400 15px/1.5 var(--mono); border-left: 6px solid var(--acc); padding-left: 16px; letter-spacing: .04em; }
+  .looks { position: absolute; right: 72px; top: 64px; display: grid; grid-template-columns: repeat(3, 176px); border-left: 4px solid #fff; border-top: 4px solid #fff; }
+  .looks figure { margin: 0; border-right: 4px solid #fff; border-bottom: 4px solid #fff; display: flex; flex-direction: column; }
+  .n { display: flex; justify-content: space-between; padding: 8px 10px; border-bottom: 4px solid #fff; font: 900 24px/1 var(--serif); }
+  .n b { font: 700 12px var(--mono); letter-spacing: .2em; color: var(--acc-text); align-self: center; }
+  .looks img { display: block; width: 136px; margin: 30px auto; image-rendering: pixelated; }
+  .foot { position: absolute; left: 72px; right: 72px; bottom: 40px; display: flex; justify-content: space-between; align-items: baseline; font: 700 14px var(--mono); letter-spacing: .2em; border-top: 6px solid #fff; padding-top: 16px; }
+  .foot b { font: 900 30px/1 var(--serif); letter-spacing: 0; transform: scaleX(.84); transform-origin: left; display: inline-block; }
+  .crt { position: absolute; inset: 0; pointer-events: none; text-shadow: none;
+    background: repeating-linear-gradient(0deg, rgba(0,0,0,.28) 0 2px, rgba(0,0,0,0) 2px 4px), radial-gradient(ellipse at center, rgba(0,0,0,0) 55%, rgba(0,0,0,.55) 100%); }
 </style></head><body>
-  <div class="copy"><p class="t">ROYALS &amp; GOOD®</p><h1>Q&amp;G<sup>®</sup></h1><p class="l">Out now in MAKER®.</p></div>
-  <div class="looks"><figure><img src="/tools/studio/work/out/qglooks-sheets/qg-2.png"></figure><figure><img src="/tools/studio/work/out/qglooks-sheets/qg-3.png"></figure><figure><img src="/tools/studio/work/out/qglooks-sheets/qg-5.png"></figure></div>
-  <p class="f a">FENCING · CLASP · BIKER</p><p class="f b">GOOD.LEEMS.ME/Q</p>
+  <div class="copy">
+    <p class="ep">EPISODE: 01</p>
+    <h1>Q<span>&amp;</span>G<sup>®</sup></h1>
+    <p class="by">ROYALS &amp; GOOD®</p>
+    <p class="lede">FENCING · CLASP · BIKER</p>
+  </div>
+  <div class="looks">
+    <figure><div class="n">01<b>LOOK</b></div><img src="/tools/studio/work/out/qglooks-sheets/qg-2.png"></figure>
+    <figure><div class="n">02<b>LOOK</b></div><img src="/tools/studio/work/out/qglooks-sheets/qg-3.png"></figure>
+    <figure><div class="n">03<b>LOOK</b></div><img src="/tools/studio/work/out/qglooks-sheets/qg-5.png"></figure>
+  </div>
+  <div class="foot"><b>OUT NOW IN MAKER®</b><span>GOOD.LEEMS.ME/Q</span></div>
+  <div class="crt"></div>
 </body></html>
