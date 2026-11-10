@@ -1,8 +1,7 @@
 // MAKER® helpers from the UX overhaul:
 // - the three steps over the stage (1 YOUR SKIN → 2 PICK PIECES → 3 DOWNLOAD OR SAVE), lit as
 //   you go, gone once you've downloaded or saved (or pressed GOT IT), remembered per browser;
-// - the filter dropdowns as a row of chips on desktop (the dropdown stays the source of truth:
-//   app.js listens to it, and adds options when a drop loads).
+// - the filter row over the pieces (ALL · THE BASICS · NEW · CRATES ▾ · DROPS ▾ · BABY® · OWNED ONLY).
 (() => {
   const $ = (id) => document.getElementById(id);
   const KEY = 'good-steps-done';
@@ -26,51 +25,69 @@
     $('saveLook')?.addEventListener('click', finish);
   }
 
-  // The filter bar, once, at the top of the pieces: one dropdown in groups (GOOD®, CRATES, COLLABS &
-  // DROPS, YOURS) beside HIDE LOCKED. It drives the shirt and pants filters (one value for both).
-  const sels = [...document.querySelectorAll('select[data-filter]')];
+  // The filter row, at the top of the pieces: quiet text, the one that's on underlined.
+  //   ALL · THE BASICS · <newest> NEW · CRATES ▾ · DROPS ▾ · BABY® · (YOURS ▾)      ○ OWNED ONLY
+  // A ▾ opens a small menu. app.js keeps the filters (GoodApp.filters / setFilter) and says when
+  // they change ('good:filters'), e.g. when a drop arrives after boot.
   const panel = document.querySelector('.panel.right');
-  if (sels.length && panel) {
-    const GROUPS = [['GOOD®', ['all', 'basics', 'fall', 'current']], ['CRATES', ['crate3', 'crate2', 'crate1']],
-      ['COLLABS & DROPS', ['qg', 'deep', 'gud', 'wandering']], ['YOURS', ['core', 'private']]];
-    const short = (t) => t.replace('GOOD® CRATE ', 'CRATE ').replace('CURRENT SEASON', 'THIS SEASON');
-    const bar = document.createElement('div'); bar.className = 'mk-filterbar';
-    bar.innerHTML = '<label class="mk-filter"><span class="mk-filter-l">SHOW</span><select class="mono" aria-label="Show"></select></label>'
-      + '<label class="mk-hide-locked"><input type="checkbox"><span>HIDE LOCKED</span></label>';
-    const pick = bar.querySelector('select'), box = bar.querySelector('input');
-    const draw = () => {
-      const opts = [...sels[0].options], placed = new Set();
-      const groups = GROUPS.map(([label, vals]) => {
-        const own = vals.map((v) => opts.find((o) => o.value === v)).filter(Boolean);
-        if (!own.length) return null;
-        const g = document.createElement('optgroup'); g.label = label;
-        for (const o of own) { placed.add(o); g.append(new Option(short(o.textContent), o.value)); }
-        return g;
-      }).filter(Boolean);
-      const rest = opts.filter((o) => !placed.has(o));   // anything new lands with the drops
-      const drops = groups.find((g) => g.label === 'COLLABS & DROPS') || groups[groups.length - 1];
-      for (const o of rest) drops.append(new Option(short(o.textContent), o.value));
-      pick.replaceChildren(...groups); pick.value = sels[0].value;
+  const App = window.GoodApp;
+  if (panel && App && App.filters) {
+    const MENUS = [['CRATES', ['crate3', 'crate2', 'crate1']], ['DROPS', ['qg', 'fall', 'deep', 'gud', 'wandering']], ['YOURS', ['core', 'private']]];
+    const SOLO = ['all', 'basics'];
+    const row = document.createElement('nav'); row.className = 'mk-row mono'; row.setAttribute('aria-label', 'Show');
+    const menu = document.createElement('div'); menu.className = 'mk-menu mono'; menu.hidden = true; document.body.append(menu);
+    let owned = false;
+    try { owned = localStorage.getItem('good-hide-locked') === '1'; } catch {}
+    if (owned) setTimeout(() => App.hideLocked(true), 0);
+    const btn = (label, on, onClick, extra = '') => {
+      const b = document.createElement('button'); b.type = 'button'; b.innerHTML = label + extra;
+      if (on) b.setAttribute('aria-current', 'true');
+      b.onclick = onClick; return b;
     };
-    pick.onchange = () => { sels[0].value = pick.value; sels[0].dispatchEvent(new Event('change')); };
-    let hideLocked = false;
-    try { hideLocked = localStorage.getItem('good-hide-locked') === '1'; } catch {}
-    box.checked = hideLocked;
-    if (hideLocked) setTimeout(() => window.GoodApp?.hideLocked(true), 0);
-    box.onchange = () => { try { localStorage.setItem('good-hide-locked', box.checked ? '1' : ''); } catch {} window.GoodApp?.hideLocked(box.checked); };
+    const closeMenu = () => { menu.hidden = true; row.querySelectorAll('[aria-expanded]').forEach((b) => b.setAttribute('aria-expanded', 'false')); };
+    const draw = () => {
+      const { names, on, lead } = App.filters();
+      const has = (v) => v in names;
+      const items = [];
+      for (const v of SOLO) items.push(btn(names[v], on === v, () => App.setFilter(v)));
+      if (lead && has(lead)) items.push(btn(names[lead], on === lead, () => App.setFilter(lead), '<sup>NEW</sup>'));
+      // anything that arrives without a home goes under DROPS
+      const placed = new Set([...SOLO, 'baby', 'current', lead, ...MENUS.flatMap(([, v]) => v)]);
+      const menus = MENUS.map(([t, v]) => [t, v.filter((x) => x !== lead && has(x))]);
+      menus[1][1].push(...Object.keys(names).filter((x) => !placed.has(x)));
+      for (const [title, vals] of menus) {
+        if (!vals.length) continue;
+        const cur = vals.includes(on);
+        const b = btn(cur ? names[on] : title, cur, null, ' <span aria-hidden="true">▾</span>');
+        b.setAttribute('aria-haspopup', 'true'); b.setAttribute('aria-expanded', 'false');
+        b.onclick = (e) => {
+          e.stopPropagation();
+          if (!menu.hidden && b.getAttribute('aria-expanded') === 'true') return closeMenu();
+          closeMenu();
+          menu.replaceChildren(...vals.map((v) => btn(names[v], on === v, () => { closeMenu(); App.setFilter(v); })));
+          const r = b.getBoundingClientRect();
+          menu.style.left = `${Math.max(8, Math.min(r.left, innerWidth - 220))}px`; menu.style.top = `${r.bottom + 8}px`;
+          menu.hidden = false; b.setAttribute('aria-expanded', 'true');
+        };
+        items.push(b);
+      }
+      if (has('baby')) items.push(btn(names.baby, on === 'baby', () => App.setFilter('baby')));
+      const sp = document.createElement('span'); sp.className = 'mk-row-sp';
+      const own = btn('OWNED ONLY', false, () => {
+        owned = !owned;
+        try { localStorage.setItem('good-hide-locked', owned ? '1' : ''); } catch {}
+        App.hideLocked(owned); draw();
+      });
+      own.className = 'mk-owned'; own.setAttribute('aria-pressed', String(owned));
+      row.replaceChildren(...items, sp, own);
+    };
+    document.addEventListener('good:filters', draw);
+    document.addEventListener('click', (e) => { if (!menu.hidden && !menu.contains(e.target)) closeMenu(); });
+    addEventListener('keydown', (e) => { if (e.key === 'Escape') closeMenu(); });
+    addEventListener('resize', closeMenu);
+    panel.addEventListener('scroll', closeMenu, { passive: true });
+    row.addEventListener('scroll', closeMenu, { passive: true });
     draw();
-    for (const sel of sels) new MutationObserver(draw).observe(sel, { childList: true, attributes: true, attributeFilter: ['class'] });
-    panel.querySelector('.fit-cols')?.before(bar);
+    panel.querySelector('.fit-cols')?.before(row);
   }
-
-  // Desktop: GOOD®/BABY® first, above the SHIRT/PANTS tabs (on phones it stays in the sheet).
-  const line = document.getElementById('line'), home = line && line.parentNode, after = line && line.nextSibling;
-  const wide = matchMedia('(min-width: 701px)');
-  const place = () => {
-    const tabs = document.querySelector('.m-tabs');
-    if (!line || !tabs) return;
-    if (wide.matches) { tabs.before(line); line.classList.add('mk-line-top'); }
-    else { home.insertBefore(line, after); line.classList.remove('mk-line-top'); }
-  };
-  place(); wide.addEventListener('change', place);
 })();

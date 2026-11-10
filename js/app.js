@@ -31,16 +31,16 @@
   // LATEST_FIRST is newest collection first; the first one that has pieces in the lists leads.
   const LATEST_FIRST = ['qg', 'crate3'];
   const plain = (k) => (k.name || '').replace(/[®™ⓤ]/g, '').trim();
+  // ALL comes in three sections: NEW (that collection), THE BASICS, then everything else; each A–Z.
+  let lead = null;
+  const groupOf = (k) => (lead && FILTERS[lead](k) ? 0 : isBasic(k) ? 1 : 2);
   function sortLists() {
     const all = [...SHIRTS, ...PANTS, ...ACCS];
-    const lead = LATEST_FIRST.find((f) => FILTERS[f] && all.some(FILTERS[f]));
-    const first = (k) => (lead && FILTERS[lead](k) ? 0 : 1);
-    for (const list of [SHIRTS, PANTS, ACCS]) list.sort((a, b) => first(a) - first(b) || plain(a).localeCompare(plain(b), 'en', { numeric: true }) || rankOf(a) - rankOf(b));
+    lead = LATEST_FIRST.find((f) => FILTERS[f] && all.some(FILTERS[f])) || null;
+    for (const list of [SHIRTS, PANTS, ACCS]) list.sort((a, b) => groupOf(a) - groupOf(b) || plain(a).localeCompare(plain(b), 'en', { numeric: true }) || rankOf(a) - rankOf(b));
   }
   const ALL_PANTS = PANTS.flatMap((k) => k.colors);
   // GOOD® / BABY®: kinds shown under the current line ('both' shows under either).
-  // A filter other than ALL shows every piece in it, GOOD® and BABY® together.
-  const inLine = (k) => state.filter !== 'all' || k.line === 'both' || k.line === state.line;
   // The filter dropdown by the SHIRT and PANTS labels (one value for both lists):
   // ALL, CURRENT SEASON (the latest season's kinds), GOOD® CRATE Nº001 (kinds
   // with a piece from the crate), FALL® (AMONG THE TREES®, season 2) and DEEP END®.
@@ -58,7 +58,11 @@
     crate3: (k) => k.drop === 'crate3',
     fall: (k) => k.season === 2,
     deep: (k) => k.drop === 'deep',
+    baby: (k) => k.line === 'baby',
   };
+  // The names on the filter row (js/maker-ui.js); drops that arrive later add theirs (addDrop).
+  const FILTER_NAMES = { all: 'ALL', basics: 'THE BASICS', fall: 'FALL®', current: 'THIS SEASON', crate3: 'CRATE Nº003', crate2: 'CRATE Nº002', crate1: 'CRATE Nº001', deep: 'DEEP END®', baby: 'BABY®' };
+  const filtersChanged = () => document.dispatchEvent(new CustomEvent('good:filters'));
   sortLists();
   // HIDE LOCKED (the checkbox under the filters): pieces you can't wear yet drop out of the lists.
   const inSeason = (k) => (FILTERS[state.filter] || FILTERS.all)(k) && !(state.hideLocked && k.colors.every(isLocked));
@@ -66,8 +70,11 @@
   const crateOf = (c) => (c.kind && c.kind.drop === 'crate3' ? { name: 'GOOD® CRATE Nº003', href: 'dynamics' }
     : c.kind && c.kind.drop === 'crate2' ? { name: 'GOOD® CRATE Nº002', href: 'inmotion' }
     : CRATE1.has(c.id) || (c.kind && CRATE1.has(c.kind.id)) ? { name: 'GOOD® CRATE Nº001', href: 'crate' } : { name: 'A GOOD® CRATE', href: 'releases' });
-  const LOCK_TAG = '<span class="lock-tag mono">LOCKED</span>';
-  const lineShirts = () => SHIRTS.filter((k) => inLine(k) && inSeason(k));
+  const LOCK_TAG = '<span class="lock-tag" role="img" aria-label="Locked"></span>';   // a small hollow dot
+  // ALL keeps its sections (sortLists); any other filter is plain A–Z.
+  const az = (a, b) => plain(a).localeCompare(plain(b), 'en', { numeric: true });
+  const listed = (list) => { const l = list.filter(inSeason); return state.filter === 'all' ? l : l.sort(az); };
+  const lineShirts = () => listed(SHIRTS);
 
   const state = {
     user: null,          // ImageData of the head source
@@ -276,43 +283,29 @@
   // Cards show the name with the pictured colourway in small type underneath.
   const nameOnly = (o) => `<span class="outfit-name">${o.name}</span>`;
 
-  // Three-up carousel of cards with side buttons (used for shirts and pants).
-  function carousel(listEl, prevBtn, nextBtn) {
-    const update = () => {
-      prevBtn.disabled = listEl.scrollLeft <= 2;
-      nextBtn.disabled = listEl.scrollLeft + listEl.clientWidth >= listEl.scrollWidth - 2;
-    };
-    const step = () => {
-      const card = listEl.querySelector('.outfit');
-      return card ? card.getBoundingClientRect().width + 8 : listEl.clientWidth / 3;
-    };
-    prevBtn.onclick = () => listEl.scrollBy({ left: -step() });
-    nextBtn.onclick = () => listEl.scrollBy({ left: step() });
-    listEl.addEventListener('scroll', update, { passive: true });
-    window.addEventListener('resize', update);
-    // Rebuild the cards without jumping the scroll position; when the selected
-    // card changes (e.g. a shirt picks its pants) and is out of view, scroll to it.
-    let lastPicked = -1;
+  // A grid of cards that reads across and scrolls down (shirts and pants). Rebuilding keeps
+  // the scroll position; a new filter starts at the top (setFilter).
+  function grid(listEl) {
     return (cards) => {
-      const keep = listEl.scrollLeft;
+      const keep = listEl.scrollTop;
       listEl.replaceChildren(...cards);
-      listEl.style.scrollBehavior = 'auto';
-      listEl.scrollLeft = keep;
-      listEl.style.scrollBehavior = '';
-      const picked = cards.findIndex((c) => c.getAttribute('aria-pressed') === 'true');
-      if (picked !== lastPicked && picked >= 0) {
-        const c = cards[picked];
-        const left = c.getBoundingClientRect().left - listEl.getBoundingClientRect().left + listEl.scrollLeft;
-        if (left < listEl.scrollLeft || left + c.offsetWidth > listEl.scrollLeft + listEl.clientWidth) {
-          listEl.scrollTo({ left: Math.min(left, listEl.scrollWidth - listEl.clientWidth) });
-        }
-      }
-      lastPicked = picked;
-      update();
+      listEl.scrollTop = keep;
     };
   }
-  const fillShirts = carousel($('outfits'), $('outfitPrev'), $('outfitNext'));
-  const fillPants = carousel($('pants'), $('pantsPrev'), $('pantsNext'));
+  const fillShirts = grid($('outfits'));
+  const fillPants = grid($('pants'));
+  // In ALL, a quiet heading over each section: NEW · Q&G®, THE BASICS, EVERYTHING ELSE.
+  function withHeads(kinds, cards) {
+    if (state.filter !== 'all') return cards;
+    const names = [lead ? `NEW · ${FILTER_NAMES[lead] || ''}` : '', 'THE BASICS', 'EVERYTHING ELSE · A–Z'];
+    const out = []; let at = -1;
+    kinds.forEach((k, i) => {
+      const g = groupOf(k);
+      if (g !== at) { at = g; const h = document.createElement('p'); h.className = 'mk-head mono'; h.textContent = names[g]; out.push(h); }
+      out.push(cards[i]);
+    });
+    return out;
+  }
 
   const NEW_TAG = '<span class="new-tag mono" aria-label="New">NEW</span>';
   function card(selected, inner, onPick) {
@@ -425,27 +418,25 @@
       return shirtThumb(setFor(o)[body], body === 'slim');
     }));
     if (id !== drawId) return; // a newer redraw started
-    fillShirts(shirts.map((k, i) => { const o = k.current, c = cover(k); const el = card(
+    fillShirts(withHeads(shirts, shirts.map((k, i) => { const o = k.current, c = cover(k); const el = card(
       !state.noTop && o.kind === state.outfit.kind,
       c.locked
         ? `${k.colors.every(isLocked) ? LOCK_TAG : ''}${LOCKED_THUMB}${nameOnly(c)}`
         : `${k.isNew ? NEW_TAG : ''}<img class="ghost-thumb" src="${thumbs[i]}" alt="">${nameOnly(c)}`,
       () => selectOutfit(o)
-    ); if (k.colors.every(isLocked)) el.classList.add('is-locked'); if (c.locked) whenSeen(el, () => paintLocked(el, c, false)); return el; }));
+    ); if (k.colors.every(isLocked)) el.classList.add('is-locked'); if (c.locked) whenSeen(el, () => paintLocked(el, c, false)); return el; })));
     drawColors($('shirtColors'), state.outfit, (c) => selectOutfit(c));
     if (state.noTop) $('shirtColors').hidden = true;
     drawPants();
   }
 
-  // Filter dropdowns (by the shirt and pants labels): one value for both lists.
+  // The filter row (js/maker-ui.js): one value for shirts, pants and accessories.
   function setFilter(v) {
     state.filter = FILTERS[v] ? v : 'all';
-    document.querySelectorAll('[data-filter]').forEach((sel) => { sel.value = state.filter; sel.classList.toggle('on', state.filter !== 'all'); });
-    $('outfits').scrollLeft = 0; $('pants').scrollLeft = 0;
-    drawLine();
+    $('outfits').scrollTop = 0; $('pants').scrollTop = 0;
+    filtersChanged();
     drawOutfits();
   }
-  document.querySelectorAll('[data-filter]').forEach((sel) => { sel.onchange = () => setFilter(sel.value); });
 
   // ---------- Shoe cards ----------
   // Shoes are kinds with colourways, like tops and bottoms. Each colour's id is
@@ -507,16 +498,16 @@
   async function drawPants() {
     const id = ++pantsDrawId;
     $('pantsSection').hidden = false;
-    const pants = PANTS.filter(inSeason); // every bottom shows under both lines
+    const pants = listed(PANTS);
     const thumbs = await Promise.all(pants.map((k) => (k.current.locked ? null : pantsThumb(k.current))));
     if (id !== pantsDrawId) return; // a newer redraw started (e.g. the filter changed)
-    fillPants(pants.map(({ current: p }, i) => { const el = card(
+    fillPants(withHeads(pants, pants.map(({ current: p }, i) => { const el = card(
       !state.noBottom && p.kind === state.pants.kind,
       p.locked
         ? `${p.kind.colors.every(isLocked) ? LOCK_TAG : ''}${LOCKED_THUMB}${nameOnly(p)}`
         : `${p.kind.isNew ? NEW_TAG : ''}<img class="pants-thumb" src="${thumbs[i]}" alt="">${nameOnly(p)}`,
       () => pickPants(p)
-    ); if (p.kind.colors.every(isLocked)) el.classList.add('is-locked'); if (p.locked) whenSeen(el, () => paintLocked(el, p, true)); return el; }));
+    ); if (p.kind.colors.every(isLocked)) el.classList.add('is-locked'); if (p.locked) whenSeen(el, () => paintLocked(el, p, true)); return el; })));
     drawColors($('pantsColors'), state.pants, pickPants);
     if (state.noBottom) $('pantsColors').hidden = true;
     // Only the shoes these pants come in; a missing pick shows the first pair.
@@ -687,21 +678,8 @@
     setBody(state.body); // bodies can differ per sleeve; also redraws and renders
   };
 
-  // GOOD® / BABY® toggle: a filter for the shirt cards; it never changes the outfit.
-  // While a filter is on it shows GOOD® and BABY® together, so neither reads as picked;
-  // picking one goes back to ALL under that line.
-  const drawLine = () => $('line').querySelectorAll('button').forEach((b) => b.setAttribute('aria-checked', state.filter === 'all' && b.dataset.line === state.line));
-  drawLine();
-  $('line').onclick = (e) => {
-    const btn = e.target.closest('[data-line]');
-    if (!btn || (btn.dataset.line === state.line && state.filter === 'all')) return;
-    state.line = btn.dataset.line;
-    if (state.filter !== 'all') return setFilter('all');
-    drawLine();
-    // Only the cards change: whatever is on (shirt, pants, shoe) stays on, so a
-    // BABY® top can be worn with pants picked under GOOD® and back again.
-    drawOutfits();
-  };
+  // GOOD® / BABY®: BABY® is now a filter on the row (FILTERS.baby); the old toggle stays hidden.
+  const drawLine = () => {};
 
   function selectOutfit(o) {
     state.fadeNext = true;
@@ -910,7 +888,10 @@
 
   // For js/runway.js: fetch a player's skin and read the current skin.
   window.GoodApp = {
-    hideLocked: (on) => { state.hideLocked = !!on; $('outfits').scrollLeft = 0; $('pants').scrollLeft = 0; drawOutfits(); drawAccessories(); },
+    // The filter row (js/maker-ui.js): names, the one that's on, and the newest collection.
+    filters: () => ({ names: { ...FILTER_NAMES }, on: state.filter, lead }),
+    setFilter: (v) => setFilter(v),
+    hideLocked: (on) => { state.hideLocked = !!on; $('outfits').scrollTop = 0; $('pants').scrollTop = 0; drawOutfits(); drawAccessories(); },
     skinForName,
     current: () => ({ skin: state.user, name: state.userName, isDemo: state.isDemo }),
     // For js/account.js: the look on screen, putting a saved one on, and the home skin.
@@ -1447,10 +1428,9 @@
     SHIRTS.push(...join(SHIRTS, T)); PANTS.push(...join(PANTS, P)); ACCS.push(...join(ACCS, A));
     const ids = new Set([...T, ...P, ...A].flatMap((k) => k.colors.map((c) => c.id)));
     FILTERS[filter] = (k) => k.colors.some((c) => ids.has(c.id));
+    FILTER_NAMES[filter] = label;
     sortLists();
-    document.querySelectorAll('[data-filter]').forEach((sel) => {
-      const o = document.createElement('option'); o.value = filter; o.textContent = label; sel.append(o);
-    });
+    filtersChanged();
     if (A.length) drawAccessories();
     // A link that asks for this drop (e.g. /gud's WEAR IT IN MAKER® → ./?filter=gud).
     if (BOOT_FILTER === filter) { setFilter(filter); return; }
