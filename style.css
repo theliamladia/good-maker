@@ -892,6 +892,7 @@ body.st {
 /* WANDERING®: the valley at dawn */
 .im-banner.wd-banner { color: #f3ead8; background: linear-gradient(90deg, #141838 0%, #3b2a5e 38%, #8a4a6a 66%, #e2672a 100%); }
 .im-banner.dy-banner { color: #fff; background: #131416; }
+.im-banner.qg-banner { color: #fff; background: #000; letter-spacing: 0.24em; }   /* Q&G®: the CRT black */
 .im-banner span { margin-left: 14px; font-weight: 400; text-decoration: underline; text-underline-offset: 4px; text-decoration-thickness: 1px; }
 .im-banner:hover span { text-underline-offset: 7px; }
 .intro .im-banner { opacity: 0; }
@@ -1267,20 +1268,22 @@ body.st {
 .mk-chips button:hover { border-color: var(--good-blue); color: var(--good-blue); }
 .mk-chips button[aria-pressed="true"] { background: var(--ink); border-color: var(--ink); color: #fff; }
 @media (min-width: 701px) { body.m-maker .tag-row .season-select { display: none; } }
-@media (max-width: 700px) { .mk-chips .mk-chip-group { display: none; } .mk-chips { margin: 4px 0 10px; } }   /* phones keep the dropdown; the checkbox stays */
-/* In the house colour: GOOD® BLUE chips in groups (GOOD®, CRATES, COLLABS & DROPS, YOURS) */
-.mk-chips { gap: 10px 18px; align-items: center; }
-.mk-chip-group { display: flex; flex-wrap: wrap; align-items: center; gap: 6px; }
-.mk-chip-label { flex-basis: 100%; margin: 0 0 1px 2px; font: 400 0.6rem var(--font-mono); letter-spacing: 0.2em; color: rgba(0, 0, 255, 0.55); }
-.mk-chips button { border-color: rgba(0, 0, 255, 0.22); color: var(--good-blue); background: #fff; }
-.mk-chips button:hover { border-color: var(--good-blue); background: rgba(0, 0, 255, 0.06); color: var(--good-blue); }
-.mk-chips button[aria-pressed="true"] { background: var(--good-blue); border-color: var(--good-blue); color: #fff; }
-.mk-hide-locked { flex-basis: 100%; display: inline-flex; align-items: center; gap: 8px; margin-top: 2px; cursor: pointer; user-select: none;
+/* The filter bar: SHOW (one grouped dropdown) beside HIDE LOCKED, in GOOD® BLUE */
+.mk-filterbar { display: grid; grid-template-columns: minmax(0, 1fr) auto; align-items: center; gap: 12px 20px; margin: 0 0 22px; }
+.mk-filter { display: flex; align-items: center; gap: 12px; min-width: 0; }
+.mk-filter-l { font: 400 var(--label-size) var(--font-mono); letter-spacing: 0.2em; color: rgba(0, 0, 255, 0.6); }
+.mk-filter select { flex: 1; min-width: 0; max-width: 320px; min-height: 38px; padding: 0 36px 0 14px; border: 1px solid rgba(0, 0, 255, 0.3); border-radius: 999px; cursor: pointer;
+  background: #fff url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6'%3E%3Cpath d='M0 0l5 6 5-6z' fill='%230000ff'/%3E%3C/svg%3E") no-repeat right 14px center;
+  appearance: none; -webkit-appearance: none; color: var(--good-blue); font: 700 var(--label-size) var(--font-mono); letter-spacing: 0.14em; }
+.mk-filter select:hover, .mk-filter select:focus-visible { border-color: var(--good-blue); outline: none; }
+.mk-hide-locked { display: inline-flex; align-items: center; gap: 8px; cursor: pointer; user-select: none; white-space: nowrap;
   font: 400 var(--label-size) var(--font-mono); letter-spacing: 0.14em; color: var(--good-blue); }
 .mk-hide-locked input { appearance: none; -webkit-appearance: none; width: 16px; height: 16px; margin: 0; border: 1.5px solid var(--good-blue); border-radius: 4px; display: grid; place-items: center; cursor: pointer; background: #fff; }
 .mk-hide-locked input:checked { background: var(--good-blue); }
 .mk-hide-locked input:checked::after { content: ''; width: 4px; height: 8px; border: solid #fff; border-width: 0 2px 2px 0; transform: translateY(-1px) rotate(45deg); }
 .mk-hide-locked input:focus-visible { outline: 2px solid var(--good-blue); outline-offset: 2px; }
+/* the old per-list dropdowns stay in the page (the bar drives them) but out of sight */
+.tag-row .season-select { display: none !important; }
 
 /* MINECRAFT STAND: a quiet link under the main actions, not a third big button */
 #mcStand.wardrobe-save { display: block; text-align: center; border: 0; background: none; padding: 8px 0; margin-top: 2px; font-weight: 400; opacity: 0.8; }
@@ -1402,3 +1405,4 @@ body.fall .download-btn:disabled { background: rgba(255, 255, 255, 0.55); }
   .mk-actions > #saveLook > span { display: none; }   /* short screens: the coin note goes; the button stays one line */
   .mk-actions > #saveLook, .mk-actions > .wd-open-desk { min-height: 40px; padding: 8px 6px; }
 }
+@media (min-width: 701px) { body.m-maker .line-toggle.mk-line-top { margin: 0 0 16px; } }

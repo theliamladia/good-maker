@@ -26,47 +26,51 @@
     $('saveLook')?.addEventListener('click', finish);
   }
 
-  // Filter chips (one value for both lists, so a press redraws every row)
-  const draws = [];
-  let hideLocked = false;
-  try { hideLocked = localStorage.getItem('good-hide-locked') === '1'; } catch {}
-  if (hideLocked) setTimeout(() => window.GoodApp?.hideLocked(true), 0);
-  document.querySelectorAll('select[data-filter]').forEach((sel) => {
-    const row = document.createElement('div');
-    row.className = 'mk-chips'; row.setAttribute('role', 'group'); row.setAttribute('aria-label', sel.getAttribute('aria-label') || 'Filter');
-    // In groups, the basics first: GOOD® (all, the basics, FALL®, this season), the crates, the
-    // collaborations and drops, then your own pieces (CORE®, PRIVATE) when you have them.
+  // The filter bar, once, at the top of the pieces: one dropdown in groups (GOOD®, CRATES, COLLABS &
+  // DROPS, YOURS) beside HIDE LOCKED. It drives the shirt and pants filters (one value for both).
+  const sels = [...document.querySelectorAll('select[data-filter]')];
+  const panel = document.querySelector('.panel.right');
+  if (sels.length && panel) {
     const GROUPS = [['GOOD®', ['all', 'basics', 'fall', 'current']], ['CRATES', ['crate3', 'crate2', 'crate1']],
-      ['COLLABS & DROPS', ['deep', 'gud', 'wandering']], ['YOURS', ['core', 'private']]];
-    const short = (t) => t.replace('GOOD® CRATE ', '').replace('CURRENT SEASON', 'THIS SEASON');
+      ['COLLABS & DROPS', ['qg', 'deep', 'gud', 'wandering']], ['YOURS', ['core', 'private']]];
+    const short = (t) => t.replace('GOOD® CRATE ', 'CRATE ').replace('CURRENT SEASON', 'THIS SEASON');
+    const bar = document.createElement('div'); bar.className = 'mk-filterbar';
+    bar.innerHTML = '<label class="mk-filter"><span class="mk-filter-l">SHOW</span><select class="mono" aria-label="Show"></select></label>'
+      + '<label class="mk-hide-locked"><input type="checkbox"><span>HIDE LOCKED</span></label>';
+    const pick = bar.querySelector('select'), box = bar.querySelector('input');
     const draw = () => {
-      const opts = [...sel.options], placed = new Set();
-      const button = (o) => {
-        placed.add(o);
-        const b = document.createElement('button');
-        b.type = 'button'; b.textContent = short(o.textContent); b.setAttribute('aria-pressed', String(o.value === sel.value));
-        b.onclick = () => { sel.value = o.value; sel.dispatchEvent(new Event('change')); draws.forEach((d) => d()); };
-        return b;
-      };
+      const opts = [...sels[0].options], placed = new Set();
       const groups = GROUPS.map(([label, vals]) => {
         const own = vals.map((v) => opts.find((o) => o.value === v)).filter(Boolean);
         if (!own.length) return null;
-        const g = document.createElement('div'); g.className = 'mk-chip-group'; g.setAttribute('role', 'group'); g.setAttribute('aria-label', label);
-        const l = document.createElement('span'); l.className = 'mk-chip-label'; l.textContent = label;
-        g.append(l, ...own.map(button));
+        const g = document.createElement('optgroup'); g.label = label;
+        for (const o of own) { placed.add(o); g.append(new Option(short(o.textContent), o.value)); }
         return g;
       }).filter(Boolean);
       const rest = opts.filter((o) => !placed.has(o));   // anything new lands with the drops
-      if (rest.length) (groups.find((g) => g.getAttribute('aria-label') === 'COLLABS & DROPS') || groups[groups.length - 1]).append(...rest.map(button));
-      // HIDE LOCKED: a checkbox, one state for every list (remembered on this device)
-      const lab = document.createElement('label'); lab.className = 'mk-hide-locked';
-      lab.innerHTML = '<input type="checkbox"><span>HIDE LOCKED</span>';
-      const box = lab.querySelector('input'); box.checked = hideLocked;
-      box.onchange = () => { hideLocked = box.checked; try { localStorage.setItem('good-hide-locked', hideLocked ? '1' : ''); } catch {} window.GoodApp?.hideLocked(hideLocked); draws.forEach((d) => d()); };
-      row.replaceChildren(...groups, lab);
+      const drops = groups.find((g) => g.label === 'COLLABS & DROPS') || groups[groups.length - 1];
+      for (const o of rest) drops.append(new Option(short(o.textContent), o.value));
+      pick.replaceChildren(...groups); pick.value = sels[0].value;
     };
-    draws.push(draw); draw();
-    new MutationObserver(draw).observe(sel, { childList: true, attributes: true, attributeFilter: ['class'] });
-    sel.closest('.section-tag').after(row);
-  });
+    pick.onchange = () => { sels[0].value = pick.value; sels[0].dispatchEvent(new Event('change')); };
+    let hideLocked = false;
+    try { hideLocked = localStorage.getItem('good-hide-locked') === '1'; } catch {}
+    box.checked = hideLocked;
+    if (hideLocked) setTimeout(() => window.GoodApp?.hideLocked(true), 0);
+    box.onchange = () => { try { localStorage.setItem('good-hide-locked', box.checked ? '1' : ''); } catch {} window.GoodApp?.hideLocked(box.checked); };
+    draw();
+    for (const sel of sels) new MutationObserver(draw).observe(sel, { childList: true, attributes: true, attributeFilter: ['class'] });
+    panel.querySelector('.fit-cols')?.before(bar);
+  }
+
+  // Desktop: GOOD®/BABY® first, above the SHIRT/PANTS tabs (on phones it stays in the sheet).
+  const line = document.getElementById('line'), home = line && line.parentNode, after = line && line.nextSibling;
+  const wide = matchMedia('(min-width: 701px)');
+  const place = () => {
+    const tabs = document.querySelector('.m-tabs');
+    if (!line || !tabs) return;
+    if (wide.matches) { tabs.before(line); line.classList.add('mk-line-top'); }
+    else { home.insertBefore(line, after); line.classList.remove('mk-line-top'); }
+  };
+  place(); wide.addEventListener('change', place);
 })();

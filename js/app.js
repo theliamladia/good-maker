@@ -1564,7 +1564,7 @@
   }
 
   // Drops (GUD™, WANDERING®): released pieces come from the server (sealed until the drop; api/_drop.js).
-  for (const [q, filter, label] of [['gud=1', 'gud', 'GUD™'], ['drop=wandering', 'wandering', 'WANDERING®']]) {
+  for (const [q, filter, label] of [['gud=1', 'gud', 'GUD™'], ['drop=wandering', 'wandering', 'WANDERING®'], ['drop=qg', 'qg', 'Q&G®']]) {
     fetch(`api/outfit?${q}`, { cache: 'no-store' }).then((r) => (r.ok ? r.json() : null)).then(async (cat) => {
       if (!cat) return;
       await bootDone; addDrop(cat, { filter, label });

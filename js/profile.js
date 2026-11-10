@@ -22,7 +22,7 @@
     Promise.all(['api/crate', 'api/crate?crate=2', 'api/crate?crate=3'].map((u) => fetch(u).then((r) => r.json()).catch(() => ({ items: [] })))).then((cs) => ({ items: cs.flatMap((c) => c.items || []) })),   // both crates' pieces
     meOnce(),
     // The released drops' pieces (GUD™, WANDERING®) from the server, so fits with them draw.
-    Promise.all(['gud=1', 'drop=wandering'].map((q) => fetch(`api/outfit?${q}`, { cache: 'no-store' }).then((r) => (r.ok ? r.json() : null)).catch(() => null))),
+    Promise.all(['gud=1', 'drop=wandering', 'drop=qg'].map((q) => fetch(`api/outfit?${q}`, { cache: 'no-store' }).then((r) => (r.ok ? r.json() : null)).catch(() => null))),
   ]).then(async ([p, c, m, drops]) => {
     if (window.GoodCompose) for (const cat of drops) if (cat) GoodCompose.addPrivate(cat);
     if (p && p.pieces && window.GoodCompose) GoodCompose.addPrivate(p.pieces);   // private pieces in these fits: to see, not to wear
