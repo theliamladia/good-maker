@@ -27,10 +27,20 @@
   // server (GUD™, WANDERING®) and your own pieces (CORE®, PRIVATE) are added after these.
   const isBasic = (k) => (k.season || 1) === 1 && !k.drop && k.colors.some((c) => !c.locked);
   const rankOf = (k) => (isBasic(k) ? 0 : k.season === 2 && !k.drop ? 1 : k.drop === 'crate3' ? 2 : k.drop === 'crate2' ? 3 : !k.drop ? 4 : 5);
-  for (const list of [SHIRTS, PANTS]) list.sort((a, b) => rankOf(a) - rankOf(b));
+  // ALL: the latest collection first, then everything else A–Z (by name, ignoring ® ™ marks).
+  // LATEST_FIRST is newest collection first; the first one that has pieces in the lists leads.
+  const LATEST_FIRST = ['qg', 'crate3'];
+  const plain = (k) => (k.name || '').replace(/[®™ⓤ]/g, '').trim();
+  function sortLists() {
+    const all = [...SHIRTS, ...PANTS, ...ACCS];
+    const lead = LATEST_FIRST.find((f) => FILTERS[f] && all.some(FILTERS[f]));
+    const first = (k) => (lead && FILTERS[lead](k) ? 0 : 1);
+    for (const list of [SHIRTS, PANTS, ACCS]) list.sort((a, b) => first(a) - first(b) || plain(a).localeCompare(plain(b), 'en', { numeric: true }) || rankOf(a) - rankOf(b));
+  }
   const ALL_PANTS = PANTS.flatMap((k) => k.colors);
   // GOOD® / BABY®: kinds shown under the current line ('both' shows under either).
-  const inLine = (k) => k.line === 'both' || k.line === state.line;
+  // A filter other than ALL shows every piece in it, GOOD® and BABY® together.
+  const inLine = (k) => state.filter !== 'all' || k.line === 'both' || k.line === state.line;
   // The filter dropdown by the SHIRT and PANTS labels (one value for both lists):
   // ALL, CURRENT SEASON (the latest season's kinds), GOOD® CRATE Nº001 (kinds
   // with a piece from the crate), FALL® (AMONG THE TREES®, season 2) and DEEP END®.
@@ -49,6 +59,7 @@
     fall: (k) => k.season === 2,
     deep: (k) => k.drop === 'deep',
   };
+  sortLists();
   // HIDE LOCKED (the checkbox under the filters): pieces you can't wear yet drop out of the lists.
   const inSeason = (k) => (FILTERS[state.filter] || FILTERS.all)(k) && !(state.hideLocked && k.colors.every(isLocked));
   // Where a locked piece comes from, for the LOCKED note under the colours and on DOWNLOAD.
@@ -62,7 +73,7 @@
     user: null,          // ImageData of the head source
     isDemo: true,
     line: 'good',        // GOOD® / BABY® toggle: which kinds are shown
-    outfit: SHIRTS[0].current,
+    outfit: (SHIRTS.find((k) => k.id === window.OUTFITS[0].id) || SHIRTS[0]).current,   // the house default, not the A–Z first
     body: 'classic',     // 'classic' | 'slim'
     sleeve: 'short',     // 'short' | 'long'
     hood: 'up',          // 'up' | 'down', for tops that come both ways (hoodDown)
@@ -431,6 +442,7 @@
     state.filter = FILTERS[v] ? v : 'all';
     document.querySelectorAll('[data-filter]').forEach((sel) => { sel.value = state.filter; sel.classList.toggle('on', state.filter !== 'all'); });
     $('outfits').scrollLeft = 0; $('pants').scrollLeft = 0;
+    drawLine();
     drawOutfits();
   }
   document.querySelectorAll('[data-filter]').forEach((sel) => { sel.onchange = () => setFilter(sel.value); });
@@ -676,12 +688,15 @@
   };
 
   // GOOD® / BABY® toggle: a filter for the shirt cards; it never changes the outfit.
-  const drawLine = () => $('line').querySelectorAll('button').forEach((b) => b.setAttribute('aria-checked', b.dataset.line === state.line));
+  // While a filter is on it shows GOOD® and BABY® together, so neither reads as picked;
+  // picking one goes back to ALL under that line.
+  const drawLine = () => $('line').querySelectorAll('button').forEach((b) => b.setAttribute('aria-checked', state.filter === 'all' && b.dataset.line === state.line));
   drawLine();
   $('line').onclick = (e) => {
     const btn = e.target.closest('[data-line]');
-    if (!btn || btn.dataset.line === state.line) return;
+    if (!btn || (btn.dataset.line === state.line && state.filter === 'all')) return;
     state.line = btn.dataset.line;
+    if (state.filter !== 'all') return setFilter('all');
     drawLine();
     // Only the cards change: whatever is on (shirt, pants, shoe) stays on, so a
     // BABY® top can be worn with pants picked under GOOD® and back again.
@@ -1432,6 +1447,7 @@
     SHIRTS.push(...join(SHIRTS, T)); PANTS.push(...join(PANTS, P)); ACCS.push(...join(ACCS, A));
     const ids = new Set([...T, ...P, ...A].flatMap((k) => k.colors.map((c) => c.id)));
     FILTERS[filter] = (k) => k.colors.some((c) => ids.has(c.id));
+    sortLists();
     document.querySelectorAll('[data-filter]').forEach((sel) => {
       const o = document.createElement('option'); o.value = filter; o.textContent = label; sel.append(o);
     });
