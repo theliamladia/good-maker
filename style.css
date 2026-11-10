@@ -1267,7 +1267,20 @@ body.st {
 .mk-chips button:hover { border-color: var(--good-blue); color: var(--good-blue); }
 .mk-chips button[aria-pressed="true"] { background: var(--ink); border-color: var(--ink); color: #fff; }
 @media (min-width: 701px) { body.m-maker .tag-row .season-select { display: none; } }
-@media (max-width: 700px) { .mk-chips { display: none; } }
+@media (max-width: 700px) { .mk-chips .mk-chip-group { display: none; } .mk-chips { margin: 4px 0 10px; } }   /* phones keep the dropdown; the checkbox stays */
+/* In the house colour: GOOD® BLUE chips in groups (GOOD®, CRATES, COLLABS & DROPS, YOURS) */
+.mk-chips { gap: 10px 18px; align-items: center; }
+.mk-chip-group { display: flex; flex-wrap: wrap; align-items: center; gap: 6px; }
+.mk-chip-label { flex-basis: 100%; margin: 0 0 1px 2px; font: 400 0.6rem var(--font-mono); letter-spacing: 0.2em; color: rgba(0, 0, 255, 0.55); }
+.mk-chips button { border-color: rgba(0, 0, 255, 0.22); color: var(--good-blue); background: #fff; }
+.mk-chips button:hover { border-color: var(--good-blue); background: rgba(0, 0, 255, 0.06); color: var(--good-blue); }
+.mk-chips button[aria-pressed="true"] { background: var(--good-blue); border-color: var(--good-blue); color: #fff; }
+.mk-hide-locked { flex-basis: 100%; display: inline-flex; align-items: center; gap: 8px; margin-top: 2px; cursor: pointer; user-select: none;
+  font: 400 var(--label-size) var(--font-mono); letter-spacing: 0.14em; color: var(--good-blue); }
+.mk-hide-locked input { appearance: none; -webkit-appearance: none; width: 16px; height: 16px; margin: 0; border: 1.5px solid var(--good-blue); border-radius: 4px; display: grid; place-items: center; cursor: pointer; background: #fff; }
+.mk-hide-locked input:checked { background: var(--good-blue); }
+.mk-hide-locked input:checked::after { content: ''; width: 4px; height: 8px; border: solid #fff; border-width: 0 2px 2px 0; transform: translateY(-1px) rotate(45deg); }
+.mk-hide-locked input:focus-visible { outline: 2px solid var(--good-blue); outline-offset: 2px; }
 
 /* MINECRAFT STAND: a quiet link under the main actions, not a third big button */
 #mcStand.wardrobe-save { display: block; text-align: center; border: 0; background: none; padding: 8px 0; margin-top: 2px; font-weight: 400; opacity: 0.8; }

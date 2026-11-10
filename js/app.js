@@ -22,6 +22,12 @@
   const PANTS = catalogue(window.PANTS);
   // ACCESSORIES: worn over any top and bottom (window.ACCESSORIES; locked ones preview until owned).
   const ACCS = catalogue(window.ACCESSORIES || []);
+  // The basics first, then everything else: the GOOD® essentials (season 1, nothing to unlock),
+  // FALL® (AMONG THE TREES®), the crates newest first, then DEEP END®. Drops that arrive from the
+  // server (GUD™, WANDERING®) and your own pieces (CORE®, PRIVATE) are added after these.
+  const isBasic = (k) => (k.season || 1) === 1 && !k.drop && k.colors.some((c) => !c.locked);
+  const rankOf = (k) => (isBasic(k) ? 0 : k.season === 2 && !k.drop ? 1 : k.drop === 'crate3' ? 2 : k.drop === 'crate2' ? 3 : !k.drop ? 4 : 5);
+  for (const list of [SHIRTS, PANTS]) list.sort((a, b) => rankOf(a) - rankOf(b));
   const ALL_PANTS = PANTS.flatMap((k) => k.colors);
   // GOOD® / BABY®: kinds shown under the current line ('both' shows under either).
   const inLine = (k) => k.line === 'both' || k.line === state.line;
@@ -36,13 +42,15 @@
   const FILTERS = {
     all: () => true,
     current: (k) => k.season === LATEST,
+    basics: isBasic,
     crate1: (k) => CRATE1.has(k.id) || k.colors.some((c) => CRATE1.has(c.id)),
     crate2: (k) => k.drop === 'crate2',
     crate3: (k) => k.drop === 'crate3',
     fall: (k) => k.season === 2,
     deep: (k) => k.drop === 'deep',
   };
-  const inSeason = (k) => (FILTERS[state.filter] || FILTERS.all)(k);
+  // HIDE LOCKED (the checkbox under the filters): pieces you can't wear yet drop out of the lists.
+  const inSeason = (k) => (FILTERS[state.filter] || FILTERS.all)(k) && !(state.hideLocked && k.colors.every(isLocked));
   // Where a locked piece comes from, for the LOCKED note under the colours and on DOWNLOAD.
   const crateOf = (c) => (c.kind && c.kind.drop === 'crate3' ? { name: 'GOOD® CRATE Nº003', href: 'dynamics' }
     : c.kind && c.kind.drop === 'crate2' ? { name: 'GOOD® CRATE Nº002', href: 'inmotion' }
@@ -60,6 +68,7 @@
     hood: 'up',          // 'up' | 'down', for tops that come both ways (hoodDown)
     pants: ALL_PANTS.find((p) => p.id === SHIRTS[0].current.pants) || PANTS[0].current, // the default top's pairing
     filter: 'all',       // the filter dropdown on the shirt and pants lists (FILTERS)
+    hideLocked: false,   // HIDE LOCKED: leave out pieces you can't wear yet
     pantsPicked: false,  // once the user picks pants, shirts stop changing them
     noTop: false,        // the top was taken off (equipped squares by the model)
     noBottom: false,     // the bottom (pants) was taken off
@@ -527,7 +536,7 @@
     if (!box) return;
     const list = box.querySelector('.acc-list');
     const none = card(!state.acc, '<span class="acc-none" aria-hidden="true">∅</span><span class="outfit-name">NONE</span>', () => { state.acc = null; drawAccessories(); render(); });
-    const cards = ACCS.flatMap((k) => k.colors.map((c) => {
+    const cards = ACCS.flatMap((k) => k.colors.filter((c) => !(state.hideLocked && isLocked(c))).map((c) => {
       const el = card(state.acc === c, `${isLocked(c) ? LOCK_TAG : ''}${LOCKED_THUMB}<span class="outfit-name">${k.name} ${c.color}</span>`, () => { state.acc = c; drawAccessories(); render(); });
       if (isLocked(c)) el.classList.add('is-locked');
       whenSeen(el, () => accThumb(c).then((src) => {
@@ -886,6 +895,7 @@
 
   // For js/runway.js: fetch a player's skin and read the current skin.
   window.GoodApp = {
+    hideLocked: (on) => { state.hideLocked = !!on; $('outfits').scrollLeft = 0; $('pants').scrollLeft = 0; drawOutfits(); drawAccessories(); },
     skinForName,
     current: () => ({ skin: state.user, name: state.userName, isDemo: state.isDemo }),
     // For js/account.js: the look on screen, putting a saved one on, and the home skin.
