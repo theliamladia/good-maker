@@ -109,7 +109,7 @@
   $('pieces').replaceChildren(...PIECES.map(([name, cws], i) => {
     const tr = document.createElement('tr');
     tr.innerHTML = `<td>${String(i + 1).padStart(2, '0')}</td><td></td><td>${cws.map((c) => `<span class="cw">${dots(c)}${c}</span>`).join('')}</td>`;
-    tr.children[1].textContent = name;
+    const n = document.createElement('span'); n.textContent = name; tr.children[1].append(n);   // the pixel filter goes on the span (Safari skips it on a cell)
     return tr;
   }));
 
