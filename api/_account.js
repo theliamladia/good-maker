@@ -67,7 +67,8 @@ async function unlocksFor(user) {
   const { ITEMS, ITEMS2, ITEMS3 } = require('./_crate');
   const owned = (await redis('SMEMBERS', `user:${user.uid}:owned`)) || [];
   const fromCrate = owned.flatMap((id) => (ITEMS[id] || ITEMS2[id] || ITEMS3[id] || {}).unlock).filter(Boolean);   // a chase set unlocks a list
-  return [...new Set([...(UNLOCKS[sha(String(user.email).toLowerCase())] || []), ...fromCrate])];
+  const house = owned.filter((id) => id.startsWith('hse-'));   // HOUSE® one-of-ones (api/_house.js)
+  return [...new Set([...(UNLOCKS[sha(String(user.email).toLowerCase())] || []), ...fromCrate, ...house])];
 }
 
 // Profile URL from a GOOD® name: LEEEEEMS -> leeeeems, BIG G. -> big-g

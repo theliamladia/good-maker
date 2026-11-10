@@ -42,6 +42,8 @@
       extrasLoaded = true;
       const qs = ['gud=1', 'drop=wandering', 'drop=qg'].concat(me.owner || me.private ? ['private=1'] : []);
       for (const q of qs) { const cat = await fetch(`api/outfit?${q}`, { cache: 'no-store' }).then((r) => (r.ok ? r.json() : null)).catch(() => null); if (cat) GoodCompose.addPrivate(cat); }
+      const house = await fetch('api/crate?house=mine', { cache: 'no-store' }).then((r) => (r.ok ? r.json() : null)).catch(() => null);   // HOUSE® pieces you own
+      if (house) GoodCompose.addPrivate(house);
     }
     let skin;
     try { skin = await GoodCompose.load(me.hasSkin ? `api/me?skin=1&t=${Date.now()}` : DEMO); } catch { skin = await GoodCompose.load(DEMO); }

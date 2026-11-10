@@ -7,6 +7,7 @@ const { redis, configured } = require('./_redis');
 const ACH = require('./_achievements');
 const { isOwner, tagsOf } = require('./_account');
 const { forLooks } = require('./_private');
+const HOUSE = require('./_house');
 
 module.exports = async function handler(req, res) {
   res.setHeader('Cache-Control', 'no-store');
@@ -27,6 +28,8 @@ module.exports = async function handler(req, res) {
     const inventory = ((await redis('LRANGE', `user:${uid}:inv`, 0, -1)) || []).map((r) => { const { item, serial, at } = JSON.parse(r); return { item, serial, at }; });
     const wardrobe = ((await redis('LRANGE', `user:${uid}:wardrobe`, 0, 59)) || []).map((r) => { const { id, look, title } = JSON.parse(r); return { id, look, title }; });
     const pieces = forLooks(wardrobe.map((w) => w.look));   // private pieces in these fits: shown, never wearable
+    const house = HOUSE.forLooks(wardrobe.map((w) => w.look));   // and HOUSE® one-of-ones
+    pieces.tops = [...(pieces.tops || []), ...house.tops]; pieces.pants = [...(pieces.pants || []), ...house.pants];
     const hasSkin = !!(await redis('EXISTS', `user:${uid}:skin`));
     res.status(200).json({ name: user.name, admin: isOwner(user), tags: tagsOf(user.name), coins: user.coins || 0, since: (user.created || '').slice(0, 10), achievements, inventory, wardrobe, pieces, hasSkin });
   } catch {

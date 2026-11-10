@@ -20,6 +20,7 @@ const ACH = require('./_achievements');
 const { applySeeds } = require('./_seeds');
 const { privateIds } = require('./_private');
 const { dropIds } = require('./_drop');
+const HOUSE = require('./_house');
 
 const privateWho = async (user) => (isOwner(user) ? 'owner' : (await seesPrivate(user)) ? 'guest' : null);
 const COINS_PER_SAVE = 10;
@@ -40,14 +41,15 @@ function cleanLook(L, unlocks = [], who = null) {   // who: 'owner' | 'guest' (p
   const priv = who ? privateIds(who) : null;   // the private pieces (api/_private.js), for the owner and guests
   const gud = dropIds();                       // GUD™, WANDERING®…, once they're live (api/_drop.js)
   const owns = (id) => LOCKED.has(id) && (unlocks.includes(id) || unlocks.includes(LOCKED.get(id)));
-  if (L.top) { if (!TOPS.has(String(L.top)) && !owns(String(L.top)) && !(priv && priv.tops.has(String(L.top))) && !gud.tops.has(String(L.top))) return null; out.top = String(L.top); }
+  const house = (id) => id.startsWith('hse-') && unlocks.includes(id) && HOUSE.byId(id);   // HOUSE® pieces you own
+  if (L.top) { if (!TOPS.has(String(L.top)) && !owns(String(L.top)) && !(priv && priv.tops.has(String(L.top))) && !gud.tops.has(String(L.top)) && !house(String(L.top))) return null; out.top = String(L.top); }
   if (L.bottom) {
-    const b = String(L.bottom), mine = (priv && priv.bottoms.has(b)) || gud.bottoms.has(b);
+    const b = String(L.bottom), mine = (priv && priv.bottoms.has(b)) || gud.bottoms.has(b) || house(b);
     if (!mine && (!BOTTOMS.has(b) || (LOCKED.has(b) && !owns(b)))) return null;
     out.bottom = b;
   }
   if (!out.top && !out.bottom) return null;
-  if (out.bottom && (BOTTOMS.get(out.bottom) || gud.bottoms.get(out.bottom) || (priv && priv.bottoms.get(out.bottom)) || []).includes(L.shoe)) out.shoe = L.shoe;
+  if (out.bottom && (BOTTOMS.get(out.bottom) || gud.bottoms.get(out.bottom) || (priv && priv.bottoms.get(out.bottom)) || HOUSE.shoesOf(out.bottom) || []).includes(L.shoe)) out.shoe = L.shoe;
   if (L.feet === 'bare') out.feet = 'bare';
   if (['short', 'long'].includes(L.sleeve)) out.sleeve = L.sleeve;
   if (L.hood === 'down') out.hood = 'down';

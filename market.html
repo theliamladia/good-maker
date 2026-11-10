@@ -29,7 +29,7 @@
   <link rel="stylesheet" href="good.css?v=3">
   <link rel="stylesheet" href="style.css?v=14">
   <link rel="stylesheet" href="collab.css?v=2">
-  <link rel="stylesheet" href="market.css?v=4">
+  <link rel="stylesheet" href="market.css?v=5">
 </head>
 <body class="co-page mk-page">
 
@@ -56,6 +56,13 @@
       <p class="mk-wallet mono" id="wallet" aria-live="polite">&nbsp;</p>
       <button type="button" class="mk-btn mono" id="tradesBtn" hidden>MY TRADES</button>
     </div>
+  </section>
+
+  <!-- HOUSE®: one-of-one pieces sold only here (js/market.js, api/_house.js). Hidden until there's a shelf. -->
+  <section class="co-block hs" aria-labelledby="houseTitle" id="house" hidden>
+    <header class="co-head"><p class="co-tag mono">GOOD® · HOUSE®</p><h2 id="houseTitle">One of one</h2></header>
+    <p class="hs-lede">Pieces you know, in colours MAKER® never gets. One of each, sold only here. When one goes, another takes its place.</p>
+    <div class="hs-grid" id="houseGrid"></div>
   </section>
 
   <div class="mk-tape mono" aria-label="Latest trades"><div class="mk-tape-run" id="tape"></div></div>
@@ -131,7 +138,7 @@
 <script src="js/colors.js?v=3"></script>
 <script src="js/gooditems.js?v=5"></script>
 <script src="js/heads.js"></script>
-<script src="js/market.js?v=5"></script>
+<script src="js/market.js?v=6"></script>
 <script src="js/nav.js?v=2"></script>
 </body>
 </html>

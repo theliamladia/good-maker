@@ -244,7 +244,45 @@
     }));
   }
 
-  function drawAll() { drawWallet(); drawStats(); drawListings(); drawDoubles(); drawSales(); drawSold(); drawTrades(); }
+  // HOUSE®: four one-of-one pieces sold by GOOD® (api/_house.js). Buying one puts another in its
+  // place, so the shelf is redrawn from what the server sends back.
+  let house = [];
+  function drawHouse() {
+    const sec = $('house');
+    sec.hidden = !house.length;
+    $('houseGrid').replaceChildren(...house.map((it) => {
+      const f = document.createElement('figure'); f.className = 'hs-piece';
+      f.innerHTML = `<div class="hs-stage"><canvas${it.bottom ? ' class="hs-bottom"' : ''} aria-hidden="true"></canvas></div>
+        <div class="hs-dots">${(it.hex || []).map((h) => `<i style="background:${h}"></i>`).join('')}</div>
+        <p class="hs-name"></p><p class="hs-cw mono"></p>
+        <div class="hs-foot mono"><b>${coin}${it.price}</b><span>1 OF 1</span></div>`;
+      f.querySelector('.hs-name').textContent = it.name; f.querySelector('.hs-cw').textContent = it.color;
+      window.GoodItems?.draw(it, f.querySelector('canvas')).catch(() => {});
+      const b = document.createElement('button'); b.type = 'button'; b.className = 'hs-buy mono'; b.textContent = 'BUY';
+      if (!me) { b.textContent = 'SIGN IN TO BUY'; b.onclick = () => { location.href = 'account'; }; }
+      else {
+        let sure = false, t;
+        b.onclick = async () => {
+          if (!sure) { sure = true; b.innerHTML = `ARE YOU SURE? ${coin}${it.price}`; b.classList.add('mk-sure'); t = setTimeout(() => { sure = false; b.textContent = 'BUY'; b.classList.remove('mk-sure'); }, 4000); return; }
+          clearTimeout(t); b.disabled = true; b.textContent = 'BUYING…';
+          try {
+            const j = await post({ action: 'house', hid: it.id });
+            me.coins = j.coins; items[j.item.id] = j.item; for (const x of j.shelf) items[x.id] = x; house = j.shelf;
+            toast(`IT'S YOURS: ${it.name} ${it.color}, 1 OF 1. NOW IN MY INVENTORY® AND MAKER®.`); await refresh();
+          } catch (e) { if (typeof e.coins === 'number') me.coins = e.coins; toast(ERR[e.code] || 'COULDN’T BUY IT. TRY AGAIN.'); await loadHouse(); }
+        };
+      }
+      f.append(b);
+      return f;
+    }));
+  }
+  async function loadHouse() {
+    const h = await fetch('api/crate?crate=house', { cache: 'no-store' }).then((r) => r.json()).catch(() => ({ shelf: [], items: [] }));
+    for (const it of h.items || []) items[it.id] = it;
+    house = h.shelf || []; drawAll();
+  }
+
+  function drawAll() { drawWallet(); drawStats(); drawListings(); drawDoubles(); drawSales(); drawSold(); drawTrades(); drawHouse(); }
   const take = (m, mk) => { me = m.user; inventory = m.inventory || []; listings = mk.listings || []; sales = mk.sales || []; trades = mk.trades || []; };
 
   async function refresh() {
@@ -275,6 +313,6 @@
     fetch('api/crate?market=1', { cache: 'no-store' }).then((r) => r.json()).catch(() => ({ listings: [], sales: [] })),
   ]).then(([c1, c2, c3, m, mk]) => {
     for (const it of [...(c1.items || []), ...(c2.items || []), ...(c3.items || [])]) items[it.id] = it;
-    take(m, mk); drawAll();
+    take(m, mk); drawAll(); loadHouse();
   });
 })();

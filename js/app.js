@@ -1559,6 +1559,12 @@
     setBody(['classic', 'slim'].includes(L.body) ? L.body : state.body);
   }
 
+  // HOUSE® (MARKET® one-of-ones): the pieces this account owns, to wear and download.
+  fetch('api/crate?house=mine', { cache: 'no-store' }).then((r) => (r.ok ? r.json() : null)).then(async (cat) => {
+    if (!cat || !((cat.tops || []).length || (cat.pants || []).length)) return;
+    await bootDone; addDrop(cat, { filter: 'house', label: 'HOUSE®' });
+  }).catch(() => {});
+
   // Drops (GUD™, WANDERING®): released pieces come from the server (sealed until the drop; api/_drop.js).
   for (const [q, filter, label] of [['gud=1', 'gud', 'GUD™'], ['drop=wandering', 'wandering', 'WANDERING®'], ['drop=qg', 'qg', 'Q&G®']]) {
     fetch(`api/outfit?${q}`, { cache: 'no-store' }).then((r) => (r.ok ? r.json() : null)).then(async (cat) => {

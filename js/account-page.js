@@ -201,7 +201,7 @@
   meOnce().then(async (j) => {
     me = j.user; wardrobe = j.wardrobe || []; inventory = j.inventory || []; achievements = j.achievements || [];
     // The released drops' pieces (GUD™, WANDERING®) from the server, so saved fits with them draw.
-    for (const q of ['gud=1', 'drop=wandering', 'drop=qg']) { const cat = await fetch(`api/outfit?${q}`, { cache: 'no-store' }).then((r) => (r.ok ? r.json() : null)).catch(() => null); if (cat) GoodCompose.addPrivate(cat); }
+    for (const q of ['gud=1', 'drop=wandering', 'drop=qg', 'house']) { const cat = await fetch(q === 'house' ? 'api/crate?house=mine' : `api/outfit?${q}`, { cache: 'no-store' }).then((r) => (r.ok ? r.json() : null)).catch(() => null); if (cat) GoodCompose.addPrivate(cat); }
     // The private pieces (owner and guests): loaded before the wardrobe draws, so fits with them show.
     if (me && (me.owner || me.private)) {
       const cat = await fetch('api/outfit?private=1', { cache: 'no-store' }).then((r) => (r.ok ? r.json() : null)).catch(() => null);
@@ -209,7 +209,7 @@
     }
     render();
     // Both crates' pieces (Nº001 and Nº002), so every pull in MY INVENTORY® has its name.
-    Promise.all(['api/crate', 'api/crate?crate=2', 'api/crate?crate=3'].map((u) => fetch(u).then((r) => r.json()).catch(() => ({ items: [] })))).then((cs) => ({ items: cs.flatMap((c) => c.items || []) })).then((c) => { crateItems = Object.fromEntries((c.items || []).map((i) => [i.id, i])); if (me) { drawInventory(); drawLedger(); drawSuggestions(); } }).catch(() => {});
+    Promise.all(['api/crate', 'api/crate?crate=2', 'api/crate?crate=3', 'api/crate?crate=house'].map((u) => fetch(u).then((r) => r.json()).catch(() => ({ items: [] })))).then((cs) => ({ items: cs.flatMap((c) => c.items || []) })).then((c) => { crateItems = Object.fromEntries((c.items || []).map((i) => [i.id, i])); if (me) { drawInventory(); drawLedger(); drawSuggestions(); } }).catch(() => {});
     if (signin === 'ok' && me) toast(`SIGNED IN AS ${me.name}.`);
     if (signin === 'expired') toast('THAT LINK EXPIRED. ASK FOR A NEW ONE.');
   });

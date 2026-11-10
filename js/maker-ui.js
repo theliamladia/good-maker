@@ -32,7 +32,7 @@
   const panel = document.querySelector('.panel.right');
   const App = window.GoodApp;
   if (panel && App && App.filters) {
-    const MENUS = [['CRATES', ['crate3', 'crate2', 'crate1']], ['DROPS', ['qg', 'fall', 'deep', 'gud', 'wandering']], ['YOURS', ['core', 'private']]];
+    const MENUS = [['CRATES', ['crate3', 'crate2', 'crate1']], ['DROPS', ['qg', 'fall', 'deep', 'gud', 'wandering']], ['YOURS', ['house', 'core', 'private']]];
     const SOLO = ['all', 'basics'];
     const row = document.createElement('nav'); row.className = 'mk-row mono'; row.setAttribute('aria-label', 'Show');
     const menu = document.createElement('div'); menu.className = 'mk-menu mono'; menu.hidden = true; document.body.append(menu);

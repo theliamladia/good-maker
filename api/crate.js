@@ -7,6 +7,9 @@
 //   POST /api/crate { action: 'reset' } -> owner only: clears the owner's own pulls (testing; serials are never reused)
 //   GET  /api/crate?market=1           -> MARKET®: { listings: [{ lid, item, serial, price, seller, at, mine }], sales: [...], trades: [...yours] }
 //   POST /api/crate { action: 'list', entry, price } | { action: 'unlist', lid } | { action: 'buy', lid }
+//   GET  /api/crate?crate=house         -> HOUSE® (api/_house.js): { open, shelf: [4 pieces], items: [every piece shown so far] }
+//   GET  /api/crate?house=mine          -> the HOUSE® pieces you own, as a MAKER® catalogue { tops, pants }
+//   POST /api/crate { action: 'house', hid } -> buy that HOUSE® piece (one of one); another takes its place
 // Signed in only. Opening costs 5 GOOD® COINS; the roll happens here, never on
 // the page. Every roll is serialized per item (GD-001, GD-002, ...) and added to
 // the account's inventory (user:<uid>:inv). A piece you already had refunds 2.
@@ -16,6 +19,7 @@ const { redis, configured, overLimit, parseBody } = require('./_redis');
 const { currentUser, saveUser, isOwner, slugOf } = require('./_account');
 const { ITEMS, ODDS, GOLD_ODDS, PRICE, REFUND, table, ITEMS2, ODDS2, table2, ITEMS3, ODDS3, table3 } = require('./_crate');
 const ACH = require('./_achievements');
+const HOUSE = require('./_house');
 
 // Weighted pick in hundredths of a percent, from a cryptographic RNG.
 function pick(odds) {
@@ -193,6 +197,16 @@ module.exports = async function handler(req, res) {
       res.status(200).json({ listings, sales, trades }); return;
     } catch { res.status(502).json({ error: 'storage' }); return; }
   }
+  // HOUSE®: the shelf and every piece shown so far. Until it ships, only the owner sees it.
+  if (req.method === 'GET' && req.query && (req.query.crate === 'house' || req.query.house)) {
+    try {
+      const me = configured() ? await currentUser(req).catch(() => null) : null;
+      if (req.query.house === 'mine') { res.status(200).json(me ? await HOUSE.wardrobe(me.uid) : { tops: [], pants: [] }); return; }
+      if (!configured() || (!HOUSE.OPEN && !isOwner(me))) { res.status(200).json({ open: false, shelf: [], items: [] }); return; }
+      const shelf = await HOUSE.shelf();
+      res.status(200).json({ open: true, shelf, items: await HOUSE.shown() }); return;
+    } catch { res.status(502).json({ error: 'storage' }); return; }
+  }
   // GOOD® CRATE Nº002 (ART® IN MOTION, /inmotion) and Nº003 (DYNAMICS® I, /dynamics): the pieces, odds and copies pulled.
   const later = req.query && { 2: [ITEMS2, table2], 3: [ITEMS3, table3] }[req.query.crate];
   if (req.method === 'GET' && later) {
@@ -230,6 +244,19 @@ module.exports = async function handler(req, res) {
       for (const f of ['weewy-sowwy', 'en-plein-air']) if ((await redis('GET', `ach:${f}:first`)) === me.uid) await redis('DEL', `ach:${f}:first`);
       for (const a of ['weewy-sowwy', 'im-sowwy', 'scarfin-it-down', 'en-plein-air', 'creatif', 'frequent-flyer']) { await redis('SREM', `user:${me.uid}:ach`, a); await redis('SREM', `ach:${a}`, me.uid); }
       res.status(200).json({ ok: true }); return;
+    }
+    if (action === 'house') {
+      if (!HOUSE.OPEN && !isOwner(me)) { res.status(404).json({ error: 'gone' }); return; }
+      if (await overLimit(req, `market:${me.uid}`, 60)) { res.status(429).json({ error: 'slow_down' }); return; }
+      if (!(await lockUser(me.uid))) { res.status(409).json({ error: 'busy' }); return; }
+      try {
+        const user = JSON.parse((await redis('GET', `user:${me.uid}`)) || 'null');
+        if (!user) { res.status(401).json({ error: 'signed_out' }); return; }
+        const r = await HOUSE.buy(user, String(body.hid || ''), saveUser);
+        if (r.error) { res.status(r.error === 'coins' ? 402 : 409).json(r); return; }
+        await logTrade(user.uid, { type: 'buy', item: r.entry.item, serial: r.entry.serial, price: r.item.price, with: 'GOOD® HOUSE®', balance: r.coins });
+        res.status(200).json({ ok: true, ...r }); return;
+      } finally { await unlockUser(me.uid); }
     }
     if (['list', 'unlist', 'buy'].includes(action)) {
       if (await overLimit(req, `market:${me.uid}`, 60)) { res.status(429).json({ error: 'slow_down' }); return; }
