@@ -16,6 +16,9 @@
   .rule { height: 1px; background: #fff; margin: 120px 0 0; }
   .head { display: flex; justify-content: space-between; align-items: baseline; margin-top: 30px; }
   h2 { margin: 70px 0 0; font: 500 64px/1 var(--sans); letter-spacing: -.03em; }
+  .withchip { display: flex; align-items: center; gap: 30px; }
+  .chip { width: 84px; height: 84px; flex: none; filter: drop-shadow(0 8px 18px rgba(0,0,60,.35)); }
+  .end .chip { width: 64px; height: 64px; }
   .copy { margin: 26px 0 0; max-width: 32em; font: 300 22px/1.6 var(--sans); opacity: .94; }
   .shelf { display: grid; grid-template-columns: repeat(4, 1fr); gap: 60px; margin-top: 90px; }
   .piece .img { height: 300px; display: flex; align-items: flex-end; justify-content: center; }
@@ -68,7 +71,7 @@
 
   <div class="rule"></div>
   <div class="head"><p class="tag">02 · GOOD® CASINO</p><p class="tag">GOOD.LEEMS.ME/CASINO</p></div>
-  <h2>A quiet table after dark.</h2>
+  <h2 class="withchip"><svg class="chip" viewBox="0 0 56 56" aria-hidden="true"><circle cx="28" cy="28" r="27" fill="#fff"/><circle cx="28" cy="28" r="22" fill="none" stroke="#0000ff" stroke-width="6" stroke-dasharray="5.76 5.76"/><circle cx="28" cy="28" r="14" fill="#0000ff"/><path d="M28 19c3 4 8 6 8 10.5 0 2.6-2 4.4-4.3 4.4-1.4 0-2.5-.6-3.1-1.5.3 2 1 3.4 2.2 4.6h-5.6c1.2-1.2 1.9-2.6 2.2-4.6-.6.9-1.7 1.5-3.1 1.5-2.3 0-4.3-1.8-4.3-4.4C20 25 25 23 28 19z" fill="#fff"/></svg>A quiet table after dark.</h2>
   <p class="copy">Bet the GOOD® COINS you earned saving fits, 1 to 100 a hand. Free coins, never real money.</p>
   <div class="games">
     <div class="game">
@@ -85,5 +88,5 @@
     </div>
   </div>
 
-  <div class="end"><b>Spend them well.</b><span>GOOD.LEEMS.ME</span></div>
+  <div class="end"><b>Spend them well.</b><span style="display:flex;align-items:center;gap:22px">GOOD.LEEMS.ME/CASINO <svg class="chip" viewBox="0 0 56 56" aria-hidden="true"><circle cx="28" cy="28" r="27" fill="#fff"/><circle cx="28" cy="28" r="22" fill="none" stroke="#0000ff" stroke-width="6" stroke-dasharray="5.76 5.76"/><circle cx="28" cy="28" r="14" fill="#0000ff"/><path d="M28 19c3 4 8 6 8 10.5 0 2.6-2 4.4-4.3 4.4-1.4 0-2.5-.6-3.1-1.5.3 2 1 3.4 2.2 4.6h-5.6c1.2-1.2 1.9-2.6 2.2-4.6-.6.9-1.7 1.5-3.1 1.5-2.3 0-4.3-1.8-4.3-4.4C20 25 25 23 28 19z" fill="#fff"/></svg></span></div>
 </div></body></html>
