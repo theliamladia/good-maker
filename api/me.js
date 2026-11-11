@@ -9,6 +9,7 @@
 //   POST /api/me { action: 'prefs', prefs }       -> MAKER® settings to start from (fit or none, body, MY SKIN, tone)
 //   POST /api/me { action: 'suggest', text }      -> the SUGGESTION BOX
 //   GET  /api/me?suggestions=1                    -> owner only: every suggestion, newest first
+//   POST /api/me { action: 'notify', drop, on }   -> NOTIFY ME on a RELEASES® UPCOMING drop (api/_notify.js); GET /api/me lists yours as notify
 // Looks are recipes of catalogue ids (like the address bar), never pictures.
 const fs = require('fs');
 const path = require('path');
@@ -21,6 +22,7 @@ const { applySeeds } = require('./_seeds');
 const { privateIds } = require('./_private');
 const { dropIds } = require('./_drop');
 const HOUSE = require('./_house');
+const NOTIFY = require('./_notify');
 
 const privateWho = async (user) => (isOwner(user) ? 'owner' : (await seesPrivate(user)) ? 'guest' : null);
 const COINS_PER_SAVE = 10;
@@ -133,7 +135,7 @@ module.exports = async function handler(req, res) {
       await ACH.touch(user.uid);
       const achievements = await ACH.list(user.uid);
       const profile = await claimProfile(user);
-      res.status(200).json({ user: { name: user.name, coins: user.coins || 0, hasSkin, unlocks: await unlocksFor(user), owner: isOwner(user) || undefined, private: (await seesPrivate(user)) || undefined, profile, prefs: user.prefs || null, daily: await dailyOf(user.uid) }, wardrobe: rows.map((r) => JSON.parse(r)), inventory: inv, achievements });
+      res.status(200).json({ user: { name: user.name, coins: user.coins || 0, hasSkin, unlocks: await unlocksFor(user), owner: isOwner(user) || undefined, private: (await seesPrivate(user)) || undefined, profile, prefs: user.prefs || null, daily: await dailyOf(user.uid), notify: await NOTIFY.mine(user.uid) }, wardrobe: rows.map((r) => JSON.parse(r)), inventory: inv, achievements });
       return;
     }
     if (req.method !== 'POST') { res.status(405).json({ error: 'method' }); return; }
@@ -199,6 +201,11 @@ module.exports = async function handler(req, res) {
       await redis('LTRIM', 'suggestions', 0, 499);
       res.status(200).json({ ok: true }); return;
     }
+    if (body.action === 'notify') {
+      const on = body.on !== false;
+      if (!(await NOTIFY.set(user.uid, body.drop, on))) { res.status(400).json({ error: on ? 'not_upcoming' : 'drop' }); return; }
+      res.status(200).json({ ok: true, drop: String(body.drop), on, notify: await NOTIFY.mine(user.uid) }); return;
+    }
     if (body.action === 'title') {
       // Name a saved fit (shown on the account page and the public profile). Empty clears it.
       const title = String(body.title || '').replace(/[<>]/g, '').replace(/\s+/g, ' ').trim().slice(0, 32).toUpperCase();
@@ -235,6 +242,7 @@ module.exports = async function handler(req, res) {
         try { const sg = JSON.parse(sugg[i]); if (sg.name === user.name) await redis('LSET', 'suggestions', i, JSON.stringify({ ...sg, name: 'DELETED' })); } catch {}
       }
       for (const d of ACH.DEFS) await redis('DEL', `user:${user.uid}:ach:${d.id}`);
+      await NOTIFY.purge(user.uid);   // NOTIFY ME on RELEASES®
       await redis('DEL', `user:${user.uid}`, `user:${user.uid}:skin`, `user:${user.uid}:wardrobe`, `user:${user.uid}:earned`, `user:${user.uid}:inv`, `user:${user.uid}:owned`, `user:${user.uid}:ach`, `user:${user.uid}:trades`, `casino:bj:${user.uid}`, `casino:hl:${user.uid}`, `casino:hist:${user.uid}`, `user:email:${sha(user.email)}`);
       if ((await redis('GET', `profile:${slugOf(user.name)}`)) === user.uid) await redis('DEL', `profile:${slugOf(user.name)}`);
       await redis('SREM', 'users:all', user.uid);

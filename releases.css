@@ -27,7 +27,22 @@
 .rl-go { display: inline-block; margin-top: 26px; padding-bottom: 6px; border-bottom: 1px solid rgba(255, 255, 255, 0.5); font: 700 var(--label-size) var(--font-mono); letter-spacing: 0.18em; }
 .rl-post:hover .rl-go, .rl-post:focus-visible .rl-go { border-bottom-color: #fff; }
 
+/* UPCOMING (js/releases.js, from js/upcoming.js): soonest first, each with NOTIFY ME. No cards:
+   a thin rule over each drop, the date in the small label, one outlined button. */
+.rl-ups { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: clamp(40px, 6vh, 64px) clamp(28px, 4vw, 56px); }
+.rl-up { display: grid; align-content: start; gap: 12px; padding-top: 22px; border-top: var(--rule-soft); }
+.rl-up-label, .rl-up-when { margin: 0; font-size: var(--label-size); letter-spacing: var(--label-track); line-height: 1.6; }
+.rl-up-label { opacity: 0.8; }
+.rl-up-name { margin: 6px 0 0; font-weight: 500; font-size: clamp(1.4rem, 2.4vw, 1.9rem); line-height: 1.1; letter-spacing: -0.03em; }
+.rl-up-btn { justify-self: start; margin-top: 18px; padding: 13px 22px; border: 1px solid #fff; background: none; color: #fff; cursor: pointer;
+  font: 700 var(--label-size) var(--font-mono); letter-spacing: 0.18em; text-decoration: none; transition: background 0.15s, color 0.15s; }
+.rl-up-btn:hover, .rl-up-btn:focus-visible, .rl-up-btn.is-on, .rl-up-btn.is-out { background: #fff; color: var(--good-blue); }
+.rl-up-btn.is-on:hover, .rl-up-btn.is-on:focus-visible { background: none; color: #fff; }
+.rl-up-btn:disabled { opacity: 0.6; cursor: default; }
+
 @media (max-width: 800px) {
+  .rl-ups { grid-template-columns: minmax(0, 1fr); }
+  .rl-up-btn { letter-spacing: 0.12em; }
   .rl-post { grid-template-columns: 1fr; gap: 22px; }
   .rl-crates { grid-template-columns: minmax(0, 1fr); gap: 12px; }
   .rl-crate { padding: 20px 4px; }

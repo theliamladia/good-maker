@@ -27,9 +27,9 @@
   <link rel="icon" href="/favicon-32.png" sizes="32x32" type="image/png">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+JP:wght@900&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+JP:wght@900&family=Inter:wght@300;400;500;600&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="/q.css?v=3">
-  <link rel="stylesheet" href="/return-bar.css?v=2">
+  <link rel="stylesheet" href="/frame.css?v=1">
 </head>
 <body class="qg booting">
 
@@ -41,7 +41,20 @@
 </div>
 <canvas class="qg-card" id="card" aria-hidden="true"></canvas>
 
-<nav class="rb" aria-label="Back to GOOD®"><a href="/">← GOOD®</a><a class="rb-rel" href="/releases">RELEASES®</a></nav>
+<header class="site-header">
+  <a class="wordmark" href="/">GOOD®</a>
+  <nav class="site-nav" aria-label="Main">
+    <a class="nav-link mono" href="/">MAKER®</a>
+    <a class="nav-link mono" href="/releases" aria-current="page">RELEASES®</a>
+    <a class="nav-link mono" href="market">MARKET®</a>
+    <a class="nav-link mono" href="casino">CASINO®</a>
+    <a class="nav-link mono" href="members">MEMBERS®</a>
+    <a class="nav-link nav-sec mono" href="colors">COLORS®</a>
+    <a class="nav-link nav-sec mono" href="study">STUDY®</a>
+    <a class="nav-link nav-sec mono" href="collaborations">COLLABORATIONS®</a>
+    <a class="nav-link nav-acct mono" href="account" data-acct>SIGN IN</a>
+  </nav>
+</header>
 
 <main class="qg-main" id="main">
   <section class="qg-hero">
@@ -73,8 +86,8 @@
 </main>
 
 <footer class="qg-foot">
-  <div class="qg-tape" aria-hidden="true"><span>PREVIEW · NOT FOR RELEASE · Q&amp;G® · ROYALS &amp; GOOD® · </span><span>PREVIEW · NOT FOR RELEASE · Q&amp;G® · ROYALS &amp; GOOD® · </span></div>
-  <p>© 2026 GOOD®. Q&amp;G® is a collaboration between ROYALS and GOOD®.</p>
+  <div class="qg-tape" aria-hidden="true"><span>OUT NOW IN MAKER® · Q&amp;G® · ROYALS &amp; GOOD® · </span><span>OUT NOW IN MAKER® · Q&amp;G® · ROYALS &amp; GOOD® · </span></div>
+  <p>Q&amp;G® is a collaboration between ROYALS and GOOD®.</p>
 </footer>
 
 <!-- Degraded type: #px-l / #px-m sample one pixel per block and grow it (a mosaic), then cut the
@@ -99,5 +112,6 @@
 <div class="crt-vignette" aria-hidden="true"></div>
 
 <script src="/js/q.js?v=9"></script>
+<script src="/js/nav.js?v=4"></script>
 </body>
 </html>
