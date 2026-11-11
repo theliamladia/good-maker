@@ -1,0 +1,45 @@
+/* MEMBERS®: one calm list on GOOD® BLUE, rows between thin rules. No cards.
+   Loaded after account.css; everything here is scoped to .mb-page. */
+.mb-page .mb-main { max-width: var(--max); padding-bottom: var(--space-5); }
+.mb-page .mb-in { padding-top: clamp(72px, 14vh, 160px); }
+.mb-page .mb-lede { font-weight: var(--w-light); line-height: var(--lh-copy); margin-top: 32px; }
+.mb-page .mb-block { margin-top: clamp(80px, 13vh, 140px); border-top: var(--rule); padding-top: 22px; }
+.mb-page .mb-bar { margin-bottom: clamp(36px, 6vh, 56px); }
+
+/* Columns: face · member · coins · achievements · since · arrow */
+.mb-page .mb-cols, .mb-page .mb-row {
+  display: grid; align-items: center; column-gap: clamp(16px, 2.6vw, 36px);
+  grid-template-columns: 48px minmax(0, 1fr) 9.5rem 9.5rem 10rem 1.5rem;
+}
+.mb-page .mb-cols { padding: 0 0 14px; border-bottom: var(--rule); font-size: var(--label-size); letter-spacing: var(--label-track); opacity: 0.7; }
+.mb-page .mb-list { list-style: none; margin: 0; padding: 0; }
+.mb-page .mb-list li { border-bottom: var(--rule-soft); }
+.mb-page .mb-row { min-height: 44px; padding: 22px 0; color: #fff; text-decoration: none; }
+.mb-page .mb-row:focus-visible { outline-offset: 0; }
+
+.mb-page .mb-head { width: 48px; height: 48px; image-rendering: pixelated; box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.45); }
+.mb-page .mb-who { display: flex; align-items: center; flex-wrap: wrap; gap: 8px 14px; min-width: 0; }
+.mb-page .mb-name { font-weight: 500; font-size: clamp(1.05rem, 1.5vw, 1.25rem); letter-spacing: -0.02em; overflow-wrap: anywhere; }
+.mb-page .mb-row:hover .mb-name { text-decoration: underline; text-decoration-thickness: 1px; text-underline-offset: 6px; }
+.mb-page .mb-tags { display: inline-flex; gap: 8px; }
+.mb-page .mb-tag-q { border: var(--rule-soft); padding: 3px 7px; font-size: 0.66rem; letter-spacing: 0.2em; line-height: 1.4; }
+
+.mb-page .mb-stats { display: contents; }
+.mb-page .mb-v { font-family: var(--font-sans); letter-spacing: 0; white-space: nowrap; font-weight: var(--w-copy); font-size: 1rem; font-variant-numeric: tabular-nums; }
+/* The column header names each stat on wide screens; each cell keeps its own label for screen readers and phones. */
+.mb-page .mb-k { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+.mb-page .mb-go { justify-self: end; opacity: 0.45; transition: opacity 0.2s, transform 0.2s; }
+.mb-page .mb-row:hover .mb-go, .mb-page .mb-row:focus-visible .mb-go { opacity: 1; transform: translateX(3px); }
+
+/* Phone: one column. Face and name, then the three labelled stats in a row under them. */
+@media (max-width: 760px) {
+  .mb-page .mb-cols { display: none; }
+  .mb-page .mb-bar { margin-bottom: 8px; }
+  .mb-page .mb-row { grid-template-columns: 44px minmax(0, 1fr) 1.25rem; column-gap: 16px; row-gap: 16px; padding: 22px 0 24px; }
+  .mb-page .mb-head { width: 44px; height: 44px; }
+  .mb-page .mb-stats { display: grid; grid-template-columns: minmax(0, 0.85fr) minmax(0, 1fr) minmax(0, 1.2fr); gap: 8px; grid-column: 2 / 4; grid-row: 2; }
+  .mb-page .mb-stat { display: flex; flex-direction: column; gap: 6px; min-width: 0; }
+  .mb-page .mb-k { position: static; width: auto; height: auto; overflow: visible; clip: auto; white-space: normal; font-size: 0.6rem; letter-spacing: 0.12em; white-space: nowrap; opacity: 0.7; }
+  .mb-page .mb-v { font-size: 0.92rem; }
+  .mb-page .mb-go { grid-column: 3; grid-row: 1; }
+}

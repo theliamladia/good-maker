@@ -28,8 +28,9 @@
   <link rel="stylesheet" href="good.css?v=3">
   <link rel="stylesheet" href="style.css?v=14">
   <link rel="stylesheet" href="account.css?v=4">
+  <link rel="stylesheet" href="profile.css?v=1">
 </head>
-<body class="ac-page">
+<body class="ac-page pf-page">
 
 <header class="site-header">
   <a class="wordmark" href="./">GOOD®</a>
@@ -53,46 +54,51 @@
     <p class="ac-lede">There's no GOOD® profile with that name. Names are set on the <a class="foot-link" href="account">account page</a>.</p>
   </section>
 
-  <section class="ac-in" id="found" hidden>
-    <div class="ac-head">
-      <div class="ac-who">
+  <section class="ac-in pf-in" id="found" hidden>
+    <header class="pf-top">
+      <div class="pf-who">
         <p class="ac-tag mono">GOOD® PROFILE</p>
-        <div class="ac-name-row"><canvas class="ac-avatar" id="head" aria-hidden="true"></canvas><h1 class="ac-title" id="name"></h1></div>
-        <p class="ac-coins"><span class="coin ac-coin" aria-hidden="true"></span><strong id="coins">0</strong> <span class="mono">GOOD® COINS</span></p>
-        <p class="ac-since mono" id="since"></p>
-        <div class="ac-actions"><button type="button" class="ac-link mono" id="share">COPY PROFILE LINK</button></div>
+        <div class="pf-name-row"><canvas class="pf-face" id="head" aria-hidden="true"></canvas><h1 class="ac-title pf-name" id="name"></h1></div>
+        <p class="pf-tags" id="tags" hidden></p>
+        <dl class="pf-stats">
+          <div><dt class="mono">GOOD® COINS</dt><dd id="coins">0</dd></div>
+          <div><dt class="mono">MEMBER SINCE</dt><dd id="since">—</dd></div>
+        </dl>
+        <div class="pf-actions"><button type="button" class="ac-link mono" id="share">COPY PROFILE LINK</button></div>
       </div>
-      <section class="ac-story" id="story" aria-labelledby="storyTitle" hidden>
-        <h2 class="ac-story-t mono" id="storyTitle">COLOR STORY</h2>
-        <div class="ac-story-strip" id="storyStrip" role="list"></div>
+      <section class="pf-story" id="story" aria-labelledby="storyTitle" hidden>
+        <h2 class="pf-label mono" id="storyTitle">THE COLOR STORY®</h2>
+        <div class="ac-story-strip pf-strip" id="storyStrip" role="list"></div>
         <p class="ac-story-read mono" id="storyRead" aria-live="polite">&nbsp;</p>
       </section>
-    </div>
+    </header>
 
-    <section class="ac-block" aria-labelledby="wTitle">
-      <header class="ac-bar"><h2 class="mono" id="wTitle">WARDROBE</h2><span class="mono" id="wCount"></span></header>
-      <p class="ac-lede" id="wEmpty" hidden>Nothing in the wardrobe yet. When they save a fit in <a class="foot-link" href="./">MAKER®</a>, it hangs here.</p>
-      <div class="ac-grid" id="grid"></div>
+    <section class="pf-sec" aria-labelledby="wTitle">
+      <header class="pf-bar"><h2 class="mono" id="wTitle">FITS</h2><span class="mono" id="wCount"></span></header>
+      <p class="pf-empty" id="wEmpty" hidden>No fits yet. When they save a fit in <a class="foot-link" href="./">MAKER®</a>, it hangs here.</p>
+      <div class="pf-fits" id="grid"></div>
+      <button type="button" class="pf-more mono" id="wMore" aria-controls="grid" aria-expanded="false" hidden></button>
     </section>
 
-    <section class="ac-block" aria-labelledby="iTitle">
-      <header class="ac-bar"><h2 class="mono" id="iTitle">INVENTORY®</h2><span class="mono" id="iCount"></span></header>
-      <p class="ac-lede" id="iEmpty" hidden>No pulls yet. Every piece from a <a class="foot-link" href="releases">GOOD® CRATE</a> lands here, serial and all.</p>
-      <div class="ac-grid ac-inv" id="inv"></div>
+    <section class="pf-sec" aria-labelledby="iTitle">
+      <header class="pf-bar"><h2 class="mono" id="iTitle">INVENTORY®</h2><span class="mono" id="iCount"></span></header>
+      <p class="pf-empty" id="iEmpty" hidden>No pulls yet. Every piece from a <a class="foot-link" href="releases">GOOD® CRATE</a> lands here, serial and all.</p>
+      <div class="pf-inv" id="inv"></div>
+      <button type="button" class="pf-more mono" id="iMore" aria-controls="inv" aria-expanded="false" hidden></button>
     </section>
 
-    <section class="ac-block ac-ach" aria-labelledby="aTitle">
-      <header class="ac-bar"><h2 class="mono" id="aTitle">ACHIEVEMENTS</h2><span class="mono" id="aCount"></span></header>
-      <div class="ac-ach-grid" id="ach"></div>
+    <section class="pf-sec pf-ach" aria-labelledby="aTitle">
+      <header class="pf-bar"><h2 class="mono" id="aTitle">ACHIEVEMENTS</h2><span class="mono" id="aCount"></span></header>
+      <div id="ach"></div>
     </section>
 
-    <section class="ac-block" aria-labelledby="cTitle">
-      <header class="ac-bar"><h2 class="mono" id="cTitle">COMMENTS</h2><span class="mono" id="cCount"></span></header>
+    <section class="pf-sec" aria-labelledby="cTitle">
+      <header class="pf-bar"><h2 class="mono" id="cTitle">COMMENTS</h2><span class="mono" id="cCount"></span></header>
       <form class="pf-form" id="cForm" hidden>
-        <textarea id="cText" maxlength="500" rows="3" placeholder="Say something nice." required></textarea>
+        <textarea id="cText" maxlength="500" rows="3" placeholder="Say something nice." required aria-label="Comment"></textarea>
         <button type="submit" class="ac-go mono">POST</button>
       </form>
-      <p class="ac-lede" id="cSignin" hidden><a class="foot-link" href="account">Sign in</a> to leave a comment.</p>
+      <p class="pf-empty" id="cSignin" hidden><a class="foot-link" href="account">Sign in</a> to leave a comment.</p>
       <ol class="pf-comments" id="comments"></ol>
     </section>
   </section>
@@ -109,7 +115,7 @@
 <script src="js/gooditems.js?v=5"></script>
 <script src="js/heads.js"></script>
 <script src="js/ui.js?v=1"></script>
-<script src="js/profile.js?v=9"></script>
+<script src="js/profile.js?v=10"></script>
 <script src="js/nav.js?v=4"></script>
 </body>
 </html>

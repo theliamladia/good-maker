@@ -1,0 +1,104 @@
+/* GOOD® PROFILE (/profiles/<slug>): one calm page on GOOD® BLUE. Header, FITS, INVENTORY®,
+   ACHIEVEMENTS, COMMENTS, each opened by a thin white rule. No cards or panels.
+   Loaded after account.css; everything here is scoped to .pf-page. */
+.pf-page .ac-main { max-width: var(--max); padding-bottom: var(--space-5); }
+.pf-page .pf-in { padding-top: clamp(72px, 14vh, 160px); }
+.pf-page .pf-label, .pf-page .pf-bar h2, .pf-page .pf-bar span { margin: 0; font-size: var(--label-size); letter-spacing: var(--label-track); font-weight: 700; }
+
+/* Header: face and name, two labelled stats, the share link; THE COLOR STORY® to the right */
+.pf-page .pf-top { display: grid; grid-template-columns: minmax(0, 1.25fr) minmax(0, 1fr); gap: clamp(48px, 8vw, 120px); align-items: end; }
+.pf-page .pf-name-row { display: flex; align-items: center; gap: clamp(18px, 2.4vw, 30px); }
+.pf-page .pf-face { flex: 0 0 auto; width: clamp(56px, 6.5vw, 88px); height: clamp(56px, 6.5vw, 88px); image-rendering: pixelated; box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.5); }
+.pf-page .pf-name { font-size: clamp(2.6rem, 6.4vw, 5.2rem); min-width: 0; }
+.pf-page .pf-tags { display: flex; flex-wrap: wrap; gap: 8px; margin: 22px 0 0; }
+.pf-page .pf-tags[hidden] { display: none; }
+.pf-page .pf-tag { display: inline-block; border: var(--rule-soft); padding: 3px 8px; font-size: 0.66rem; letter-spacing: 0.2em; line-height: 1.4; }
+.pf-page .pf-stats { display: flex; flex-wrap: wrap; gap: 20px clamp(40px, 6vw, 80px); margin: clamp(36px, 6vh, 56px) 0 0; }
+.pf-page .pf-stats div { margin: 0; }
+.pf-page .pf-stats dt { font-size: var(--label-size); letter-spacing: var(--label-track); opacity: 0.7; }
+.pf-page .pf-stats dd { margin: 10px 0 0; font-size: clamp(1.4rem, 2.4vw, 1.9rem); font-weight: 500; letter-spacing: -0.03em; line-height: 1; font-variant-numeric: tabular-nums; }
+.pf-page .pf-actions { margin-top: 28px; }
+.pf-page .pf-actions .ac-link { min-height: 44px; }
+.pf-page .pf-story { min-width: 0; }
+.pf-page .pf-story[hidden] { display: none; }
+.pf-page .pf-story .pf-label { margin-bottom: 16px; }
+.pf-page .pf-strip { height: 150px; border: var(--rule-soft); }
+
+/* Sections */
+.pf-page .pf-sec { border-top: var(--rule); margin-top: clamp(96px, 14vh, 160px); padding-top: 22px; }
+.pf-page .pf-bar { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: clamp(44px, 7vh, 72px); }
+.pf-page .pf-empty { font-weight: var(--w-light); line-height: var(--lh-copy); max-width: var(--measure); margin: 0; }
+.pf-page .pf-more {
+  display: block; margin: clamp(48px, 7vh, 72px) auto 0; min-height: 44px; padding: 0 22px;
+  border: var(--rule-soft); background: none; color: #fff; cursor: pointer;
+  font-size: var(--label-size); letter-spacing: var(--label-track); font-weight: 700;
+}
+.pf-page .pf-more:hover { border-color: #fff; }
+.pf-page .pf-more[hidden] { display: none; }
+
+/* FITS: the saved looks, open on the ground, four across (two on a phone) */
+.pf-page .pf-fits { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: clamp(56px, 8vh, 88px) clamp(24px, 4vw, 64px); }
+.pf-page .pf-fits:not(.all) > :nth-child(n+9) { display: none; }
+.pf-page .pf-fit { position: relative; margin: 0; min-width: 0; }
+.pf-page .pf-fit-link { display: flex; flex-direction: column; color: #fff; text-decoration: none; }
+.pf-page .pf-fit-fig { display: grid; place-items: center; aspect-ratio: 3 / 4; margin-bottom: 22px; }
+.pf-page .pf-fit-fig canvas { height: 82%; width: auto; image-rendering: pixelated; transition: transform 0.3s; }
+.pf-page .pf-fit-link:hover .pf-fit-fig canvas { transform: translateY(-4px); }
+.pf-page .pf-fit-name { font-weight: 500; font-size: 1.02rem; letter-spacing: -0.02em; margin-bottom: 4px; }
+.pf-page .pf-fit-name[hidden] { display: none; }
+.pf-page .pf-fit-pieces { font-weight: var(--w-light); font-size: 0.92rem; line-height: 1.4; }
+.pf-page .pf-fit-cw { margin-top: 8px; font-size: 0.66rem; letter-spacing: 0.12em; line-height: 1.6; opacity: 0.75; }
+.pf-page .pf-try { margin-top: 14px; min-height: 24px; font-size: var(--label-size); letter-spacing: 0.18em; opacity: 0.8; }
+.pf-page .pf-fit-link:hover .pf-try, .pf-page .pf-fit-link:focus-visible .pf-try { opacity: 1; text-decoration: underline; text-underline-offset: 6px; }
+.pf-page .pf-rename { position: absolute; top: 0; right: 0; min-height: 32px; padding: 0 8px; border: 0; background: none; color: #fff; font-size: 0.66rem; letter-spacing: 0.16em; text-decoration: underline; text-underline-offset: 4px; cursor: pointer; opacity: 0; transition: opacity 0.15s; }
+.pf-page .pf-fit:hover .pf-rename, .pf-page .pf-rename:focus-visible { opacity: 0.85; }
+@media (hover: none) { .pf-page .pf-rename { opacity: 0.75; } }
+
+/* INVENTORY®: each piece on its own in a soft spotlight, stacks show ×N */
+.pf-page .pf-inv { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: clamp(56px, 8vh, 88px) clamp(24px, 4vw, 64px); }
+.pf-page .pf-inv:not(.all) > :nth-child(n+13) { display: none; }
+.pf-page .pf-piece { margin: 0; min-width: 0; }
+.pf-page .pf-spot { display: grid; place-items: center; aspect-ratio: 1; background: var(--spot); margin-bottom: 18px; }
+.pf-page .pf-piece-cv { height: 46%; width: auto; max-width: 70%; image-rendering: pixelated; }
+.pf-page .pf-cap { display: flex; flex-direction: column; align-items: flex-start; }
+.pf-page .pf-cap-name { font-weight: 500; font-size: 1rem; letter-spacing: -0.02em; }
+.pf-page .pf-cap-cw { display: flex; align-items: center; flex-wrap: wrap; gap: 8px; margin-top: 8px; font-size: 0.66rem; letter-spacing: 0.12em; line-height: 1.5; opacity: 0.85; }
+.pf-page .pf-dots { display: inline-flex; gap: 4px; }
+.pf-page .pf-dot { width: 9px; height: 9px; border-radius: 50%; box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.6); }
+.pf-page .pf-serial { margin-top: 12px; font-size: 0.66rem; letter-spacing: 0.16em; opacity: 0.7; }
+.pf-page .pf-serial[hidden] { display: none; }
+.pf-page .pf-serial-btn { margin-top: 4px; min-height: 36px; padding: 0; border: 0; background: none; color: #fff; cursor: pointer; font-size: 0.66rem; letter-spacing: 0.16em; text-decoration: underline; text-underline-offset: 5px; opacity: 0.9; }
+.pf-page .pf-serials { display: flex; flex-direction: column; gap: 6px; margin-top: 4px; padding-top: 10px; border-top: var(--rule-soft); font-size: 0.66rem; letter-spacing: 0.14em; opacity: 0.85; }
+.pf-page .pf-serials[hidden] { display: none; }
+
+/* ACHIEVEMENTS: the icons sit on the ground (no white tiles); the full card still opens on hover / tap */
+.pf-page .ac-ach-icon { background: radial-gradient(closest-side, rgba(255, 255, 255, 0.9), rgba(255, 255, 255, 0.35) 70%, transparent); box-shadow: none; }
+.pf-page .ac-ach-icon:hover, .pf-page .ac-ach-icon.open { box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.6); }
+.pf-page .ac-ach-row { gap: 20px; }
+
+/* COMMENTS */
+.pf-page .pf-comments { max-width: var(--measure); }
+.pf-page .pf-comments li { padding: 22px 0; border-top: var(--rule-soft); }
+.pf-page .pf-c-who canvas { box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.45); }
+.pf-page .pf-c-at { opacity: 0.7; }
+.pf-page .pf-c-text { font-weight: var(--w-light); }
+.pf-page .pf-c-del { top: 18px; }
+.pf-page .pf-form { max-width: var(--measure); margin-bottom: 36px; }
+
+@media (max-width: 900px) {
+  .pf-page .pf-top { grid-template-columns: 1fr; gap: 56px; }
+  .pf-page .pf-fits, .pf-page .pf-inv { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+}
+@media (max-width: 640px) {
+  .pf-page .pf-fits, .pf-page .pf-inv { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 48px 20px; }
+  .pf-page .pf-strip { height: 90px; }
+  .pf-page .pf-sec { margin-top: 88px; }
+  .pf-page .pf-bar { margin-bottom: 36px; }
+  .pf-page .pf-try { min-height: 44px; display: flex; align-items: center; margin-top: 4px; }
+  .pf-page .pf-serial-btn, .pf-page .pf-rename { min-height: 44px; }
+}
+@media (max-width: 640px) {
+  .pf-page .ac-ach-pager button { width: 44px; height: 44px; }
+  .pf-page .pf-form .ac-go { min-height: 44px; }
+  .pf-page .pf-c-who a { display: inline-flex; align-items: center; min-height: 44px; }
+}
