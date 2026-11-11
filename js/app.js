@@ -913,11 +913,15 @@
     // Pieces that arrive after boot: the owner's own (addPrivate) or a released drop like
     // GUD™ (addDrop). They join the lists with their own filter option.
     addPrivate: (cat) => {
-      // CORE® (drop: 'core', the owner's alone for now) gets its own filter; the rest is PRIVATE.
-      const part = (core) => Object.fromEntries(['tops', 'pants', 'accessories'].map((p) => [p, (cat[p] || []).filter((k) => (k.drop === 'core') === core)]));
-      const core = part(true);
-      if (core.tops.length || core.pants.length || core.accessories.length) addDrop(core, { filter: 'core', label: 'CORE®', extra: true });
-      addDrop(part(false), { filter: 'private', label: 'PRIVATE', extra: true });
+      // Programs in the private catalogue get their own filter (CORE®, FRIDAY PROGRAM®, the owner's
+      // alone until they ship); the rest is PRIVATE.
+      const OWN = { core: 'CORE®', friday: 'FRIDAY PROGRAM®' };
+      const part = (keep) => Object.fromEntries(['tops', 'pants', 'accessories'].map((p) => [p, (cat[p] || []).filter(keep)]));
+      for (const [drop, label] of Object.entries(OWN)) {
+        const c = part((k) => k.drop === drop);
+        if (c.tops.length || c.pants.length || c.accessories.length) addDrop(c, { filter: drop, label, extra: true });
+      }
+      addDrop(part((k) => !OWN[k.drop]), { filter: 'private', label: 'PRIVATE', extra: true });
     },
     addDrop: (cat, opts) => addDrop(cat, opts),
     unlock: (ids) => {
