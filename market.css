@@ -200,3 +200,64 @@ a.mk-seller:hover .mk-av, a.mk-seller:focus-visible .mk-av { outline-color: #fff
 .hs-buy.mk-sure { background: #fff; color: var(--good-blue); }
 .hs-buy:disabled { opacity: 0.5; cursor: default; }
 @media (max-width: 900px) { .hs-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 44px 18px; } .hs-foot b { font-size: 0.95rem; } }
+
+/* ---------- Price signals, TRY IT ON, quiet empties (v6) ---------- */
+.mk-stats { grid-template-columns: none; grid-auto-flow: column; grid-auto-columns: minmax(0, 1fr); }
+.mk-stats[hidden], .mk-tape[hidden], .mk-tools[hidden], #soldBlock[hidden] { display: none; }
+/* LAST SALE and a line of the recent ones: one thin white stroke, no colour. */
+.mk-signal { display: inline-flex; align-items: center; gap: 12px; font-size: var(--label-size); letter-spacing: 0.18em; opacity: 0.8; }
+.mk-signal .coin { width: 0.9em; height: 0.9em; vertical-align: -0.1em; }
+.mk-spark { display: block; color: #fff; overflow: visible; }
+.mk-own { text-decoration: none; opacity: 0.75; }
+/* TRY IT ON →: a quiet link, a full 44px to tap. */
+.mk-try { display: inline-flex; align-items: center; min-height: 44px; color: inherit; font-size: var(--label-size); letter-spacing: 0.2em; text-decoration: underline; text-decoration-thickness: 1px; text-underline-offset: 6px; }
+.mk-try:hover, .mk-try:focus-visible { text-decoration-color: transparent; outline: none; }
+.hs-piece .mk-try { align-self: center; margin-top: 6px; }
+.mk-copies summary { min-height: 44px; display: flex; align-items: center; justify-content: center; padding: 0; }
+
+/* Phones: a tight hero, then something to buy on the first screen. */
+@media (max-width: 760px) {
+  .mk-stats { grid-auto-flow: row; grid-template-columns: repeat(3, minmax(0, 1fr)); }
+}
+@media (max-width: 520px) {
+  .mk-hero { padding: 6px 0 28px; }
+  .mk-hero .co-tag { margin-bottom: 12px; }
+  .mk-hero .co-title { font-size: 2.4rem; margin-bottom: 12px; }
+  .mk-hero .co-lede { font-size: 0.94rem; line-height: 1.55; }
+  .mk-acct { margin-top: 14px; gap: 8px 12px; flex-wrap: nowrap; justify-content: space-between; }
+  .mk-acct .mk-wallet { letter-spacing: 0.1em; font-size: 0.66rem; min-width: 0; }
+  #tradesBtn { padding: 10px 12px; letter-spacing: 0.14em; flex: none; }
+  a.mk-seller { min-height: 44px; }
+  .mk-btn, .mk-tabs button, .mk-x { min-height: 44px; }
+  .mk-q, .mk-sort select { min-height: 44px; }
+  .mk-copies .mk-btn { padding: 8px 12px; }
+  /* SAMPLE SALE as a strip: swipe sideways, the next piece peeking in. */
+  .hs.co-block { padding-top: 18px; }
+  .hs .co-head { margin-bottom: 12px; }
+  .hs-lede { display: none; }
+  .hs-grid { display: flex; gap: 22px; overflow-x: auto; scroll-snap-type: x mandatory; -webkit-overflow-scrolling: touch; scrollbar-width: none;
+    margin-right: calc(-1 * var(--gutter)); padding-right: var(--gutter); }
+  .hs-grid::-webkit-scrollbar { display: none; }
+  .hs-piece { flex: 0 0 58%; scroll-snap-align: start; }
+  .hs-stage { aspect-ratio: 16 / 10; }
+  .hs-stage canvas { width: 46%; }
+  .hs-stage canvas.hs-bottom { width: 24%; }
+  .hs-dots { margin: 10px 0 6px; }
+  .hs-cw { min-height: 0; }
+  .hs-foot { margin-top: 14px; }
+  .mk-signal { gap: 8px; letter-spacing: 0.12em; flex-wrap: wrap; justify-content: center; }
+  .mk-try { letter-spacing: 0.14em; }
+  #listings .mk-meta { letter-spacing: 0.12em; }
+  #listings .mk-meta > span { white-space: nowrap; }
+  .mk-page .mk-row .mk-btn { padding: 10px 12px; letter-spacing: 0.12em; }
+}
+
+/* style.css's MAKER® rule `.mk-row button { all: unset }` also caught MARKET®'s BUY / LIST buttons
+   (faint, no frame, 23px tall). Put the MARKET® button back, a full 44px to tap. */
+.mk-page .mk-row .mk-btn { box-sizing: border-box; display: inline-flex; align-items: center; justify-content: center; min-height: 44px; padding: 10px 16px;
+  border: var(--rule); background: transparent; color: #fff; font: 400 0.69rem var(--font-mono); letter-spacing: 0.2em; cursor: pointer; transition: none; }
+.mk-page .mk-row .mk-btn:hover:not(:disabled), .mk-page .mk-row .mk-btn:focus-visible, .mk-page .mk-row .mk-btn.mk-sure { background: #fff; color: var(--good-blue); outline: none; }
+.mk-page .mk-row .mk-btn:disabled { opacity: 0.5; cursor: default; }
+.mk-page .mk-copies .mk-btn { min-height: 44px; padding: 8px 12px; }
+.mk-set { min-height: 44px; box-sizing: border-box; }
+@media (max-width: 520px) { .mk-page .mk-row .mk-btn { padding: 10px 12px; letter-spacing: 0.1em; max-width: 100%; } }
