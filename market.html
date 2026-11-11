@@ -29,7 +29,7 @@
   <link rel="stylesheet" href="good.css?v=3">
   <link rel="stylesheet" href="style.css?v=14">
   <link rel="stylesheet" href="collab.css?v=2">
-  <link rel="stylesheet" href="market.css?v=5">
+  <link rel="stylesheet" href="market.css?v=6">
 </head>
 <body class="co-page mk-page">
 
@@ -66,15 +66,9 @@
     <div class="hs-grid" id="houseGrid"></div>
   </section>
 
-  <div class="mk-tape mono" aria-label="Latest trades"><div class="mk-tape-run" id="tape"></div></div>
+  <div class="mk-tape mono" aria-label="Trades this week" hidden><div class="mk-tape-run" id="tape"></div></div>
 
-  <dl class="mk-stats mono" id="stats">
-    <div><dt>LISTED</dt><dd id="stListed">0</dd></div>
-    <div><dt>FLOOR</dt><dd id="stFloor">—</dd></div>
-    <div><dt>LAST TRADE</dt><dd id="stLast">—</dd></div>
-    <div><dt>24H VOLUME</dt><dd id="stVol">0</dd></div>
-    <div><dt>24H TRADES</dt><dd id="stTrades">0</dd></div>
-  </dl>
+  <dl class="mk-stats mono" id="stats" hidden></dl>
 
   <section class="co-block" aria-labelledby="saleTitle" id="asks">
     <header class="co-head"><p class="co-tag mono" id="saleCount">FOR SALE</p><h2 id="saleTitle">For sale</h2></header>
@@ -85,7 +79,7 @@
       </label>
     </div>
     <div class="mk-grid" id="listings"></div>
-    <p class="mk-empty" id="empty" hidden>Nothing for sale right now. Open a <a class="foot-link" href="inmotion">GOOD® CRATE</a>; anything you pull can be listed here.</p>
+    <p class="mk-empty" id="empty" hidden></p>
   </section>
 
   <section class="co-block" aria-labelledby="sellTitle" id="sell">
@@ -99,7 +93,7 @@
     <ol class="mk-sales" id="mySalesRows"></ol>
   </section>
 
-  <section class="co-block" aria-labelledby="soldTitle" id="soldBlock">
+  <section class="co-block" aria-labelledby="soldTitle" id="soldBlock" hidden>
     <header class="co-head"><p class="co-tag mono">SOLD</p><h2 id="soldTitle">Recent trades</h2></header>
     <div class="mk-scroll">
       <table class="mk-table mk-tapetable">
@@ -138,8 +132,9 @@
 <script src="js/skin.js?v=2"></script>
 <script src="js/colors.js?v=3"></script>
 <script src="js/gooditems.js?v=5"></script>
+<script src="js/outfits.js?v=8"></script>
 <script src="js/heads.js"></script>
-<script src="js/market.js?v=7"></script>
+<script src="js/market.js?v=8"></script>
 <script src="js/nav.js?v=4"></script>
 </body>
 </html>

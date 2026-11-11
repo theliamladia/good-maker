@@ -36,26 +36,78 @@
   // Per piece: asks, floor (lowest ask), last sale (the FLOOR/LAST hint when you sell).
   function book() {
     const rows = {};
-    const row = (id) => (rows[id] ||= { id, asks: 0, floor: null, last: null });
+    const row = (id) => (rows[id] ||= { id, asks: 0, floor: null, last: null, hist: [] });
     for (const l of listings) { const r = row(l.item); r.asks++; if (r.floor == null || l.price < r.floor) r.floor = l.price; }
-    for (const s of sales) { const r = row(s.item); if (r.last == null) r.last = s.price; }   // newest first
+    for (const s of sales) { const r = row(s.item); if (r.last == null) r.last = s.price; r.hist.unshift(s.price); }   // sales are newest first; hist runs oldest → newest
     return Object.values(rows);
   }
 
+  // A sparkline of a piece's recent sale prices (oldest → newest): one thin white line, a dot on the last.
+  function spark(hist) {
+    const p = hist.slice(-12), W = 72, H = 18, pad = 2;
+    if (p.length < 2) return '';   // one sale is no line: LAST SALE says it
+    const lo = Math.min(...p), hi = Math.max(...p), span = hi - lo || 1;
+    const xy = p.map((v, i) => [p.length < 2 ? W / 2 : pad + (i * (W - 2 * pad)) / (p.length - 1), hi === lo ? H / 2 : H - pad - ((v - lo) * (H - 2 * pad)) / span]);
+    const [lx, ly] = xy[xy.length - 1];
+    return `<svg class="mk-spark" viewBox="0 0 ${W} ${H}" width="${W}" height="${H}" aria-hidden="true">`
+      + (p.length > 1 ? `<polyline points="${xy.map(([x, y]) => `${x.toFixed(1)},${y.toFixed(1)}`).join(' ')}" fill="none" stroke="currentColor" stroke-width="1" vector-effect="non-scaling-stroke" stroke-linejoin="round"/>` : '')
+      + `<circle cx="${lx.toFixed(1)}" cy="${ly.toFixed(1)}" r="1.8" fill="currentColor"/></svg>`;
+  }
+
+  // TRY IT ON: the MAKER® link that puts a piece on (index.html?top=&bottom=&acc=, read by lookFromUrl in js/app.js).
+  // A crate item's unlock is a MAKER® colour id, a kind id (its first colour) or a set [top, bottom].
+  // Anything missing is filled with the house default (and a top's own pairing), so nobody is shown half-dressed.
+  // SAMPLE SALE (hse-*) pieces only reach MAKER® once owned, so they link only for their owner.
+  const CAT = { top: window.OUTFITS || [], bottom: window.PANTS || [], acc: window.ACCESSORIES || [] };
+  function findColour(id) {
+    for (const [part, kinds] of Object.entries(CAT)) for (const k of kinds) {
+      if (k.id === id && k.colors && k.colors[0]) return { part, c: k.colors[0] };
+      const c = (k.colors || []).find((x) => x.id === id); if (c) return { part, c };
+    }
+    return null;
+  }
+  function tryHref(id) {
+    const it = items[id];
+    if (!it) return null;
+    const L = {};
+    if (String(id).startsWith('hse-')) {
+      if (!inventory.some((e) => e.item === id)) return null;
+      L[it.bottom ? 'bottom' : 'top'] = id;
+    } else {
+      for (const u of [].concat(it.unlock || [])) { const f = findColour(u); if (f && !L[f.part]) { L[f.part] = f.c.id; if (f.part === 'top' && f.c.pants) L.pair = f.c.pants; } }
+      if (!L.top && !L.bottom && !L.acc) return null;
+    }
+    const house = CAT.top[0] && CAT.top[0].colors[0];
+    const q = new URLSearchParams();
+    q.set('top', L.top || (house ? house.id : 'shirt-cotton-maple-leaf'));
+    q.set('bottom', L.bottom || L.pair || (house && house.pants) || 'cargo-maple-leaf-fatigue');
+    if (L.acc) q.set('acc', L.acc);
+    return `./?${q}`;
+  }
+  function tryLink(id, label) {
+    const href = tryHref(id); if (!href) return null;
+    const a = document.createElement('a'); a.className = 'mk-try mono'; a.href = href;
+    a.textContent = label || 'TRY IT ON →';
+    return a;
+  }
+
+  // Stats: only the figures there are (no wall of zeros). Nothing listed and nothing traded: no strip at all.
   function drawStats() {
     const day = sales.filter((s) => Date.now() - Date.parse(s.at) < DAY);
-    $('stListed').textContent = listings.length;
-    $('stFloor').innerHTML = listings.length ? c(Math.min(...listings.map((l) => l.price))) : '—';
-    $('stLast').innerHTML = sales[0] ? c(sales[0].price) : '—';
-    $('stVol').innerHTML = c(day.reduce((a, s) => a + s.price, 0));
-    $('stTrades').textContent = day.length;
-    // The tape: the latest trades, twice over so the loop is seamless.
-    const bits = sales.slice(0, 16).map((s) => `<span><b></b> ${s.serial} ${c(s.price)} <em>${ago(s.at)}</em></span>`);
+    const st = [];
+    if (listings.length) st.push(['LISTED', listings.length], ['FLOOR', c(Math.min(...listings.map((l) => l.price)))]);
+    if (sales[0]) st.push(['LAST TRADE', c(sales[0].price)]);
+    if (day.length) st.push(['24H VOLUME', c(day.reduce((a, s) => a + s.price, 0))], ['24H TRADES', day.length]);
+    $('stats').hidden = !st.length;
+    $('stats').innerHTML = st.map(([k, v]) => `<div><dt>${k}</dt><dd>${v}</dd></div>`).join('');
+    // The tape: trades from the last seven days, twice over so the loop is seamless. None: no tape.
+    const week = sales.filter((s) => Date.now() - Date.parse(s.at) < 7 * DAY).slice(0, 16);
+    const bits = week.map((s) => `<span><b></b> ${s.serial} ${c(s.price)} <em>${ago(s.at)}</em></span>`);
     const tape = $('tape');
-    if (!bits.length) { tape.innerHTML = '<span>NO TRADES YET · LIST A PIECE AND BE THE FIRST</span>'; tape.classList.add('mk-still'); return; }
-    tape.classList.remove('mk-still');
+    tape.parentElement.hidden = !bits.length;
+    if (!bits.length) { tape.replaceChildren(); return; }
     tape.innerHTML = bits.join('') + bits.join('');
-    tape.querySelectorAll('b').forEach((b, i) => { const s = sales[i % bits.length]; b.textContent = nameOf(s.item); });
+    tape.querySelectorAll('b').forEach((b, i) => { const s = week[i % bits.length]; b.textContent = nameOf(s.item); });
     tape.style.animationDuration = `${Math.max(20, bits.length * 6)}s`;
   }
 
@@ -180,17 +232,29 @@
     }
     const rows = Object.entries(groups).map(([id, ls]) => ({ id, ls: ls.sort((a, b) => a.price - b.price), floor: Math.min(...ls.map((l) => l.price)), at: ls.reduce((m, l) => (l.at > m ? l.at : m), '') }))
       .sort((a, b) => (sort === 'new' ? b.at.localeCompare(a.at) : sort === 'high' ? b.floor - a.floor : a.floor - b.floor));
-    $('saleCount').textContent = `${listings.length} LISTED`;
+    const stats = Object.fromEntries(book().map((r) => [r.id, r]));
+    $('saleCount').textContent = listings.length ? `${listings.length} LISTED` : 'GOOD® · MARKET®';
+    $('asks').querySelector('.mk-tools').hidden = !listings.length;
+    // Empty: one calm line and the next step.
     $('empty').hidden = listings.length > 0;
+    $('empty').innerHTML = me && inventory.some((e) => e.serial !== 'GD-999')
+      ? 'Nothing listed yet. <a class="foot-link" href="#sell">List a piece of yours</a> and it’s the first thing people see.'
+      : 'Nothing listed yet. Open a <a class="foot-link" href="inmotion">GOOD® CRATE</a>; anything you pull can be listed here.';
+    if (listings.length && !rows.length) { $('empty').hidden = false; $('empty').textContent = 'Nothing matches that search.'; }
     $('listings').replaceChildren(...rows.map(({ id, ls, floor }) => {
-      const f = piece(items[id], `${ls.length} LISTED`);
+      const f = piece(items[id], '');
       const cap = f.querySelector('figcaption');
-      const head = document.createElement('span'); head.className = 'mk-floor mono'; head.innerHTML = `FROM ${coin}${floor}`;
-      f.querySelector('.mk-cw').after(head);
-      if (own[id]) {
-        const o = document.createElement('a'); o.className = 'mk-own mono'; o.href = './';
-        o.textContent = `YOU OWN ×${own[id]} · WEAR IT IN MAKER® →`; cap.append(o);
+      // Price signals: how many, from what; the last sale and a line of the recent ones.
+      f.querySelector('.mk-meta').innerHTML = `<span>${ls.length} LISTED</span> · <span>FROM ${coin}${floor}</span>`;
+      f.querySelector('.mk-meta').classList.add('mk-floor');
+      const b = stats[id];
+      if (b && b.hist.length) {
+        const sig = document.createElement('span'); sig.className = 'mk-signal mono';
+        sig.innerHTML = `<span>LAST SALE ${coin}${b.last}</span>${spark(b.hist)}`;
+        sig.title = `Recent sales: ${b.hist.slice(-12).join(', ')} GOOD® COINS`;
+        f.querySelector('.mk-meta').after(sig);
       }
+      const tryOn = tryLink(id, own[id] ? 'WEAR YOURS →' : ''); if (tryOn) cap.append(tryOn);
       const best = ls.find((l) => !l.mine);
       const row = document.createElement('div'); row.className = 'mk-row';
       row.append(best ? buyButton(best, ls.length > 1 ? 'BUY THE CHEAPEST' : 'BUY') : buyButton(ls[0]));
@@ -220,7 +284,8 @@
     $('doubles').replaceChildren(...spare.map((e) => {
       const f = piece(items[e.item], count[e.item] < 2 ? `${e.serial} · YOUR ONLY COPY` : e.serial);
       const b = stats[e.item];
-      if (b) { const h = document.createElement('span'); h.className = 'mk-hint mono'; h.innerHTML = `FLOOR ${c(b.floor)} · LAST ${c(b.last)}`; f.querySelector('.mk-meta').after(h); }
+      const hint = b ? [b.floor != null && `FLOOR ${c(b.floor)}`, b.last != null && `LAST ${c(b.last)}`].filter(Boolean).join(' · ') : '';
+      if (hint) { const h = document.createElement('span'); h.className = 'mk-hint mono'; h.innerHTML = hint; f.querySelector('.mk-meta').after(h); }
       const row = document.createElement('form'); row.className = 'mk-row';
       row.innerHTML = `<label class="mk-set mono">${coin}<input type="number" min="1" max="9999" step="1" required aria-label="Price in GOOD® COINS" placeholder="PRICE"></label><button type="submit" class="mk-btn mono">LIST</button>`;
       row.onsubmit = async (ev) => {
@@ -235,6 +300,7 @@
   }
 
   function drawSold() {
+    $('soldBlock').hidden = !sales.length;
     $('soldEmpty').hidden = sales.length > 0;
     $('sold').replaceChildren(...sales.slice(0, 20).map((s) => {
       const tr = document.createElement('tr');
@@ -273,6 +339,7 @@
         };
       }
       f.append(b);
+      const tryOn = tryLink(it.id, 'WEAR IT IN MAKER® →'); if (tryOn) f.append(tryOn);
       return f;
     }));
   }
