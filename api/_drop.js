@@ -12,6 +12,8 @@ const DROPS = {
   gud: { at: Date.parse('2026-10-19T00:00:00-04:00'), prefix: 'gud-', index: 'gud-index' },
   wandering: { at: Date.parse('2026-10-23T00:00:00-04:00'), prefix: 'wdm-', index: 'wdm-index' },
   qg: { at: Date.parse('2026-11-10T00:00:00-05:00'), prefix: 'qgm-', index: 'qgm-index' },   // Q&G® (ROYALS & GOOD®), live 10 November 2026
+  // GOOD® FRIDAY PROGRAMME®: BURGUNDY/KHAKI, free, Friday 13 November 2026 at 2 p.m. New York time
+  friday: { at: Date.parse('2026-11-13T14:00:00-05:00'), prefix: 'fpm-', index: 'fpm-index' },
 };
 const isOpen = (name, now = Date.now()) => { const d = DROPS[name]; return !!d && d.at !== null && now >= d.at; };
 const dropOf = (id) => Object.keys(DROPS).find((n) => id.startsWith(DROPS[n].prefix)) || null;

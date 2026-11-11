@@ -201,7 +201,7 @@
   meOnce().then(async (j) => {
     me = j.user; wardrobe = j.wardrobe || []; inventory = j.inventory || []; achievements = j.achievements || [];
     // The released drops' pieces (GUD™, WANDERING®) from the server, so saved fits with them draw.
-    for (const q of ['gud=1', 'drop=wandering', 'drop=qg', 'house']) { const cat = await fetch(q === 'house' ? 'api/crate?house=mine' : `api/outfit?${q}`, { cache: 'no-store' }).then((r) => (r.ok ? r.json() : null)).catch(() => null); if (cat) GoodCompose.addPrivate(cat); }
+    for (const q of ['gud=1', 'drop=wandering', 'drop=qg', 'drop=friday', 'house']) { const cat = await fetch(q === 'house' ? 'api/crate?house=mine' : `api/outfit?${q}`, { cache: 'no-store' }).then((r) => (r.ok ? r.json() : null)).catch(() => null); if (cat) GoodCompose.addPrivate(cat); }
     // The private pieces (owner and guests): loaded before the wardrobe draws, so fits with them show.
     if (me && (me.owner || me.private)) {
       const cat = await fetch('api/outfit?private=1', { cache: 'no-store' }).then((r) => (r.ok ? r.json() : null)).catch(() => null);
