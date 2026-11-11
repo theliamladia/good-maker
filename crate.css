@@ -110,6 +110,9 @@
 .cr-ach { display: inline-block; margin-top: 10px; color: #ffd23f; letter-spacing: 0.2em; }
 .cr-timer { margin: 10px 0 0; font-size: 0.7rem; font-weight: 700; letter-spacing: 0.16em; min-height: 1.2em; }
 .cr-timer .coin { vertical-align: -0.2em; }
+.cr-newest { margin: 26px 0 0; font-size: var(--label-size); letter-spacing: 0.18em; }
+.cr-newest a { color: #fff; text-decoration: none; padding-bottom: 6px; border-bottom: 1px solid rgba(255, 255, 255, 0.5); }
+.cr-newest a:hover, .cr-newest a:focus-visible { border-bottom-color: #fff; }
 
 /* HOW IT WORKS, on the crate page itself (was only on good-crate) */
 .cr-how { margin-top: clamp(40px, 7vh, 80px); }

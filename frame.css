@@ -1,0 +1,84 @@
+/* The site frame for the drop worlds (/dynamics, /inmotion, /q): the standard header nav and footer,
+   the same as on every core page (style.css), for pages that don't load style.css. Everything
+   here is scoped to .site-header / .site-foot / .nav-burger, so the world below is untouched.
+   Keep in step with the header and footer rules in style.css. */
+.site-header, .site-foot {
+  --good-blue: #0000ff;
+  --f-sans: 'Inter', system-ui, sans-serif;
+  --f-mono: 'Space Mono', ui-monospace, monospace;
+  box-sizing: border-box; background: var(--good-blue); color: #fff; font-family: var(--f-sans);
+  -webkit-font-smoothing: antialiased; text-shadow: none; filter: none;
+}
+.site-header *, .site-foot * { box-sizing: border-box; }
+.site-header .mono, .site-foot.mono, .site-foot .mono { font-family: var(--f-mono); }
+
+/* Header */
+.site-header { position: relative; z-index: 15; display: flex; justify-content: space-between; align-items: center; padding: 18px 28px; }
+.site-header .wordmark {
+  font: 700 2rem var(--f-sans); letter-spacing: -0.05em; color: #fff; text-decoration: none;
+  text-shadow: 0 2px 0 rgba(11, 21, 38, 0.18);
+}
+.site-nav { display: flex; align-items: center; gap: clamp(20px, 2.6vw, 34px); margin: 0; }
+.site-nav .nav-link {
+  text-decoration: none; display: inline-block;
+  color: #fff; padding: 6px 0; font-size: 1.15rem; font-weight: 500; letter-spacing: 0.12em; font-variant-caps: all-small-caps; line-height: normal;
+  text-shadow: 0 1px 2px rgba(11, 21, 38, 0.35), 0 2px 12px rgba(11, 21, 38, 0.3);
+  opacity: 0.72; border-bottom: 1px solid transparent; transition: opacity 0.2s, border-color 0.2s;
+}
+.site-nav .nav-link:hover, .site-nav .nav-link:focus-visible { opacity: 1; }
+.site-nav .nav-link[aria-current="page"] { opacity: 1; border-bottom-color: currentColor; }
+.site-nav .nav-sec:not([aria-current]) { display: none; }
+.site-nav .nav-acct {
+  display: inline-flex; align-items: center; gap: 9px; min-height: 36px; padding: 4px 14px; border: 1px solid currentColor;
+  border-radius: 999px; opacity: 1; font-variant-caps: normal; font-size: 0.72rem; letter-spacing: 0.18em; font-weight: 700; text-shadow: none;
+}
+.site-nav .nav-acct.in { padding-left: 5px; }
+.site-nav .nav-acct:hover, .site-nav .nav-acct:focus-visible, .site-nav .nav-acct[aria-current="page"] { background: #fff; color: var(--good-blue); border-color: #fff; }
+.site-nav .nav-acct canvas, .site-nav .nav-acct svg { width: 26px; height: 26px; border-radius: 999px; image-rendering: pixelated; flex-shrink: 0; }
+.site-nav .nav-acct .na-coins { font-weight: 400; opacity: 0.8; }
+.site-nav .nav-acct .na-coins::before { content: '·'; margin-right: 9px; }
+.site-header a:focus-visible, .site-header button:focus-visible, .site-foot a:focus-visible { outline: 2px solid currentColor; outline-offset: 3px; }
+@media (min-width: 1251px) { .site-header { padding: 10px 40px; } .site-header .wordmark { font-size: 1.7rem; } }
+@media (max-width: 900px) { .site-header { padding: 14px 16px; } }
+
+/* Phone menu (js/nav.js adds the button) */
+.nav-burger { display: none; }
+@media (max-width: 700px) {
+  .nav-burger {
+    display: grid; align-content: center; gap: 5px; width: 44px; height: 44px; padding: 0 12px; border: 0; cursor: pointer;
+    border-radius: 999px; background: var(--good-blue); box-shadow: 0 6px 18px rgba(0, 0, 90, 0.28); flex-shrink: 0;
+  }
+  .nav-burger span { display: block; height: 2px; border-radius: 2px; background: #fff; transition: transform 0.25s ease, opacity 0.2s; }
+  .nav-open .nav-burger span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+  .nav-open .nav-burger span:nth-child(2) { opacity: 0; }
+  .nav-open .nav-burger span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
+  .site-header .site-nav {
+    display: none; position: absolute; z-index: 700; top: calc(100% - 4px); left: 16px; right: 16px; margin: 0;
+    flex-direction: column; align-items: stretch; gap: 0; padding: 6px; border-radius: 18px;
+    background: #fff; box-shadow: 0 24px 60px rgba(11, 21, 38, 0.28);
+    animation: gf-nav-drop 0.22s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+  .nav-open .site-nav { display: flex; }
+  .site-nav .nav-link {
+    background: none; box-shadow: none; color: var(--good-blue); border-radius: 12px; padding: 16px 14px; border: 0;
+    font-size: 1.05rem; text-align: left; transform: none; text-decoration: none; opacity: 1; text-shadow: none;
+  }
+  .site-nav .nav-link + .nav-link { border-top: 1px solid rgba(11, 21, 38, 0.08); border-radius: 0; }
+  .site-nav .nav-link:hover, .site-nav .nav-link:focus-visible { background: rgba(0, 0, 255, 0.06); }
+  .site-nav .nav-link[aria-current="page"] { font-weight: 700; }
+  .site-nav .nav-sec, .site-nav .nav-sec:not([aria-current]) { display: block; font-size: 0.85rem; padding: 12px 14px; }
+  .site-nav .nav-sec:not(.nav-sec + .nav-sec) { border-top: 1px solid rgba(11, 21, 38, 0.2); }
+  .site-nav .nav-acct, .site-nav .nav-acct.in { justify-content: flex-start; border-radius: 0; border: 0; border-top: 1px solid rgba(11, 21, 38, 0.2); padding: 14px; font-size: 0.8rem; }
+  .site-nav .nav-acct:hover, .site-nav .nav-acct:focus-visible, .site-nav .nav-acct[aria-current="page"] { background: rgba(0, 0, 255, 0.06); color: var(--good-blue); }
+}
+@keyframes gf-nav-drop { from { opacity: 0; transform: translateY(-8px); } to { opacity: 1; transform: none; } }
+
+/* Footer */
+.site-foot { position: relative; z-index: 2; margin: 0; text-align: center; padding: 40px 24px 48px; font-size: 0.69rem; letter-spacing: 0.16em; line-height: normal; }
+.site-foot .foot-nav { display: flex; flex-wrap: wrap; justify-content: center; gap: 10px 28px; margin: 0 0 18px; }
+.site-foot .foot-nav a { color: inherit; text-decoration: none; opacity: 0.85; padding: 6px 0; border-bottom: 1px solid transparent; }
+.site-foot .foot-nav a:hover, .site-foot .foot-nav a:focus-visible { opacity: 1; border-bottom-color: currentColor; }
+.site-foot p { margin: 0; opacity: 0.7; font-size: inherit; letter-spacing: inherit; }
+@media print { .site-header, .site-foot { display: none; } }
+/* /q: the frame sits above the CRT (once the boot is over), so the nav stays legible */
+body.qg:not(.booting) .site-header, body.qg .site-foot { z-index: 1001; }
