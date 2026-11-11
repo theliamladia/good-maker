@@ -76,15 +76,24 @@
   const listed = (list) => { const l = list.filter(inSeason); return state.filter === 'all' ? l : l.sort(az); };
   const lineShirts = () => listed(SHIRTS);
 
+  // The look a newcomer lands on is free to download: the house default top (its first colour you
+  // don't need to unlock) and its own pants pairing, or else the first free basic pants.
+  const free = (c) => !!c && !isLocked(c);
+  const houseTop = SHIRTS.find((k) => k.id === window.OUTFITS[0].id) || SHIRTS[0];
+  const DEFAULT_TOP = houseTop.colors.find(free) || houseTop.current;
+  houseTop.current = DEFAULT_TOP;
+  const freePants = (o) => ALL_PANTS.find((p) => p.id === (o && o.pants) && free(p))
+    || PANTS.filter(isBasic).flatMap((k) => k.colors).find(free) || ALL_PANTS.find(free) || PANTS[0].current;
+
   const state = {
     user: null,          // ImageData of the head source
     isDemo: true,
     line: 'good',        // GOOD® / BABY® toggle: which kinds are shown
-    outfit: (SHIRTS.find((k) => k.id === window.OUTFITS[0].id) || SHIRTS[0]).current,   // the house default, not the A–Z first
+    outfit: DEFAULT_TOP, // the house default, not the A–Z first (which can be a locked crate piece)
     body: 'classic',     // 'classic' | 'slim'
     sleeve: 'short',     // 'short' | 'long'
     hood: 'up',          // 'up' | 'down', for tops that come both ways (hoodDown)
-    pants: ALL_PANTS.find((p) => p.id === SHIRTS[0].current.pants) || PANTS[0].current, // the default top's pairing
+    pants: freePants(DEFAULT_TOP), // the default top's pairing, never a locked piece
     filter: 'all',       // the filter dropdown on the shirt and pants lists (FILTERS)
     hideLocked: false,   // HIDE LOCKED: leave out pieces you can't wear yet
     pantsPicked: false,  // once the user picks pants, shirts stop changing them
@@ -687,7 +696,7 @@
     state.outfit = o;
     state.noTop = false;
     if (!state.pantsPicked) {
-      state.pants = ALL_PANTS.find((p) => p.id === o.pants) || PANTS[0].current;
+      state.pants = ALL_PANTS.find((p) => p.id === o.pants) || freePants(null);
     }
     updateSleeveButtons();
     // (Preview-only is already shown on the download button; this line is for errors.)
@@ -1051,7 +1060,7 @@
       // works and return to the last outfit that rendered, keeping the reason visible.
       const usable = o.kind.colors.find((c) => c !== o && !c.locked) || o.kind.colors.find((c) => c !== o);
       if (usable) o.kind.current = usable;
-      const back = lastGood && lastGood !== o ? lastGood : usable || SHIRTS[0].current;
+      const back = lastGood && lastGood !== o ? lastGood : usable || DEFAULT_TOP;
       selectOutfit(back);
       $('outfitHint').hidden = false;
       $('outfitHint').textContent = `${o.color || o.name} ${err.message}`;
@@ -1098,11 +1107,20 @@
       const accName = (c) => { const k = ACCS.find((k) => k.colors.includes(c)); return k ? `${k.name} ${c.color}` : fullName(c); };
       const piece = !noTop && isLocked(o) ? o : !state.noBottom && isLocked(state.pants) ? state.pants : state.acc;
       const which = piece === state.acc ? accName(piece) : fullName(piece), src = crateOf(piece);
+      // One tap back to something you can download: a free colour of the same piece, else a free piece.
+      state.swap = piece === state.acc ? { off: true }
+        : piece === o ? { to: o.kind.colors.find(free) || DEFAULT_TOP, top: true }
+        : { to: state.pants.kind.colors.find(free) || freePants(noTop ? null : o) };
+      const swapText = state.swap.off ? 'TAKE IT OFF' : `SWAP FOR ${fullName(state.swap.to)}`;
       dl.title = `${which} is locked: try it on, then pull it from ${src.name} to download it`;
-      $('downloadHint').innerHTML = `<strong>${which}</strong> IS LOCKED. YOU CAN TRY IT ON; PULL IT FROM <a href="${src.href}">${src.name}</a> TO DOWNLOAD IT.`;
+      $('downloadHint').innerHTML = `<strong>${which}</strong> IS LOCKED<span class="dl-why">, SO THIS LOOK IS TRY-ON ONLY</span>. <button type="button" class="dl-swap mono" data-swap>${swapText} →</button>`
+        + `<span class="dl-or">OR PULL IT FROM <a href="${src.href}">${src.name}</a>.</span>`;
+      document.body.classList.add('look-locked');
       showSkin(withLeaves(merged.data, slim), slim);
       return;
     }
+    document.body.classList.remove('look-locked');
+    state.swap = null;
     texture.hidden = false;
     flat.getContext('2d').putImageData(new ImageData(merged.data, 64, 64), 0, 0);
     state.resultUrl = flat.toDataURL('image/png');
@@ -1114,6 +1132,15 @@
     else if (state.isDemo) $('downloadHint').textContent = 'THIS IS THE DEMO SKIN. ADD YOURS UNDER YOUR SKIN TO DOWNLOAD.';
     showSkin(withLeaves(merged.data, slim), slim);
   }
+
+  // SWAP FOR … (the locked note under DOWNLOAD, and its copy on the phone sheet: js/mobile.js)
+  document.addEventListener('click', (e) => {
+    if (!e.target.closest('[data-swap]') || !state.swap) return;
+    const sw = state.swap;
+    if (sw.off) { state.acc = null; drawAccessories(); render(); }
+    else if (sw.top) selectOutfit(sw.to);
+    else pickPants(sw.to);
+  });
 
   // ---------- Eraser ----------
   // Pixel maps of the torso (Hair card) and head (Head card) as seen on the

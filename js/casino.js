@@ -183,8 +183,8 @@
     if (me) me = { ...me };
     const st = await refresh();
     if (st !== 200) {
-      $('soon').hidden = false;
-      if (st === 401) { $('soon').querySelector('.co-tag').textContent = 'SIGN IN'; $('soon').querySelector('.cs-note').innerHTML = '<a href="account">Sign in</a> to play for GOOD® COINS.'; }
+      // Signed out: show the three tables and how each pays, then SIGN IN TO PLAY.
+      if (st === 401) $('preview').hidden = false; else $('soon').hidden = false;
       $('wallet').innerHTML = me ? `${me.name} · ${coin}${me.coins} GOOD® COINS` : '&nbsp;';
       return;
     }

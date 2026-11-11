@@ -76,7 +76,9 @@
       filter: drop-shadow(0 6px 14px rgba(0, 0, 60, 0.35)); transition: transform 0.4s cubic-bezier(0.2, 0.8, 0.2, 1); }
     .casino-chip:hover, .casino-chip:focus-visible { transform: rotate(45deg) scale(1.06); outline: none; }
     .casino-chip svg { width: 100%; height: 100%; display: block; }
-    @media (max-width: 700px) { .casino-chip { left: 14px; bottom: 14px; width: 44px; height: 44px; }
+    @media (max-width: 700px) { .casino-chip { left: 12px; bottom: calc(12px + env(safe-area-inset-bottom)); width: 44px; height: 44px; transition: transform 0.3s, opacity 0.3s; }
+      body > .casino-chip.cc-away { transform: translateY(90px); opacity: 0; pointer-events: none; }
+      body:not(.m-maker) { padding-bottom: 68px; }
       .m-stage > .casino-chip { position: absolute; left: 12px; bottom: 30px; width: 50px; height: 50px; } body.m-maker.m-open .m-stage > .casino-chip { width: 40px; height: 40px; bottom: 26px; } }
     @media print { .casino-chip { display: none; } }`;
   document.head.append(css);
@@ -90,4 +92,13 @@
   const phone = matchMedia('(max-width: 700px)');
   const place = () => { const st = phone.matches && document.querySelector('.m-stage'); (st || document.body).append(a); };
   place(); addEventListener('load', place); phone.addEventListener('change', place);
+  // Phones (every page but MAKER®, where it sits on the stage): it steps aside while you scroll
+  // down and comes back when you scroll up or reach the end, so it never sits on what you're reading.
+  let lastY = scrollY;
+  addEventListener('scroll', () => {
+    const y = scrollY, end = y + innerHeight >= document.documentElement.scrollHeight - 4;
+    if (Math.abs(y - lastY) < 6 && !end) return;
+    a.classList.toggle('cc-away', phone.matches && y > 80 && y > lastY && !end);
+    lastY = y;
+  }, { passive: true });
 })();

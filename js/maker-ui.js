@@ -9,10 +9,11 @@
   const steps = $('mkSteps');
   if (steps && !seen()) {
     steps.hidden = false; document.body.classList.add('has-steps');
+    if ($('mkLede')) $('mkLede').hidden = false;   // phones: the one-line headline over the steps
     const li = steps.querySelectorAll('li:not(.mk-steps-x)');
     const at = (n) => li.forEach((e, i) => { e.classList.toggle('on', i === n); e.classList.toggle('done', i < n); });
     at(0);
-    const finish = () => { try { localStorage.setItem(KEY, '1'); } catch {} steps.hidden = true; document.body.classList.remove('has-steps'); };
+    const finish = () => { try { localStorage.setItem(KEY, '1'); } catch {} steps.hidden = true; if ($('mkLede')) $('mkLede').hidden = true; document.body.classList.remove('has-steps'); };
     $('mkStepsX').onclick = finish;
     // 1 → 2 once there's a real skin (not the demo); 2 → 3 once a piece is picked
     const sub = $('uploadSub');

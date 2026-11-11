@@ -109,3 +109,21 @@
   .cs-hide { display: none; }
   .cs-actions .cs-btn { flex: 1 1 auto; }
 }
+
+/* Signed out: the three tables, how each pays, then SIGN IN TO PLAY */
+.cs-preview[hidden] { display: none; }
+.cs-pv { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: clamp(32px, 5vw, 72px); }
+.cs-pv li { border-top: 1px solid rgba(255, 255, 255, 0.4); padding-top: 22px; display: flex; flex-direction: column; }
+.cs-pv-n { margin: 0 0 28px; font-size: var(--label-size); letter-spacing: var(--label-track); opacity: 0.7; }
+.cs-pv h3 { margin: 0 0 16px; font-size: clamp(1.4rem, 2.2vw, 1.9rem); font-weight: 500; letter-spacing: -0.03em; }
+.cs-pv-how { margin: 0 0 24px; font-weight: 300; line-height: 1.6; opacity: 0.92; max-width: 24em; }
+.cs-pv-pay { margin: auto 0 0; font-size: var(--label-size); letter-spacing: 0.16em; line-height: 1.7; }
+.cs-pv-cta { display: flex; flex-wrap: wrap; align-items: center; gap: 18px 28px; margin: clamp(56px, 9vh, 96px) 0 0; }
+.cs-pv-cta .cs-btn { display: inline-flex; align-items: center; min-height: 48px; padding: 0 28px; text-decoration: none; font-weight: 700; }
+.cs-pv-cta span { font-size: var(--label-size); letter-spacing: var(--label-track); opacity: 0.75; }
+@media (max-width: 700px) {
+  .cs-pv { grid-template-columns: minmax(0, 1fr); gap: 40px; }
+  .cs-pv-n { margin-bottom: 14px; }
+  .cs-pv-cta .cs-btn { flex: 1 1 100%; justify-content: center; }
+  .cs-tabs button { min-height: 44px; }
+}

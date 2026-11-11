@@ -87,6 +87,17 @@
     try { if (navigator.share) { await navigator.share({ title: 'My fit · MAKER® · GOOD®', url }); return; } } catch { return; }
     try { await navigator.clipboard.writeText(url); share.textContent = '✓'; setTimeout(() => { share.textContent = '↗'; }, 1400); } catch {}
   };
+  // A locked piece in the look: the note under DOWNLOAD (hidden on phones) comes up over the bar,
+  // with its SWAP FOR … button (js/app.js handles [data-swap] wherever it is).
+  const lock = document.createElement('div');
+  lock.className = 'm-lock mono'; lock.hidden = true; lock.setAttribute('role', 'status');
+  const syncLock = () => {
+    const on = body.classList.contains('look-locked');
+    lock.hidden = !on;
+    if (on) lock.innerHTML = $('downloadHint').innerHTML;
+  };
+  new MutationObserver(syncLock).observe($('downloadHint'), { childList: true, subtree: true, characterData: true });
+  new MutationObserver(syncLock).observe(body, { attributes: true, attributeFilter: ['class'] });
   const save = $('saveLook');
   // Desktop: the actions (DOWNLOAD SKIN, SAVE TO WARDROBE, MINECRAFT STAND) sit together under the model.
   const acts = document.createElement('div');
@@ -98,8 +109,8 @@
     const m = mq.matches;
     if (m && tabs.parentNode !== right) right.prepend(tabs);
     if (!m && tabs.parentNode !== panel) panel.prepend(tabs);
-    if (m && save.parentNode !== bar) { bar.append(save, share); right.append(bar); }
-    if (!m && save.parentNode === bar) { acts.insertBefore(save, $('mcStand')); bar.remove(); setOpen(false); you(false); }
+    if (m && save.parentNode !== bar) { bar.append(save, share); right.append(lock, bar); }
+    if (!m && save.parentNode === bar) { acts.insertBefore(save, $('mcStand')); bar.remove(); lock.remove(); setOpen(false); you(false); }
     // the stage sits under the header, however tall it wraps
     const h = document.querySelector('.site-header');
     if (h) document.documentElement.style.setProperty('--mh', `${h.offsetHeight}px`);
