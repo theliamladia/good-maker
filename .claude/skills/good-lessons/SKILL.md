@@ -19,6 +19,10 @@ Every rule here cost the owner a round trip. Check the list before you say "done
 3. **No contrast pixels where the legs meet.** The two legs' outer layers overlap in 3D: the inner
    side faces (rleg `left`, lleg `right`) and the seam columns on front/back (rleg front u3 /
    back u0, lleg front u0 / back u3). Bright accents there flicker. Keep them on the outer sides.
+   The right leg's seam column and the left leg's are drawn in the same place, so they must match
+   EACH OTHER row by row (matching the leg's own neighbour column isn't enough). Check every bottom
+   with `python3 tools/studio/scanbottoms.py` (and `--fix`); `tools/studio/scantops.py` finds tops
+   still carrying the JEAN® template's blue waistband.
 4. **Accents go on both meanings of "side" only on purpose.** A rule like `s in ('left','right')`
    paints the inner side too. Name the outer side explicitly.
 5. **A colourway is a colour, not a new item.** A special/private colourway joins the existing

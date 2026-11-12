@@ -159,6 +159,11 @@ function sampleSkinTone(skin) {
 // headwear = 'keep' | 'auto' (drop hoods) | 'none' (drop the whole hat layer).
 // keepSkin = true: bare skin keeps the player's own skin texture (both layers)
 //            instead of the shaded tone; the outfit still goes on top.
+// Is this pixel roughly the player's skin tone (within a generous distance, so shading still counts)?
+function nearTone(d, i, tone) {
+  const dr = d[i] - tone[0], dg = d[i + 1] - tone[1], db = d[i + 2] - tone[2];
+  return dr * dr + dg * dg + db * db < 70 * 70;
+}
 function mergeSkin(userSkin, outfit, tone, slim, hairRows = 0, erased = null, headwear = 'auto', keepSkin = false) {
   outfit = to64(outfit);
   const out = blank();
@@ -186,7 +191,11 @@ function mergeSkin(userSkin, outfit, tone, slim, hairRows = 0, erased = null, he
             if (opaque(x, y - 1) || opaque(x + ox, y - 1 + oy)) step += CAST_SHADOW;
           }
           if (isSide && part.name !== 'torso' && y === y0 + h - 1) step += LIMB_END;
-          const c = ownAt(x, y) ? own.data.subarray(idx(x, y), idx(x, y) + 3) : shadeTone(tone, step);
+          // Keeping their skin: the player's own old clothes in the torso's waist rows (old jeans drawn
+          // higher than our pants reach) would show above the new pants under a crop top; there the
+          // shaded tone is used instead. Skin-coloured pixels keep the player's own texture.
+          const oldClothes = ownAt(x, y) && part.name === 'torso' && y >= y0 + h - 6 && !nearTone(own.data, idx(x, y), tone);
+          const c = ownAt(x, y) && !oldClothes ? own.data.subarray(idx(x, y), idx(x, y) + 3) : shadeTone(tone, step);
           const i = idx(x, y);
           out.data[i] = c[0]; out.data[i + 1] = c[1]; out.data[i + 2] = c[2]; out.data[i + 3] = 255;
         }
