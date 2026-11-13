@@ -18,6 +18,176 @@
 //   { end: true }            the end mark after the last paragraph
 const STUDY = [
   {
+    "slug": "2-pm-on-a-friday",
+    "rubric": "STUDY® / INTERVIEW",
+    "title": "2 P.M. ON A FRIDAY",
+    "dek": "GOOD® FRIDAY PROGRAMME®: BURGUNDY/KHAKI.",
+    "byline": "GOOD®",
+    "date": "2026-11-13",
+    "description": "Every Friday at 2 p.m., GOOD® releases something new and free: the FRIDAY PROGRAMME®. The first is BURGUNDY/KHAKI. An interview.",
+    "lead": {
+      "img": "/assets/study/fp-lineup.png",
+      "alt": "Leeeeems, racerjackk, LindseyyHazel and Isabelleblanco in the FRIDAY PROGRAMME®: burgundy GOODIE® and DOUBBIE® I with olive and khaki jeans.",
+      "caption": "Left to right: Leeeeems in the GOODIE® and the JEAN® in OLIVE™; racerjackk in the DOUBBIE® I and the JEAN® in KHAKI™; LindseyyHazel in the DOUBBIE® I and OLIVE™; Isabelleblanco in the GOODIE® and OLIVE™."
+    },
+    "og": "/assets/study/og-friday-programme.png",
+    "thumb": "/assets/study/fp-lineup.png",
+    "body": [
+      {
+        "p": "Every Friday at 2 p.m., GOOD® releases something new: the FRIDAY PROGRAMME®. Some weeks it will be simple, some weeks it won’t, but it is always free and never in a crate. The first one is BURGUNDY/KHAKI: a GOODIE® and a DOUBBIE® I in BURGUNDY™, a ripped JEAN® in OLIVE™ and a clean one in KHAKI™. We talked on a Wednesday afternoon, two days before it went out."
+      },
+      {
+        "note": "This conversation has been edited and condensed."
+      },
+      {
+        "q": "What does Friday feel like to you, the hour things loosen up?"
+      },
+      {
+        "p": "There’s a certain point on a Friday, around 2 p.m., that’s an amazing, zen period of creativity for me. It’s when I get to think about what I want to do next."
+      },
+      {
+        "p": "People know me as someone with a lot of avenues for creativity. Minecraft only caught my whimsy recently, but the creative exercises that have come out of it have been really gratifying. A lot of people might see this as colour blocking, and that’s fine. I see it as a board where I can conceptualise and make really interesting things for the future."
+      },
+      {
+        "p": "So every Friday around 2 p.m., we’re going to release something. It might be super simple, it might be super complicated, but it will always be free and never tied to a crate. We hope everyone who does GOOD® really enjoys it."
+      },
+      {
+        "quote": "It might be super simple, it might be super complicated, but it will always be free."
+      },
+      {
+        "q": "Why burgundy, and why now?"
+      },
+      {
+        "p": "Funnily enough, I was inspired by the iPhone 18. I thought that colour was very rich and interesting. But as I worked on it, this shade turned out to be more malleable than the one I had in my head. It can be dressed up or dressed down. It can be casual, it can be prep. It’s a very versatile colour, and it’s one of my original favourites. I’m actually wearing it right now. I just realised."
+      },
+      {
+        "p": "This Friday is play and experimentation with that colour and its complements. And the fun part: FRIDAY PROGRAMME® pieces go with everything else we make, collabs included. Who knows what the creative people who enjoy GOOD® will put together in their wardrobes."
+      },
+      {
+        "quote": "It can be dressed up or dressed down. It can be casual, it can be prep."
+      },
+      {
+        "pair": [
+          {
+            "img": "/assets/study/fp-model-leeeeems.png",
+            "alt": "Leeeeems mid-stride in the GOODIE® BURGUNDY™/COTTON™ and the ripped JEAN® in OLIVE™."
+          },
+          {
+            "img": "/assets/study/fp-model-racerjackk.png",
+            "alt": "racerjackk, one arm up, in the DOUBBIE® I BURGUNDY™/COTTON™ and the JEAN® in KHAKI™."
+          }
+        ],
+        "caption": "Leeeeems in the GOODIE® BURGUNDY™/COTTON™ and the JEAN® in OLIVE™ with TOBACCO™. racerjackk in the DOUBBIE® I BURGUNDY™/COTTON™ and the JEAN® in KHAKI™ with WORKBOOT® WHEAT™."
+      },
+      {
+        "q": "Olive with rips, khaki with none. What’s the conversation between them?"
+      },
+      {
+        "p": "Olive is all over fall and WANDERING®. Besides GOOD® BLUE, earth tones are what I resonate with most. I think of them as comfort food: I stick with what I know, and when we want to make something compelling, we explore. Maybe the next FRIDAY PROGRAMME® will have nothing I’m comfortable with, which I’m strangely comfortable with, if that makes any sense."
+      },
+      {
+        "p": "Olive is a casual colour that dresses down, and we wanted to try a different kind of rip on it. The khaki we kept clean, to speak to the prep side of the burgundy. So you can have it both ways, and with the rest of our pants, any way you want."
+      },
+      {
+        "quote": "Earth tones are comfort food. I stick with what I know, and when we want to make something compelling, we explore."
+      },
+      {
+        "q": "Where would you wear this?"
+      },
+      {
+        "p": "Whenever, wherever, depending on how you feel. That’s the best thing about a set like this: the tops and the pants turn into whatever the day needs."
+      },
+      {
+        "q": "What’s the first thing you put on, and what goes on last?"
+      },
+      {
+        "p": "I love the hoodie and the shirt. The shade is great and the G pops. But the pants are nice too. It’s like being asked to pick my favourite child. I love them all."
+      },
+      {
+        "q": "How did it feel once it was done?"
+      },
+      {
+        "p": "Great. I got to release something small that started as a little thought bubble in my head. We had a concept, we workshopped it, and we delivered something really small but really curated for the people who wear GOOD®. We’re really happy."
+      },
+      {
+        "pair": [
+          {
+            "img": "/assets/study/fp-model-lindseyyhazel.png",
+            "alt": "LindseyyHazel mid-stride in the DOUBBIE® I BURGUNDY™/COTTON™ and the JEAN® in OLIVE™."
+          },
+          {
+            "img": "/assets/study/fp-model-isabelleblanco.png",
+            "alt": "Isabelleblanco, a hand up, in the GOODIE® BURGUNDY™/COTTON™ and the JEAN® in OLIVE™."
+          }
+        ],
+        "caption": "LindseyyHazel in the DOUBBIE® I and the JEAN® in OLIVE™ with SNEAK01. Isabelleblanco in the GOODIE® and the JEAN® in OLIVE™ with DUCK BOOT® CHOCOLATE/CACAO."
+      },
+      {
+        "q": "A rip is an accident on purpose. When did one of yours earn its place?"
+      },
+      {
+        "p": "Growing up, I couldn’t buy many pairs of jeans. Every time I tripped or fell, you’d start to see fraying, and with frequent washes on cheaper denim, the layers wore thin and little rips started to form."
+      },
+      {
+        "p": "What people seek out now is something my mom hated. She was a single mother, and a rip meant buying another pair, because we didn’t look presentable, and we were clumsy kids who couldn’t stop putting holes in our jeans."
+      },
+      {
+        "p": "Now I buy distressed denim on purpose. Whenever I see a rip, it reminds me of that time, and it reminds me to be grateful. Any hole you make that wasn’t already there is earned, and it’s a wonderful story. Hopefully you can look at your jeans and think about yours."
+      },
+      {
+        "quote": "Whenever I see a rip, it reminds me of that time, and it reminds me to be grateful."
+      },
+      {
+        "q": "Who do you picture walking in it?"
+      },
+      {
+        "p": "Anyone who resonates with this, anyone who wants something new, anyone who just thinks it’s a great colour. Really, anyone."
+      },
+      {
+        "q": "What song is this collection?"
+      },
+      {
+        "p": "“Heart Don’t Stand a Chance” by Anderson .Paak. It’s so warm, and with the olive, it’s lush."
+      },
+      {
+        "q": "Finish the sentence: “On Friday, we…”"
+      },
+      {
+        "p": "…release something new from the FRIDAY PROGRAMME®. Something interesting. I hope you enjoy it as much as we enjoyed making it.",
+        "end": true
+      },
+      {
+        "head": "The pieces"
+      },
+      {
+        "gallery": [
+          {
+            "img": "/assets/study/fp-piece-goodie.png",
+            "label": "GOODIE®",
+            "sub": "BURGUNDY™/COTTON™"
+          },
+          {
+            "img": "/assets/study/fp-piece-doubbie.png",
+            "label": "DOUBBIE® I",
+            "sub": "BURGUNDY™/COTTON™"
+          },
+          {
+            "img": "/assets/study/fp-piece-jean-olive.png",
+            "label": "JEAN®",
+            "sub": "OLIVE™, ripped"
+          },
+          {
+            "img": "/assets/study/fp-piece-jean-khaki.png",
+            "label": "JEAN®",
+            "sub": "KHAKI™, clean"
+          }
+        ],
+        "title": "GOOD® FRIDAY PROGRAMME®: BURGUNDY/KHAKI",
+        "caption": "Free in MAKER®, in every shoe, with anything else GOOD® makes. <a href=\"/?filter=friday\">Try them on your skin →</a>"
+      }
+    ]
+  },
+  {
     slug: 'old-g-to-new-g',
     rubric: 'STUDY® / DESIGN',
     title: 'OLD G® TO NEW G®',
