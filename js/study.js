@@ -21,20 +21,20 @@ const STUDY = [
     "slug": "2-pm-on-a-friday",
     "rubric": "STUDY® / INTERVIEW",
     "title": "2 P.M. ON A FRIDAY",
-    "dek": "GOOD® FRIDAY PROGRAMME®: BURGUNDY/KHAKI.",
+    "dek": "GOOD® FRIDAY PROGRAMME®: MERLOT/KHAKI.",
     "byline": "GOOD®",
     "date": "2026-11-13",
-    "description": "Every Friday at 2 p.m., GOOD® releases something new and free: the FRIDAY PROGRAMME®. The first is BURGUNDY/KHAKI. An interview.",
+    "description": "Every Friday at 2 p.m., GOOD® releases something new and free: the FRIDAY PROGRAMME®. The first is MERLOT/KHAKI. An interview.",
     "lead": {
       "img": "/assets/study/fp-lineup.png",
-      "alt": "Leeeeems, racerjackk, LindseyyHazel and Isabelleblanco in the FRIDAY PROGRAMME®: burgundy GOODIE® and DOUBBIE® I with olive and khaki jeans.",
+      "alt": "Leeeeems, racerjackk, LindseyyHazel and Isabelleblanco in the FRIDAY PROGRAMME®: merlot GOODIE® and DOUBBIE® I with olive and khaki jeans.",
       "caption": "Left to right: Leeeeems in the GOODIE® and the JEAN® in OLIVE™; racerjackk in the DOUBBIE® I and the JEAN® in KHAKI™; LindseyyHazel in the DOUBBIE® I and OLIVE™; Isabelleblanco in the GOODIE® and OLIVE™."
     },
     "og": "/assets/study/og-friday-programme.png",
     "thumb": "/assets/study/fp-lineup.png",
     "body": [
       {
-        "p": "Every Friday at 2 p.m., GOOD® releases something new: the FRIDAY PROGRAMME®. Some weeks it will be simple, some weeks it won’t, but it is always free and never in a crate. The first one is BURGUNDY/KHAKI: a GOODIE® and a DOUBBIE® I in BURGUNDY™, a ripped JEAN® in OLIVE™ and a clean one in KHAKI™. We talked on a Wednesday afternoon, two days before it went out."
+        "p": "Every Friday at 2 p.m., GOOD® releases something new: the FRIDAY PROGRAMME®. Some weeks it will be simple, some weeks it won’t, but it is always free and never in a crate. The first one is MERLOT/KHAKI: a GOODIE® and a DOUBBIE® I in MERLOT™, a ripped JEAN® in OLIVE™ and a clean one in KHAKI™. We talked on a Wednesday afternoon, two days before it went out."
       },
       {
         "note": "This conversation has been edited and condensed."
@@ -55,7 +55,7 @@ const STUDY = [
         "quote": "It might be super simple, it might be super complicated, but it will always be free."
       },
       {
-        "q": "Why burgundy, and why now?"
+        "q": "Why merlot, and why now?"
       },
       {
         "p": "Funnily enough, I was inspired by the iPhone 18. I thought that colour was very rich and interesting. But as I worked on it, this shade turned out to be more malleable than the one I had in my head. It can be dressed up or dressed down. It can be casual, it can be prep. It’s a very versatile colour, and it’s one of my original favourites. I’m actually wearing it right now. I just realised."
@@ -70,14 +70,14 @@ const STUDY = [
         "pair": [
           {
             "img": "/assets/study/fp-model-leeeeems.png",
-            "alt": "Leeeeems mid-stride in the GOODIE® BURGUNDY™/COTTON™ and the ripped JEAN® in OLIVE™."
+            "alt": "Leeeeems mid-stride in the GOODIE® MERLOT™/COTTON™ and the ripped JEAN® in OLIVE™."
           },
           {
             "img": "/assets/study/fp-model-racerjackk.png",
-            "alt": "racerjackk, one arm up, in the DOUBBIE® I BURGUNDY™/COTTON™ and the JEAN® in KHAKI™."
+            "alt": "racerjackk, one arm up, in the DOUBBIE® I MERLOT™/COTTON™ and the JEAN® in KHAKI™."
           }
         ],
-        "caption": "Leeeeems in the GOODIE® BURGUNDY™/COTTON™ and the JEAN® in OLIVE™ with TOBACCO™. racerjackk in the DOUBBIE® I BURGUNDY™/COTTON™ and the JEAN® in KHAKI™ with WORKBOOT® WHEAT™."
+        "caption": "Leeeeems in the GOODIE® MERLOT™/COTTON™ and the JEAN® in OLIVE™ with TOBACCO™. racerjackk in the DOUBBIE® I MERLOT™/COTTON™ and the JEAN® in KHAKI™ with WORKBOOT® WHEAT™."
       },
       {
         "q": "Olive with rips, khaki with none. What’s the conversation between them?"
@@ -86,7 +86,7 @@ const STUDY = [
         "p": "Olive is all over fall and WANDERING®. Besides GOOD® BLUE, earth tones are what I resonate with most. I think of them as comfort food: I stick with what I know, and when we want to make something compelling, we explore. Maybe the next FRIDAY PROGRAMME® will have nothing I’m comfortable with, which I’m strangely comfortable with, if that makes any sense."
       },
       {
-        "p": "Olive is a casual colour that dresses down, and we wanted to try a different kind of rip on it. The khaki we kept clean, to speak to the prep side of the burgundy. So you can have it both ways, and with the rest of our pants, any way you want."
+        "p": "Olive is a casual colour that dresses down, and we wanted to try a different kind of rip on it. The khaki we kept clean, to speak to the prep side of the merlot. So you can have it both ways, and with the rest of our pants, any way you want."
       },
       {
         "quote": "Earth tones are comfort food. I stick with what I know, and when we want to make something compelling, we explore."
@@ -113,11 +113,11 @@ const STUDY = [
         "pair": [
           {
             "img": "/assets/study/fp-model-lindseyyhazel.png",
-            "alt": "LindseyyHazel mid-stride in the DOUBBIE® I BURGUNDY™/COTTON™ and the JEAN® in OLIVE™."
+            "alt": "LindseyyHazel mid-stride in the DOUBBIE® I MERLOT™/COTTON™ and the JEAN® in OLIVE™."
           },
           {
             "img": "/assets/study/fp-model-isabelleblanco.png",
-            "alt": "Isabelleblanco, a hand up, in the GOODIE® BURGUNDY™/COTTON™ and the JEAN® in OLIVE™."
+            "alt": "Isabelleblanco, a hand up, in the GOODIE® MERLOT™/COTTON™ and the JEAN® in OLIVE™."
           }
         ],
         "caption": "LindseyyHazel in the DOUBBIE® I and the JEAN® in OLIVE™ with SNEAK01. Isabelleblanco in the GOODIE® and the JEAN® in OLIVE™ with DUCK BOOT® CHOCOLATE/CACAO."
@@ -164,12 +164,17 @@ const STUDY = [
           {
             "img": "/assets/study/fp-piece-goodie.png",
             "label": "GOODIE®",
-            "sub": "BURGUNDY™/COTTON™"
+            "sub": "MERLOT™/COTTON™"
           },
           {
             "img": "/assets/study/fp-piece-doubbie.png",
             "label": "DOUBBIE® I",
-            "sub": "BURGUNDY™/COTTON™"
+            "sub": "MERLOT™/COTTON™"
+          },
+          {
+            "img": "/assets/study/fp-piece-shirt.png",
+            "label": "SHIRT® I",
+            "sub": "COTTON™/MERLOT™"
           },
           {
             "img": "/assets/study/fp-piece-jean-olive.png",
@@ -182,7 +187,7 @@ const STUDY = [
             "sub": "KHAKI™, clean"
           }
         ],
-        "title": "GOOD® FRIDAY PROGRAMME®: BURGUNDY/KHAKI",
+        "title": "GOOD® FRIDAY PROGRAMME®: MERLOT/KHAKI",
         "caption": "Free in MAKER®, in every shoe, with anything else GOOD® makes. <a href=\"/?filter=friday\">Try them on your skin →</a>"
       }
     ]

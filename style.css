@@ -782,6 +782,7 @@ body.st {
 .st-gallery h3 { margin: 0 0 10px; font: 400 1.5rem 'Libre Caslon Display', Georgia, serif; }
 .st-grid { display: grid; gap: 12px; }
 .st-grid.st-n4 { grid-template-columns: repeat(4, 1fr); }
+.st-grid.st-n5 { grid-template-columns: repeat(3, 1fr); }
 .st-grid.st-n6 { grid-template-columns: repeat(6, 1fr); }
 .st-grid figure { margin: 0; }
 .st-grid .st-tile { aspect-ratio: 5 / 8; padding: 10px; }
@@ -815,6 +816,7 @@ body.st {
   .st-item { grid-template-columns: 1fr; gap: 16px; }
   .st-body { font-size: 1.05rem; }
   .st-grid.st-n4 { grid-template-columns: repeat(2, 1fr); }
+  .st-grid.st-n5 { grid-template-columns: repeat(2, 1fr); }
   .st-grid.st-n6 { grid-template-columns: repeat(3, 1fr); }
 }
 
