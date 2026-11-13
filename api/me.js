@@ -16,7 +16,7 @@ const path = require('path');
 const vm = require('vm');
 const crypto = require('crypto');
 const { redis, configured, overLimit, parseBody } = require('./_redis');
-const { sha, currentUser, endSession, saveUser, unlocksFor, isOwner, seesPrivate, slugOf, claimProfile } = require('./_account');
+const { sha, currentUser, endSession, saveUser, unlocksFor, isOwner, seesPrivate, privateWho, slugOf, claimProfile } = require('./_account');
 const ACH = require('./_achievements');
 const { applySeeds } = require('./_seeds');
 const { privateIds } = require('./_private');
@@ -24,7 +24,6 @@ const { dropIds } = require('./_drop');
 const HOUSE = require('./_house');
 const NOTIFY = require('./_notify');
 
-const privateWho = async (user) => (isOwner(user) ? 'owner' : (await seesPrivate(user)) ? 'guest' : null);
 const COINS_PER_SAVE = 10;
 const SAVES_PER_DAY = 4;
 const MAX_LOOKS = 60;
@@ -37,7 +36,7 @@ const ACCS = new Set();   // ACCESSORIES: all locked until owned
 for (const k of win.ACCESSORIES || []) for (const c of k.colors || [k]) { ACCS.add(c.id); if (k.locked || c.locked) LOCKED.set(c.id, k.id); }
 
 // Locked tops only for accounts that own them (by colour id or kind id).
-function cleanLook(L, unlocks = [], who = null) {   // who: 'owner' | 'guest' (private pieces) | null
+function cleanLook(L, unlocks = [], who = null) {   // who: 'owner' | a guest's slug (private pieces) | null
   L = L || {};
   const out = {};
   const priv = who ? privateIds(who) : null;   // the private pieces (api/_private.js), for the owner and guests
@@ -118,6 +117,8 @@ module.exports = async function handler(req, res) {
       // One-time account set-ups (api/_seeds.js); re-read in case this account was one of them.
       await applySeeds();
       { const raw = await redis('GET', `user:${user.uid}`); if (raw) Object.assign(user, JSON.parse(raw)); }
+      // 100 GOOD® COINS for the owner, once (13 November 2026, at the owner's word).
+      if (isOwner(user) && await redis('SET', 'grant:owner:100:nov13', 1, 'NX')) { user.coins = (user.coins || 0) + 100; await saveUser(user); }
       // One-time owner set-up, on the owner's next visit: take back the 1000-coin grant
       // if it was applied, and add every GOOD® CRATE piece at serial GD-999 (outside
       // the normal serial counters, so GD-001 onwards stay attainable).

@@ -45,8 +45,8 @@ function unsealFile(file) {
 async function ownerOnly(req) {
   try { const { currentUser, isOwner } = require('./_account'); return isOwner(await currentUser(req)); } catch { return false; }
 }
-async function privateOk(req) {   // the owner and the private guests (api/_account.js)
-  try { const { currentUser, seesPrivate } = require('./_account'); return await seesPrivate(await currentUser(req)); } catch { return false; }
+async function privateWho(req) {   // 'owner', a private guest's slug (api/_account.js), or null
+  try { const A = require('./_account'); return await A.privateWho(await A.currentUser(req)); } catch { return null; }
 }
 
 module.exports = async function handler(req, res) {
@@ -70,11 +70,12 @@ module.exports = async function handler(req, res) {
   if (wantsPrivate || PRIVATE.has(id)) {
     // The catalogue (what can be worn) is for the owner and guests; a piece's own file is
     // there for anyone to see on a profile, scrambled like every preview.
-    if (wantsPrivate && !(await privateOk(req))) { unknown(); return; }
+    const who = wantsPrivate ? await privateWho(req) : null;
+    if (wantsPrivate && !who) { unknown(); return; }
     let buf = null;
     try { buf = unsealFile(path.join(__dirname, '_private', wantsPrivate ? 'index.enc' : `${id}.enc`)); } catch { buf = null; }
     if (!buf) { unknown(); return; }
-    if (wantsPrivate) { res.status(200).json(require('./_private').forViewer((await ownerOnly(req)) ? 'owner' : 'guest')); return; }
+    if (wantsPrivate) { res.status(200).json(require('./_private').forViewer(who)); return; }
     const key = crypto.randomBytes(32);
     const data = Buffer.alloc(buf.length);
     for (let i = 0; i < buf.length; i++) data[i] = buf[i] ^ key[i % key.length];

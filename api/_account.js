@@ -44,13 +44,17 @@ const OWNER = '402fb6989f1b7e8cf49c604bd500e77fef3bc4fb340372fc7d5415ee09717511'
 const isOwner = (user) => !!user && sha(String(user.email).toLowerCase()) === OWNER;
 // Accounts besides the owner who see the private pieces (api/_private: MAKER® and their
 // wardrobe), by the profile slug their account holds.
-const PRIVATE_GUESTS = ['chinny'];   // CHINNY (globohomo123 in Minecraft)
-async function seesPrivate(user) {
-  if (!user) return false;
-  if (isOwner(user)) return true;
-  for (const slug of PRIVATE_GUESTS) if ((await redis('GET', `profile:${slug}`)) === user.uid) return true;
-  return false;
+// A guest sees the colours marked for them (only: ['owner', '<slug>']); CHINNY also sees every
+// unmarked colour (api/_private.js).
+const PRIVATE_GUESTS = ['chinny', 'royal'];   // CHINNY (globohomo123 in Minecraft), ROYAL (Q&G®)
+// Who this account is to the private catalogue: 'owner', a guest's slug, or null.
+async function privateWho(user) {
+  if (!user) return null;
+  if (isOwner(user)) return 'owner';
+  for (const slug of PRIVATE_GUESTS) if ((await redis('GET', `profile:${slug}`)) === user.uid) return slug;
+  return null;
 }
+const seesPrivate = async (user) => !!(await privateWho(user));
 const UNLOCKS = {
   // owner: plus every GOOD® CRATE Nº002 piece (kind ids), which the owner wore before it opened
   '402fb6989f1b7e8cf49c604bd500e77fef3bc4fb340372fc7d5415ee09717511': ['goodie-im-sowwy', 'goodie-black-chrome',
@@ -84,4 +88,4 @@ async function claimProfile(user) {
   return (await redis('GET', `profile:${slug}`)) === user.uid ? slug : null;
 }
 
-module.exports = { sha, currentUser, startSession, endSession, saveUser, unlocksFor, isOwner, seesPrivate, slugOf, tagsOf, claimProfile };
+module.exports = { sha, currentUser, startSession, endSession, saveUser, unlocksFor, isOwner, seesPrivate, privateWho, slugOf, tagsOf, claimProfile };

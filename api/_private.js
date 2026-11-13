@@ -1,6 +1,7 @@
 // The private pieces (tools/private-seal.js), read from the sealed catalogue. Not a route.
-// The owner and the private guests (api/_account.js) wear them; colours marked only: 'owner'
-// are the owner's alone. Anyone may see them on a profile (drawn from scrambled data), never
+// The owner and the private guests (api/_account.js) wear them. A colour marked only: 'owner' is
+// the owner's alone; only: ['owner', 'royal'] is the owner's and those guests'. Unmarked colours
+// go to the owner and the guests in ALL_GUESTS. Anyone may see them on a profile (drawn from scrambled data), never
 // equip them: MAKER® only gets the catalogue for the owner and guests (?private=1).
 const fs = require('fs');
 const path = require('path');
@@ -19,16 +20,18 @@ function catalogue() {
   } catch { cat = { tops: [], pants: [], accessories: [] }; }
   return cat;
 }
-// The catalogue cut down: to what this viewer may wear ('owner' | 'guest'), or to the colours a
-// set of looks uses (a profile's fits).
+// The catalogue cut down: to what this viewer may wear ('owner' or a guest's slug), or to the
+// colours a set of looks uses (a profile's fits). Who a colour is for never leaves the server.
 function cut(keep) {
   const c = catalogue(), out = {};
   for (const part of ['tops', 'pants', 'accessories']) {
-    out[part] = (c[part] || []).map((k) => ({ ...k, colors: k.colors.filter(keep) })).filter((k) => k.colors.length);
+    out[part] = (c[part] || []).map((k) => ({ ...k, colors: k.colors.filter(keep).map(({ only, ...x }) => x) })).filter((k) => k.colors.length);
   }
   return out;
 }
-const forViewer = (who) => cut((c) => who === 'owner' || c.only !== 'owner');
+const ALL_GUESTS = ['chinny'];
+const mayWear = (who, c) => who === 'owner' || (Array.isArray(c.only) ? c.only.includes(who) : !c.only && ALL_GUESTS.includes(who));
+const forViewer = (who) => cut((c) => mayWear(who, c));
 function forLooks(looks) {
   const used = new Set(looks.flatMap((L) => [L.top, L.bottom, L.acc].filter(Boolean).map(String)));
   return cut((c) => used.has(c.id));
