@@ -67,7 +67,8 @@
   // HIDE LOCKED (the checkbox under the filters): pieces you can't wear yet drop out of the lists.
   const inSeason = (k) => (FILTERS[state.filter] || FILTERS.all)(k) && !(state.hideLocked && k.colors.every(isLocked));
   // Where a locked piece comes from, for the LOCKED note under the colours and on DOWNLOAD.
-  const crateOf = (c) => (c.kind && c.kind.drop === 'crate3' ? { name: 'GOOD® CRATE Nº003', href: 'dynamics' }
+  const crateOf = (c) => (String(c.id).startsWith('hse-') ? { name: 'MARKET®', href: 'market#house', verb: 'BUY IT ON', sale: true }
+    : c.kind && c.kind.drop === 'crate3' ? { name: 'GOOD® CRATE Nº003', href: 'dynamics' }
     : c.kind && c.kind.drop === 'crate2' ? { name: 'GOOD® CRATE Nº002', href: 'inmotion' }
     : CRATE1.has(c.id) || (c.kind && CRATE1.has(c.kind.id)) ? { name: 'GOOD® CRATE Nº001', href: 'crate' } : { name: 'A GOOD® CRATE', href: 'releases' });
   const LOCK_TAG = '<span class="lock-tag" role="img" aria-label="Locked"></span>';   // a small hollow dot
@@ -637,7 +638,7 @@
     label.textContent = selected.color || '';
     if (isLocked(selected)) {
       const src = crateOf(selected), get = document.createElement('a');
-      get.className = 'sw-get'; get.href = src.href; get.textContent = `LOCKED · IN ${src.name} →`;
+      get.className = 'sw-get'; get.href = src.href; get.textContent = src.sale ? 'TODAY ON SAMPLE SALE · BUY IT ON MARKET® →' : `LOCKED · IN ${src.name} →`;
       label.append(document.createElement('br'), get);
     }
   }
@@ -1116,9 +1117,9 @@
         : piece === o ? { to: o.kind.colors.find(free) || DEFAULT_TOP, top: true }
         : { to: state.pants.kind.colors.find(free) || freePants(noTop ? null : o) };
       const swapText = state.swap.off ? 'TAKE IT OFF' : `SWAP FOR ${fullName(state.swap.to)}`;
-      dl.title = `${which} is locked: try it on, then pull it from ${src.name} to download it`;
+      dl.title = src.sale ? `${which} is on today's SAMPLE SALE: try it on, then buy it on MARKET® to download it` : `${which} is locked: try it on, then pull it from ${src.name} to download it`;
       $('downloadHint').innerHTML = `<strong>${which}</strong> IS LOCKED<span class="dl-why">, SO THIS LOOK IS TRY-ON ONLY</span>. <button type="button" class="dl-swap mono" data-swap>${swapText} →</button>`
-        + `<span class="dl-or">OR PULL IT FROM <a href="${src.href}">${src.name}</a>.</span>`;
+        + `<span class="dl-or">OR ${src.verb || 'PULL IT FROM'} <a href="${src.href}">${src.name}</a>.</span>`;
       document.body.classList.add('look-locked');
       showSkin(withLeaves(merged.data, slim), slim);
       return;
@@ -1444,7 +1445,7 @@
   function addDrop({ tops = [], pants = [], accessories = [] } = {}, { filter, label, owned = true, extra = false } = {}) {
     if (!filter || FILTERS[filter]) return;
     const T = catalogue(tops), P = catalogue(pants), A = catalogue(accessories);
-    for (const k of [...T, ...P, ...A]) for (const c of k.colors) { c.locked = true; if (owned) c.owned = true; if (extra) c.extra = true; }
+    for (const k of [...T, ...P, ...A]) for (const c of k.colors) { c.locked = true; c.owned = owned && c.owned !== false; if (extra) c.extra = true; }
     // A kind that's already listed (e.g. a private colourway of a WANDERING® piece) joins it as
     // more colours, extra ones last, whichever arrives first.
     const join = (list, kinds) => kinds.filter((k) => {
@@ -1590,7 +1591,8 @@
     setBody(['classic', 'slim'].includes(L.body) ? L.body : state.body);
   }
 
-  // HOUSE® (MARKET® one-of-ones): the pieces this account owns, to wear and download.
+  // SAMPLE SALE (MARKET® one-of-ones): the pieces this account owns, to wear and download, and
+  // today's shelf to try on (owned: false from the server: try-on only).
   fetch('api/crate?house=mine', { cache: 'no-store' }).then((r) => (r.ok ? r.json() : null)).then(async (cat) => {
     if (!cat || !((cat.tops || []).length || (cat.pants || []).length)) return;
     await bootDone; addDrop(cat, { filter: 'house', label: 'SAMPLE SALE' });

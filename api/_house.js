@@ -139,9 +139,15 @@ function catalogueOf(hids) {
   }
   return cat;
 }
-// MAKER®: the pieces an account owns, to wear and download.
+// MAKER®: the pieces an account owns, to wear and download, plus today's shelf to try on
+// (owned: false: try-on only, never saved or downloaded; api/me.js only takes pieces you own).
+// Only what's for sale today: nothing from the sealed pool, nothing already sold.
 async function wardrobe(uid) {
-  return catalogueOf(((await redis('SMEMBERS', `user:${uid}:owned`)) || []).filter((id) => id.startsWith('hse-')));
+  const mine = uid ? ((await redis('SMEMBERS', `user:${uid}:owned`)) || []).filter((id) => id.startsWith('hse-')) : [];
+  const today = OPEN ? (await shelf()).map((p) => p.id) : [];
+  const cat = catalogueOf([...mine, ...today]);
+  for (const k of [...cat.tops, ...cat.pants]) for (const c of k.colors) c.owned = mine.includes(c.id);
+  return cat;
 }
 // A profile's fits: the HOUSE® pieces they use, to draw (never to wear).
 const forLooks = (looks) => catalogueOf(looks.flatMap((L) => [L && L.top, L && L.bottom]).filter((id) => typeof id === 'string' && id.startsWith('hse-')));

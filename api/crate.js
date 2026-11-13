@@ -8,7 +8,7 @@
 //   GET  /api/crate?market=1           -> MARKET®: { listings: [{ lid, item, serial, price, seller, at, mine }], sales: [...], trades: [...yours] }
 //   POST /api/crate { action: 'list', entry, price } | { action: 'unlist', lid } | { action: 'buy', lid }
 //   GET  /api/crate?crate=house         -> HOUSE® (api/_house.js): { open, shelf: [4 pieces], items: [every piece shown so far] }
-//   GET  /api/crate?house=mine          -> the HOUSE® pieces you own, as a MAKER® catalogue { tops, pants }
+//   GET  /api/crate?house=mine          -> the HOUSE® pieces you own and today's shelf (to try on), as a MAKER® catalogue { tops, pants }
 //   POST /api/crate { action: 'house', hid } -> buy that HOUSE® piece (one of one); another takes its place
 //   GET  /api/crate?casino=1 · POST { action: 'casino', game, move, ... } -> GOOD® CASINO (api/_casino.js)
 // Signed in only. Opening costs 5 GOOD® COINS; the roll happens here, never on
@@ -210,7 +210,7 @@ module.exports = async function handler(req, res) {
   if (req.method === 'GET' && req.query && (req.query.crate === 'house' || req.query.house)) {
     try {
       const me = configured() ? await currentUser(req).catch(() => null) : null;
-      if (req.query.house === 'mine') { res.status(200).json(me ? await HOUSE.wardrobe(me.uid) : { tops: [], pants: [] }); return; }
+      if (req.query.house === 'mine') { res.status(200).json(configured() ? await HOUSE.wardrobe(me && me.uid) : { tops: [], pants: [] }); return; }
       if (!configured() || (!HOUSE.OPEN && !isOwner(me))) { res.status(200).json({ open: false, shelf: [], items: [] }); return; }
       const shelf = await HOUSE.shelf();
       res.status(200).json({ open: true, shelf, items: await HOUSE.shown() }); return;

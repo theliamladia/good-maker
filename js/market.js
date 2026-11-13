@@ -6,7 +6,7 @@
   const $ = (id) => document.getElementById(id);
   const coin = '<span class="coin" aria-hidden="true"></span>';
   const meOnce = () => (window.__goodMe ||= fetch('/api/me').then((r) => (r.ok ? r.json() : { user: null })).catch(() => ({ user: null })));
-  let me = null, inventory = [], items = {}, listings = [], sales = [], trades = [];
+  let me = null, inventory = [], items = {}, listings = [], sales = [], trades = [], house = [];
 
   // Colour dots: each colour in the colourway, looked up by name in COLORS®.
   const HEX = Object.fromEntries((window.GOOD_COLORS || []).map((c) => [c.name.toUpperCase(), [].concat(c.hex)[0]]));
@@ -57,7 +57,7 @@
   // TRY IT ON: the MAKER® link that puts a piece on (index.html?top=&bottom=&acc=, read by lookFromUrl in js/app.js).
   // A crate item's unlock is a MAKER® colour id, a kind id (its first colour) or a set [top, bottom].
   // Anything missing is filled with the house default (and a top's own pairing), so nobody is shown half-dressed.
-  // SAMPLE SALE (hse-*) pieces only reach MAKER® once owned, so they link only for their owner.
+  // SAMPLE SALE (hse-*) pieces reach MAKER® once owned, or to try on while they're on today's shelf.
   const CAT = { top: window.OUTFITS || [], bottom: window.PANTS || [], acc: window.ACCESSORIES || [] };
   function findColour(id) {
     for (const [part, kinds] of Object.entries(CAT)) for (const k of kinds) {
@@ -71,16 +71,16 @@
     if (!it) return null;
     const L = {};
     if (String(id).startsWith('hse-')) {
-      if (!inventory.some((e) => e.item === id)) return null;
+      if (!inventory.some((e) => e.item === id) && !house.some((h) => h.id === id)) return null;
       L[it.bottom ? 'bottom' : 'top'] = id;
     } else {
       for (const u of [].concat(it.unlock || [])) { const f = findColour(u); if (f && !L[f.part]) { L[f.part] = f.c.id; if (f.part === 'top' && f.c.pants) L.pair = f.c.pants; } }
       if (!L.top && !L.bottom && !L.acc) return null;
     }
-    const house = CAT.top[0] && CAT.top[0].colors[0];
+    const dflt = CAT.top[0] && CAT.top[0].colors[0];
     const q = new URLSearchParams();
-    q.set('top', L.top || (house ? house.id : 'shirt-cotton-maple-leaf'));
-    q.set('bottom', L.bottom || L.pair || (house && house.pants) || 'cargo-maple-leaf-fatigue');
+    q.set('top', L.top || (dflt ? dflt.id : 'shirt-cotton-maple-leaf'));
+    q.set('bottom', L.bottom || L.pair || (dflt && dflt.pants) || 'cargo-maple-leaf-fatigue');
     if (L.acc) q.set('acc', L.acc);
     return `./?${q}`;
   }
@@ -312,7 +312,7 @@
 
   // HOUSE®: four one-of-one pieces sold by GOOD® (api/_house.js). Buying one puts another in its
   // place, so the shelf is redrawn from what the server sends back.
-  let house = [];
+  // (house: declared at the top, so TRY IT ON can read it)
   function drawHouse() {
     const sec = $('house');
     sec.hidden = !house.length;
@@ -339,7 +339,7 @@
         };
       }
       f.append(b);
-      const tryOn = tryLink(it.id, 'WEAR IT IN MAKER® →'); if (tryOn) f.append(tryOn);
+      const tryOn = tryLink(it.id, 'TRY IT ON →'); if (tryOn) f.append(tryOn);
       return f;
     }));
   }
