@@ -534,6 +534,12 @@ function combineOutfit(shirt, pants, tucked = true) {
     const [bx, by, bw, bh] = JACKET_BOTTOM;
     for (let yy = by; yy < by + bh; yy++) for (let xx = bx; xx < bx + bw; xx++) put(xx, yy, null);
   }
+  // An outer-layer top or bottom face with no outer-layer sides beside it floats off the body as a
+  // shelf (tees cut from SHIRT® files keep the old jean's underside): clear it.
+  const outerRowEmpty = (r) => { for (let xx = x; xx < x + w; xx++) if (out.data[idx(xx, y + r) + 3]) return false; return true; };
+  for (const [fx, fr] of [[20, 0], [28, JACKET_SIDES.h - 1]]) {
+    if (outerRowEmpty(fr)) for (let yy = 32; yy < 36; yy++) for (let xx = fx; xx < fx + 8; xx++) put(xx, yy, null);
+  }
   for (const [x0, y0, lw, lh] of LEG_RECTS) {
     for (let yy = y0; yy < y0 + lh; yy++) for (let xx = x0; xx < x0 + lw; xx++) put(xx, yy, pants);
   }
