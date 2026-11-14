@@ -41,7 +41,11 @@ module.exports = async function handler(req, res) {
       let uid = await redis('GET', `user:email:${sha(email)}`);
       if (!uid) {
         uid = crypto.randomBytes(9).toString('base64url');
-        await saveUser({ uid, email, name: email.split('@')[0].slice(0, 16).toUpperCase(), coins: 0, created: new Date().toISOString() });
+        // The first name comes from the email, so keep it to what a rename allows (ASCII letters, digits,
+        // _ . - and spaces): no markup and no look-alike Unicode (FULLWIDTH or Cyrillic posing as a member).
+        let name = email.split('@')[0].replace(/[^A-Za-z0-9_.-]/g, '').slice(0, 16).toUpperCase();
+        if (name.replace(/[^A-Z0-9]/g, '').length < 2) name = `MEMBER-${uid.slice(0, 6).toUpperCase().replace(/[^A-Z0-9]/g, 'X')}`;
+        await saveUser({ uid, email, name, coins: 0, created: new Date().toISOString() });
         await redis('SET', `user:email:${sha(email)}`, uid);
       }
       await startSession(res, uid);

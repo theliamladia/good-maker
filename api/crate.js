@@ -217,7 +217,8 @@ module.exports = async function handler(req, res) {
     } catch { res.status(502).json({ error: 'storage' }); return; }
   }
   // GOOD® CRATE Nº002 (ART® IN MOTION, /inmotion) and Nº003 (DYNAMICS® I, /dynamics): the pieces, odds and copies pulled.
-  const later = req.query && { 2: [ITEMS2, table2], 3: [ITEMS3, table3] }[req.query.crate];
+  const LATER = { 2: [ITEMS2, table2], 3: [ITEMS3, table3] };
+  const later = req.query && Object.hasOwn(LATER, String(req.query.crate)) ? LATER[String(req.query.crate)] : null;
   if (req.method === 'GET' && later) {
     let pulled = {};
     try {
