@@ -13,6 +13,11 @@ Write sheet HTML in the scratchpad (or `tools/studio/work/`), images next to it,
 and check it against the rules below before sending it (SendUserFile, display: render).
 Images taller than 8000px get scaled in chat — offer the original in a .zip if needed.
 
+## Previews are white (owner, 14 Nov 2026)
+Every preview and concept sheet you send goes on a white ground (`#fff`, type `#111114`, 1px dark
+rules, pieces with the soft drop shadow instead of the white spotlight). Check renders on white too.
+Released press (share banners, RELEASES® cards, collab pages) keep their own look.
+
 ## House art direction (from CLAUDE.md — the owner enforces it)
 - COLLABORATIONS® look: GOOD® BLUE `#0000ff` ground, white type. Inter 500–600 headlines with
   slight negative tracking (never 700–900), Inter 300–400 copy at 1.55+ line height, Space Mono
