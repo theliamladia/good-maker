@@ -57,7 +57,7 @@ function cleanLook(L, unlocks = [], who = null) {   // who: 'owner' | a guest's 
   if (['classic', 'slim'].includes(L.body)) out.body = L.body;
   if (L.tuck === 'out') out.tuck = 'out';
   if (L.boxer === 'tartan') out.boxer = 'tartan';
-  if (L.acc) { const a = String(L.acc); if ((ACCS.has(a) && (!LOCKED.has(a) || owns(a))) || (priv && priv.accs.has(a))) out.acc = a; }
+  if (L.acc) { const a = String(L.acc); if ((ACCS.has(a) && (!LOCKED.has(a) || owns(a))) || (priv && priv.accs.has(a)) || gud.accs.has(a)) out.acc = a; }
   const ft = cleanFt(L.ft);
   if (ft) out.ft = ft;
   return out;

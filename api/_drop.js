@@ -14,6 +14,8 @@ const DROPS = {
   qg: { at: Date.parse('2026-11-10T00:00:00-05:00'), prefix: 'qgm-', index: 'qgm-index' },   // Q&G® (ROYALS & GOOD®), live 10 November 2026
   // GOOD® FRIDAY PROGRAMME®: MERLOT/KHAKI, free, Friday 13 November 2026 at 2 p.m. New York time
   friday: { at: Date.parse('2026-11-13T14:00:00-05:00'), prefix: 'fpm-', index: 'fpm-index' },
+  // FARTHER®: MOON®, the GROUND CREW COVERALL and the VISITOR TEE, live 17 November 2026, at the owner's word
+  farther: { at: Date.parse('2026-11-17T00:00:00-05:00'), prefix: 'frm-', index: 'frm-index' },
 };
 const isOpen = (name, now = Date.now()) => { const d = DROPS[name]; return !!d && d.at !== null && now >= d.at; };
 const dropOf = (id) => Object.keys(DROPS).find((n) => id.startsWith(DROPS[n].prefix)) || null;
@@ -21,11 +23,11 @@ const dropOf = (id) => Object.keys(DROPS).find((n) => id.startsWith(DROPS[n].pre
 // The open drops' catalogues (MAKER® ids), for checking saved fits.
 const cache = {};
 function dropIds() {
-  const ids = { tops: new Set(), bottoms: new Map() };
+  const ids = { tops: new Set(), bottoms: new Map(), accs: new Set() };
   for (const name of Object.keys(DROPS)) {
     if (!isOpen(name)) continue;
     if (!cache[name]) {
-      cache[name] = { tops: new Set(), bottoms: new Map() };
+      cache[name] = { tops: new Set(), bottoms: new Map(), accs: new Set() };
       try {
         const key = Buffer.from(process.env.GOOD_LOCK_KEY || '', 'base64');
         const { iv, tag, data } = JSON.parse(fs.readFileSync(path.join(__dirname, '_locked', `${DROPS[name].index}.enc`), 'utf8'));
@@ -34,10 +36,12 @@ function dropIds() {
         const cat = JSON.parse(Buffer.concat([d.update(Buffer.from(data, 'base64')), d.final()]).toString('utf8'));
         for (const k of cat.tops) for (const c of k.colors) cache[name].tops.add(c.id);
         for (const k of cat.pants) for (const c of k.colors) cache[name].bottoms.set(c.id, Object.keys(c.shoes || {}));
+        for (const k of cat.accessories || []) for (const c of k.colors) cache[name].accs.add(c.id);
       } catch { /* no catalogue */ }
     }
     for (const t of cache[name].tops) ids.tops.add(t);
     for (const [b, s] of cache[name].bottoms) ids.bottoms.set(b, s);
+    for (const a of cache[name].accs) ids.accs.add(a);
   }
   return ids;
 }
