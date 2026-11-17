@@ -1,0 +1,17 @@
+/* FARTHER® (/farther): a flight out of the solar system on a canvas, ending over a GOOD® BLUE planet. */
+html, body { margin: 0; height: 100%; background: #05060a; color: #fff; overflow: hidden; }
+body { font-family: Inter, system-ui, sans-serif; }
+.fr-space { position: fixed; inset: 0; width: 100%; height: 100%; display: block; image-rendering: pixelated; }
+.fr-home, .fr-skip { position: fixed; z-index: 3; top: 22px; font: 400 11px 'Space Mono', monospace; letter-spacing: .22em; color: #fff; opacity: .75; text-decoration: none; }
+.fr-home { left: 24px; }
+.fr-skip { right: 24px; background: none; border: 1px solid rgba(255,255,255,.4); padding: 8px 14px; cursor: pointer; }
+.fr-home:hover, .fr-skip:hover { opacity: 1; }
+.fr-skip[hidden] { display: none; }
+.fr-main { position: fixed; inset: 0; z-index: 2; display: grid; place-items: center; padding-bottom: 22vh; pointer-events: none; }
+.fr-title { margin: 0; font: 600 clamp(64px, 15vw, 240px)/.9 Inter, sans-serif; letter-spacing: -.045em; opacity: 0; transform: translateY(18px); transition: opacity 1.4s ease, transform 1.4s ease; text-shadow: 0 0 60px rgba(0,0,255,.45); }
+.fr-title sup { font-size: .26em; font-weight: 500; vertical-align: 2.4em; letter-spacing: 0; }
+.fr-title.on { opacity: 1; transform: none; }
+.fr-foot { position: fixed; z-index: 3; left: 0; right: 0; bottom: 18px; text-align: center; font: 400 10px 'Space Mono', monospace; letter-spacing: .22em; opacity: 0; transition: opacity 1.4s ease 1s; }
+.fr-done .fr-foot { opacity: .8; }
+.fr-foot { text-shadow: 0 0 8px rgba(0,0,40,.9), 0 0 2px rgba(0,0,40,.9); }
+@media (prefers-reduced-motion: reduce) { .fr-title, .fr-foot { transition: none; } }
