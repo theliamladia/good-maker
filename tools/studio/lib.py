@@ -65,7 +65,8 @@ def coat(im, col, rows=12, sleeve=12, fn=None, sfn=None, collar=None, cuff=0.82,
         return sd(col, s, 1, amt)
     for arm in ('rarm', 'larm'):
         paint(im, arm, a, 'over')
-        paint(im, arm, lambda s, u, v, w, h: None if s != 'top' and v >= sleeve else sd(col, s, 0.8))
+        # base sleeve; a short sleeve never paints the arm's underside (that's the hand)
+        paint(im, arm, lambda s, u, v, w, h: None if (s == 'bottom' and sleeve < 12) or (s not in ('top', 'bottom') and v >= sleeve) else sd(col, s, 0.8))
 def legs(fn, boot=C('#0e0e10')):
     """Trousers from scratch: fn(leg, side, u, v) for rows 0-9, boots on rows 10-11."""
     p = new()

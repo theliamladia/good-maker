@@ -8,7 +8,7 @@
   const title = document.getElementById('title'), skip = document.getElementById('skip');
   const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
   let W = 0, H = 0, DPR = 1;
-  function size() { DPR = Math.min(2, devicePixelRatio || 1); W = innerWidth; H = innerHeight; cv.width = W * DPR; cv.height = H * DPR; ctx.setTransform(DPR, 0, 0, DPR, 0, 0); }
+  function size() { DPR = Math.min(2, devicePixelRatio || 1); W = cv.clientWidth || innerWidth; H = cv.clientHeight || innerHeight; cv.width = W * DPR; cv.height = H * DPR; ctx.setTransform(DPR, 0, 0, DPR, 0, 0); }
   size(); addEventListener('resize', size);
 
   // ---------- noise ----------
@@ -204,8 +204,11 @@
     if (shown) return; shown = true;
     title.classList.add('on'); document.body.classList.add('fr-done'); skip.hidden = true;
   }
+  let heroOn = true;   // the flight only draws while the hero is on screen
+  new IntersectionObserver(([e]) => { heroOn = e.isIntersecting; }).observe(document.getElementById('hero'));
   function frame(now) {
     if (t0 === null) t0 = now;
+    if (!heroOn && t0 !== null && (now - t0) / 1000 > END) { requestAnimationFrame(frame); return; }
     if (jumped) { if ((now - t0) / 1000 < END) t0 = now - END * 1000; jumped = false; }   // straight to the end, still turning
     const t = (now - t0) / 1000;
     const c = cam(Math.min(t, END));
@@ -225,4 +228,87 @@
   skip.onclick = jump;
   addEventListener('keydown', (e) => { if (['Escape', 'Enter', ' '].includes(e.key) && !shown) { e.preventDefault(); jump(); } });
   document.fonts.ready.then(() => requestAnimationFrame(frame));
+
+  // ---------- the looks: sealed turntables, drawn straight to canvas (like /q) ----------
+  const $ = (id) => document.getElementById(id);
+  const wait = (ms) => new Promise((ok) => setTimeout(ok, ms));
+  const HEX = { 'MOONDUST™': '#e9e7e1', 'REGOLITH™': '#8a8780', 'GOOD® BLUE': '#0000ff', 'GOLD™': '#d8b23c', 'FLIGHTLINE™': '#2447c9',
+    'SIGNAL™': '#ff6a13', 'VISITOR™': '#7bd34a', 'COTTON™': '#f4f4f2', 'JET™': '#131416' };
+  const dots = (cw) => `<span class="dots">${cw.split('/').map((n) => `<i style="background:${HEX[n] || '#000'}"></i>`).join('')}</span>`;
+  const LOOKS = [
+    ['MOON® · MOON® HELMET', 'MOONDUST™/GOOD® BLUE'],
+    ['MOON® · MOON® HELMET', 'MOONDUST™/GOLD™'],
+    ['GROUND CREW COVERALL', 'FLIGHTLINE™'],
+    ['GROUND CREW COVERALL', 'SIGNAL™'],
+    ['GROUND CREW COVERALL', 'REGOLITH™'],
+    ['VISITOR TEE · GROUND CREW COVERALL', 'JET™/VISITOR™'],
+  ];
+  $('looks').replaceChildren(...LOOKS.map(([pieces, cw], i) => {
+    const f = document.createElement('figure');
+    f.dataset.id = `fr-${i + 1}`;
+    f.innerHTML = `<div class="n"><span>${String(i + 1).padStart(2, '0')}</span><span>LOOK</span></div><canvas width="202" height="407" aria-hidden="true"></canvas><figcaption><span></span><span>${dots(cw)}${cw}</span></figcaption>`;
+    f.querySelector('figcaption span').textContent = pieces;
+    f.setAttribute('aria-label', `Look ${i + 1}: ${pieces}, ${cw}`);
+    return f;
+  }));
+  const PIECES = [
+    ['MOON®', ['MOONDUST™/GOOD® BLUE', 'MOONDUST™/GOLD™']],
+    ['MOON® HELMET', ['MOONDUST™/GOOD® BLUE', 'MOONDUST™/GOLD™']],
+    ['GROUND CREW COVERALL', ['FLIGHTLINE™', 'SIGNAL™', 'REGOLITH™']],
+    ['VISITOR TEE', ['COTTON™/VISITOR™', 'JET™/VISITOR™', 'VISITOR™/REGOLITH™']],
+  ];
+  $('pieces').replaceChildren(...PIECES.map(([name, cws], i) => {
+    const tr = document.createElement('tr');
+    tr.innerHTML = `<td>${String(i + 1).padStart(2, '0')}</td><td></td><td>${cws.map((c) => `<span class="cw">${dots(c)}${c}</span>`).join('')}</td>`;
+    tr.children[1].textContent = name;
+    return tr;
+  }));
+  const scrambled = async (id, tries = 3) => {
+    const r = await fetch(`/api/outfit?id=${id}`, { cache: 'no-store' }).catch(() => null);
+    if (!r || !r.ok) {
+      if (tries > 1 && (!r || r.status >= 500)) { await wait(800); return scrambled(id, tries - 1); }
+      throw new Error('unavailable');
+    }
+    const { k, d } = await r.json();
+    const kb = Uint8Array.from(atob(k), (ch) => ch.charCodeAt(0));
+    return createImageBitmap(new Blob([Uint8Array.from(atob(d), (ch, i) => ch.charCodeAt(0) ^ kb[i % kb.length])]));
+  };
+  const FW = 202, FH = 407, FRAMES = 24, STEP = 260;
+  const shownLooks = new Set(), spinners = [];
+  const still = (c, id) => scrambled(id).then((bmp) => {
+    if (c.dataset.spin) { bmp.close(); return; }
+    c.getContext('2d').drawImage(bmp, 0, 0, FW, FH); bmp.close();
+  }).catch(() => {});
+  const turntable = (c, id) => {
+    if (c.dataset.asked) return; c.dataset.asked = '1';
+    scrambled(id.replace(/^fr-/, 'fr-spin-')).then((sheet) => { c.dataset.spin = '1'; spinners.push({ c, sheet, off: spinners.length * 4, drag: 0, drawn: -1 }); }).catch(() => {});
+  };
+  const near = new IntersectionObserver((es) => es.forEach((e) => {
+    if (e.isIntersecting) { shownLooks.add(e.target); turntable(e.target, e.target.dataset.look); } else shownLooks.delete(e.target);
+  }), { rootMargin: '600px 0px' });
+  const spinLoop = (now) => {
+    const auto = reduce ? 0 : Math.floor(now / STEP);
+    for (const sp of spinners) {
+      if (!shownLooks.has(sp.c)) continue;
+      const k = (((auto + sp.off + sp.drag) % FRAMES) + FRAMES) % FRAMES;
+      if (k === sp.drawn) continue;
+      sp.drawn = k;
+      const x = sp.c.getContext('2d'); x.clearRect(0, 0, FW, FH); x.drawImage(sp.sheet, k * FW, 0, FW, FH, 0, 0, FW, FH);
+    }
+    requestAnimationFrame(spinLoop);
+  };
+  requestAnimationFrame(spinLoop);
+  document.querySelectorAll('.fr-looks figure').forEach((fig) => {
+    const c = fig.querySelector('canvas');
+    c.dataset.look = fig.dataset.id; c.addEventListener('contextmenu', (e) => e.preventDefault());
+    still(c, fig.dataset.id); near.observe(c);
+    let x0 = null, d0 = 0, sp = null;
+    fig.addEventListener('pointerdown', (e) => {
+      sp = spinners.find((q) => q.c === c); if (!sp) return;
+      x0 = e.clientX; d0 = sp.drag; fig.setPointerCapture(e.pointerId); fig.classList.add('turning');
+    });
+    fig.addEventListener('pointermove', (e) => { if (x0 !== null && sp) sp.drag = d0 + Math.round((e.clientX - x0) / 10); });
+    const up = () => { x0 = null; fig.classList.remove('turning'); };
+    fig.addEventListener('pointerup', up); fig.addEventListener('pointercancel', up);
+  });
 })();
