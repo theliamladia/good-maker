@@ -74,6 +74,8 @@
     good: texture(40, (i, j, t, N) => {
       const n = vnoise(i / 5 + t * .08, j / 5, 101, 8) * .7 + vnoise(i / 2 + t * .08 * 2.5, j / 2, 107, 20) * .3;
       const cloud = vnoise(i / 3 + t * .14, j / 4, 113, 14) > .74;
+      const edge = Math.min(i, j, N - 1 - i, N - 1 - j);            // a border of water all round: no land or cloud
+      if (edge < 3) return limb([0, 0, 255], i, j, N);               // in the outer three pixels
       return limb(cloud ? [235, 238, 255] : n > .57 ? [255, 255, 255] : [0, 0, 255], i, j, N);
     }),
   };
@@ -83,19 +85,19 @@
   const SUN = { x: 0, y: 0, s: 200, tex: P.sun, spin: .05, glow: 'rgba(255,170,40,' };
   const BODIES = [
     SUN,
-    { x: 420, y: -90, s: 16, tex: P.mercury, spin: .3 },
-    { x: 760, y: 150, s: 26, tex: P.venus, spin: -.15 },
-    { x: 1150, y: -160, s: 28, tex: P.earth, spin: .2, moon: true },
-    { x: 1600, y: 120, s: 20, tex: P.mars, spin: .25 },
-    { x: 2600, y: -400, s: 120, tex: P.jupiter, spin: .08 },
-    { x: 3900, y: 500, s: 95, tex: P.saturn, spin: .06, ring: true },
-    { x: 52000, y: -8000, s: 4200, tex: P.blackhole, spin: .2, glow: 'rgba(255,140,40,' },
-    { x: 80000, y: 12000, s: 6000, tex: P.blackhole, spin: -.15, glow: 'rgba(255,190,90,' },
+    { x: 400, y: 0, s: 18, tex: P.mercury, spin: .3 },
+    { x: 700, y: 0, s: 28, tex: P.venus, spin: -.15 },
+    { x: 1050, y: 0, s: 30, tex: P.earth, spin: .2, moon: true },
+    { x: 1450, y: 0, s: 22, tex: P.mars, spin: .25 },
+    { x: 2400, y: 0, s: 140, tex: P.jupiter, spin: .08 },
+    { x: 3700, y: 0, s: 110, tex: P.saturn, spin: .06, ring: true },
+    { x: 52000, y: 0, s: 4200, tex: P.blackhole, spin: .2, glow: 'rgba(255,140,40,' },
+    { x: 80000, y: 0, s: 6000, tex: P.blackhole, spin: -.15, glow: 'rgba(255,190,90,' },
   ];
   const GOOD = { x: 140000, y: 0, s: 3000, tex: P.good, spin: 0, glow: 'rgba(40,60,255,' };
   BODIES.push(GOOD);
   // galaxies: a spiral of pixel squares
-  const GALAXIES = [{ x: 14000, y: -3000, s: 7000, rot: .4, seed: 5, hue: ['#cfd8ff', '#ffd6f0', '#ffffff'] }, { x: 30000, y: 6000, s: 10000, rot: -.25, seed: 9, hue: ['#ffe3b8', '#bcd2ff', '#ffffff'] }];
+  const GALAXIES = [{ x: 14000, y: 0, s: 7000, rot: .4, seed: 5, hue: ['#cfd8ff', '#ffd6f0', '#ffffff'] }, { x: 30000, y: 0, s: 10000, rot: -.25, seed: 9, hue: ['#ffe3b8', '#bcd2ff', '#ffffff'] }];
   for (const g of GALAXIES) {
     g.pts = [];
     for (let k = 0; k < 520; k++) {
@@ -105,30 +107,26 @@
   }
 
   // ---------- the camera ----------
-  // t (s), x, y, v (world units across the screen height), r (roll)
-  const K = [
-    { t: 0, x: 0, y: 0, v: 240, r: 0 },
-    { t: 2.2, x: 120, y: 0, v: 900, r: .02 },
-    { t: 3.3, x: 420, y: -90, v: 150, r: .05 },
-    { t: 4.4, x: 760, y: 150, v: 190, r: .08 },
-    { t: 5.5, x: 1150, y: -160, v: 190, r: .11 },
-    { t: 6.6, x: 1600, y: 120, v: 170, r: .14 },
-    { t: 7.9, x: 2600, y: -400, v: 560, r: .17 },
-    { t: 9.1, x: 3900, y: 500, v: 500, r: .2 },
-    { t: 10.0, x: 14000, y: -3000, v: 9000, r: .28 },
-    { t: 10.8, x: 30000, y: 6000, v: 13000, r: .36 },
-    { t: 11.6, x: 52000, y: -8000, v: 12000, r: .3 },
-    { t: 12.4, x: 80000, y: 12000, v: 16000, r: .2 },
-    { t: 13.6, x: 140000, y: -900, v: 40000, r: .08 },
-    { t: 15.8, x: 140000, y: -1740, v: 2400, r: 0 },
-  ];
-  const END = K[K.length - 1].t;
-  const ease = (s) => .45 * s + .55 * (s * s * (3 - 2 * s));
+  // Everything sits on one line. The camera travels out along it in one continuous move: steady through
+  // the planets, then faster through the galaxies and black holes, easing in over the GOOD® planet. The
+  // view widens with the distance travelled (a smooth zoom out), and the path bows gently off the line
+  // with a little roll (the slight curve), then settles level over the planet.
+  const END = 16, X0 = 300, XN = GOOD.x;
+  const L0 = Math.log(X0), L1 = Math.log(XN + X0);
+  const SPLIT = .6, AT = (Math.log(3700 + X0) - L0) / (L1 - L0);           // Saturn is passed at 60% of the time
+  function along(s) {   // 0..1 of the log distance, steady first, then a Hermite run that speeds up and settles
+    if (s <= SPLIT) return AT * s / SPLIT;
+    const q = (s - SPLIT) / (1 - SPLIT), m0 = (AT / SPLIT) * (1 - SPLIT) / (1 - AT);
+    return AT + (1 - AT) * ((q * q * q - 2 * q * q + q) * m0 + (-2 * q * q * q + 3 * q * q));
+  }
+  const smooth = (e0, e1, x) => { const k = Math.max(0, Math.min(1, (x - e0) / (e1 - e0))); return k * k * (3 - 2 * k); };
   function cam(t) {
-    if (t >= END) return { ...K[K.length - 1] };
-    let i = 0; while (K[i + 1].t <= t) i++;
-    const a = K[i], b = K[i + 1], s = ease((t - a.t) / (b.t - a.t));
-    return { x: lerp(a.x, b.x, s), y: lerp(a.y, b.y, s), v: Math.exp(lerp(Math.log(a.v), Math.log(b.v), s)), r: lerp(a.r, b.r, s) };
+    const s = Math.min(1, t / END), x = Math.exp(lerp(L0, L1, along(s))) - X0;
+    const vOut = 240 + .5 * x, land = smooth(.86, 1, s);
+    const v = Math.exp(lerp(Math.log(vOut), Math.log(2400), land));
+    const bow = Math.sin(Math.PI * Math.min(1, s / .9));
+    const y = lerp(-.12 * vOut * bow, -1740, land), r = .07 * bow * (1 - land);
+    return { x, y, v, r };
   }
 
   // ---------- stars (screen space, relative to the centre) ----------
