@@ -538,9 +538,11 @@
       const d = /^api\//.test(c.src) ? await loadLocked(c.src) : await loadData(c.src);
       const tex = document.createElement('canvas'); tex.width = tex.height = 64;
       tex.getContext('2d').putImageData(new ImageData(new Uint8ClampedArray(d.data), 64, 64), 0, 0);
-      const cv = document.createElement('canvas'); cv.width = 8; cv.height = 20;
+      // the head and the torso front; a piece that's only on the head (a helmet) gets a square thumb
+      const body = Array.from({ length: 8 * 12 * 2 }, (_, i) => d.data[(((i < 96 ? 20 : 36) + Math.floor((i % 96) / 8)) * 64 + 20 + (i % 8)) * 4 + 3]).some((a) => a > 0);
+      const cv = document.createElement('canvas'); cv.width = 8; cv.height = body ? 20 : 8;
       const x = cv.getContext('2d'); x.imageSmoothingEnabled = false;
-      for (const [sx, sy, dy, h] of [[8, 8, 0, 8], [40, 8, 0, 8], [20, 20, 8, 12], [20, 36, 8, 12]]) x.drawImage(tex, sx, sy, 8, h, 0, dy, 8, h);
+      for (const [sx, sy, dy, h] of [[8, 8, 0, 8], [40, 8, 0, 8], [20, 20, 8, 12], [20, 36, 8, 12]]) if (body || dy === 0) x.drawImage(tex, sx, sy, 8, h, 0, dy, 8, h);
       return cv;
     })().catch(() => null));
   }
@@ -1609,7 +1611,7 @@
   // The ACCESSORY row: at the foot of the shirt column, across from the shoes.
   if (ACCS.length && !$('accSection')) {
     const sec = document.createElement('div'); sec.id = 'accSection';
-    sec.innerHTML = '<div class="section-tag mono">ACCESSORY</div><div class="acc-list"></div>';
+    sec.innerHTML = '<div class="section-tag mono">ACCESSORY</div><div class="acc-list outfits"></div>';   // the same grid as the shirts and pants
     ($('tuckSection').closest('.fit-col') || $('pantsSection').parentNode).append(sec);
     drawAccessories();
   }
