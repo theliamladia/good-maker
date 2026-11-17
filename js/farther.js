@@ -43,6 +43,14 @@
     const b = (j / N) * cols.length + (n - .5) * wob; const k = Math.max(0, Math.min(cols.length - 1, Math.floor(b)));
     return limb(cols[k], i, j, N);
   };
+  const blackhole = (inner, outer, arms, speed) => texture(20, (i, j, t, N) => {
+    const cx = i + .5 - N / 2, cy = j + .5 - N / 2, r = Math.max(Math.abs(cx), Math.abs(cy));
+    if (r < 4.6) return [0, 0, 0];                                            // the event horizon
+    if (r < 5.4) return rgb('#fff6dc');                                       // the photon ring
+    const a = Math.atan2(cy, cx) + t * speed, glow = Math.max(0, 1 - (r - 5.4) / 5);
+    const sw = .5 + .5 * Math.sin(a * arms + r * .9);
+    return mix([6, 4, 12], mix(rgb(outer), rgb(inner), sw), glow * (.55 + .45 * sw));
+  });
   const P = {
     sun: texture(20, (i, j, t, N) => {
       const n = vnoise(i / 2.5 + t * .6, j / 2.5 - t * .3, 3, 8) * .6 + vnoise(i / 1.2 - t * 1.4, j / 1.2, 9, 17) * .4;
@@ -64,13 +72,6 @@
     jupiter: (() => { const base = bands([rgb('#d9c3a0'), rgb('#b08454'), rgb('#e8d8bd'), rgb('#9c6b40'), rgb('#e2ccaa'), rgb('#b88c5c'), rgb('#d7c09c')], .45, 1.2, 71);
       return texture(24, (i, j, t, N) => { const sx = ((Math.floor(t * 4) + 6) % N); const spot = j >= 14 && j <= 16 && ((i - sx + N) % N) < 4; return spot ? limb(rgb('#c0492b'), i, j, N) : base(i, j, t, N); }); })(),
     saturn: texture(20, bands([rgb('#e8d39a'), rgb('#cfb072'), rgb('#efe0b3'), rgb('#c4a262'), rgb('#e5cd92')], .35, 1, 81)),
-    blackhole: texture(16, (i, j, t, N) => {
-      const cx = i + .5 - N / 2, cy = j + .5 - N / 2, r = Math.max(Math.abs(cx), Math.abs(cy));
-      if (r < 4.2) return [0, 0, 0];
-      const a = Math.atan2(cy, cx) + t * 1.6, glow = Math.max(0, 1 - (r - 4.2) / 4);
-      const sw = .5 + .5 * Math.sin(a * 3 + r);
-      return mix([8, 6, 14], mix(rgb('#ff8a2a'), rgb('#fff1c2'), sw), glow * (.6 + .4 * sw));
-    }),
     good: texture(40, (i, j, t, N) => {
       const n = vnoise(i / 5 + t * .08, j / 5, 101, 8) * .7 + vnoise(i / 2 + t * .08 * 2.5, j / 2, 107, 20) * .3;
       const cloud = vnoise(i / 3 + t * .14, j / 4, 113, 14) > .74;
@@ -80,123 +81,119 @@
     }),
   };
 
-  // ---------- the world ----------
-  // x, y and size in world units; spin in rad/s; glow = halo colour.
-  const SUN = { x: 0, y: 0, s: 200, tex: P.sun, spin: .05, glow: 'rgba(255,170,40,' };
-  const BODIES = [
-    SUN,
-    { x: 400, y: 0, s: 18, tex: P.mercury, spin: .3 },
-    { x: 700, y: 0, s: 28, tex: P.venus, spin: -.15 },
-    { x: 1050, y: 0, s: 30, tex: P.earth, spin: .2, moon: true },
-    { x: 1450, y: 0, s: 22, tex: P.mars, spin: .25 },
-    { x: 2400, y: 0, s: 140, tex: P.jupiter, spin: .08 },
-    { x: 3700, y: 0, s: 110, tex: P.saturn, spin: .06, ring: true },
-    { x: 52000, y: 0, s: 4200, tex: P.blackhole, spin: .2, glow: 'rgba(255,140,40,' },
-    { x: 80000, y: 0, s: 6000, tex: P.blackhole, spin: -.15, glow: 'rgba(255,190,90,' },
-  ];
-  const GOOD = { x: 140000, y: 0, s: 3000, tex: P.good, spin: 0, glow: 'rgba(40,60,255,' };
-  BODIES.push(GOOD);
-  // galaxies: a spiral of pixel squares
-  const GALAXIES = [{ x: 14000, y: 0, s: 7000, rot: .4, seed: 5, hue: ['#cfd8ff', '#ffd6f0', '#ffffff'] }, { x: 30000, y: 0, s: 10000, rot: -.25, seed: 9, hue: ['#ffe3b8', '#bcd2ff', '#ffffff'] }];
-  for (const g of GALAXIES) {
-    g.pts = [];
-    for (let k = 0; k < 520; k++) {
-      const arm = k % 3, d = Math.pow(hash(k, 1, g.seed), .7), a = arm * 2.094 + d * 5.2 + (hash(k, 2, g.seed) - .5) * .7;
-      g.pts.push({ d: d * .5, a, c: g.hue[k % 3], sz: hash(k, 3, g.seed) < .1 ? 2 : 1 });
+  // ---------- the world, first person ----------
+  // Everything is lined up along the way out. The camera starts over the sun and flies straight back,
+  // away from it: each body is behind the camera at first, comes past it, and then shrinks ahead,
+  // one in front of the other. Depth z is distance from the sun; a body sits off the axis by
+  // z·off in the direction ang, so it slides in from the edge of the frame as it passes.
+  // Sizes are relative: galaxies and black holes dwarf the planets.
+  const B = [];
+  const add = (o) => (B.push(o), o);
+  add({ kind: 'body', z: 0, s: 100, off: 0, ang: 0, tex: P.sun, spin: .05, glow: 'rgba(255,170,40,' });
+  add({ kind: 'body', z: 150, s: 10, off: .14, ang: .3, tex: P.mercury, spin: .3 });
+  add({ kind: 'body', z: 230, s: 17, off: .14, ang: 2.4, tex: P.venus, spin: -.15 });
+  add({ kind: 'body', z: 340, s: 18, off: .13, ang: 4.2, tex: P.earth, spin: .2, moon: true });
+  add({ kind: 'body', z: 500, s: 12, off: .13, ang: 5.6, tex: P.mars, spin: .25 });
+  add({ kind: 'body', z: 850, s: 95, off: .16, ang: 1.1, tex: P.jupiter, spin: .08 });
+  add({ kind: 'body', z: 1500, s: 80, off: .15, ang: 3.3, tex: P.saturn, spin: .06, ring: true });
+  // galaxies: three kinds, each far bigger than anything before it
+  const galaxy = (z, s, off, ang, type, cols, seed, tilt) => {
+    const g = add({ kind: 'galaxy', z, s, off, ang, type, cols, tilt, pts: [] });
+    for (let k = 0; k < 900; k++) {
+      const h1 = hash(k, 1, seed), h2 = hash(k, 2, seed), h3 = hash(k, 3, seed);
+      let d, a;
+      if (type === 'elliptical') { d = Math.pow(h1, 1.8) * .5; a = h2 * Math.PI * 2; }
+      else if (type === 'barred') {
+        if (k % 4 === 0) { d = (h1 - .5) * .32; a = 0; }                                  // the bar
+        else { const arm = k % 2; d = .14 + Math.pow(h1, .8) * .36; a = arm * Math.PI + (d - .14) * 7 + (h2 - .5) * .5; }
+      } else { const arms = type === 'spiral4' ? 4 : 2; const arm = k % arms; d = Math.pow(h1, .7) * .5; a = arm * (Math.PI * 2 / arms) + d * 9 + (h2 - .5) * .6; }
+      g.pts.push({ d, a, c: cols[k % cols.length], big: h3 < .08 });
     }
-  }
+    return g;
+  };
+  galaxy(9000, 26000, .55, .8, 'spiral', ['#cfd8ff', '#9fb4ff', '#ffffff', '#ffd6f0'], 5, .55);
+  add({ kind: 'body', z: 22000, s: 9000, off: .42, ang: 3.9, tex: blackhole('#fff1c2', '#ff8a2a', 3, 1.6), spin: .2, glow: 'rgba(255,140,40,' });
+  galaxy(52000, 160000, .7, 2.6, 'elliptical', ['#ffe3b8', '#ffcf8a', '#fff4e0'], 9, .7);
+  add({ kind: 'body', z: 110000, s: 70000, off: .5, ang: 5.5, tex: blackhole('#d9f2ff', '#5a6cff', 2, -1.2), spin: -.12, glow: 'rgba(90,110,255,' });
+  galaxy(240000, 700000, .6, 4.6, 'barred', ['#ffd1e8', '#c9b8ff', '#ffffff'], 13, .5);
+  add({ kind: 'body', z: 420000, s: 260000, off: .55, ang: 1.9, tex: blackhole('#ffe0f0', '#ff3d6e', 4, 2.1), spin: .1, glow: 'rgba(255,60,110,' });
+  galaxy(700000, 2400000, .9, 3.2, 'spiral4', ['#bfffe8', '#9fdcff', '#ffffff'], 17, .6);
+  const GOOD = add({ kind: 'body', z: 1200000, s: 60000, off: .08, ang: 2.2, tex: P.good, spin: 0, glow: 'rgba(40,60,255,', good: true });
 
   // ---------- the camera ----------
-  // Everything sits on one line. The camera travels out along it in one continuous move: steady through
-  // the planets, then faster through the galaxies and black holes, easing in over the GOOD® planet. The
-  // view widens with the distance travelled (a smooth zoom out), and the path bows gently off the line
-  // with a little roll (the slight curve), then settles level over the planet.
-  const END = 16, X0 = 300, XN = GOOD.x;
-  const L0 = Math.log(X0), L1 = Math.log(XN + X0);
-  const SPLIT = .6, AT = (Math.log(3700 + X0) - L0) / (L1 - L0);           // Saturn is passed at 60% of the time
-  function along(s) {   // 0..1 of the log distance, steady first, then a Hermite run that speeds up and settles
-    if (s <= SPLIT) return AT * s / SPLIT;
-    const q = (s - SPLIT) / (1 - SPLIT), m0 = (AT / SPLIT) * (1 - SPLIT) / (1 - AT);
-    return AT + (1 - AT) * ((q * q * q - 2 * q * q + q) * m0 + (-2 * q * q * q + 3 * q * q));
-  }
+  // c = how far back from the sun. It grows on a log scale: steady through the planets, then faster
+  // through the galaxies and black holes, then easing off. Over the last stretch the camera turns onto
+  // the GOOD® planet and stops where the whole planet fills about half the frame, below the title.
+  const END = 17;
+  const F = () => H * .9;                                    // focal length in px
+  const sideOf = (o) => [Math.cos(o.ang) * o.off * o.z, Math.sin(o.ang) * o.off * o.z];
+  const [GX, GY] = sideOf(GOOD);
   const smooth = (e0, e1, x) => { const k = Math.max(0, Math.min(1, (x - e0) / (e1 - e0))); return k * k * (3 - 2 * k); };
+  function cEnd() { const target = .5 * Math.min(W, H); return GOOD.z + F() * GOOD.s / target; }
   function cam(t) {
-    const s = Math.min(1, t / END), x = Math.exp(lerp(L0, L1, along(s))) - X0;
-    const vOut = 240 + .5 * x, land = smooth(.86, 1, s);
-    const v = Math.exp(lerp(Math.log(vOut), Math.log(2400), land));
-    const bow = Math.sin(Math.PI * Math.min(1, s / .9));
-    const y = lerp(-.12 * vOut * bow, -1740, land), r = .07 * bow * (1 - land);
-    return { x, y, v, r };
+    const s = Math.min(1, t / END), C0 = 115, C1 = cEnd();
+    const L0 = Math.log(C0), L1 = Math.log(C1);
+    const SP = .5, AT = (Math.log(2600) - L0) / (L1 - L0);                // past Saturn at half time
+    let u;
+    if (s <= SP) u = AT * s / SP;
+    else { const q = (s - SP) / (1 - SP), m0 = (AT / SP) * (1 - SP) / (1 - AT); u = AT + (1 - AT) * ((q * q * q - 2 * q * q + q) * m0 + (-2 * q * q * q + 3 * q * q)); }
+    const c = Math.exp(lerp(L0, L1, u));
+    const turn = smooth(.78, 1, s), drop = (H * .12) * (c - GOOD.z) / F();   // planet sits a little low, under the title
+    return { c, x: GX * turn, y: (GY - drop) * turn, r: .05 * Math.sin(Math.PI * s) * (1 - turn) };
   }
 
-  // ---------- stars (screen space, relative to the centre) ----------
-  const STARS = Array.from({ length: 360 }, (_, k) => ({ x: (Math.random() - .5) * 2, y: (Math.random() - .5) * 2, d: .15 + Math.random() * .85, b: .3 + Math.random() * .7 }));
+  // ---------- stars: they stream in towards the centre as we pull back ----------
+  const STARS = Array.from({ length: 420 }, () => ({ x: (Math.random() - .5) * 2, y: (Math.random() - .5) * 2, d: .2 + Math.random() * .8, b: .3 + Math.random() * .7 }));
   let prev = null;
-  function stars(c) {
-    const R = Math.max(W, H);
-    const k = prev ? prev.v / c.v : 1, dr = prev ? c.r - prev.r : 0;
-    const px = prev ? ((c.x - prev.x) / c.v) * H : 0, py = prev ? ((c.y - prev.y) / c.v) * H : 0;
-    for (const s of STARS) {
-      let x = s.x * R, y = s.y * R; const ox = x, oy = y;
-      const z = Math.pow(k, s.d * .35);                           // zooming out pulls them in, gently
-      x *= z; y *= z;
+  function stars(cm) {
+    const R = Math.max(W, H), k = prev ? prev.c / cm.c : 1, dr = prev ? cm.r - prev.r : 0;
+    for (const st of STARS) {
+      let x = st.x * R, y = st.y * R; const ox = x, oy = y;
+      const z = Math.pow(k, st.d * .6); x *= z; y *= z;
       const cs = Math.cos(-dr), sn = Math.sin(-dr); [x, y] = [x * cs - y * sn, x * sn + y * cs];
-      x -= px * s.d * .25; y -= py * s.d * .25;
       const moved = Math.hypot(x - ox, y - oy);
-      ctx.strokeStyle = ctx.fillStyle = `rgba(255,255,255,${s.b})`;
-      if (moved > 2.5) { ctx.lineWidth = s.d * 1.6; ctx.beginPath(); ctx.moveTo(W / 2 + ox, H / 2 + oy); ctx.lineTo(W / 2 + x, H / 2 + y); ctx.stroke(); }
-      else { const q = s.d > .8 ? 2 : 1; ctx.fillRect(Math.round(W / 2 + x), Math.round(H / 2 + y), q, q); }
-      s.x = x / R; s.y = y / R;
-      if (Math.abs(s.x) > .75 || Math.abs(s.y) > .75 || Math.hypot(s.x, s.y) < .01) { s.x = (Math.random() - .5) * 1.5; s.y = (Math.random() - .5) * 1.5; }
+      ctx.strokeStyle = ctx.fillStyle = `rgba(255,255,255,${st.b})`;
+      if (moved > 2.5) { ctx.lineWidth = st.d * 1.6; ctx.beginPath(); ctx.moveTo(W / 2 + ox, H / 2 + oy); ctx.lineTo(W / 2 + x, H / 2 + y); ctx.stroke(); }
+      else { const q = st.d > .8 ? 2 : 1; ctx.fillRect(Math.round(W / 2 + x), Math.round(H / 2 + y), q, q); }
+      st.x = x / R; st.y = y / R;
+      if (Math.hypot(st.x, st.y) < .02) { const a = Math.random() * Math.PI * 2, r = .55 + Math.random() * .25; st.x = Math.cos(a) * r; st.y = Math.sin(a) * r; }   // reborn at the edge
     }
-    prev = c;
+    prev = cm;
   }
 
   // ---------- draw ----------
-  function toScreen(c, x, y) {
-    const sc = H / c.v, dx = (x - c.x) * sc, dy = (y - c.y) * sc, cs = Math.cos(c.r), sn = Math.sin(c.r);
-    return [W / 2 + dx * cs - dy * sn, H / 2 + dx * sn + dy * cs, sc];
+  function project(cm, o) {
+    const d = cm.c - o.z; if (d <= 1) return null;                         // still behind us
+    const [sx, sy] = sideOf(o), f = F();
+    let X = (sx - cm.x) * f / d, Y = (sy - cm.y) * f / d;
+    const cs = Math.cos(cm.r), sn = Math.sin(cm.r); [X, Y] = [X * cs - Y * sn, X * sn + Y * cs];
+    return { X: W / 2 + X, Y: H / 2 + Y, S: o.s * f / d, d };
   }
-  function body(c, b, t) {
-    const [X, Y, sc] = toScreen(c, b.x, b.y), S = b.s * sc;
-    if (S < .6 || X < -S * 2 || X > W + S * 2 || Y < -S * 2 || Y > H + S * 2) return;
-    if (b.glow) {
-      const g = ctx.createRadialGradient(X, Y, S * .3, X, Y, S * 1.6);
-      g.addColorStop(0, b.glow + '.45)'); g.addColorStop(1, b.glow + '0)');
-      ctx.fillStyle = g; ctx.fillRect(X - S * 1.6, Y - S * 1.6, S * 3.2, S * 3.2);
-    }
-    b.tex.draw(t);
-    ctx.save(); ctx.translate(X, Y); ctx.rotate(c.r + t * b.spin);
-    if (b.ring) {   // Saturn: a square ring, seen at a tilt
-      ctx.save(); ctx.scale(1, .22);
-      ctx.strokeStyle = 'rgba(232,211,154,.85)'; ctx.lineWidth = Math.max(1, S * .07);
-      ctx.strokeRect(-S * 1.05, -S * 1.05, S * 2.1, S * 2.1); ctx.restore();
-    }
-    ctx.imageSmoothingEnabled = false;
-    ctx.drawImage(b.tex.c, -S / 2, -S / 2, S, S);
-    if (b.ring) {   // the front half of the ring over the planet
-      ctx.save(); ctx.beginPath(); ctx.rect(-S * 2, 0, S * 4, S * 2); ctx.clip(); ctx.scale(1, .22);
-      ctx.strokeStyle = 'rgba(232,211,154,.95)'; ctx.lineWidth = Math.max(1, S * .07); ctx.strokeRect(-S * 1.05, -S * 1.05, S * 2.1, S * 2.1); ctx.restore();
-    }
+  function drawBody(cm, o, p, t) {
+    const { X, Y, S } = p;
+    if (S < .6 || X < -S * 1.8 || X > W + S * 1.8 || Y < -S * 1.8 || Y > H + S * 1.8) return;
+    if (o.glow) { const g = ctx.createRadialGradient(X, Y, S * .3, X, Y, S * 1.6); g.addColorStop(0, o.glow + '.45)'); g.addColorStop(1, o.glow + '0)'); ctx.fillStyle = g; ctx.fillRect(X - S * 1.6, Y - S * 1.6, S * 3.2, S * 3.2); }
+    o.tex.draw(t);
+    ctx.save(); ctx.translate(X, Y); ctx.rotate(cm.r + t * o.spin);
+    const ring = (front) => { ctx.save(); if (front) { ctx.beginPath(); ctx.rect(-S * 2, 0, S * 4, S * 2); ctx.clip(); } ctx.scale(1, .22); ctx.strokeStyle = `rgba(232,211,154,${front ? .95 : .85})`; ctx.lineWidth = Math.max(1, S * .07); ctx.strokeRect(-S * 1.05, -S * 1.05, S * 2.1, S * 2.1); ctx.restore(); };
+    if (o.ring) ring(false);
+    ctx.imageSmoothingEnabled = false; ctx.drawImage(o.tex.c, -S / 2, -S / 2, S, S);
+    if (o.ring) ring(true);
     ctx.restore();
-    if (b.moon) {   // Earth's moon, on a square orbit
-      const a = t * 1.2, o = b.s * 1.1;
-      const [mx, my] = toScreen(c, b.x + Math.cos(a) * o, b.y + Math.sin(a) * o), m = b.s * .28 * sc;
-      P.moon.draw(t); ctx.save(); ctx.translate(mx, my); ctx.rotate(c.r + t * .4); ctx.drawImage(P.moon.c, -m / 2, -m / 2, m, m); ctx.restore();
-    }
+    if (o.moon) { const a = t * 1.2, m = S * .28, mx = X + Math.cos(a) * S * 1.1, my = Y + Math.sin(a) * S * 1.1; P.moon.draw(t); ctx.save(); ctx.translate(mx, my); ctx.rotate(cm.r + t * .4); ctx.drawImage(P.moon.c, -m / 2, -m / 2, m, m); ctx.restore(); }
   }
-  function galaxy(c, g, t) {
-    const [X, Y, sc] = toScreen(c, g.x, g.y), S = g.s * sc;
-    if (S < 4 || X < -S || X > W + S || Y < -S || Y > H + S) return;
-    const core = ctx.createRadialGradient(X, Y, 0, X, Y, S * .18);
-    core.addColorStop(0, 'rgba(255,245,230,.9)'); core.addColorStop(1, 'rgba(255,245,230,0)');
-    ctx.fillStyle = core; ctx.fillRect(X - S * .2, Y - S * .2, S * .4, S * .4);
-    const rot = c.r + g.rot + t * .12;
-    for (const p of g.pts) {
-      const a = p.a + rot, r = p.d * S;
-      ctx.fillStyle = p.c; ctx.globalAlpha = .55 + .45 * (1 - p.d * 2);
-      const q = Math.max(1, p.sz * Math.min(3, S / 400));
-      ctx.fillRect(Math.round(X + Math.cos(a) * r), Math.round(Y + Math.sin(a) * r * .55), q, q);
+  function drawGalaxy(cm, g, p, t) {
+    const { X, Y, S } = p;
+    if (S < 6 || X < -S || X > W + S || Y < -S || Y > H + S) return;
+    const core = ctx.createRadialGradient(X, Y, 0, X, Y, S * (g.type === 'elliptical' ? .32 : .16));
+    core.addColorStop(0, 'rgba(255,245,230,.85)'); core.addColorStop(1, 'rgba(255,245,230,0)');
+    ctx.fillStyle = core; ctx.fillRect(X - S * .35, Y - S * .35, S * .7, S * .7);
+    const rot = cm.r + g.ang + t * .1, q0 = Math.max(1, Math.min(6, S / 260));
+    for (const pt of g.pts) {
+      const a = pt.a + rot, r = pt.d * S;
+      ctx.fillStyle = pt.c; ctx.globalAlpha = .45 + .55 * (1 - Math.min(1, pt.d * 2));
+      const q = Math.round(pt.big ? q0 * 2 : q0);
+      ctx.fillRect(Math.round(X + Math.cos(a) * r), Math.round(Y + Math.sin(a) * r * g.tilt), q, q);
     }
     ctx.globalAlpha = 1;
   }
@@ -218,8 +215,9 @@
     g.addColorStop(0, `rgba(20,30,${90 + 120 * deep},${.25 + .2 * deep})`); g.addColorStop(1, 'rgba(0,0,0,0)');
     ctx.fillStyle = g; ctx.fillRect(0, 0, W, H);
     stars(c);
-    for (const gx of GALAXIES) galaxy(c, gx, t);
-    for (const b of BODIES) body(c, b, t);
+    const vis = []; for (const o of B) { const p = project(c, o); if (p) vis.push([o, p]); }
+    vis.sort((a, b) => b[1].d - a[1].d);                                     // far first
+    for (const [o, p] of vis) (o.kind === 'galaxy' ? drawGalaxy : drawBody)(c, o, p, t);
     if (t >= END - .2) finish();
     requestAnimationFrame(frame);
   }

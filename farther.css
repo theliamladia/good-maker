@@ -7,7 +7,7 @@ body { font-family: Inter, system-ui, sans-serif; }
 .fr-skip { right: 24px; background: none; border: 1px solid rgba(255,255,255,.4); padding: 8px 14px; cursor: pointer; }
 .fr-home:hover, .fr-skip:hover { opacity: 1; }
 .fr-skip[hidden] { display: none; }
-.fr-main { position: fixed; inset: 0; z-index: 2; display: grid; place-items: center; padding-bottom: 22vh; pointer-events: none; }
+.fr-main { position: fixed; inset: 0; z-index: 2; display: grid; place-items: center; padding-bottom: 50vh; pointer-events: none; }
 .fr-title { margin: 0; font: 600 clamp(64px, 15vw, 240px)/.9 Inter, sans-serif; letter-spacing: -.045em; opacity: 0; transform: translateY(18px); transition: opacity 1.4s ease, transform 1.4s ease; text-shadow: 0 0 60px rgba(0,0,255,.45); }
 .fr-title sup { font-size: .26em; font-weight: 500; vertical-align: 2.4em; letter-spacing: 0; }
 .fr-title.on { opacity: 1; transform: none; }
