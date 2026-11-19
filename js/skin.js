@@ -215,10 +215,11 @@ function mergeSkin(userSkin, outfit, tone, slim, hairRows = 0, erased = null, he
     out.data[i + 3] = Math.round(oa * 255);
   }
 
-  // 2b. Keeping their skin: the player's own outer layer shows only on body
-  //     parts the outfit leaves completely bare. Anywhere the outfit touches a
-  //     part (a sleeve, a skirt, boots), that part's old overlay is dropped, so
-  //     clothes from a previous skin (old jeans under a new skirt) can't show through.
+  // 2b. Keeping their skin: the player's own outer layer shows on body parts the
+  //     outfit leaves completely bare. Where the outfit touches a part (a sleeve, a
+  //     skirt, boots), that part's old overlay is dropped, so clothes from a previous
+  //     skin (old jeans under a new skirt) can't show through, except on uncovered pixels
+  //     whose base is empty: there the outer layer is the player's skin itself.
   if (own) {
     for (const part of bodyParts(slim)) {
       const [ox, oy] = part.ov;
@@ -226,11 +227,13 @@ function mergeSkin(userSkin, outfit, tone, slim, hairRows = 0, erased = null, he
         for (let y = y0; y < y0 + h; y++) for (let x = x0; x < x0 + w; x++) if (opaque(x, y) || opaque(x + ox, y + oy)) return true;
         return false;
       });
-      if (touched) continue;
       for (const [x0, y0, w, h] of Object.values(part.faces)) {
         for (let y = y0; y < y0 + h; y++) {
           for (let x = x0; x < x0 + w; x++) {
             if (opaque(x, y) || opaque(x + ox, y + oy) || !ownAt(x + ox, y + oy)) continue;
+            // A touched part keeps only the outer pixels that stand in for missing base skin (skins drawn
+            // wholly on the outer layer, like a black hand with nothing under it): never a tone instead.
+            if (touched && ownAt(x, y)) continue;
             const i = idx(x + ox, y + oy);
             for (let c = 0; c < 4; c++) out.data[i + c] = own.data[i + c];
           }
