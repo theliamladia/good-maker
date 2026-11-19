@@ -46,7 +46,7 @@ const isOwner = (user) => !!user && sha(String(user.email).toLowerCase()) === OW
 // wardrobe), by the profile slug their account holds.
 // A guest sees the colours marked for them (only: ['owner', '<slug>']); CHINNY also sees every
 // unmarked colour (api/_private.js).
-const PRIVATE_GUESTS = ['chinny', 'royal', 'mova_tv'];   // CHINNY (globohomo123 in Minecraft), ROYAL (Q&G®), MOVA_TV (FARTHER® F&F)
+const PRIVATE_GUESTS = ['chinny', 'royal', 'mova', 'mova_tv'];   // CHINNY (globohomo123 in Minecraft), ROYAL (Q&G®), MOVA (profile mova or mova_tv: FARTHER® F&F)
 // Who this account is to the private catalogue: 'owner', a guest's slug, or null.
 async function privateWho(user) {
   if (!user) return null;
