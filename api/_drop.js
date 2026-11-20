@@ -16,6 +16,8 @@ const DROPS = {
   friday: { at: Date.parse('2026-11-13T14:00:00-05:00'), prefix: 'fpm-', index: 'fpm-index' },
   // FARTHER®: MOON®, the GROUND CREW COVERALL and the VISITOR TEE, live 17 November 2026, at the owner's word
   farther: { at: Date.parse('2026-11-17T00:00:00-05:00'), prefix: 'frm-', index: 'frm-index' },
+  // GOOD® FRIDAY PROGRAMME®: COZY (HOODIE, ZIP, SWEATPANT), free, Friday 20 November 2026 at 2 p.m. New York time
+  cozy: { at: Date.parse('2026-11-20T14:00:00-05:00'), prefix: 'fpc-', index: 'fpc-index' },
 };
 const isOpen = (name, now = Date.now()) => { const d = DROPS[name]; return !!d && d.at !== null && now >= d.at; };
 const dropOf = (id) => Object.keys(DROPS).find((n) => id.startsWith(DROPS[n].prefix)) || null;

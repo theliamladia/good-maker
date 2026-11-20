@@ -29,7 +29,7 @@
   const rankOf = (k) => (isBasic(k) ? 0 : k.season === 2 && !k.drop ? 1 : k.drop === 'crate3' ? 2 : k.drop === 'crate2' ? 3 : !k.drop ? 4 : 5);
   // ALL: the latest collection first, then everything else A–Z (by name, ignoring ® ™ marks).
   // LATEST_FIRST is newest collection first; the first one that has pieces in the lists leads.
-  const LATEST_FIRST = ['farther', 'friday', 'qg', 'crate3'];
+  const LATEST_FIRST = ['cozy', 'farther', 'friday', 'qg', 'crate3'];
   const plain = (k) => (k.name || '').replace(/[®™ⓤ]/g, '').trim();
   // ALL comes in three sections: NEW (that collection), THE BASICS, then everything else; each A–Z.
   let lead = null;
@@ -1601,7 +1601,7 @@
   }).catch(() => {});
 
   // Drops (GUD™, WANDERING®): released pieces come from the server (sealed until the drop; api/_drop.js).
-  for (const [q, filter, label] of [['gud=1', 'gud', 'GUD™'], ['drop=wandering', 'wandering', 'WANDERING®'], ['drop=qg', 'qg', 'Q&G®'], ['drop=friday', 'friday', 'FRIDAY PROGRAMME®'], ['drop=farther', 'farther', 'FARTHER®']]) {
+  for (const [q, filter, label] of [['gud=1', 'gud', 'GUD™'], ['drop=wandering', 'wandering', 'WANDERING®'], ['drop=qg', 'qg', 'Q&G®'], ['drop=friday', 'friday', 'FRIDAY PROGRAMME®'], ['drop=farther', 'farther', 'FARTHER®'], ['drop=cozy', 'cozy', 'COZY']]) {
     fetch(`api/outfit?${q}`, { cache: 'no-store' }).then((r) => (r.ok ? r.json() : null)).then(async (cat) => {
       if (!cat) return;
       await bootDone; addDrop(cat, { filter, label });
