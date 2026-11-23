@@ -1090,6 +1090,7 @@ body.st {
 .wardrobe-save:hover { background: #fff; color: var(--good-blue); }
 .acct-toast { position: fixed; left: 50%; bottom: 28px; transform: translateX(-50%); z-index: 960; background: #fff; color: var(--good-blue); padding: 12px 20px; font-size: var(--label-size); font-weight: 700; letter-spacing: 0.16em; box-shadow: 0 10px 30px rgba(0, 0, 40, 0.35); }
 .acct-toast[hidden] { display: none; }
+.acct-toast-go { color: inherit; text-decoration: underline; text-underline-offset: 4px; white-space: nowrap; }
 
 .st-member::after { content: ' ●'; color: var(--good-blue); }
 .st-as { margin: 0; font-family: var(--st-sans); font-size: 0.8rem; color: var(--st-grey); }

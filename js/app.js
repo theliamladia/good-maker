@@ -68,9 +68,14 @@
   const inSeason = (k) => (FILTERS[state.filter] || FILTERS.all)(k) && !(state.hideLocked && k.colors.every(isLocked));
   // Where a locked piece comes from, for the LOCKED note under the colours and on DOWNLOAD.
   const crateOf = (c) => (String(c.id).startsWith('hse-') ? { name: 'MARKET®', href: 'market#house', verb: 'BUY IT ON', sale: true }
-    : c.kind && c.kind.drop === 'crate3' ? { name: 'GOOD® CRATE Nº003', href: 'dynamics' }
+    : c.kind && c.kind.drop === 'crate3' ? { name: 'GOOD® CRATE Nº003', href: 'dynamics#crateT' }
     : c.kind && c.kind.drop === 'crate2' ? { name: 'GOOD® CRATE Nº002', href: 'inmotion' }
     : CRATE1.has(c.id) || (c.kind && CRATE1.has(c.kind.id)) ? { name: 'GOOD® CRATE Nº001', href: 'crate' } : { name: 'A GOOD® CRATE', href: 'releases' });
+  // The odds of pulling each crate piece (api/crate), for the LOCKED note: fetched once, after boot.
+  const ODDS = new Map();
+  const fmtPct = (p) => `${p < 1 ? p.toFixed(1) : String(+p.toFixed(1)).replace(/\.0$/, '')}%`;
+  setTimeout(() => Promise.all(['api/crate', 'api/crate?crate=2', 'api/crate?crate=3'].map((u) => fetch(u).then((r) => r.json()).catch(() => ({}))))
+    .then((cs) => { for (const c of cs) for (const it of c.items || []) if (typeof it.pct === 'number') ODDS.set(it.id, it.pct); try { drawOutfits(); } catch {} }), 1500);
   const LOCK_TAG = '<span class="lock-tag" role="img" aria-label="Locked"></span>';   // a small hollow dot
   // ALL keeps its sections (sortLists); any other filter is plain A–Z.
   const az = (a, b) => plain(a).localeCompare(plain(b), 'en', { numeric: true });
@@ -640,7 +645,7 @@
     label.textContent = selected.color || '';
     if (isLocked(selected)) {
       const src = crateOf(selected), get = document.createElement('a');
-      get.className = 'sw-get'; get.href = src.href; get.textContent = src.sale ? 'TODAY ON SAMPLE SALE · BUY IT ON MARKET® →' : `LOCKED · IN ${src.name} →`;
+      get.className = 'sw-get'; get.href = src.href; get.textContent = src.sale ? 'TODAY ON SAMPLE SALE · BUY IT ON MARKET® →' : `LOCKED · ${ODDS.has(selected.id) ? `${fmtPct(ODDS.get(selected.id))} IN` : 'IN'} ${src.name} · OPEN IT →`;
       label.append(document.createElement('br'), get);
     }
   }

@@ -17,10 +17,12 @@
     return j;
   };
   let toastT;
-  function toast(msg) {
+  function toast(msg, link) {
     const t = $('acctToast'); t.textContent = msg; t.hidden = false;
     if (/GOOD® COINS/.test(msg)) { const c = document.createElement('span'); c.className = 'coin'; c.setAttribute('aria-hidden', 'true'); t.prepend(c); }
-    clearTimeout(toastT); toastT = setTimeout(() => { t.hidden = true; }, 2600);
+    // A next step to tap (e.g. OPEN A CRATE after earning coins): the toast stays up longer.
+    if (link) { const a = document.createElement('a'); a.className = 'acct-toast-go'; a.href = link.href; a.textContent = link.text; t.append(' · ', a); }
+    clearTimeout(toastT); toastT = setTimeout(() => { t.hidden = true; }, link ? 6000 : 2600);
   }
   function draw() {
     window.GoodNav?.update(me);
@@ -86,7 +88,8 @@
       if (j.daily) { me.daily = j.daily; drawDaily(); }
       if (j.duplicate) { toast('ALREADY IN YOUR WARDROBE.'); return; }
       me.coins = j.coins; draw();
-      toast(j.earned ? `SAVED TO YOUR WARDROBE. +${j.earned} GOOD® COINS` : j.capped ? 'SAVED. YOU’VE EARNED TODAY’S GOOD® COINS (4 FITS). BACK TOMORROW FOR MORE.' : 'SAVED TO YOUR WARDROBE.');
+      if (j.earned) { toast(`SAVED TO YOUR WARDROBE. +${j.earned} GOOD® COINS`, { href: 'crates', text: 'OPEN A CRATE →' }); return; }
+      toast(j.capped ? 'SAVED. YOU’VE EARNED TODAY’S GOOD® COINS (4 FITS). BACK TOMORROW FOR MORE.' : 'SAVED TO YOUR WARDROBE.');
     } catch (e) {
       toast(e.code === 'full' ? 'WARDROBE FULL (60). REMOVE ONE ON YOUR ACCOUNT PAGE.' : e.code === 'look' ? 'PUT ON A TOP OR BOTTOM FIRST.' : 'COULDN’T SAVE. TRY AGAIN.');
     }

@@ -49,3 +49,4 @@
   .rl-crate-meta { letter-spacing: 0.08em; }
   .rl-crate-go { padding: 12px 12px; letter-spacing: 0.12em; }
 }
+.rl-crate-got { font-size: var(--label-size); letter-spacing: 0.16em; font-weight: 700; }
