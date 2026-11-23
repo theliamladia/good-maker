@@ -157,7 +157,8 @@
     };
     $('wCount').textContent = `${p.wardrobe.length}`;
     $('wEmpty').hidden = p.wardrobe.length > 0;
-    let syncFits = () => {};
+    let syncFits = () => {}, order = 0;
+    const figs = new Map();
     $('grid').replaceChildren(...p.wardrobe.map((w) => {
       // Every fit opens in MAKER®: yours as saved; someone else's on your own skin (TRY THIS FIT).
       const fig = el('figure', 'pf-fit');
@@ -170,6 +171,27 @@
       const cw = el('span', 'pf-fit-cw mono');
       a.append(box, name, pcs, cw, el('span', 'pf-try mono', mine ? 'OPEN IN MAKER® →' : 'TRY THIS FIT →'));
       fig.append(a);
+      fig.dataset.i = String(order++);
+      // Likes: anyone signed in can heart someone else's fit; everyone sees the count.
+      const heart = el(viewer && !mine ? 'button' : 'span', 'pf-like mono');
+      const drawHeart = () => {
+        heart.textContent = `${w.liked ? '♥' : '♡'} ${w.likes || 0}`;
+        heart.classList.toggle('on', !!w.liked);
+        heart.hidden = !(viewer && !mine) && !w.likes;
+        if (heart.tagName === 'BUTTON') heart.setAttribute('aria-label', `${w.liked ? 'Unlike' : 'Like'} this fit · ${w.likes || 0} ${w.likes === 1 ? 'like' : 'likes'}`);
+      };
+      if (heart.tagName === 'BUTTON') {
+        heart.type = 'button';
+        heart.onclick = async () => {
+          const was = { likes: w.likes || 0, liked: !!w.liked };
+          w.liked = !w.liked; w.likes = Math.max(0, was.likes + (w.liked ? 1 : -1)); drawHeart();
+          try { const j = await post('api/profile', { action: 'like', name: slug, fit: w.id }); w.likes = j.likes; w.liked = j.liked; drawHeart(); }
+          catch (err) { Object.assign(w, was); drawHeart(); toast(err.code === 'slow_down' ? 'SLOW DOWN. TRY AGAIN IN A MINUTE.' : 'COULDN’T LIKE IT. TRY AGAIN.'); }
+        };
+      }
+      drawHeart();
+      fig.append(heart);
+      figs.set(fig, w);
       if (mine) {
         // Your own profile: name your fits.
         const b = el('button', 'pf-rename mono', 'RENAME');
@@ -193,6 +215,15 @@
       return fig;
     }));
     syncFits = more($('wMore'), $('grid'), FITS_FIRST, 'FITS');
+    // Sort: NEWEST (as saved) or MOST LIKED (ties keep the newest first).
+    const sortBtns = [...$('wSort').querySelectorAll('button')];
+    $('wSort').hidden = p.wardrobe.length < 2;
+    for (const b of sortBtns) b.onclick = () => {
+      for (const x of sortBtns) x.setAttribute('aria-pressed', String(x === b));
+      const kids = [...$('grid').children];
+      kids.sort((x, y) => (b.dataset.sort === 'liked' ? ((figs.get(y) || {}).likes || 0) - ((figs.get(x) || {}).likes || 0) : 0) || (+x.dataset.i - +y.dataset.i));
+      $('grid').append(...kids); syncFits();
+    };
 
     // Comments: any signed-in member can post; the profile's owner (or ADMIN) can delete.
     const drawWall = async () => {

@@ -86,6 +86,8 @@
     $('gotSerial').textContent = roll.serial;
     $('gotMeta').innerHTML = `${TIER[roll.tier]} · ${pct(item.pct)} · ADDED TO MY INVENTORY®${roll.dup ? ` · YOU ALREADY HAD ONE: +${roll.refund} ${coin} REFUNDED` : ''}`;
     if ((j.achievements || []).length) $('gotMeta').innerHTML += j.achievements.map((a) => `<br><b class="cr-ach">★ ACHIEVEMENT UNLOCKED: ${a.name}</b>`).join('');
+    $('gotMeta').innerHTML += `<br><b class="cr-left">${coin}${j.coins} GOOD® COINS REMAINING</b>`;   // what's left after this one
+    window.GoodProgress && GoodProgress.refresh();
     $('got').hidden = false;
     me.coins = j.coins; drawNav();
     state = 'idle'; drawButton();

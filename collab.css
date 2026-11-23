@@ -112,3 +112,8 @@
 .co-step figure { margin: 0 0 clamp(12px, 2vw, 24px); }
 .co-step img { display: block; width: 100%; height: auto; user-select: none; -webkit-user-drag: none; }
 .co-step figcaption { font-size: 0.7rem; letter-spacing: 0.18em; padding-top: 12px; }
+
+/* MARKET® and CASINO®: the way back to the crates */
+.co-crates { display: flex; flex-wrap: wrap; align-items: center; gap: 10px 18px; margin: 26px 0 0; font-size: var(--label-size); font-weight: 700; letter-spacing: var(--label-track); }
+.co-crates a { color: inherit; text-decoration: none; border: 1px solid currentColor; padding: 10px 14px; opacity: .85; }
+.co-crates a:hover { opacity: 1; background: #fff; color: #0000ff; }

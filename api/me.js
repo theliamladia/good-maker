@@ -223,7 +223,7 @@ module.exports = async function handler(req, res) {
       const key = `user:${user.uid}:wardrobe`;
       const rows = (await redis('LRANGE', key, 0, MAX_LOOKS - 1)) || [];
       const hit = rows.find((r) => JSON.parse(r).id === body.id);
-      if (hit) await redis('LREM', key, 1, hit);
+      if (hit) { await redis('LREM', key, 1, hit); await redis('DEL', `likes:${user.uid}:${body.id}`); await redis('HDEL', `likes:${user.uid}`, String(body.id)); }   // its likes go with it
       res.status(200).json({ ok: true }); return;
     }
     if (body.action === 'delete') {
@@ -244,7 +244,14 @@ module.exports = async function handler(req, res) {
       }
       for (const d of ACH.DEFS) await redis('DEL', `user:${user.uid}:ach:${d.id}`);
       await NOTIFY.purge(user.uid);   // NOTIFY ME on RELEASES®
-      await redis('DEL', `user:${user.uid}`, `user:${user.uid}:skin`, `user:${user.uid}:wardrobe`, `user:${user.uid}:earned`, `user:${user.uid}:inv`, `user:${user.uid}:owned`, `user:${user.uid}:ach`, `user:${user.uid}:trades`, `casino:bj:${user.uid}`, `casino:hl:${user.uid}`, `casino:hist:${user.uid}`, `user:email:${sha(user.email)}`);
+      // Their likes come off other people's fits (counts recomputed), then the lists go.
+      for (const tag of (await redis('SMEMBERS', `liked:${user.uid}`)) || []) {
+        const [owner, fit] = String(tag).split(':');
+        if (!owner || !fit) continue;
+        await redis('SREM', `likes:${owner}:${fit}`, user.uid);
+        await redis('HSET', `likes:${owner}`, fit, +(await redis('SCARD', `likes:${owner}:${fit}`)) || 0);
+      }
+      await redis('DEL', `user:${user.uid}`, `user:${user.uid}:skin`, `user:${user.uid}:wardrobe`, `user:${user.uid}:earned`, `user:${user.uid}:inv`, `user:${user.uid}:owned`, `user:${user.uid}:ach`, `likes:${user.uid}`, `liked:${user.uid}`, `user:${user.uid}:trades`, `casino:bj:${user.uid}`, `casino:hl:${user.uid}`, `casino:hist:${user.uid}`, `user:email:${sha(user.email)}`);
       if ((await redis('GET', `profile:${slugOf(user.name)}`)) === user.uid) await redis('DEL', `profile:${slugOf(user.name)}`);
       await redis('SREM', 'users:all', user.uid);
       for (const d of ACH.DEFS) await redis('SREM', `ach:${d.id}`, user.uid);

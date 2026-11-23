@@ -28,7 +28,7 @@
   <link rel="stylesheet" href="good.css?v=3">
   <link rel="stylesheet" href="style.css?v=20">
   <link rel="stylesheet" href="account.css?v=4">
-  <link rel="stylesheet" href="profile.css?v=1">
+  <link rel="stylesheet" href="profile.css?v=2">
 </head>
 <body class="ac-page pf-page">
 
@@ -74,7 +74,7 @@
     </header>
 
     <section class="pf-sec" aria-labelledby="wTitle">
-      <header class="pf-bar"><h2 class="mono" id="wTitle">FITS</h2><span class="mono" id="wCount"></span></header>
+      <header class="pf-bar"><h2 class="mono" id="wTitle">FITS</h2><span class="pf-sort mono" id="wSort" hidden><button type="button" data-sort="new" aria-pressed="true">NEWEST</button><button type="button" data-sort="liked" aria-pressed="false">MOST LIKED</button></span><span class="mono" id="wCount"></span></header>
       <p class="pf-empty" id="wEmpty" hidden>No fits yet. When they save a fit in <a class="foot-link" href="./">MAKER®</a>, it hangs here.</p>
       <div class="pf-fits" id="grid"></div>
       <button type="button" class="pf-more mono" id="wMore" aria-controls="grid" aria-expanded="false" hidden></button>
@@ -115,7 +115,7 @@
 <script src="js/gooditems.js?v=5"></script>
 <script src="js/heads.js"></script>
 <script src="js/ui.js?v=1"></script>
-<script src="js/profile.js?v=13"></script>
+<script src="js/profile.js?v=14"></script>
 <script src="js/nav.js?v=5"></script>
 </body>
 </html>

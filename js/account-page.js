@@ -36,7 +36,7 @@
       e.preventDefault(); e.stopPropagation();
       if (!GoodUI.arm(e.currentTarget, 'REMOVE?')) return;
       await post('api/me', { action: 'remove', id: w.id }).catch(() => {});
-      wardrobe = wardrobe.filter((v) => v !== w); a.remove(); count(); toast('REMOVED FROM YOUR WARDROBE.');
+      wardrobe = wardrobe.filter((v) => v !== w); a.remove(); count(); syncFits(); toast('REMOVED FROM YOUR WARDROBE.');
     };
     GoodCompose.compose(skin, w.look).then(({ merged, slim, top, bottom }) => {
       a.querySelector('.ac-fig').append(GoodCompose.front(merged, slim));
@@ -48,6 +48,18 @@
     }).catch(() => a.remove());   // a retired piece
     return a;
   }
+  // SHOW ALL (N): a grid shows its first few children until opened (as on a profile).
+  const more = (btn, grid, first, noun) => {
+    const sync = () => {
+      const n = grid.children.length, open = grid.classList.contains('all');
+      btn.hidden = n <= first;
+      btn.textContent = open ? `SHOW FEWER ${noun}` : `SHOW ALL (${n})`;
+      btn.setAttribute('aria-expanded', String(open));
+    };
+    btn.onclick = () => { grid.classList.toggle('all'); sync(); if (!grid.classList.contains('all')) grid.scrollIntoView({ block: 'start', behavior: 'smooth' }); };
+    return sync;
+  };
+  let syncFits = () => {}, syncInv = () => {};
   const count = () => { $('wCount').textContent = `${wardrobe.length} / 60`; $('wEmpty').hidden = wardrobe.length > 0; story(); };
 
   // YOUR COLOR STORY: every colour in the wardrobe's colourways (from COLORS®),
@@ -91,6 +103,7 @@
     try { skin = me.hasSkin ? await GoodCompose.load(`api/me?skin=1&t=${Date.now()}`) : await GoodCompose.load(DEMO); } catch { skin = await GoodCompose.load(DEMO); }
     GoodHeads.draw($('avatar'), me.hasSkin ? `api/me?skin=1&t=${Date.now()}` : null);
     $('grid').replaceChildren(...wardrobe.map(card));
+    syncFits = more($('wMore'), $('grid'), 8, 'FITS'); syncFits();
     count();
     drawInventory();
     drawAchievements();
@@ -102,6 +115,7 @@
     $('iEmpty').hidden = inventory.length > 0;
     $('invReset').hidden = !(me && me.owner && inventory.some((e) => e.serial !== 'GD-999'));
     $('inv').replaceChildren(...GoodItems.inventoryCards(inventory, crateItems));
+    syncInv = more($('iMore'), $('inv'), 12, 'PIECES'); syncInv();
   }
 
   // ACHIEVEMENTS: earned ones first, each with the % of players who have it.
