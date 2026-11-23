@@ -28,10 +28,11 @@
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="good.css?v=3">
   <link rel="stylesheet" href="style.css?v=21">
-  <link rel="stylesheet" href="collab.css?v=3">
-  <link rel="stylesheet" href="releases.css?v=6">
+  <link rel="stylesheet" href="collab.css?v=4">
+  <link rel="stylesheet" href="releases.css?v=7">
+  <link rel="stylesheet" href="white.css?v=1">
 </head>
-<body class="co-page rl-page">
+<body class="w-page co-page rl-page">
 
 <header class="site-header">
   <a class="wordmark" href="./">GOOD®</a>
@@ -50,10 +51,13 @@
 </header>
 
 <main class="co-main rl-main">
-  <section class="co-hero rl-hero">
-    <p class="co-tag mono">RELEASES® · 7</p>
-    <h1 class="co-title">RELEASES<span>®</span></h1>
-    <p class="co-lede">Every crate and collection from GOOD®, newest first. Each one keeps its page: the story, the pieces, the odds.</p>
+  <section class="co-hero rl-hero w-ph">
+    <div>
+      <p class="co-tag mono">RELEASES® · 7</p>
+      <h1 class="co-title">RELEASES<span>®</span></h1>
+      <p class="co-lede">Every crate and collection from GOOD®, newest first. Each one keeps its page: the story, the pieces, the odds.</p>
+    </div>
+    <a class="w-btn" href="crates">OPEN A CRATE →</a>
   </section>
 
   <!-- UPCOMING: drops with a date, from js/upcoming.js (hidden while that list is empty) -->
@@ -62,35 +66,7 @@
     <ol class="rl-ups" id="upcomingList"></ol>
   </section>
 
-  <section class="co-block" aria-labelledby="openTitle">
-    <header class="co-head"><p class="co-tag mono">OPEN NOW</p><h2 id="openTitle">GOOD® CRATES</h2></header>
-    <p class="rl-how">Save new fits in MAKER® for GOOD® COINS (+10 each, four a day). Open a crate with them. Every pull is serialized, lands in your inventory, and is yours to wear in MAKER® or sell on MARKET®.</p>
-    <div class="rl-crates">
-      <a class="rl-crate" href="dynamics#crateT" aria-label="GOOD® CRATE Nº003 · DYNAMICS® I: open it">
-        <img src="assets/crate3.svg" alt="" width="160" height="160" draggable="false">
-        <span class="rl-crate-no mono">GOOD® CRATE Nº003 · NEW</span>
-        <span class="rl-crate-name">DYNAMICS® I</span>
-        <span class="rl-crate-meta mono">5 GOOD® COINS · 43 PIECES</span>
-        <span class="rl-crate-go mono">OPEN Nº003 →</span>
-      </a>
-      <a class="rl-crate" href="inmotion" aria-label="GOOD® CRATE Nº002 · ART® IN MOTION: open it">
-        <img src="assets/crate2.svg" alt="" width="160" height="160" draggable="false">
-        <span class="rl-crate-no mono">GOOD® CRATE Nº002</span>
-        <span class="rl-crate-name">ART® IN MOTION</span>
-        <span class="rl-crate-meta mono">5 GOOD® COINS · 30 PIECES</span>
-        <span class="rl-crate-go mono">OPEN Nº002 →</span>
-      </a>
-      <a class="rl-crate" href="crate" aria-label="GOOD® CRATE Nº001: open it">
-        <img src="assets/crate.svg" alt="" width="160" height="160" draggable="false">
-        <span class="rl-crate-no mono">GOOD® CRATE Nº001</span>
-        <span class="rl-crate-name">GOOD® CRATE</span>
-        <span class="rl-crate-meta mono">5 GOOD® COINS · SERIALS FROM GD-001</span>
-        <span class="rl-crate-go mono">OPEN Nº001 →</span>
-      </a>
-    </div>
-  </section>
-
-  <section class="co-block" aria-labelledby="allTitle">
+  <section class="co-block rl-all" aria-labelledby="allTitle">
     <header class="co-head"><p class="co-tag mono">NEWEST FIRST</p><h2 id="allTitle">EVERY RELEASE</h2></header>
   <ol class="rl-list">
     <li>
@@ -205,11 +181,39 @@
     </li>
   </ol>
   </section>
+  <section class="co-block" aria-labelledby="openTitle">
+    <header class="co-head"><p class="co-tag mono">OPEN NOW</p><h2 id="openTitle">GOOD® CRATES</h2></header>
+    <p class="rl-how">Save new fits in MAKER® for GOOD® COINS (+10 each, four a day). Open a crate with them. Every pull is serialized, lands in your inventory, and is yours to wear in MAKER® or sell on MARKET®.</p>
+    <div class="rl-crates">
+      <a class="rl-crate" href="dynamics#crateT" aria-label="GOOD® CRATE Nº003 · DYNAMICS® I: open it">
+        <img src="assets/crate3.svg" alt="" width="160" height="160" draggable="false">
+        <span class="rl-crate-no mono">GOOD® CRATE Nº003 · NEW</span>
+        <span class="rl-crate-name">DYNAMICS® I</span>
+        <span class="rl-crate-meta mono">5 GOOD® COINS · 43 PIECES</span>
+        <span class="rl-crate-go mono">OPEN Nº003 →</span>
+      </a>
+      <a class="rl-crate" href="inmotion" aria-label="GOOD® CRATE Nº002 · ART® IN MOTION: open it">
+        <img src="assets/crate2.svg" alt="" width="160" height="160" draggable="false">
+        <span class="rl-crate-no mono">GOOD® CRATE Nº002</span>
+        <span class="rl-crate-name">ART® IN MOTION</span>
+        <span class="rl-crate-meta mono">5 GOOD® COINS · 30 PIECES</span>
+        <span class="rl-crate-go mono">OPEN Nº002 →</span>
+      </a>
+      <a class="rl-crate" href="crate" aria-label="GOOD® CRATE Nº001: open it">
+        <img src="assets/crate.svg" alt="" width="160" height="160" draggable="false">
+        <span class="rl-crate-no mono">GOOD® CRATE Nº001</span>
+        <span class="rl-crate-name">GOOD® CRATE</span>
+        <span class="rl-crate-meta mono">5 GOOD® COINS · SERIALS FROM GD-001</span>
+        <span class="rl-crate-go mono">OPEN Nº001 →</span>
+      </a>
+    </div>
+  </section>
+
 </main>
 
 <footer class="site-foot mono"><nav class="foot-nav" aria-label="More"><a href="colors">COLORS®</a><a href="study">STUDY®</a><a href="collaborations">COLLABORATIONS®</a><a href="privacy">PRIVACY</a></nav><p>© 2026 GOOD®. All rights reserved.</p></footer>
 <script src="js/upcoming.js?v=1"></script>
 <script src="js/releases.js?v=1"></script>
-<script src="js/nav.js?v=5"></script>
+<script src="js/nav.js?v=6"></script>
 </body>
 </html>

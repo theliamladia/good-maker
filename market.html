@@ -6,7 +6,7 @@
   <title>MARKET® · GOOD®</title>
   <meta name="description" content="MARKET®: trade your spare GOOD® pieces for GOOD® COINS. Every copy keeps its serial.">
   <link rel="canonical" href="https://good.leems.me/market">
-  <meta name="theme-color" content="#0000ff">
+  <meta name="theme-color" content="#ffffff">
   <meta property="og:site_name" content="GOOD®">
   <meta property="og:type" content="website">
   <meta property="og:url" content="https://good.leems.me/market">
@@ -28,10 +28,11 @@
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="good.css?v=3">
   <link rel="stylesheet" href="style.css?v=21">
-  <link rel="stylesheet" href="collab.css?v=3">
-  <link rel="stylesheet" href="market.css?v=6">
+  <link rel="stylesheet" href="collab.css?v=4">
+  <link rel="stylesheet" href="market.css?v=7">
+  <link rel="stylesheet" href="white.css?v=1">
 </head>
-<body class="co-page mk-page">
+<body class="w-page co-page mk-page">
 
 <header class="site-header">
   <a class="wordmark" href="./">GOOD®</a>
@@ -50,19 +51,20 @@
 </header>
 
 <main class="co-main">
-  <section class="co-hero mk-hero">
+  <section class="co-hero mk-hero w-ph">
+    <div>
     <p class="co-tag mono">GOOD® · MARKET®</p>
     <h1 class="co-title">MARKET<span>®</span></h1>
     <p class="co-lede">A second pull, a spare copy, a piece someone else is still chasing. List any piece for GOOD® COINS, or find the one you're missing. Every copy keeps its serial.</p>
-    <nav class="co-crates mono" aria-label="GOOD® CRATES">OPEN A GOOD® CRATE <a href="crate">Nº001</a><a href="inmotion">Nº002 ART® IN MOTION</a><a href="dynamics#crateT">Nº003 DYNAMICS®</a></nav>
-    <div class="mk-acct">
+    </div>
+    <div class="mk-acct w-side">
       <p class="mk-wallet mono" id="wallet" aria-live="polite">&nbsp;</p>
       <button type="button" class="mk-btn mono" id="tradesBtn" hidden>MY TRADES</button>
     </div>
   </section>
 
   <!-- HOUSE®: one-of-one pieces sold only here (js/market.js, api/_house.js). Hidden until there's a shelf. -->
-  <section class="co-block hs" aria-labelledby="houseTitle" id="house" hidden>
+  <section class="co-block hs w-first" aria-labelledby="houseTitle" id="house" hidden>
     <header class="co-head"><p class="co-tag mono">GOOD® · SAMPLE SALE</p><h2 id="houseTitle">New every day</h2></header>
     <p class="hs-lede">Pieces you know, in colours MAKER® never gets. One of each, sold only here. When one goes, another takes its place, and the whole shelf changes every day.</p>
     <div class="hs-grid" id="houseGrid"></div>
@@ -105,6 +107,7 @@
     </div>
     <p class="mk-empty" id="soldEmpty" hidden>No trades yet. The first one will show up here.</p>
   </section>
+  <section class="co-block w-crates"><nav class="co-crates mono" aria-label="GOOD® CRATES">OPEN A GOOD® CRATE <a href="crate">Nº001</a><a href="inmotion">Nº002 ART® IN MOTION</a><a href="dynamics#crateT">Nº003 DYNAMICS®</a></nav></section>
 </main>
 
 <dialog class="mk-dlg" id="trades" aria-labelledby="tradesTitle"><div class="mk-dlg-in">
@@ -137,6 +140,6 @@
 <script src="js/outfits.js?v=8"></script>
 <script src="js/heads.js"></script>
 <script src="js/market.js?v=9"></script>
-<script src="js/nav.js?v=5"></script>
+<script src="js/nav.js?v=6"></script>
 </body>
 </html>

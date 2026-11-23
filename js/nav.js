@@ -26,6 +26,36 @@
   matchMedia('(min-width: 701px)').addEventListener('change', (m) => { if (m.matches) set(false); });
 })();
 
+// On white pages (body.w-page): four places in the header (MAKER®, CRATES®, MARKET®, RELEASES®), the
+// rest under MORE ▾. The phone menu still lists every link (the originals stay in the nav).
+(() => {
+  const nav = document.querySelector('.w-page .site-nav');
+  if (!nav) return;
+  const key = (a) => (a.getAttribute('href') || '').replace(/^\.?\//, '').replace(/\.html$/, '') || 'maker';
+  const PRIMARY = ['maker', 'crates', 'market', 'releases'];
+  const links = [...nav.querySelectorAll('a.nav-link:not([data-acct])')];
+  const acct = nav.querySelector('[data-acct]');
+  let at = nav.firstChild;
+  for (const k of PRIMARY) { const a = links.find((l) => key(l) === k); if (a) { nav.insertBefore(a, at); at = a.nextSibling; } }
+  const rest = links.filter((l) => !PRIMARY.includes(key(l)));
+  if (!rest.length) return;
+  const more = document.createElement('div'); more.className = 'nav-more';
+  const btn = document.createElement('button'); btn.type = 'button'; btn.textContent = 'MORE ▾';
+  btn.setAttribute('aria-expanded', 'false'); btn.setAttribute('aria-haspopup', 'true');
+  const menu = document.createElement('div'); menu.className = 'nav-more-menu';
+  for (const l of rest) {
+    l.classList.add('nav-more-sec');
+    const c = document.createElement('a'); c.href = l.getAttribute('href'); c.textContent = l.textContent;
+    if (l.hasAttribute('aria-current')) { c.setAttribute('aria-current', 'page'); more.classList.add('here'); }
+    menu.append(c);
+  }
+  more.append(btn, menu); nav.insertBefore(more, acct);
+  const set = (o) => { more.classList.toggle('open', o); btn.setAttribute('aria-expanded', String(o)); };
+  btn.onclick = (e) => { e.stopPropagation(); set(!more.classList.contains('open')); };
+  document.addEventListener('click', (e) => { if (!more.contains(e.target)) set(false); });
+  document.addEventListener('keydown', (e) => { if (e.key === 'Escape' && more.classList.contains('open')) { set(false); btn.focus(); } });
+})();
+
 // You, in the nav: a pill with your face, name and GOOD® COINS once you're signed in, SIGN IN
 // (as words) before. Page scripts that already have the account call GoodNav.update(me);
 // pass fresh = true after the home skin changes.

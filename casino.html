@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>CASINO® · GOOD®</title>
   <meta name="description" content="The GOOD® CASINO: BLACKJACK, HIGH-LOW and ROULETTE for GOOD® COINS.">
-  <meta name="theme-color" content="#0000ff">
+  <meta name="theme-color" content="#ffffff">
   <link rel="icon" href="/favicon.svg" type="image/svg+xml">
   <link rel="icon" href="/favicon-32.png" sizes="32x32" type="image/png">
   <link rel="apple-touch-icon" href="/apple-touch-icon.png">
@@ -14,10 +14,11 @@
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="good.css?v=3">
   <link rel="stylesheet" href="style.css?v=21">
-  <link rel="stylesheet" href="collab.css?v=3">
-  <link rel="stylesheet" href="casino.css?v=2">
+  <link rel="stylesheet" href="collab.css?v=4">
+  <link rel="stylesheet" href="casino.css?v=3">
+  <link rel="stylesheet" href="white.css?v=1">
 </head>
-<body class="co-page cs-page">
+<body class="w-page co-page cs-page">
 
 <header class="site-header">
   <a class="wordmark" href="./">GOOD®</a>
@@ -36,20 +37,21 @@
 </header>
 
 <main class="co-main">
-  <section class="co-hero cs-hero">
+  <section class="co-hero cs-hero w-ph">
+    <div>
     <p class="co-tag mono">GOOD® · CASINO®</p>
     <h1 class="co-title">CASINO<span>®</span></h1>
     <p class="co-lede">A quiet table after dark, the city still awake behind the glass. Bring the GOOD® COINS you earned saving fits; they're free, never real money.</p>
-    <p class="cs-wallet mono" id="wallet" aria-live="polite">&nbsp;</p>
-    <nav class="co-crates mono" aria-label="GOOD® CRATES">OPEN A GOOD® CRATE <a href="crate">Nº001</a><a href="inmotion">Nº002 ART® IN MOTION</a><a href="dynamics#crateT">Nº003 DYNAMICS®</a></nav>
+    </div>
+    <div class="w-side"><p class="cs-wallet mono" id="wallet" aria-live="polite">&nbsp;</p></div>
   </section>
 
-  <section class="co-block cs-soon" id="soon" hidden>
+  <section class="co-block cs-soon cs-felt" id="soon" hidden>
     <p class="co-tag mono">COMING SOON</p>
     <p class="cs-note">The tables aren't open yet.</p>
   </section>
 
-  <section class="co-block cs-preview" id="preview" aria-labelledby="pvTitle" hidden>
+  <section class="co-block cs-preview cs-felt" id="preview" aria-labelledby="pvTitle" hidden>
     <header class="co-head"><p class="co-tag mono">THE TABLES</p><h2 id="pvTitle">Three games, one bet each</h2></header>
     <ol class="cs-pv">
       <li>
@@ -74,7 +76,7 @@
     <p class="cs-pv-cta"><a class="cs-btn cs-solid mono" href="account">SIGN IN TO PLAY</a><span class="mono">BETS OF 1 TO 100 GOOD® COINS</span></p>
   </section>
 
-  <div id="tables" hidden>
+  <div id="tables" class="cs-felt" hidden>
     <div class="cs-bar">
       <div class="cs-tabs mono" role="tablist" id="tabs">
         <button type="button" role="tab" data-g="bj" aria-selected="true" aria-controls="g-bj">BLACKJACK</button>
@@ -155,12 +157,13 @@
       <p class="cs-empty" id="histEmpty">No games yet.</p>
     </section>
   </div>
+  <section class="co-block w-crates"><nav class="co-crates mono" aria-label="GOOD® CRATES">OPEN A GOOD® CRATE <a href="crate">Nº001</a><a href="inmotion">Nº002 ART® IN MOTION</a><a href="dynamics#crateT">Nº003 DYNAMICS®</a></nav></section>
 </main>
 
 <div class="cs-toast mono" id="toast" hidden></div>
 <footer class="site-foot mono"><nav class="foot-nav" aria-label="More"><a href="colors">COLORS®</a><a href="study">STUDY®</a><a href="collaborations">COLLABORATIONS®</a><a href="privacy">PRIVACY</a></nav><p>© 2026 GOOD®. All rights reserved.</p></footer>
 
 <script src="js/casino.js?v=2"></script>
-<script src="js/nav.js?v=5"></script>
+<script src="js/nav.js?v=6"></script>
 </body>
 </html>

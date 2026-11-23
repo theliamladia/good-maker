@@ -1,6 +1,6 @@
 /* COLORS®: on GOOD® BLUE like the rest of the site. White type, thin white rules, lots of air. */
-.cx-page { background: var(--good-blue); color: #fff; margin: 0; }
-.cx-page ::selection { background: #fff; color: var(--good-blue); }
+.cx-page { background: var(--bg); color: var(--fg); margin: 0; }
+.cx-page ::selection { background: var(--accent); color: #fff; }
 /* the header matches every other page: COLORS® lives in the footer and the phone menu, not up top */
 @media (min-width: 701px) { .cx-header .site-nav .nav-sec[aria-current] { display: none; } }
 
@@ -14,21 +14,21 @@
 .cx-copy { margin: 40px 0 0; max-width: 32em; font-size: clamp(1rem, 1.4vw, 1.2rem); font-weight: 300; line-height: 1.6; }
 
 /* Spectrum strip */
-.cx-strip { display: flex; height: clamp(120px, 22vh, 220px); outline: 1px solid rgba(255, 255, 255, 0.5); }
+.cx-strip { display: flex; height: clamp(120px, 22vh, 220px); outline: 1px solid var(--line-strong); }
 .cx-band { flex: 1 1 0; min-width: 0; border: 0; padding: 0; cursor: pointer; transition: flex-grow 0.45s cubic-bezier(0.2, 0.8, 0.2, 1); }
 .cx-band:hover, .cx-band:focus-visible { flex-grow: 6; outline: none; }
 .cx-strip-read { margin: 14px 0 0; min-height: 1.2em; font-size: var(--label-size); letter-spacing: 0.18em; white-space: pre; }
 
 /* Index */
-.cx-bar { display: flex; justify-content: space-between; align-items: baseline; gap: 16px; flex-wrap: wrap; border-top: 1px solid #fff; margin-top: clamp(80px, 13vh, 140px); padding-top: 22px; margin-bottom: clamp(40px, 6vh, 64px); }
+.cx-bar { display: flex; justify-content: space-between; align-items: baseline; gap: 16px; flex-wrap: wrap; border-top: 1px solid var(--line-strong); margin-top: clamp(80px, 13vh, 140px); padding-top: 22px; margin-bottom: clamp(40px, 6vh, 64px); }
 .cx-order { display: flex; gap: 26px; }
-.cx-order button { border: 0; background: none; padding: 2px 0; cursor: pointer; color: #fff; opacity: 0.55; font: 700 0.7rem var(--font-mono); letter-spacing: var(--label-track); text-decoration: underline; text-decoration-color: transparent; text-underline-offset: 6px; transition: opacity 0.2s, text-decoration-color 0.2s; }
+.cx-order button { border: 0; background: none; padding: 2px 0; cursor: pointer; color: var(--fg); opacity: 0.55; font: 700 0.7rem var(--font-mono); letter-spacing: var(--label-track); text-decoration: underline; text-decoration-color: transparent; text-underline-offset: 6px; transition: opacity 0.2s, text-decoration-color 0.2s; }
 .cx-order button:hover { opacity: 0.8; }
 .cx-order button[aria-checked="true"] { opacity: 1; text-decoration-color: currentColor; }
 
 .cx-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(180px, 42vw), 1fr)); gap: clamp(36px, 5vw, 64px) clamp(16px, 2.4vw, 32px); }
 .cx-chip { display: block; align-self: start; border: 0; padding: 0; background: none; text-align: left; cursor: pointer; color: inherit; font: inherit; }
-.cx-sw { display: block; aspect-ratio: 3 / 4; box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.35); transition: transform 0.45s cubic-bezier(0.2, 0.8, 0.2, 1); }
+.cx-sw { display: block; aspect-ratio: 3 / 4; box-shadow: inset 0 0 0 1px var(--line); transition: transform 0.45s cubic-bezier(0.2, 0.8, 0.2, 1); }
 .cx-chip:hover .cx-sw, .cx-chip:focus-visible .cx-sw { transform: translateY(-8px); }
 .cx-chip:focus-visible { outline: none; }
 .cx-chip:focus-visible .cx-cn { text-decoration: underline; text-underline-offset: 4px; }
@@ -63,9 +63,9 @@
 .cx-room-foot { display: flex; align-items: center; gap: clamp(14px, 3vw, 36px); }
 .cx-step { flex: none; border: 0; background: none; color: inherit; cursor: pointer; font-size: var(--label-size); font-weight: 700; letter-spacing: 0.2em; padding: 8px 0; }
 .cx-step:hover { text-decoration: underline; text-underline-offset: 6px; }
-.cx-mini { flex: 1; display: flex; height: 22px; outline: 1px solid color-mix(in srgb, var(--ink-on, #fff) 35%, transparent); }
+.cx-mini { flex: 1; display: flex; height: 22px; outline: 1px solid color-mix(in srgb, var(--ink-on, var(--line-strong)) 35%, transparent); }
 .cx-mini span { flex: 1 1 0; cursor: pointer; transition: flex-grow 0.4s cubic-bezier(0.2, 0.8, 0.2, 1); }
-.cx-mini span.on { flex-grow: 5; box-shadow: inset 0 0 0 2px var(--ink-on, #fff); }
+.cx-mini span.on { flex-grow: 5; box-shadow: inset 0 0 0 2px var(--ink-on, var(--line-strong)); }
 
 @media (max-width: 760px) {
   .cx-room-body { grid-template-columns: 1fr; align-items: start; align-content: end; }
