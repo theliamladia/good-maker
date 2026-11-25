@@ -98,7 +98,12 @@
 .ac-ach-pager[hidden] { display: none; }
 .ac-ach-pager button { width: 34px; height: 34px; border: 1px solid var(--line-strong); border-radius: 50%; background: none; color: var(--fg); font-size: 1rem; cursor: pointer; }
 .ac-ach-pager button:disabled { opacity: 0.3; cursor: default; }
-@media (max-width: 600px) { .ac-ach-wrap { gap: 16px; } .ac-ach-row { flex: 1 1 100%; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 8px; } .ac-ach-pop { top: auto; bottom: calc(100% + 10px); width: min(300px, 84vw); } .ac-ach-icon:nth-child(n+3) .ac-ach-pop { left: auto; right: 0; border: 1px solid var(--line);} }
+@media (max-width: 600px) { .ac-ach-wrap { gap: 16px; } .ac-ach-row { flex: 1 1 100%; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 8px; } .ac-ach-pop { top: auto; bottom: calc(100% + 10px); width: min(300px, 84vw); } .ac-ach-icon:nth-child(n+3) .ac-ach-pop { left: auto; right: 0; border: 1px solid var(--line);}
+  /* phones: the card spans the whole row (anchored to the row, not the icon), so it never runs off either edge */
+  .ac-ach-row { position: relative; } .ac-ach-row > .ac-ach-icon { position: static; }
+  .ac-ach-row .ac-ach-pop, .ac-ach-row .ac-ach-icon:nth-child(n+3) .ac-ach-pop { left: 0; right: 0; width: auto; max-width: 100%; box-sizing: border-box; grid-template-columns: 56px minmax(0, 1fr); }
+  .ac-ach-pop img { width: 56px; height: 56px; }
+  .ac-ach-p span { white-space: normal; } }
 .ac-ach-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 14px; }
 .ac-ach-card { display: grid; grid-template-columns: 72px 1fr; gap: 14px; align-items: center; padding: 14px; background: var(--bg); color: var(--fg); border: 1px solid var(--line);}
 .ac-ach-card img { width: 72px; height: 72px; object-fit: contain; image-rendering: pixelated; border: 1px solid var(--line);}

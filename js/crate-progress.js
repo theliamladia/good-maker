@@ -8,15 +8,15 @@
   if (!anchor) return;
   const css = document.createElement('style');
   css.textContent = `
-.gp { margin: 18px auto 0; text-align: center; color: inherit; }
-.gp-line { border: 0; background: none; color: inherit; cursor: pointer; font: inherit; font-size: 0.72rem; letter-spacing: 0.2em; text-transform: uppercase; padding: 8px 4px; }
+.gp { margin: 18px auto 0; text-align: center; color: inherit; width: 100%; max-width: 100%; min-width: 0; box-sizing: border-box; contain: inline-size; }
+.gp-line { max-width: 100%; border: 0; background: none; color: inherit; cursor: pointer; font: inherit; font-size: 0.72rem; letter-spacing: 0.2em; text-transform: uppercase; padding: 8px 4px; }
 .gp-line b { font-weight: 700; }
 .gp-line u { text-underline-offset: 5px; }
 .gp-bar { display: block; width: min(320px, 80vw); height: 3px; margin: 6px auto 0; background: color-mix(in srgb, currentColor 22%, transparent); }
 .gp-bar i { display: block; height: 100%; background: currentColor; }
-.gp-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(104px, 1fr)); gap: 14px; max-width: 900px; margin: 22px auto 0; text-align: center; }
+.gp-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(104px, 100%), 1fr)); gap: 14px; width: 100%; max-width: 900px; margin: 22px auto 0; text-align: center; }
 .gp-grid[hidden] { display: none; }
-.gp-card { display: flex; flex-direction: column; align-items: center; gap: 6px; font-size: 0.62rem; letter-spacing: 0.12em; line-height: 1.3; text-transform: uppercase; }
+.gp-card { min-width: 0; overflow-wrap: anywhere; display: flex; flex-direction: column; align-items: center; gap: 6px; font-size: 0.62rem; letter-spacing: 0.12em; line-height: 1.3; text-transform: uppercase; }
 .gp-card canvas { width: 88px; height: 88px; image-rendering: pixelated; }
 .gp-card small { opacity: .7; font-size: 0.56rem; }
 .gp-miss canvas { filter: grayscale(1); opacity: .28; }
