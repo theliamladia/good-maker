@@ -10,9 +10,33 @@
     s.firstChild.textContent = k; s.lastChild.textContent = v;
     return s;
   };
+  // Sorting (MOVA's idea): click a column once for high → low, again for low → high, a third
+  // time for the usual order. MEMBER SINCE "high" is the newest member.
+  const sortBtns = [...document.querySelectorAll('.mb-sort')];
+  let rows = [], sortKey = null, sortDir = 0;      // sortDir: 1 high→low, -1 low→high, 0 off
+  const val = (m, k) => (k === 'since' ? Date.parse(m.since || '') || 0 : Number(m[k]) || 0);
+  function order() {
+    const list = rows.slice();
+    if (sortKey && sortDir) list.sort((a, b) => (val(b.m, sortKey) - val(a.m, sortKey)) * sortDir || a.i - b.i);
+    $('members').replaceChildren(...list.map((r) => r.li));
+    for (const b of sortBtns) {
+      const on = b.dataset.k === sortKey && sortDir !== 0;
+      b.classList.toggle('on', on);
+      b.querySelector('i').textContent = on ? (sortDir === 1 ? ' ↓' : ' ↑') : '';
+      const name = b.firstChild.textContent.trim();
+      b.setAttribute('aria-label', on ? `${name}, sorted ${sortDir === 1 ? 'high to low' : 'low to high'}. Click to ${sortDir === 1 ? 'sort low to high' : 'clear sorting'}.` : `Sort by ${name}, high to low`);
+      b.setAttribute('aria-pressed', String(on));
+    }
+  }
+  for (const b of sortBtns) b.onclick = () => {
+    if (sortKey !== b.dataset.k) { sortKey = b.dataset.k; sortDir = 1; }
+    else sortDir = sortDir === 1 ? -1 : sortDir === -1 ? 0 : 1;
+    if (!sortDir) sortKey = null;
+    order();
+  };
   fetch('api/members').then((r) => r.json()).then(({ members = [] }) => {
     $('mCount').textContent = `${members.length} ${members.length === 1 ? 'MEMBER' : 'MEMBERS'}`;
-    $('members').replaceChildren(...members.map((m) => {
+    rows = members.map((m, i) => ({ m, i, li: (() => {
       const li = document.createElement('li');
       const a = document.createElement('a');
       a.className = 'mb-row'; a.href = `profiles/${m.slug}`;
@@ -32,6 +56,7 @@
       GoodHeads.draw(a.querySelector('canvas'), m.hasSkin ? `api/profile?name=${encodeURIComponent(m.slug)}&skin=1` : null);
       li.append(a);
       return li;
-    }));
+    })() }));
+    order();
   }).catch(() => { $('mCount').textContent = 'COULDN’T LOAD MEMBERS'; });
 })();
